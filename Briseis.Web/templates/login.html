@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+ <div class="container">
+    <div class="row">
+        <div class="span2"></div>
+        <div class="span6">
+
+            <form method="post" action="." class="well form-inline">
+
+                {{ form.hidden_tag() }}
+
+                <div class="control-group">
+                    <label>
+                        <input type="text" class="input-small" placeholder="邮件">
+                    </label>
+                    <label>
+                        <input type="password" class="input-small" placeholder="密码">
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox"> 记住我
+                    </label>
+                    <button type="submit" class="btn">登录</button>
+                </div>
+            </form>
+        </div>
+        <div class="span4"></div>
+    </div>
+</div>
+{% endblock %}

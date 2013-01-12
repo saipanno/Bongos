@@ -1,0 +1,76 @@
+{% extends "operate/operate_base.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+
+            {% block sidebar %}
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">测试</li>
+                    <li class="active"><a href="#">PING测试</a></li>
+                    <li><a href="#">SSH登录测试</a></li>
+                    <li class="nav-header">操作</li>
+                    <li><a href="#">执行脚本</a></li>
+                    <li><a href="#">执行模板</a></li>
+                </ul>
+            </div>
+            {% endblock %}
+
+        </div>
+
+        {% block content %}
+        <div class="span10">
+
+            {% block content_header %}
+            <div class="hero-unit">
+                <h1>新增操作</h1>
+                <p>新增操作页,根据需求填写下面表格</p>
+                <p><a class="btn btn-primary btn-large">了解更多 &raquo;</a></p>
+            </div>
+            {% endblock %}
+
+            {% block content_body %}
+            <div class="row-fluid">
+                <form method="post" action=".">
+
+                    {{ form.hidden_tag() }}
+                    <div class="control-group .form-horizontal">
+                        {{ form.server_list.label(class="control-label") }}
+                        <div class="controls">
+                            {{ form.server_list(rows=10) }}
+                            <p class="help-block">{{ form.server_list.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group .form-horizontal">
+                        {{ form.command_list.label(class="control-label") }}
+                        <div class="controls">
+                            {{ form.command_list(rows=10) }}
+                            <p class="help-block">{{ form.command_list.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group .form-horizontal">
+                        {{ form.variable_list.label(class="control-label") }}
+                        <div class="controls">
+                            {{ form.variable_list(rows=10) }}
+                            <p class="help-block">{{ form.variable_list.description|safe }}</p>
+                        </div>
+                    </div>
+                    {{ form.submit(class="btn") }}
+                </form>
+            </div>
+            {% endblock %}
+
+        </div>
+        {% endblock %}
+    </div>
+
+    <hr>
+    <footer>
+        <p>&copy; DataCenter Managent 2012</p>
+    </footer>
+</div>
+{% endblock %}
