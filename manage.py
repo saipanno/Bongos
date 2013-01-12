@@ -9,6 +9,7 @@
 #from flask.ext.script import Manager
 
 from application import app
+app.config.from_object('config')
 
 #manager = Manager(app)
 
