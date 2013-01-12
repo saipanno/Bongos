@@ -3,7 +3,7 @@
 #
 #   Briseis, An DataCenter Management.
 #
-#       application.py
+#       __init__.py
 #
 #   Created at 2013/01/10. Ruoyan Wong(@saipanno).
 
