@@ -7,6 +7,3 @@
 #
 #    Created at 2013/01/10.
 #    Powered by Ruoyan Wong(@saipanno).
-
-from models.operate import Operate
-from models.server import Server
