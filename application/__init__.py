@@ -12,8 +12,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-#app.config['SECRET_KEY'] = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
-
 db = SQLAlchemy(app)
 
 from application.controllers.operate import mod as CreateScriptRunnerOperateCtrl
