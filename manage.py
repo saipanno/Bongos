@@ -6,18 +6,14 @@
 #
 #    Created at 2013/01/12. Ruoyan Wong(@saipanno).
 
-#from flask.ext.script import Manager
+from flask.ext.script import Manager
 
 from application import app
 app.config.from_object('config')
 
-#manager = Manager(app)
-
-def main():
-    """启动本地进程."""
-    app.run(debug=app.config['DEBUG'])
+manager = Manager(app)
+manager.add_option("-c", "--config", dest="config", required=False)
 
 
 if __name__ == '__main__':
-    #manager.run()
-    main()
+    manager.run()
