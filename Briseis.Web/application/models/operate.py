@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#    operate.py, in Charon.
+#    operate.py, in Briseis.
 #
-#         some script.
 #
-#    Created at 2013/01/10.
-#    Powered by Ruoyan Wong(@saipanno).
+#    Created at 2013/01/12. Ruoyan Wong(@saipanno).
 
+from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField
 
-class Operate(object):
+class CreateOperate(Form):
+
     pass
