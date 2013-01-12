@@ -14,3 +14,6 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
+
+from application.controllers.operate import mod as CreateScriptRunnerOperateCtrl
+app.register_blueprint(CreateScriptRunnerOperateCtrl)
