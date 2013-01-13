@@ -15,8 +15,8 @@ from application.form.operate import CreateScriptRunnerOperateForm
 
 mod = Blueprint('operate', __name__, url_prefix='/operate')
 
-@mod.route('/', methods=("GET", "POST"))
-def CreateScriptRunnerOperateCtrl():
+@mod.route('/unDefineScript', methods=("GET", "POST"))
+def CreateDefinedScriptRunnerOperateCtrl():
 
     form = CreateScriptRunnerOperateForm()
 
@@ -28,4 +28,4 @@ def CreateScriptRunnerOperateCtrl():
 
         return render_template('show_fucking.html', fucking=form.server_list.data)
 
-    return render_template('operate/operate_create.html', form=form)
+    return render_template('operate/operate_create_undefined.html', form=form)
