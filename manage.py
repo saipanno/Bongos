@@ -15,7 +15,7 @@ from tornado.options import define, options
 
 from website import Application
 
-define("port", default=80, help="default: 9000, required runserver", type=int)
+define('port', default=8888, help='run on the given port', type=int)
 
 def main():
 
