@@ -12,8 +12,6 @@ import tornado.locale
 from website import settings as config
 
 from website.helper import config_from_object
-from website.extensions import *
-from website.extensions.routing import Route
 
 
 class Application(tornado.web.Application):
@@ -22,9 +20,7 @@ class Application(tornado.web.Application):
         settings = config_from_object(config)
 
         handlers = [
-            # other handlers...
-            url(r"/theme/(.+)", tornado.web.StaticFileHandler, dict(path=settings['theme_path']), name='theme_path'),
-            url(r"/upload/(.+)", tornado.web.StaticFileHandler, dict(path=settings['upload_path']), name='upload_path')
+            (r'/', IndexHandler)
         ]
 
         # Custom 404 ErrorHandler
