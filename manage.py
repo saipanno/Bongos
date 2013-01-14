@@ -15,13 +15,12 @@ from tornado.options import define, options
 
 from website import Application
 
-define("port", default=9000, help="default: 9000, required runserver", type=int)
+define("port", default=80, help="default: 9000, required runserver", type=int)
 
 def main():
 
     tornado.options.parse_command_line()
 
-    print 'server started. port %s' % options.port
     http_server = tornado.httpserver.HTTPServer(Application(), xheaders=True)
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
