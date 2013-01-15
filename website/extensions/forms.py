@@ -1,75 +1,99 @@
-# -*- coding: utf-8 -*-
-
+#!/usr/bin/env python
+#coding=utf-8
+"""
+    forms.py
+    ~~~~~~~~~~~~~
+    wtforms extensions for tornado
+"""
 import re
-import tornado.locale
-from tornado.escape import to_unicode
-from wtforms import Form as wtForm
 
-class Form(wtForm):
+from tornado.escape import _unicode
+
+from wtforms import Form as BaseForm, fields, validators, widgets, ext
+
+from wtforms.fields import BooleanField, DecimalField, DateField, \
+    DateTimeField, FieldList, FloatField, FormField, \
+    HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
+    SelectMultipleField, SubmitField, TextField, TextAreaField
+
+from wtforms.validators import ValidationError, Email, email, EqualTo, equal_to, \
+    IPAddress, ip_address, Length, length, NumberRange, number_range, \
+    Optional, optional, Required, required, Regexp, regexp, \
+    URL, url, AnyOf, any_of, NoneOf, none_of
+
+from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
+    ListWidget, PasswordInput, RadioInput, Select, SubmitInput, \
+    TableWidget, TextArea, TextInput
+
+try:
+    import sqlalchemy
+    _is_sqlalchemy = True
+except ImportError:
+    _is_sqlalchemy = False
+
+
+if _is_sqlalchemy:
+    from wtforms.ext.sqlalchemy.fields import QuerySelectField, \
+        QuerySelectMultipleField
+
+    for field in (QuerySelectField, 
+                  QuerySelectMultipleField):
+
+        setattr(fields, field.__name__, field)
+
+
+class Form(BaseForm):
     """
-    Using this Form instead of wtforms.Form
-
-    Example::
-
-        class SigninForm(Form):
-            email = EmailField('email')
-            password = PasswordField('password')
-
-        class SigninHandler(RequestHandler):
-            def get(self):
-                form = SigninForm(self.request.arguments, locale_code=self.locale.code)
-
+    Example:
+    >>> user = User.query.get(1)
+    >>> form = LoginForm(user)
+    {{ xsrf_form_html }}
+    {{ form.hiden_tag() }}
+    {{ form.username }}
     """
-    def __init__(self, formdata=None, obj=None, prefix='', locale_code='en_US', **kwargs):
-        self._locale_code = locale_code
-        super(Form, self).__init__(formdata, obj, prefix, **kwargs)
 
-    def process(self, formdata=None, obj=None, **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
+        self.obj = kwargs.get('obj', None)
+        super(Form, self).__init__(formdata, *args, **kwargs)
+    
+    def process(self, formdata=None, *args, **kwargs):
         if formdata is not None and not hasattr(formdata, 'getlist'):
-            formdata = TornadoArgumentsWrapper(formdata)
-        super(Form, self).process(formdata, obj, **kwargs)
+            formdata = TornadoInputWrapper(formdata)
+        super(Form, self).process(formdata, *args, **kwargs)
+    
+    def hidden_tag(self, *fields):
+        """
+        Wraps hidden fields in a hidden DIV tag, in order to keep XHTML 
+        compliance.
+        """
 
-    def _get_translations(self):
-        if not hasattr(self, '_locale_code'):
-            self._locale_code = 'en_US'
-        return TornadoLocaleWrapper(self._locale_code)
+        if not fields:
+            fields = [f for f in self if isinstance(f, HiddenField)]
 
+        rv = []
+        for field in fields:
+            if isinstance(field, basestring):
+                field = getattr(self, field)
+            rv.append(unicode(field))
 
-class TornadoArgumentsWrapper(dict):
-    def __getattr__(self, key):
-        try:
-            return self[key]
-        except KeyError:
-            raise AttributeError
-
-    def __setattr__(self, key, value):
-        self[key] = value
-
-    def __delattr__(self, key):
-        try:
-            del self[key]
-        except KeyError:
-            raise AttributeError
-
-    def getlist(self, key):
-        try:
-            values = []
-            for v in self[key]:
-                v = to_unicode(v)
-                if isinstance(v, unicode):
-                    v = re.sub(r"[\x00-\x08\x0e-\x1f]", " ", v)
-                values.append(v)
-            return values
-        except KeyError:
-            raise AttributeError
-
-
-class TornadoLocaleWrapper(object):
-    def __init__(self, code):
-        self.locale = tornado.locale.get(code)
-
-    def gettext(self, message):
-        return self.locale.translate(message)
-
-    def ngettext(self, message, plural_message, count):
-        return self.locale.translate(message, plural_message, count)
+        return u"".join(rv)
+    
+    
+class TornadoInputWrapper(dict):
+    """
+    From tornado source-> RequestHandler.get_arguments
+    """
+    def getlist(self, name, strip=True):
+        values = []
+        for v in self.get(name, []):
+            v = _unicode(v)
+            if isinstance(v, unicode):
+                # Get rid of any weird control chars (unless decoding gave
+                # us bytes, in which case leave it alone)
+                v = re.sub(r"[\x00-\x08\x0e-\x1f]", " ", v)
+            if strip:
+                v = v.strip()
+            values.append(v)
+        return values
+        
+        

@@ -4,7 +4,7 @@
 """
     signals.py
     ~~~~~~~~~~~~~
-
+    
     Implements signals based on blinker if available, otherwise
     falls silently back to a noop
 
@@ -40,3 +40,9 @@ except ImportError:
             temporarily_connected_to = connected_to = _fail
 
         del _fail
+
+
+# _signals = Namespace()
+
+# comment_saved = _signals.signal('comment-saved')
+

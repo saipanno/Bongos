@@ -6,7 +6,7 @@
 #
 #    Created at 2013/01/14. Ruoyan Wong(@saipanno).
 
-def config_from_object(obj):
+def import_setting_from_config(obj):
     config = dict()
     for key in dir(obj):
         if key.isupper():
