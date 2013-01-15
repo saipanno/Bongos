@@ -12,7 +12,7 @@ import tornado.locale
 from website import settings as config
 
 from website.helper import config_from_object
-from website.extensions.routing import Route
+from website.extensions.routing import route
 
 
 class Application(tornado.web.Application):
@@ -26,7 +26,7 @@ class Application(tornado.web.Application):
             (r'/operate/query', IndexHandler),
             (r'/operate/create', IndexHandler),
             (r'/', IndexHandler)
-        ] + Route.get_routes()
+        ] + route.get_routes()
 
         # Custom 404 ErrorHandler
         handlers.append((r"/(.*)", ErrorHandler))

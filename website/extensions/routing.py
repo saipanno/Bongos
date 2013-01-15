@@ -1,6 +1,6 @@
 import tornado.web
 
-class Route(object):
+class route(object):
     """
     decorates RequestHandlers and builds up a list of routables handlers
 
@@ -20,7 +20,6 @@ class Route(object):
     Example
     -------
 
-    ```python
     @route('/some/path')
     class SomeRequestHandler(RequestHandler):
         def get(self):
@@ -35,7 +34,6 @@ class Route(object):
             self.redirect(goto)
 
     my_routes = route.get_routes()
-    ```
 
     Credit
     -------
@@ -72,37 +70,9 @@ class Route(object):
 #        def get(self):
 #            ...
 def route_redirect(from_, to, name=None):
-    Route._routes.append(tornado.web.url(
+    route._routes.append(tornado.web.url(
         from_,
         tornado.web.RedirectHandler,
         dict(url=to),
         name=name ))
-
-# maps a template to a route.
-def generic_route(uri, template, handler = None):
-    h_ = handler or tornado.web.RequestHandler
-    @Route(uri, name=uri)
-    class generic_handler(h_):
-        _template = template
-        def get(self):
-            return self.render(self._template)
-    return generic_handler
-
-def authed_generic_route(uri, template, handler):
-    """
-    Provides authenticated mapping of template render to route.
-
-    :param: uri: the route path
-    :param: template: the template path to render
-    :param: handler: a subclass of tornado.web.RequestHandler that provides all
-        the necessary methods for resolving current_user
-    """
-    @Route(uri, name=uri)
-    class authed_handler(handler):
-        _template = template
-        @tornado.web.authenticated
-        def get(self):
-            return self.render(self._template)
-    return authed_handler
-
 
