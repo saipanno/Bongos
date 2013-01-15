@@ -9,14 +9,14 @@
 import tornado.web
 import tornado.locale
 
-from website import settings as config
+from web import settings as config
 
-from website.helper import import_setting_from_config
-from website.forms import create_forms
-from website.extensions.routing import route
+from web.helper import import_setting_from_config
+from web.forms import create_forms
+from web.extensions.routing import route
 
 
-from website.handlers.base import ErrorHandler
+from web.handlers.base import ErrorHandler
 
 class Application(tornado.web.Application):
 
@@ -24,7 +24,6 @@ class Application(tornado.web.Application):
         settings = import_setting_from_config(config)
 
         handlers = route.get_routes()
-
         # Custom 404 ErrorHandler
         handlers.append((r"/(.*)", ErrorHandler))
 

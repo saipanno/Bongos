@@ -13,7 +13,7 @@ import tornado.httpserver
 
 from tornado.options import define, options
 
-from website import Application
+from web import Application
 
 define('port', default=8888, help='run on the given port', type=int)
 

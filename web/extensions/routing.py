@@ -71,8 +71,5 @@ class route(object):
 #            ...
 def route_redirect(from_, to, name=None):
     route._routes.append(tornado.web.url(
-        from_,
-        tornado.web.RedirectHandler,
-        dict(url=to),
-        name=name ))
-
+        from_, tornado.web.RedirectHandler,
+        dict(url=to), name=name ))
