@@ -7,18 +7,15 @@
 #    Created at 2013/01/16. Ruoyan Wong(@saipanno).
 
 
-from flask import render_template, request, Blueprint
+from flask import render_template, request
 
 from web import db
 from web import app
 
 from web.forms import UserLoginForm
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def UserLoginCtrl():
 
     form = UserLoginForm()
