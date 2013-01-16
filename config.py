@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#    config.cfg, in Briseis.
+#    config.py, in Briseis.
 #
 #
 #    Created at 2013/01/16. Ruoyan Wong(@saipanno).

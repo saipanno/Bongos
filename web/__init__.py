@@ -16,5 +16,5 @@ db = SQLAlchemy(app)
 
 app.config.from_object('config')
 
-from application.controllers.operate import mod as CreateScriptRunnerOperateCtrl
+from web.controllers import mod as CreateScriptRunnerOperateCtrl
 app.register_blueprint(CreateScriptRunnerOperateCtrl)

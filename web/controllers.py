@@ -9,10 +9,10 @@
 
 from flask import render_template, request, Blueprint
 
-from application import db
+from web import db
 
-from application.models.operate import CreateScriptRunnerOperate
-from application.form.operate import CreateScriptRunnerOperateForm
+from web.models import CreateScriptRunnerOperate
+from web.forms import CreateScriptRunnerOperateForm
 
 mod = Blueprint('operate', __name__, url_prefix='/operate')
 
