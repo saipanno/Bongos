@@ -12,11 +12,13 @@ import tornado.locale
 from web import settings as config
 
 from web.helper import import_setting_from_config
-from web.forms import create_forms
+from web.form import create_forms
 from web.extensions.routing import route
 
+from sqlalchemy import  create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-from web.handlers.base import ErrorHandler
+from web.handler import ErrorHandler
 
 class Application(tornado.web.Application):
 
@@ -30,3 +32,6 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
         self.forms = create_forms()
+
+        engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, convert_unicode=True, echo=settings.debug)
+        self.db = scoped_session(sessionmaker(bind=engine))

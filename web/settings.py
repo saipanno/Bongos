@@ -16,4 +16,7 @@ LOGIN_URL = '/login'
 STATIC_PATH   = os.path.join(_basedir, 'static')
 TEMPLATE_PATH = os.path.join(_basedir, 'templates')
 
+XSRF_COOKIES = True
+COOKIE_SECRET = 'nzjxcjasduuqwheazmu293nsadhaslzkci9023nsadnua9sdads/Vo='
+
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.dirname(_basedir), 'sqlite.db')
