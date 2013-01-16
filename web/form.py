@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#    forms.py, in Briseis.
+#    form.py, in Briseis.
 #
 #
 #    Created at 2013/01/15. Ruoyan Wong(@saipanno).

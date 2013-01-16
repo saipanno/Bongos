@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#    models.py, in Briseis.
+#    model.py, in Briseis.
 #
 #
 #    Created at 2013/01/15. Ruoyan Wong(@saipanno).
