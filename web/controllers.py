@@ -10,23 +10,39 @@
 from flask import render_template, request, Blueprint
 
 from web import db
+from web import app
 
-from web.models import CreateScriptRunnerOperate
-from web.forms import CreateScriptRunnerOperateForm
+from web.forms import UserLoginForm
 
-mod = Blueprint('operate', __name__, url_prefix='/operate')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
-@mod.route('/unDefineScript', methods=("GET", "POST"))
-def CreateDefinedScriptRunnerOperateCtrl():
+@app.route('/login', methods=['GET', 'POST'])
+def UserLoginCtrl():
 
-    form = CreateScriptRunnerOperateForm()
+    form = UserLoginForm()
 
-    if request.method == 'POST':
+    if request.method == 'GET':
+        return  render_template('login.html', form=form)
 
-        operate = CreateScriptRunnerOperate(0, form.server_list.data, form.command_list.data, form.variable_list.data)
-        db.session.add(operate)
-        db.session.commit()
+    elif request.method == 'POST':
 
-        return render_template('show_fucking.html', fucking=form.server_list.data)
+        return render_template('show_fucking', fucking=form.password.data)
 
-    return render_template('operate/operate_create_undefined.html', form=form)
+
+
+# @mod.route('/unDefineScript', methods=("GET", "POST"))
+#def CreateDefinedScriptRunnerOperateCtrl():
+
+#    form = CreateScriptRunnerOperateForm()
+
+#    if request.method == 'POST':
+
+#        operate = CreateScriptRunnerOperate(0, form.server_list.data, form.command_list.data, form.variable_list.data)
+#        db.session.add(operate)
+#        db.session.commit()
+
+#        return render_template('show_fucking.html', fucking=form.server_list.data)
+
+ #   return render_template('operate/operate_create_undefined.html', form=form)

@@ -7,7 +7,16 @@
 #    Created at 2013/01/16. Ruoyan Wong(@saipanno).
 
 
-from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, SelectField
+from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, SubmitField, SelectField, PasswordField
+
+
+class UserLoginForm(Form):
+
+    next = HiddenField()
+    username = TextField(u'username', id='text')
+    password = PasswordField(u'password', id='password')
+
+    submit = SubmitField(u'login', id='submit', description='submit')
 
 class CreateDefinedScriptRunnerOperateForm(Form):
 
