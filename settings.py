@@ -7,7 +7,10 @@
 #    Created at 2013/01/16. Ruoyan Wong(@saipanno).
 
 import os
+
 _basedir = os.path.abspath(os.path.dirname(__file__))
+
+PORT = 8080
 
 DEBUG = True
 

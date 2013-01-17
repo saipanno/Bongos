@@ -12,27 +12,11 @@ from flask import render_template, request
 from web import db
 from web import app
 
-from web.forms import UserLoginForm
 from web.forms import OperateCreateDefaultForm
 from web.forms import OperateCreateCustomForm
 from web.forms import OperateCreateTemplateForm
 
 from web.models import OperateCreateDefineRunner
-
-@app.route('/login', methods=['GET', 'POST'])
-def user_login_ctrl():
-
-    """
-    登录页面
-    """
-    form = UserLoginForm()
-
-    if request.method == 'GET':
-        return  render_template('login.html', form=form)
-
-    elif request.method == 'POST':
-
-        return render_template('show_fucking.html', fucking=form.username.data)
 
 
 @app.route('/operate/create', methods=("GET", "POST"))
