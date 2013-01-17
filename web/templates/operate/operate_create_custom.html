@@ -1,0 +1,43 @@
+{% extends "operate/operate_create.html" %}
+
+{% block active_custom %} class="active"{% endblock %}
+
+{% block content %}
+<div class="span10">
+
+    {% block content_header %}
+    <div class="hero-unit">
+        <h1>新增操作</h1>
+        <p>新增操作页,根据需求填写下面表格</p>
+        <p><a class="btn btn-primary btn-large">了解更多 &raquo;</a></p>
+    </div>
+    {% endblock %}
+
+    {% block content_body %}
+    <div class="row-fluid">
+        <form method="post" action="">
+
+            {{ form.hidden_tag() }}
+            <div class="control-group .form-horizontal">
+                {{ form.server_list.label(class="control-label") }}
+                <div class="controls">
+                    {{ form.server_list(rows=10) }}
+                    <p class="help-block">{{ form.server_list.description|safe }}</p>
+                </div>
+            </div>
+
+            <div class="control-group .form-horizontal">
+                {{ form.command_list.label(class="control-label") }}
+                <div class="controls">
+                    {{ form.command_list(rows=10) }}
+                    <p class="help-block">{{ form.command_list.description|safe }}</p>
+                </div>
+            </div>
+
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+    {% endblock %}
+
+</div>
+{% endblock %}

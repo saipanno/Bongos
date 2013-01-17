@@ -8,7 +8,7 @@
 
 from web import db
 
-class CreateScriptRunnerOperate(db.Model):
+class OperateCreateDefineRunner(db.Model):
     __tablename__ = 'operate_list'
     id = db.Column(db.Integer, primary_key=True)
     operate_type = db.Column(db.Integer)

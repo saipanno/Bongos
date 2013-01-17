@@ -6,13 +6,12 @@
 #
 # Created at 2013/01/12. Ruoyan Wong(@saipanno).
 
-
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-
-from web import controllers
 
 app = Flask(__name__)
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
+
+from web import controllers

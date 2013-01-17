@@ -18,7 +18,7 @@ class UserLoginForm(Form):
 
     submit = SubmitField(u'login', id='submit', description='submit')
 
-class CreateDefinedScriptRunnerOperateForm(Form):
+class OperateCreateDefaultForm(Form):
 
     next = HiddenField()
     server_list = TextAreaField(u'服务器列表', id='textarea', description=u'需要远程执行命令的服务器列表,一行一个. 支持IP和域名.')
@@ -26,7 +26,16 @@ class CreateDefinedScriptRunnerOperateForm(Form):
 
     submit = SubmitField(u'提交', id='submit', description='submit')
 
-class CreateScriptRunnerOperateForm(Form):
+class OperateCreateCustomForm(Form):
+
+    next = HiddenField()
+    server_list = TextAreaField(u'服务器列表', id='textarea', description=u'需要远程执行命令的服务器列表,一行一个. 支持IP和域名.')
+    command_list = TextAreaField(u'命令列表', id='textarea', description=u'需要远程执行的命令列表, 支持SHELL变量以及模板变量.')
+    variable_list = TextAreaField(u'模板变量列表', id='textarea', description=u'模板变量列表.')
+
+    submit = SubmitField(u'提交', id='submit', description='submit')
+
+class OperateCreateTemplateForm(Form):
 
     next = HiddenField()
     server_list = TextAreaField(u'服务器列表', id='textarea', description=u'需要远程执行命令的服务器列表,一行一个. 支持IP和域名.')

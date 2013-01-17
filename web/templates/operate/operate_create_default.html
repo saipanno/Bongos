@@ -1,5 +1,7 @@
 {% extends "operate/operate_create.html" %}
 
+{% block active_normal %} class="active"{% endblock %}
+
 {% block content %}
 <div class="span10">
 
@@ -24,21 +26,6 @@
                 </div>
             </div>
 
-            <div class="control-group .form-horizontal">
-                {{ form.command_list.label(class="control-label") }}
-                <div class="controls">
-                    {{ form.command_list(rows=10) }}
-                    <p class="help-block">{{ form.command_list.description|safe }}</p>
-                </div>
-            </div>
-
-            <div class="control-group .form-horizontal">
-                {{ form.variable_list.label(class="control-label") }}
-                <div class="controls">
-                    {{ form.variable_list(rows=10) }}
-                    <p class="help-block">{{ form.variable_list.description|safe }}</p>
-                </div>
-            </div>
             {{ form.submit(class="btn btn-primary") }}
         </form>
     </div>
