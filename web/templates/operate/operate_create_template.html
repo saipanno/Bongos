@@ -39,9 +39,12 @@
                         <div class="span4">{{ form.variable_list(rows=10) }}</div>
                         <div class="span8">
                             <div class="alert alert-block alert-success fade in">
-                                <strong>说明:</strong> {{ form.variable_list.description|safe }}.
-                                <p>用|作为key和value的分隔符,用,作为多个变量赋值的分隔符,用=作为变量赋值的分隔符</p>
-                                <p>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254,netmask=255.255.255.192</p>
+                                <strong>说明:</strong>
+                                <p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>
+                                <p>用<code>,</code> 作为多个变量赋值的分隔符</p>
+                                <p>用<code>=</code> 作为变量赋值的分隔符</p>
+                                <strong>例如:</strong>
+                                <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254,netmask=255.255.255.192</code>
                             </div>
                         </div>
                     </div>
