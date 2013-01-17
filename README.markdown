@@ -21,17 +21,41 @@ BRISEIS设计
 
 ### 服务器管理
 
-`www.briseisapp.com/server` 显示服务器列表
+`www.briseisapp.com/server`
+
+### 状态查询
+
+#### 操作说明
+
+并发状态检测工具.支持如下三种检查类型类型:
+
+* SSH状态测试
+* PING状态测试
+* SOCKET状态测试
+
+#### URL设计
+
+`www.briseisapp.com/check`         检测单列表
+
+`www.briseisapp.com/check/{id}`    显示操作单细节
+
+`www.briseisapp.com/check/create`  创建标准操作单,默认为`/check/create/ping`任务
+
+`www.briseisapp.com/check/create/ssh`  创建SSH联通性测试任务
+
+`www.briseisapp.com/check/create/ping`    创建PING联通性任务
+
+`www.briseisapp.com/check/create/socket`    创建SOCKET联通性任务
 
 ### 自动化操作
 
 #### 操作说明
 
-交互式的,更好用户体验的操作平台.支持操作单类型:测试状态,远程执行
+并发自动化远程执行工具.支持如下三种操作类型:
 
-*    状态检测当前支持PING,SSH以及SOCKET测试
-
-*    远程执行当前支持预定义操作,自定义操作以及模板操作
+* 预定义操作
+* 自定义操作
+* 从模板创建自定义操作
 
 #### URL设计
 
@@ -39,7 +63,14 @@ BRISEIS设计
 
 `www.briseisapp.com/operate/{id}` 显示操作单细节
 
-`www.briseisapp.com/operate/create` 创建操作单
+`www.briseisapp.com/operate/create`          创建标准操作单,默认为`/operate/create/default`任务
+
+`www.briseisapp.com/operate/create/define`   创建标准操作单
+
+`www.briseisapp.com/operate/create/custom`   创建自定义操作单
+
+`www.briseisapp.com/operate/create/template` 从模板创建自定义操作单
+
 
 ### 个人管理
 
