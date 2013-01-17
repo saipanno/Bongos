@@ -1,35 +1,43 @@
 {% extends "operate/operate_create.html" %}
 
-{% block active_normal %} class="active"{% endblock %}
+{% block active_default %}active{% endblock %}
 
 {% block content %}
 <div class="span10">
-
-    {% block content_header %}
-    <div class="hero-unit">
-        <h1>新增操作</h1>
-        <p>新增操作页,根据需求填写下面表格</p>
-        <p><a class="btn btn-primary btn-large">了解更多 &raquo;</a></p>
-    </div>
-    {% endblock %}
-
-    {% block content_body %}
-    <div class="row-fluid">
+    <div class="tabbable">
         <form method="post" action="">
 
             {{ form.hidden_tag() }}
-            <div class="control-group .form-horizontal">
-                {{ form.server_list.label(class="control-label") }}
-                <div class="controls">
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#server" data-toggle="tab">Servers</a></li>
+                <li class=""><a href="#script" data-toggle="tab">Script</a></li>
+                <li class=""><a href="#auth" data-toggle="tab">Auth</a></li>
+            </ul>
+
+            <div class="tab-content" style="padding-bottom: 9px;">
+                <div class="tab-pane active" id="server">
                     {{ form.server_list(rows=10) }}
-                    <p class="help-block">{{ form.server_list.description|safe }}</p>
+                    <div class="alert alert-block alert-success fade in">
+                        <strong>说明:</strong> {{ form.server_list.description|safe }}.
+                    </div>
+                </div>
+                <div class="tab-pane" id="script">
+                    {{ form.server_list(rows=10) }}
+                    <div class="alert alert-block alert-success fade in">
+                        <strong>说明:</strong> {{ form.server_list.description|safe }}.
+                    </div>
+                </div>
+                <div class="tab-pane" id="auth">
+                    <div class="alert alert-block alert-error fade in">
+                        <!-- TODO:增加用户认证配置.  -->
+                        <strong>注意:</strong> 当前只支持完成KU6认证配置的服务器.
+                    </div>
                 </div>
             </div>
 
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit(class="btn btn-success") }}
         </form>
     </div>
-    {% endblock %}
-
 </div>
 {% endblock %}

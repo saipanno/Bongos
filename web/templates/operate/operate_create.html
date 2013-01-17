@@ -6,17 +6,11 @@
         <div class="span2">
 
             {% block sidebar %}
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="nav-header">状态测试</li>
-                    <li ><a href="#">PING测试</a></li>
-                    <li><a href="#">SSH登录测试</a></li>
-                    <li class="nav-header">批量操作</li>
-                    <li{% block active_normal %}{% endblock %}><a href="{{ url_for('create_normal_operate_ctrl')}}">标准操作</a></li>
-                    <li{% block active_custom %}{% endblock %}><a href="{{ url_for('create_custom_operate_ctrl')}}">执行脚本</a></li>
-                    <li{% block active_template %}{% endblock %}><a href="{{ url_for('create_template_operate_ctrl')}}">执行模板</a></li>
+                <ul class="nav nav-tabs nav-stacked">
+                    <li class="{% block active_default %}{% endblock %}"><a href="{{ url_for('create_default_operate_ctrl')}}">创建标准操作</a></li>
+                    <li class="{% block active_custom %}{% endblock %}"><a href="{{ url_for('create_custom_operate_ctrl')}}">创建自定义操作</a></li>
+                    <li class="{% block active_template %}{% endblock %}"><a href="{{ url_for('create_template_operate_ctrl')}}">从模板创建操作</a></li>
                 </ul>
-            </div>
             {% endblock %}
 
         </div>
