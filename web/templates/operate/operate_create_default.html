@@ -3,52 +3,60 @@
 {% block active_default %}active{% endblock %}
 
 {% block main %}
-<div class="span10">
-    <div class="tabbable">
-        <form method="post" action="">
+    <div class="span10">
 
-            {{ form.hidden_tag() }}
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="active">Remote Operate <span class="divider">/</span></li>
+            {% block top %}{% endblock %}
+            <li class="pull-right"><a><i class="icon-plus"></i> Create</a></li>
+        </ul>
 
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#server" data-toggle="tab">Servers</a></li>
-                <li class=""><a href="#script" data-toggle="tab">Script</a></li>
-                <li class=""><a href="#auth" data-toggle="tab">Auth</a></li>
-            </ul>
+        <div class="tabbable">
+            <form method="post" action="">
 
-            <div class="tab-content" style="padding-bottom: 9px;">
-                <div class="tab-pane active row-fluid" id="server">
+                {{ form.hidden_tag() }}
 
-                    <div class="span4">{{ form.server_list(rows=10) }}</div>
-                    <div class="span6">
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.server_list.description|safe }}</p>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#server" data-toggle="tab">Servers</a></li>
+                    <li class=""><a href="#script" data-toggle="tab">Script</a></li>
+                    <li class=""><a href="#auth" data-toggle="tab">Auth</a></li>
+                </ul>
+
+                <div class="tab-content" style="padding-bottom: 9px;">
+                    <div class="tab-pane active row-fluid" id="server">
+
+                        <div class="span4">{{ form.server_list(rows=10) }}</div>
+                        <div class="span6">
+                            <div class="alert alert-block alert-success fade in">
+                                <strong>说明:</strong>
+                                <p>{{ form.server_list.description|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane row-fluid" id="script">
+                        <div class="span4">{{ form.server_list(rows=10) }}</div>
+                        <div class="span6">
+                            <div class="alert alert-block alert-success fade in">
+                                <strong>说明:</strong>
+                                <p>{{ form.server_list.description|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane row-fluid" id="auth">
+                        <div class="span4"></div>
+                        <div class="span6">
+                            <div class="alert alert-block alert-error fade in">
+                                <!-- TODO:增加用户认证配置.  -->
+                                <strong>注意:</strong>
+                                <p>当前只支持完成KU6认证配置的服务器.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane row-fluid" id="script">
-                    <div class="span4">{{ form.server_list(rows=10) }}</div>
-                    <div class="span6">
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.server_list.description|safe }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane row-fluid" id="auth">
-                    <div class="span4"></div>
-                    <div class="span6">
-                        <div class="alert alert-block alert-error fade in">
-                            <!-- TODO:增加用户认证配置.  -->
-                            <strong>注意:</strong>
-                            <p>当前只支持完成KU6认证配置的服务器.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            {{ form.submit(class="btn btn-success") }}
-        </form>
+                {{ form.submit(class="btn btn-success") }}
+            </form>
+        </div>
     </div>
-</div>
 {% endblock %}

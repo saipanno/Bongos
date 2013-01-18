@@ -4,6 +4,14 @@
 
 {% block main %}
     <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="active">Remote Operate <span class="divider">/</span></li>
+            {% block top %}{% endblock %}
+            <li class="pull-right"><a><i class="icon-plus"></i> Create</a></li>
+        </ul>
+
         <div class="tabbable">
             <form method="post" action="">
 

@@ -46,20 +46,20 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
+            <div class="span3">
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         <li class="nav-header">CHECK STATUS</li>
-                        <li><a href="#">Ssh</a></li>
-                        <li><a href="#">Ping</a></li>
-                        <li><a href="#">Socket</a></li>
+                        <li class="{% block active_ssh %}{% endblock %}"><a href="#">Ssh</a></li>
+                        <li class="{% block active_ping %}{% endblock %}"><a href="#">Ping</a></li>
+                        <li class="{% block active_socket %}{% endblock %}"><a href="#">Socket</a></li>
                         <li class="nav-header">REMOTE OPERATE</li>
-                        <li><a href="{{ url_for('create_default_operate_ctrl')}}">Standard Script</a></li>
-                        <li><a href="{{ url_for('create_custom_operate_ctrl')}}">User Custom Script</a></li>
-                        <li><a href="{{ url_for('create_template_operate_ctrl')}}">Custom From Template</a></li>
+                        <li class="{% block active_default %}{% endblock %}"><a href="{{ url_for('create_default_operate_ctrl')}}">Standard Script</a></li>
+                        <li class="{% block active_custom %}{% endblock %}"><a href="{{ url_for('create_custom_operate_ctrl')}}">User Custom Script</a></li>
+                        <li class="{% block active_template %}{% endblock %}"><a href="{{ url_for('create_template_operate_ctrl')}}">Custom From Template</a></li>
                         <li class="nav-header">IPMI OPERATE</li>
-                        <li><a href="#">Reboot</a></li>
-                        <li><a href="#">Shutdown</a></li>
+                        <li class="{% block active_reboot %}{% endblock %}"><a href="#">Reboot</a></li>
+                        <li class="{% block active_shutdown %}{% endblock %}"><a href="#">Shutdown</a></li>
                     </ul>
                 </div>
             </div>
