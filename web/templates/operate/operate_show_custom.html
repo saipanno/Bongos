@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block active_custom %}active{% endblock %}
+
+{% block main %}
+    <div class="span9">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Remote Operate</a><span class="divider">/</span></li>
+            <li><a href="#">User Custom Script</a> <span class="divider">/</span></li>
+            <li class="active">Show</li>
+            <li class="pull-right"><a href="{{ url_for('create_custom_operate_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
+        </ul>
+
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>USER</th>
+                <th>TYPE</th>
+                <th>STATUS</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>wangruoyan</td>
+                <td>DEFAULT</td>
+                <td>FINISH</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>wangruoyan</td>
+                <td>CUSTOM</td>
+                <td>WAITING</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>wangruoyan</td>
+                <td>CUSTOM</td>
+                <td>RUNNING</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>wangruoyan</td>
+                <td>DEFAULT</td>
+                <td>FINISH</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}

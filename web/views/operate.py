@@ -14,7 +14,6 @@ from web import app
 
 from web.forms import OperateCreateDefaultForm
 from web.forms import OperateCreateCustomForm
-from web.forms import OperateCreateTemplateForm
 
 from web.models import OperateCreateDefineRunner
 
@@ -54,19 +53,17 @@ def create_custom_operate_ctrl():
 
         return render_template('show_fucking.html', fucking=form.server_list.data)
 
-@app.route('/operate/create/template', methods=("GET", "POST"))
-def create_template_operate_ctrl():
-
-    form = OperateCreateTemplateForm()
+@app.route('/operate/show')
+@app.route('/operate/show/default')
+def show_default_operate_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/operate_create_template.html', form=form)
+        return render_template('operate/operate_show_default.html')
 
-    elif request.method == 'POST':
+@app.route('/operate/show/custom')
+def show_custom_operate_ctrl():
 
-        operate = OperateCreateDefineRunner(0, form.server_list.data, form.command_list.data, form.variable_list.data)
-        db.session.add(operate)
-        db.session.commit()
+    if request.method == 'GET':
 
-        return render_template('show_fucking.html', fucking=form.server_list.data)
+        return render_template('operate/operate_show_custom.html')
