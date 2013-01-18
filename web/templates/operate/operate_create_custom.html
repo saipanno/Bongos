@@ -42,7 +42,21 @@
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.command_list.description|safe }}</p>
+                            <p>用<code>{</code>和<code>}</code>作为外部变量的定界符,模板中此类变量会自动按照变量文件中的定义进行替换.</p>
+                            <p>同时模板依然支持shell中的<code>$</code>变量</p>
+                            <pre>for device in `/sbin/ifconfig -a | awk '/^e/ { print $1 }'`; do
+    mac=`ifconfig $device | grep HWaddr | awk '{ print $5 }'`
+    if [ "$device" == "eth0" -o "$device" == "em1" ]; then
+        echo "DEVICE=$device"    > /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "TYPE=Ethernet"     >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "BOOTPROTO=static"  >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "HWADDR=$mac"       >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "IPADDR={address}"  >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "NETMASK={netmask}" >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "GATEWAY={gateway}" >> /etc/sysconfig/network-scripts/ifcfg-$device
+        echo "ONBOOT=yes"        >> /etc/sysconfig/network-scripts/ifcfg-$device
+    fi
+done</pre>
                         </div>
                     </div>
 
