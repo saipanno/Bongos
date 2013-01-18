@@ -1,8 +1,8 @@
-{% extends "operate/operate_create.html" %}
+{% extends "layout.html" %}
 
 {% block active_template %}active{% endblock %}
 
-{% block content %}
+{% block main %}
     <div class="span10">
         <div class="tabbable">
             <form method="post" action="">
@@ -19,7 +19,7 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
                     <div class="tab-pane active row-fluid" id="server">
                         <div class="span4">{{ form.server_list(rows=10) }}</div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-success fade in">
                                 <strong>说明:</strong>
                                 <p>{{ form.server_list.description|safe }}</p>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="tab-pane row-fluid" id="template">
                         <div class="span4">{{ form.command_list(rows=10) }}</div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-success fade in">
                                 <strong>说明:</strong>
                                 <p>{{ form.command_list.description|safe }}</p>
@@ -37,20 +37,20 @@
                     </div>
                     <div class="tab-pane row-fluid" id="variable">
                         <div class="span4">{{ form.variable_list(rows=10) }}</div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-success fade in">
                                 <strong>说明:</strong>
                                 <p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>
                                 <p>用<code>,</code> 作为多个变量赋值的分隔符</p>
                                 <p>用<code>=</code> 作为变量赋值的分隔符</p>
                                 <strong>例如:</strong>
-                                <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254,netmask=255.255.255.192</code>
+                                <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane row-fluid" id="auth">
                         <div class="span4"></div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-error fade in">
                                 <!-- TODO:增加用户认证配置.  -->
                                 <strong>注意:</strong>

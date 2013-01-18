@@ -13,6 +13,12 @@ from web import app
 
 from web.forms import UserLoginForm
 
+@app.route('/', methods=['GET', 'POST'])
+def index_ctrl():
+
+    if request.method == 'GET':
+        return  render_template('index.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login_ctrl():

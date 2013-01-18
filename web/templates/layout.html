@@ -1,31 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>{% block title %}BRISEIS, A Simple but Useful DataCenter Manager{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Ruoyan Wong">
+{% extends "header.html" %}
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
+{% block style %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+    </style>
+{% endblock %}
 
-    {% block style %}{% endblock %}
+{% block body %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
 
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
 
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+                <a class="brand" href="#">Briseis Manager</a>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-</head>
+                <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">User <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Setting</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Quit</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-<body>
+                <form class="navbar-search pull-right" action="">
+                    <input class="search-query span2" placeholder="Search" type="text">
+                </form>
 
-{% block main %}{% endblock %}
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">CHECK STATUS</li>
+                        <li><a href="#">Ssh</a></li>
+                        <li><a href="#">Ping</a></li>
+                        <li><a href="#">Socket</a></li>
+                        <li class="nav-header">REMOTE OPERATE</li>
+                        <li><a href="{{ url_for('create_default_operate_ctrl')}}">Standard Script</a></li>
+                        <li><a href="{{ url_for('create_custom_operate_ctrl')}}">User Custom Script</a></li>
+                        <li><a href="{{ url_for('create_template_operate_ctrl')}}">Custom From Template</a></li>
+                        <li class="nav-header">IPMI OPERATE</li>
+                        <li><a href="#">Reboot</a></li>
+                        <li><a href="#">Shutdown</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            {% block main %}{% endblock %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

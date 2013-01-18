@@ -1,8 +1,8 @@
-{% extends "operate/operate_create.html" %}
+{% extends "layout.html" %}
 
 {% block active_custom %}active{% endblock %}
 
-{% block content %}
+{% block main %}
     <div class="span10">
         <div class="tabbable">
             <form method="post" action="">
@@ -18,7 +18,7 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
                     <div class="tab-pane active row-fluid" id="server">
                         <div class="span4">{{ form.server_list(rows=10) }}</div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-success fade in">
                                 <strong>说明:</strong>
                                 <p>{{ form.server_list.description|safe }}</p>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="tab-pane row-fluid" id="template">
                         <div class="span4">{{ form.command_list(rows=10) }}</div>
-                        <div class="span8">
+                        <div class="span6">
 
                             <div class="alert alert-block alert-success fade in">
                                 <strong>说明:</strong>
@@ -39,7 +39,7 @@
                         <div class="span4">
                             <!-- TODO:增加用户认证配置.  -->
                         </div>
-                        <div class="span8">
+                        <div class="span6">
                             <div class="alert alert-block alert-error fade in">
                                 <strong>注意:</strong>
                                 <p>当前只支持完成KU6认证配置的服务器.</p>

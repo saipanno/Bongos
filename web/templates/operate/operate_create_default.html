@@ -1,8 +1,8 @@
-{% extends "operate/operate_create.html" %}
+{% extends "layout.html" %}
 
 {% block active_default %}active{% endblock %}
 
-{% block content %}
+{% block main %}
 <div class="span10">
     <div class="tabbable">
         <form method="post" action="">
@@ -18,10 +18,8 @@
             <div class="tab-content" style="padding-bottom: 9px;">
                 <div class="tab-pane active row-fluid" id="server">
 
-                    <div class="span4">
-                        {{ form.server_list(rows=10) }}
-                    </div>
-                    <div class="span8">
+                    <div class="span4">{{ form.server_list(rows=10) }}</div>
+                    <div class="span6">
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
                             <p>{{ form.server_list.description|safe }}</p>
@@ -29,10 +27,8 @@
                     </div>
                 </div>
                 <div class="tab-pane row-fluid" id="script">
-                    <div class="span4">
-                        {{ form.server_list(rows=10) }}
-                    </div>
-                    <div class="span8">
+                    <div class="span4">{{ form.server_list(rows=10) }}</div>
+                    <div class="span6">
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
                             <p>{{ form.server_list.description|safe }}</p>
@@ -41,7 +37,7 @@
                 </div>
                 <div class="tab-pane row-fluid" id="auth">
                     <div class="span4"></div>
-                    <div class="span8">
+                    <div class="span6">
                         <div class="alert alert-block alert-error fade in">
                             <!-- TODO:增加用户认证配置.  -->
                             <strong>注意:</strong>
