@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-{% import "macro.html" as gift %}
 
 {% block active_default %}active{% endblock %}
 
@@ -14,7 +13,16 @@
             <li class="pull-right"><a href="{{ url_for('create_default_operate_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
         </ul>
 
-        {{ gift.create_status(status, message) }}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
 
         <table class="table table-hover table-bordered table-condensed">
             <thead>
