@@ -74,15 +74,12 @@ done</pre>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="auth">
-                        <div class="span2"></div>
-                        <div class="span6"></div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-error fade in">
-                            <!-- TODO:增加用户认证配置.  -->
-                            <strong>注意:</strong>
-                            <p>当前只支持完成KU6认证配置的服务器</p>
-                        </div>
+                    <div class="span2">{{ form.config.label }}</div>
+                    <div class="span6">{{ form.config(class="span12", multiple="multiple") }}</div>
+                    <div class="clearfix"></div>
+                    <div class="alert alert-block alert-success fade in">
+                        <strong>说明:</strong>
+                        <p>{{ form.config.description }}</p>
                     </div>
                 </div>
 
