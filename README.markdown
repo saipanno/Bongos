@@ -63,13 +63,11 @@ BRISEIS设计
 
 `www.briseisapp.com/operate/{id}` 显示操作单细节
 
-`www.briseisapp.com/operate/create`          创建标准操作单,默认为`/operate/create/default`任务
+`www.briseisapp.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
 
 `www.briseisapp.com/operate/create/define`   创建标准操作单
 
 `www.briseisapp.com/operate/create/custom`   创建自定义操作单
-
-`www.briseisapp.com/operate/create/template` 从模板创建自定义操作单
 
 
 ### 个人管理
