@@ -12,17 +12,16 @@ from flask import render_template, request
 from web import db
 from web import app
 
-from web.forms import OperateCreateDefaultForm
-from web.forms import OperateCreateCustomForm
+from web.forms import CreateDefaultOperateForm
+from web.forms import CreateCustomOperateForm
 
-from web.models import OperateCreateDefineRunner
-
+from web.models import CreateOperateRunner
 
 @app.route('/operate/create', methods=("GET", "POST"))
 @app.route('/operate/create/default', methods=("GET", "POST"))
 def create_default_operate_ctrl():
 
-    form = OperateCreateDefaultForm()
+    form = CreateDefaultOperateForm()
 
     if request.method == 'GET':
 
@@ -30,16 +29,16 @@ def create_default_operate_ctrl():
 
     elif request.method == 'POST':
 
-        operate = OperateCreateDefineRunner(0, form.server_list.data, form.command_list.data, form.variable_list.data)
+        operate = CreateOperateRunner(0, form.server.data, form.script.data)
         db.session.add(operate)
         db.session.commit()
 
-        return render_template('show_fucking.html', fucking=form.server_list.data)
+        return render_template('operate/operate_show_default.html', status='success', message='Operate create successful.')
 
 @app.route('/operate/create/custom', methods=("GET", "POST"))
 def create_custom_operate_ctrl():
 
-    form = OperateCreateCustomForm()
+    form = CreateCustomOperateForm()
 
     if request.method == 'GET':
 
@@ -47,11 +46,11 @@ def create_custom_operate_ctrl():
 
     elif request.method == 'POST':
 
-        operate = OperateCreateDefineRunner(0, form.server_list.data, form.command_list.data, form.variable_list.data)
+        operate = CreateOperateRunner(1, form.server.data, form.script.data, form.var.data)
         db.session.add(operate)
         db.session.commit()
 
-        return render_template('show_fucking.html', fucking=form.server_list.data)
+        return render_template('operate/operate_show_custom.html', status='success', message='Operate create successful.')
 
 @app.route('/operate/show')
 @app.route('/operate/show/default')
@@ -59,11 +58,15 @@ def show_default_operate_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/operate_show_default.html')
+        operates = CreateOperateRunner.query.filter_by(type=0).all()
+
+        return render_template('operate/operate_show_default.html', operates=operates)
 
 @app.route('/operate/show/custom')
 def show_custom_operate_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/operate_show_custom.html')
+        operates = CreateOperateRunner.query.filter_by(type=1).all()
+
+        return render_template('operate/operate_show_custom.html', operates=operates)

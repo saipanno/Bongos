@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block active_default %}active{% endblock %}
+{% block active_ssh %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -19,29 +19,18 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#server" data-toggle="tab">1.Servers <i class="icon-hand-right"></i></a></li>
-                    <li class=""><a href="#script" data-toggle="tab">2.Script <i class="icon-hand-right"></i></a></li>
-                    <li class=""><a href="#auth" data-toggle="tab">3.Auth</a></li>
+                    <li class=""><a href="#auth" data-toggle="tab">2.Auth</a></li>
                 </ul>
 
                 <div class="tab-content" style="padding-bottom: 9px;">
 
                     <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server.label|safe }}</div>
-                        <div class="span6">{{ form.server(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.server_list.label|safe }}</div>
+                        <div class="span6">{{ form.server_list(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.server.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane breadcrumb" id="script">
-                        <div class="span2">{{ form.script.label|safe }}</div>
-                        <div class="span6">{{ form.script(class="span12", multiple="multiple")|safe }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.script.description|safe }}</p>
+                            <p>{{ form.server_list.description|safe }}</p>
                         </div>
                     </div>
 

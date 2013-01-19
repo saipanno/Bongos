@@ -8,18 +8,18 @@
 
 from web import db
 
-class OperateCreateDefineRunner(db.Model):
+class CreateOperateRunner(db.Model):
     __tablename__ = 'operate_list'
-    id = db.Column(db.Integer, primary_key=True)
-    operate_type = db.Column(db.Integer)
-    server_list = db.Column(db.UnicodeText)
-    command_list = db.Column(db.UnicodeText)
-    variable_list = db.Column(db.UnicodeText)
-    operate_status = db.Column(db.Integer)
+    id     = db.Column(db.Integer, primary_key=True)
+    type   = db.Column(db.Integer)
+    server = db.Column(db.UnicodeText)
+    script = db.Column(db.UnicodeText)
+    var    = db.Column(db.UnicodeText)
+    status = db.Column(db.Integer)
 
-    def __init__(self, operate_type, server_list, command_list, variable_list, operate_status=False):
-        self.operate_type = operate_type
-        self.server_list = server_list
-        self.command_list = command_list
-        self.variable_list = variable_list
-        self.operate_status = operate_status
+    def __init__(self, type, server, script, var='', status=0):
+        self.type = type
+        self.server = server
+        self.script = script
+        self.var    = var
+        self.status = status

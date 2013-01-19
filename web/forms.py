@@ -18,20 +18,21 @@ class UserLoginForm(Form):
 
     submit = SubmitField(u'login', id='submit', description='submit')
 
-class OperateCreateDefaultForm(Form):
+class CreateDefaultOperateForm(Form):
+
+    select_choices = [(1, u'CDN User Initialize'), (2, u'CDN CentOS Initialize'), (3, u'CDN DNS Update'), (4, u'Server Reboot'), (5, u'Server Shutdown')]
 
     next = HiddenField()
-    server_list = TextAreaField(u'服务器列表', id='textarea', description=u'需要远程执行命令的服务器列表,一行一个. 支持IP和域名.')
-    command_list = TextAreaField(u'命令列表', id='textarea', description=u'需要远程执行的命令列表, 支持SHELL变量以及模板变量.')
-    script_type = SelectField(u'脚本列表', id='select', description=u'预定义的脚本列表.')
+    server = TextAreaField(u'address/hostname:', id='textarea', description=u'server you want to operated, support address or hostname.')
+    script = SelectField(u'script', id='select', choices=select_choices, description=u'select script from given list.')
 
-    submit = SubmitField(u'提交', id='submit', description='submit')
+    submit = SubmitField(u'Create', id='submit', description='submit')
 
-class OperateCreateCustomForm(Form):
+class CreateCustomOperateForm(Form):
 
     next = HiddenField()
-    server_list = TextAreaField(u'服务器列表', id='textarea', description=u'需要远程执行命令的服务器列表,一行一个. 支持IP和域名.')
-    command_list = TextAreaField(u'命令列表', id='textarea', description=u'需要远程执行的命令列表, 支持SHELL变量以及模板变量.')
-    variable_list = TextAreaField(u'模板变量列表', id='textarea', description=u'模板变量列表.')
+    server = TextAreaField(u'address/hostname', id='textarea', description=u'server you want to operated, support address or hostname.')
+    script = TextAreaField(u'script', id='textarea', description=u'select script from given list.')
+    var = TextAreaField(u'var', id='textarea', description=u'var list.')
 
-    submit = SubmitField(u'提交', id='submit', description='submit')
+    submit = SubmitField(u'Create', id='submit', description='submit')
