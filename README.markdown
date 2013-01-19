@@ -13,15 +13,15 @@ BRISEIS设计
 
 ### 首页
 
-`www.briseisapp.com`
+`http://briseis.saipanno.com`
 
 ### 机架展示
 
-`www.briseisapp.com/rack`
+`http://briseis.saipanno.com/rack`
 
 ### 服务器管理
 
-`www.briseisapp.com/server`
+`http://briseis.saipanno.com/server`
 
 ### 状态查询
 
@@ -35,17 +35,17 @@ BRISEIS设计
 
 #### URL设计
 
-`www.briseisapp.com/check`         检测单列表
+`http://briseis.saipanno.com/check`         检测单列表
 
-`www.briseisapp.com/check/{id}`    显示操作单细节
+`http://briseis.saipanno.com/check/{id}`    显示操作单细节
 
-`www.briseisapp.com/check/create`  创建标准操作单,默认为`/check/create/ping`任务
+`http://briseis.saipanno.com/check/create`  创建标准操作单,默认为`/check/create/ping`任务
 
-`www.briseisapp.com/check/create/ssh`  创建SSH联通性测试任务
+`http://briseis.saipanno.com/check/create/ssh`  创建SSH联通性测试任务
 
-`www.briseisapp.com/check/create/ping`    创建PING联通性任务
+`http://briseis.saipanno.com/check/create/ping`    创建PING联通性任务
 
-`www.briseisapp.com/check/create/socket`    创建SOCKET联通性任务
+`http://briseis.saipanno.com/check/create/socket`    创建SOCKET联通性任务
 
 ### 自动化操作
 
@@ -59,20 +59,20 @@ BRISEIS设计
 
 #### URL设计
 
-`www.briseisapp.com/operate` 操作单列表
+`http://briseis.saipanno.com/operate` 操作单列表
 
-`www.briseisapp.com/operate/{id}` 显示操作单细节
+`http://briseis.saipanno.com/operate/{id}` 显示操作单细节
 
-`www.briseisapp.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
+`http://briseis.saipanno.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
 
-`www.briseisapp.com/operate/create/define`   创建标准操作单
+`http://briseis.saipanno.com/operate/create/define`   创建标准操作单
 
-`www.briseisapp.com/operate/create/custom`   创建自定义操作单
+`http://briseis.saipanno.com/operate/create/custom`   创建自定义操作单
 
 
 ### 个人管理
 
-`www.briseisapp.com/setting` 显示,修改个人信息
+`http://briseis.saipanno.com/setting` 显示,修改个人信息
 
 
 # 应用布局设计
