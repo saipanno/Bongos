@@ -29,7 +29,9 @@
             <tr>
                 <th>ID</th>
                 <th>USER</th>
-                <th>TYPE</th>
+                <th>DATETIME</th>
+                <th>SERVER</th>
+                <th>SCRIPT-ID</th>
                 <th>STATUS</th>
             </tr>
             </thead>
@@ -38,7 +40,9 @@
             <tr>
                 <td>{{ operate.id }}</td>
                 <td>wangruoyan</td>
-                <td>{{ operate.type }}</td>
+                <td>{{ operate.datetime }}</td>
+                <td>{{ operate.server_group }}</td>
+                <td>{{ operate.script_id }}</td>
                 <td>{{ operate.status }}</td>
             </tr>
             {% endfor %}

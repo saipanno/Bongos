@@ -6,9 +6,7 @@
 #
 #    Created at 2013/01/16. Ruoyan Wong(@saipanno).
 
-
 from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, SubmitField, SelectField, PasswordField
-
 
 class UserLoginForm(Form):
 
@@ -25,7 +23,7 @@ class CreateDefaultOperateForm(Form):
 
     next = HiddenField()
     server = TextAreaField(u'address/hostname:', id='textarea', description=u'server you want to operated, support address or hostname.')
-    script = SelectField(u'script', id='select', choices=script_choices, description=u'select script from given list.')
+    script_id = SelectField(u'script', id='select', choices=script_choices, description=u'select script from given list.')
     config = SelectField(u'ssh_confg', id='select', choices=ssh_configs, description=u'ssh config')
     submit = SubmitField(u'Create', id='submit', description='submit')
 
@@ -35,7 +33,7 @@ class CreateCustomOperateForm(Form):
 
     next = HiddenField()
     server = TextAreaField(u'address/hostname', id='textarea', description=u'server you want to operated, support address or hostname.')
-    script = TextAreaField(u'script', id='textarea', description=u'select script from given list.')
-    var = TextAreaField(u'var', id='textarea', description=u'var list.')
+    template_script = TextAreaField(u'template script', id='textarea', description=u'select script from given list.')
+    template_vars = TextAreaField(u'template vars', id='textarea', description=u'var list.')
     config = SelectField(u'ssh_confg', id='select', choices=ssh_configs, description=u'ssh config')
     submit = SubmitField(u'Create', id='submit', description='submit')

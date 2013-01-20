@@ -8,8 +8,7 @@
 
 import time
 
-from flask import render_template, request, redirect, url_for, flash
-#from flask.ext.sqlalchemy import desc
+from flask import render_template, request, redirect, url_for, flash, g
 from sqlalchemy import desc
 
 from web import db
@@ -18,8 +17,9 @@ from web import app
 from web.forms import CreateDefaultOperateForm
 from web.forms import CreateCustomOperateForm
 
-from web.models import OperateList
-from web.models import RemoteScript
+from web.models import PreDefinedOperate
+from web.models import CustomOperate
+from web.models import PreDefinedScript
 from web.models import SshConfig
 
 @app.route('/operate/create', methods=("GET", "POST"))
@@ -34,9 +34,7 @@ def create_default_operate_ctrl():
 
     elif request.method == 'POST':
 
-        operate_type = 0
-
-        operate = OperateList(operate_type, time.strftime("%Y/%m/%d %H:%M"), form.server.data, form.script.data, form.ssh.data)
+        operate = PreDefinedOperate(time.strftime('%Y-%m-%d %H:%M'), form.server.data, form.script_id.data, form.config.data)
         db.session.add(operate)
         db.session.commit()
 
@@ -55,16 +53,7 @@ def create_custom_operate_ctrl():
 
     elif request.method == 'POST':
 
-        script_type = 1
-        operate_type = 1
-
-        script = RemoteScript(script_type, form.script.data, form.var.data)
-        db.session.add(script)
-        db.session.commit()
-
-        script_id = 111
-
-        operate = OperateList(operate_type, time.strftime("%Y/%m/%d %H:%M"), form.server.data, script_id, form.ssh.data)
+        operate = CustomOperate(time.strftime('%Y-%m-%d %H:%M'), form.server.data, form.template_script.data, form.template_vars.data, form.config.data)
         db.session.add(operate)
         db.session.commit()
 
@@ -78,7 +67,7 @@ def show_default_operate_ctrl():
 
     if request.method == 'GET':
 
-        operates = OperateList.query.filter_by(type=0).order_by(desc(OperateList.id)).all()
+        operates = PreDefinedOperate.query.order_by(desc(PreDefinedOperate.id)).all()
 
         return render_template('operate/operate_show_default.html', operates=operates)
 
@@ -87,6 +76,6 @@ def show_custom_operate_ctrl():
 
     if request.method == 'GET':
 
-        operates = OperateList.query.filter_by(type=1).order_by(desc(OperateList.id)).all()
+        operates = CustomOperate.query.order_by(desc(CustomOperate.id)).all()
 
         return render_template('operate/operate_show_custom.html', operates=operates)

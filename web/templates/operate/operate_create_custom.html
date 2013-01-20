@@ -37,8 +37,8 @@
                     </div>
 
                     <div class="tab-pane breadcrumb" id="template">
-                        <div class="span2">{{ form.script.label|safe }}</div>
-                        <div class="span6">{{ form.script(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.template_script.label|safe }}</div>
+                        <div class="span6">{{ form.template_script(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
@@ -61,8 +61,8 @@ done</pre>
                     </div>
 
                     <div class="tab-pane breadcrumb" id="variable">
-                        <div class="span2">{{ form.var.label|safe }}</div>
-                        <div class="span6">{{ form.var(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.template_vars.label|safe }}</div>
+                        <div class="span6">{{ form.template_vars(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
@@ -74,16 +74,31 @@ done</pre>
                         </div>
                     </div>
 
-                    <div class="span2">{{ form.config.label }}</div>
-                    <div class="span6">{{ form.config(class="span12", multiple="multiple") }}</div>
-                    <div class="clearfix"></div>
-                    <div class="alert alert-block alert-success fade in">
-                        <strong>说明:</strong>
-                        <p>{{ form.config.description }}</p>
+                    <div class="tab-pane breadcrumb" id="auth">
+                        <div class="span2">{{ form.config.label }}</div>
+                        <div class="span6">{{ form.config(class="span12", multiple="multiple") }}</div>
+                        <div class="clearfix"></div>
+                        <div class="alert alert-block alert-success fade in">
+                            <strong>说明:</strong>
+                            <p>{{ form.config.description }}</p>
+                        </div>
+                    </div>
+
+                    <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
+                    <div id="commit" class="modal hide fade">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3>Warning!</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure to do this operate??</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Don't Create</button>
+                            {{ form.submit(class="btn btn-danger") }}
+                        </div>
                     </div>
                 </div>
-
-                {{ form.submit(class="btn btn-success pull-right") }}
             </form>
         </div>
     </div>
