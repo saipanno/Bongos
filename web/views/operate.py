@@ -14,7 +14,7 @@ from sqlalchemy import desc
 from web import db
 from web import app
 
-from web.forms.operate import CreateDefaultOperateForm
+from web.forms.operate import CreatePreDefinedOperateForm
 from web.forms.operate import CreateCustomOperateForm
 
 from web.models.operate import PreDefinedOperate
@@ -27,7 +27,7 @@ from web.models.base import SshConfig
 @app.route('/operate/create/default', methods=("GET", "POST"))
 def create_predefined_operate_ctrl():
 
-    form = CreateDefaultOperateForm()
+    form = CreatePreDefinedOperateForm()
 
     if request.method == 'GET':
 
@@ -71,7 +71,7 @@ def create_custom_operate_ctrl():
 
             flash(u'Create operate successful.', 'success')
 
-            return redirect(url_for('show_custom_operate_ctrl', status='success', message='Operate create successful.'))
+            return redirect(url_for('show_custom_operate_ctrl'))
 
 @app.route('/operate/show')
 @app.route('/operate/show/default')

@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
-{% block active_predefined %}active{% endblock %}
+{% block active_ping %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="active"><a href="#">Remote Operate</a><span class="divider">/</span></li>
-            <li class="active"><a href="#">PreDefined Script</a> <span class="divider">/</span></li>
+            <li class="active"><a href="#">Status Detect</a><span class="divider">/</span></li>
+            <li class="active"><a href="#">Ping</a> <span class="divider">/</span></li>
             <li class="active">Create</li>
         </ul>
 
@@ -18,13 +18,11 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Create PreDefined Operate
+                    Create Ping Detect
                 </legend>
 
                 <ul class="nav nav-pills">
                     <li class="active"><a href="#server" data-toggle="tab">1. Servers</a></li>
-                    <li class=""><a href="#script" data-toggle="tab">2. Script</a></li>
-                    <li class=""><a href="#auth" data-toggle="tab">3. Auth</a></li>
                 </ul>
 
                 <div class="tab-content" style="padding-bottom: 9px;">
@@ -39,25 +37,6 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="script">
-                        <div class="span2">{{ form.script_id.label|safe }}</div>
-                        <div class="span6">{{ form.script_id(class="span12", multiple="multiple")|safe }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.script_id.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane breadcrumb" id="auth">
-                        <div class="span2">{{ form.ssh_config.label }}</div>
-                        <div class="span6">{{ form.ssh_config(class="span12", multiple="multiple") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.ssh_config.description }}</p>
-                        </div>
-                    </div>
                 </div>
 
                 <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
@@ -67,7 +46,7 @@
                         <h3>Warning!</h3>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure to do this operate??</p>
+                        <p>Are you sure to do this detect??</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Don't Create</button>

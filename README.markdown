@@ -35,15 +35,15 @@ BRISEIS设计
 
 #### URL设计
 
-`http://briseis.saipanno.com/check`         检测单列表
+`http://briseis.saipanno.com/detect`         检测单列表
 
-`http://briseis.saipanno.com/check/{id}`    显示操作单细节
+`http://briseis.saipanno.com/detect/{id}`    显示操作单细节
 
-`http://briseis.saipanno.com/check/create`  创建标准操作单,默认为`/check/create/ping`任务
+`http://briseis.saipanno.com/detect/create`  创建标准操作单,默认为`/check/create/ping`任务
 
-`http://briseis.saipanno.com/check/create/ssh`  创建SSH联通性测试任务
+`http://briseis.saipanno.com/detect/create/ssh`  创建SSH联通性测试任务
 
-`http://briseis.saipanno.com/check/create/ping`    创建PING联通性任务
+`http://briseis.saipanno.com/detect/create/ping`    创建PING联通性任务
 
 ### 自动化操作
 

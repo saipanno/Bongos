@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 
-{% block active_predefined %}active{% endblock %}
+{% block active_ping %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Remote Operate</a><span class="divider">/</span></li>
-            <li><a href="#">PreDefined Script</a> <span class="divider">/</span></li>
+            <li><a href="#">Status Detect</a><span class="divider">/</span></li>
+            <li><a href="#">Ping</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
-            <li class="pull-right"><a href="{{ url_for('create_predefined_operate_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
+            <li class="pull-right"><a href="{{ url_for('create_ping_detect_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
         </ul>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -31,19 +31,17 @@
                 <th>USER</th>
                 <th>DATETIME</th>
                 <th>SERVER</th>
-                <th>SCRIPT-ID</th>
                 <th>STATUS</th>
             </tr>
             </thead>
             <tbody>
-            {% for operate in operates %}
+            {% for detect in detects %}
             <tr>
-                <td>{{ operate.id }}</td>
-                <td>{{ operate.author }}</td>
-                <td>{{ operate.datetime }}</td>
-                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.server_list }}</td>
-                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.script_id }}</td>
-                <td>{{ operate.status }}</td>
+                <td>{{ detect.id }}</td>
+                <td>{{ detect.author }}</td>
+                <td>{{ detect.datetime }}</td>
+                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ detect.server_list }}</td>
+                <td>{{ detect.status }}</td>
             </tr>
             {% endfor %}
             </tbody>

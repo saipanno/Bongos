@@ -9,7 +9,7 @@
 from flask.ext.wtf import Form, TextField, TextAreaField, HiddenField, SubmitField, SelectField, PasswordField
 
 
-class CreateDefaultOperateForm(Form):
+class CreatePreDefinedOperateForm(Form):
 
     ssh_configs = [(1, u'ku6.com'), (2, u'snda.com'), (3, u'saipanno.com')]
     script_choices = [(1, u'CDN User Initialize'), (2, u'CDN CentOS Initialize'), (3, u'CDN DNS Update'), (4, u'Server Reboot'), (5, u'Server Shutdown')]

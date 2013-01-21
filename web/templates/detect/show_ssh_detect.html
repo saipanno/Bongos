@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block active_ssh %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Status Detect</a><span class="divider">/</span></li>
+            <li><a href="#">Ssh</a> <span class="divider">/</span></li>
+            <li class="active">Show</li>
+            <li class="pull-right"><a href="{{ url_for('create_ssh_detect_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
+        </ul>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {{ message }}
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <table class="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>USER</th>
+                <th>DATE</th>
+                <th>SERVER</th>
+                <th>STATUS</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detect in detects %}
+                <tr>
+                    <td>{{ detect.id }}</td>
+                    <td class="">{{ detect.author }}</td>
+                    <td class="">{{ detect.datetime }}</td>
+                    <td class="" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ detect.server_list }}</td>
+                    <td class="">{{ detect.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}
