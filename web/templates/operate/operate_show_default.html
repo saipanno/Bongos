@@ -39,10 +39,10 @@
             {% for operate in operates %}
             <tr>
                 <td>{{ operate.id }}</td>
-                <td>wangruoyan</td>
+                <td>{{ operate.author }}</td>
                 <td>{{ operate.datetime }}</td>
-                <td>{{ operate.server_group }}</td>
-                <td>{{ operate.script_id }}</td>
+                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.server_list }}</td>
+                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.script_id }}</td>
                 <td>{{ operate.status }}</td>
             </tr>
             {% endfor %}

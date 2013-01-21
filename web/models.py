@@ -21,18 +21,20 @@ class PreDefinedOperate(db.Model):
     __tablename__ = 'predefined_operate_list'
 
     id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.UnicodeText, nullable=False)
     datetime = db.Column(db.String, nullable=False)
-    server_group = db.Column(db.UnicodeText, nullable=False)
+    server_list = db.Column(db.UnicodeText, nullable=False)
     script_id = db.Column(db.UnicodeText, nullable=False)
     ssh_config = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, datetime, server_group, script_id, ssh_config):
+    def __init__(self, author, datetime, server_list, script_id, ssh_config):
 
-        self.datetime   = datetime
-        self.server_group  = server_group
+        self.author = author
+        self.datetime = datetime
+        self.server_list = server_list
         self.status = 0
-        self.script_id  = script_id
+        self.script_id = script_id
         self.ssh_config = ssh_config
 
     def update_status(self, new_status):
@@ -51,22 +53,23 @@ class CustomOperate(db.Model):
     __tablename__ = 'custom_operate_list'
 
     id = db.Column(db.Integer, primary_key=True)
-    datetime = db.Column(db.String)
-    server_group = db.Column(db.UnicodeText)
-    template_script = db.Column(db.UnicodeText)
+    author = db.Column(db.UnicodeText, nullable=False)
+    datetime = db.Column(db.String, nullable=False)
+    server_list = db.Column(db.UnicodeText, nullable=False)
+    template_script = db.Column(db.UnicodeText, nullable=False)
     template_vars = db.Column(db.UnicodeText, default=None)
-    ssh_config = db.Column(db.Integer)
-    status = db.Column(db.Integer)
+    ssh_config = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, datetime, server_group, template_script, ssh_config, template_vars=None):
+    def __init__(self, author, datetime, server_list, template_script, ssh_config, template_vars):
 
-        self.datetime   = datetime
-        self.server_group  = server_group
+        self.author = author
+        self.datetime = datetime
+        self.server_list  = server_list
         self.status = 0
         self.template_script  = template_script
         self.ssh_config = ssh_config
-        if template_vars is not None:
-            self.template_vars = template_vars
+        self.template_vars = template_vars
 
     def update_status(self, new_status):
         self.status = new_status
@@ -100,5 +103,4 @@ class SshConfig(db.Model):
         self.ssh_port = ssh_port
         self.ssh_user = ssh_user
         self.user_password = user_password
-        if user_private_key is not None:
-            self.user_private_key  = user_private_key
+        self.user_private_key  = user_private_key

@@ -45,8 +45,6 @@ BRISEIS设计
 
 `http://briseis.saipanno.com/check/create/ping`    创建PING联通性任务
 
-`http://briseis.saipanno.com/check/create/socket`    创建SOCKET联通性任务
-
 ### 自动化操作
 
 #### 操作说明

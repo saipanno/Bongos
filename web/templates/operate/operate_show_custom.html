@@ -32,6 +32,7 @@
                 <th>DATE</th>
                 <th>SERVER</th>
                 <th>SCRIPT</th>
+                <th>VARS</th>
                 <th>STATUS</th>
             </tr>
             </thead>
@@ -39,11 +40,12 @@
             {% for operate in operates %}
                 <tr>
                     <td>{{ operate.id }}</td>
-                    <td>wangruoyan</td>
-                    <td>{{ operate.datetime }}</td>
-                    <td>{{ operate.server_group }}</td>
-                    <td>{{ operate.template_script }}</td>
-                    <td>{{ operate.status }}</td>
+                    <td class="">{{ operate.author }}</td>
+                    <td class="">{{ operate.datetime }}</td>
+                    <td class="" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.server_list }}</td>
+                    <td class="" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.template_script }}</td>
+                    <td class="" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.template_vars }}</td>
+                    <td class="">{{ operate.status }}</td>
                 </tr>
             {% endfor %}
             </tbody>

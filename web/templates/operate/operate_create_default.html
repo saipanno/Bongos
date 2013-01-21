@@ -26,12 +26,12 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
 
                     <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server.label|safe }}</div>
-                        <div class="span6">{{ form.server(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.server_list.label|safe }}</div>
+                        <div class="span6">{{ form.server_list(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.server.description|safe }}</p>
+                            <p>{{ form.server_list.description|safe }}</p>
                         </div>
                     </div>
 
@@ -46,12 +46,12 @@
                     </div>
 
                     <div class="tab-pane breadcrumb" id="auth">
-                        <div class="span2">{{ form.config.label }}</div>
-                        <div class="span6">{{ form.config(class="span12", multiple="multiple") }}</div>
+                        <div class="span2">{{ form.ssh_config.label }}</div>
+                        <div class="span6">{{ form.ssh_config(class="span12", multiple="multiple") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.config.description }}</p>
+                            <p>{{ form.ssh_config.description }}</p>
                         </div>
                     </div>
                 </div>
