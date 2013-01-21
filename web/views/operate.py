@@ -14,13 +14,13 @@ from sqlalchemy import desc
 from web import db
 from web import app
 
-from web.forms import CreateDefaultOperateForm
-from web.forms import CreateCustomOperateForm
+from web.forms.operate import CreateDefaultOperateForm
+from web.forms.operate import CreateCustomOperateForm
 
-from web.models import PreDefinedOperate
-from web.models import CustomOperate
-from web.models import PreDefinedScript
-from web.models import SshConfig
+from web.models.operate import PreDefinedOperate
+from web.models.operate import CustomOperate
+from web.models.operate import PreDefinedScript
+from web.models.base import SshConfig
 
 
 @app.route('/operate/create', methods=("GET", "POST"))

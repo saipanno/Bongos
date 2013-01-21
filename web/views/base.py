@@ -10,7 +10,7 @@ from flask import render_template, request
 
 from web import app
 
-from web.forms import UserLoginForm
+from web.forms.base import UserLoginForm
 
 
 @app.route('/', methods=['GET', 'POST'])
