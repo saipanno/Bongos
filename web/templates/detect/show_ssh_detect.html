@@ -10,16 +10,23 @@
             <li><a href="#">Status Detect</a><span class="divider">/</span></li>
             <li><a href="#">Ssh</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
-            <li class="pull-right"><a href="{{ url_for('create_ssh_detect_ctrl')}}"><i class="icon-plus"></i> Create</a></li>
         </ul>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    <a class="close" data-dismiss="alert" href="#">×</a>
-                    {{ message }}
+                    <div class="alert alert-{{ category }}">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        {{ message }}
+                    </div>
                 {% endfor %}
+            {% else %}
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="btn-group pull-right">
+                            <a href="{{ url_for('create_ssh_detect_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         {% endwith %}
