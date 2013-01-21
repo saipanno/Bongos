@@ -6,11 +6,16 @@
 #
 #    Created at 2013/01/21. Ruoyan Wong(@saipanno).
 
+from functools import wraps
 
-def format_server_group(servers):
+from flask import flash, url_for, session, request, redirect
 
-    node = list()
-    for server in servers.split('\n'):
-        node.append(server)
-
-    return node
+def login_required(f):
+    """Redirect to login page if user not logged in"""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('Login required', 'error')
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return wrapper

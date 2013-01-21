@@ -14,5 +14,5 @@ app.config.from_object('settings')
 
 db = SQLAlchemy(app)
 
-from web.views import basic
+from web.views import base
 from web.views import operate
