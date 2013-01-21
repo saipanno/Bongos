@@ -27,7 +27,7 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
 
                     <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server_list.label|safe }}</div>
+                        <div class="span2 inline" style="display:inline">{{ form.server_list.label|safe }} <span class="asteriskField" style="display:inline">*</span></div>
                         <div class="span6">{{ form.server_list(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="tab-pane breadcrumb" id="template">
-                        <div class="span2">{{ form.template_script.label|safe }}</div>
+                        <div class="span2">{{ form.template_script.label|safe }} <span class="asteriskField">*</span></div>
                         <div class="span6">{{ form.template_script(class="span12", rows="10")|safe }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
