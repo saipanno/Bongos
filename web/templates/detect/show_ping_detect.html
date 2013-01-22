@@ -20,16 +20,16 @@
                         {{ message }}
                     </div>
                 {% endfor %}
-            {% else %}
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <div class="btn-group pull-right">
-                            <a href="{{ url_for('create_ping_detect_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
-                        </div>
-                    </div>
-                </div>
             {% endif %}
         {% endwith %}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_ping_detect_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                </div>
+            </div>
+        </div>
 
         <table class="table table-hover table-bordered table-condensed">
             <thead>
@@ -47,7 +47,7 @@
                 <td>{{ detect.id }}</td>
                 <td>{{ detect.author }}</td>
                 <td>{{ detect.datetime }}</td>
-                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ detect.server_list }}</td>
+                <td>{{ detect.server_list }}</td>
                 <td>{{ detect.status }}</td>
             </tr>
             {% endfor %}

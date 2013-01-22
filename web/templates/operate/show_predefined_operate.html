@@ -20,16 +20,16 @@
                         {{ message }}
                     </div>
                 {% endfor %}
-            {% else %}
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <div class="btn-group pull-right">
-                            <a href="{{ url_for('create_predefined_operate_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Operate</a>
-                        </div>
-                    </div>
-                </div>
             {% endif %}
         {% endwith %}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_predefined_operate_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Operate</a>
+                </div>
+            </div>
+        </div>
 
         <table class="table table-hover table-bordered table-condensed">
             <thead>
@@ -48,8 +48,8 @@
                 <td>{{ operate.id }}</td>
                 <td>{{ operate.author }}</td>
                 <td>{{ operate.datetime }}</td>
-                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.server_list }}</td>
-                <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ operate.script_id }}</td>
+                <td>{{ operate.server_list }}</td>
+                <td>{{ operate.script_id }}</td>
                 <td>{{ operate.status }}</td>
             </tr>
             {% endfor %}

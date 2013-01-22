@@ -25,7 +25,7 @@ class CreateCustomOperateForm(Form):
 
     next = HiddenField()
     server_list = TextAreaField(u'address/hostname', id='textarea', description=u'server you want to operated, support address or hostname.', default=u'None')
-    template_script = TextAreaField(u'template script', id='textarea', description=u'select script from given list.', default=None)
+    template_script = TextAreaField(u'template script', id='textarea', description=u'select script from given list.', default=u'None')
     template_vars = TextAreaField(u'template vars', id='textarea', description=u'var list.', default=u'None')
     ssh_config = QuerySelectField(u'ssh login confg', id='select', description=u'ssh config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Create', id='submit', description='submit')

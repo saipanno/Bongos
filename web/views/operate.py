@@ -21,6 +21,16 @@ from web.models.operate import PreDefinedOperate
 from web.models.operate import CustomOperate
 
 
+@app.route('/operate/show')
+@app.route('/operate/show/predefined')
+def show_predefined_operate_ctrl():
+
+    if request.method == 'GET':
+
+        operates = PreDefinedOperate.query.order_by(desc(PreDefinedOperate.id)).all()
+
+        return render_template('operate/show_predefined_operate.html', operates=operates)
+
 @app.route('/operate/create', methods=("GET", "POST"))
 @app.route('/operate/create/default', methods=("GET", "POST"))
 def create_predefined_operate_ctrl():
@@ -46,6 +56,17 @@ def create_predefined_operate_ctrl():
             flash(u'Create operate successful.', 'success')
             return redirect(url_for('show_predefined_operate_ctrl'))
 
+
+@app.route('/operate/show/custom')
+def show_custom_operate_ctrl():
+
+    if request.method == 'GET':
+
+        operates = CustomOperate.query.order_by(desc(CustomOperate.id)).all()
+
+        return render_template('operate/show_custom_operate.html', operates=operates)
+
+
 @app.route('/operate/create/custom', methods=("GET", "POST"))
 def create_custom_operate_ctrl():
 
@@ -63,29 +84,10 @@ def create_custom_operate_ctrl():
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_custom_operate_ctrl'))
         else:
-            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data.id)
+            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.ssh_config.data.id, form.template_vars.data )
             db.session.add(operate)
             db.session.commit()
 
             flash(u'Create operate successful.', 'success')
 
             return redirect(url_for('show_custom_operate_ctrl'))
-
-@app.route('/operate/show')
-@app.route('/operate/show/default')
-def show_predefined_operate_ctrl():
-
-    if request.method == 'GET':
-
-        operates = PreDefinedOperate.query.order_by(desc(PreDefinedOperate.id)).all()
-
-        return render_template('operate/show_predefined_operate.html', operates=operates)
-
-@app.route('/operate/show/custom')
-def show_custom_operate_ctrl():
-
-    if request.method == 'GET':
-
-        operates = CustomOperate.query.order_by(desc(CustomOperate.id)).all()
-
-        return render_template('operate/show_custom_operate.html', operates=operates)
