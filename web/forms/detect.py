@@ -6,21 +6,19 @@
 #
 #    Created at 2013/01/21. Ruoyan Wong(@saipanno).
 
-from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, SelectField
+from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField
+
+from web.models.base import SshConfig
 
 
 class CreateSshDetectForm(Form):
 
-    ssh_configs = [(1, u'ku6.com'), (2, u'snda.com'), (3, u'saipanno.com')]
-
     next = HiddenField()
     server_list = TextAreaField(u'address/hostname:', id='textarea', description=u'server you want to operated, support address or hostname.', default=u'None')
-    ssh_config = SelectField(u'ssh_confg', id='select', choices=ssh_configs, description=u'ssh config', default=u'None')
+    ssh_config = QuerySelectField(u'ssh login confg', id='select', description=u'ssh config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Create', id='submit', description='submit')
 
 class CreatePingDetectForm(Form):
-
-    ssh_configs = [(1, u'ku6.com'), (2, u'snda.com'), (3, u'saipanno.com')]
 
     next = HiddenField()
     server_list = TextAreaField(u'address/hostname', id='textarea', description=u'server you want to operated, support address or hostname.', default=u'None')

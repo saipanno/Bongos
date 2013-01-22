@@ -77,7 +77,9 @@ class CustomOperate(db.Model):
 
 
 class PreDefinedScript(db.Model):
+
     __tablename__ = 'predefined_script_list'
+
     id   = db.Column(db.Integer, primary_key=True)
     desc = db.Column(db.UnicodeText)
     script = db.Column(db.UnicodeText)

@@ -17,7 +17,9 @@ from web import app
 from web.forms.detect import CreatePingDetectForm
 from web.forms.detect import CreateSshDetectForm
 
-from web.models.detect import Detect
+from web.models.detect import SshDetect
+from web.models.detect import PingDetect
+
 
 @app.route('/detect/show')
 @app.route('/detect/show/ping')
@@ -25,7 +27,7 @@ def show_ping_detect_ctrl():
 
     if request.method == 'GET':
 
-        detects = Detect.query.filter_by(type=0).order_by(desc(Detect.id)).all()
+        detects = PingDetect.query.order_by(desc(PingDetect.id)).all()
 
         return render_template('detect/show_ping_detect.html', detects=detects)
 
@@ -42,13 +44,12 @@ def create_ping_detect_ctrl():
     elif request.method == 'POST':
 
         author = 'wangruoyan'
-        detect_type = 0
 
         if form.server_list.data == u'None':
             flash(u'Some input is None.', 'error')
             return redirect(url_for(''))
         else:
-            detect = Detect(detect_type, author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, u'None')
+            detect = PingDetect(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data)
             db.session.add(detect)
             db.session.commit()
 
@@ -61,7 +62,7 @@ def show_ssh_detect_ctrl():
 
     if request.method == 'GET':
 
-        detects = Detect.query.filter_by(type=1).order_by(desc(Detect.id)).all()
+        detects = SshDetect.query.order_by(desc(SshDetect.id)).all()
 
         return render_template('detect/show_ssh_detect.html', detects=detects)
 
@@ -77,13 +78,12 @@ def create_ssh_detect_ctrl():
     elif request.method == 'POST':
 
         author = 'wangruoyan'
-        detect_type = 1
 
-        if form.server_list.data == u'None' or form.ssh_config.data == u'None':
+        if form.server_list.data == u'None' or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_ssh_detect_ctrl'))
         else:
-            detect = Detect(detect_type, author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.ssh_config.data)
+            detect = SshDetect(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.ssh_config.data.id)
             db.session.add(detect)
             db.session.commit()
 

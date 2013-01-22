@@ -19,8 +19,6 @@ from web.forms.operate import CreateCustomOperateForm
 
 from web.models.operate import PreDefinedOperate
 from web.models.operate import CustomOperate
-from web.models.operate import PreDefinedScript
-from web.models.base import SshConfig
 
 
 @app.route('/operate/create', methods=("GET", "POST"))
@@ -37,11 +35,11 @@ def create_predefined_operate_ctrl():
 
         author = 'wangruoyan'
 
-        if form.server_list.data == u'None' or form.script_id.data == u'None' or form.ssh_config.data == u'None':
+        if form.server_list.data == u'None' or form.script_list.data is None or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_predefined_operate_ctrl'))
         else:
-            operate = PreDefinedOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.script_id.data, form.ssh_config.data)
+            operate = PreDefinedOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.script_list.data.id, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 
@@ -61,11 +59,11 @@ def create_custom_operate_ctrl():
 
         author = 'wangruoyan'
 
-        if form.server_list.data == u'None' or form.template_script.data == u'None' or form.ssh_config.data == u'None':
+        if form.server_list.data == u'None' or form.template_script.data == u'None' or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_custom_operate_ctrl'))
         else:
-            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data)
+            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 

@@ -11,7 +11,7 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 PORT = 80
-HOST = '0.0.0.0'
+HOST = '127.0.0.1'
 
 DEBUG = True
 
