@@ -31,50 +31,32 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
 
                     <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server_list.label|safe }}</div>
-                        <div class="span6">{{ form.server_list(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.server_list.label }}</div>
+                        <div class="span6">{{ form.server_list(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.server_list.description|safe }}</p>
+                            <p>{{ form.server_list.description }}</p>
                         </div>
                     </div>
 
                     <div class="tab-pane breadcrumb" id="template">
-                        <div class="span2">{{ form.template_script.label|safe }} <span class="asteriskField">*</span></div>
-                        <div class="span6">{{ form.template_script(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.template_script.label }}</div>
+                        <div class="span6">{{ form.template_script(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>用<code>{</code>和<code>}</code>作为外部变量的定界符,模板中此类变量会自动按照变量文件中的定义进行替换.</p>
-                            <p>同时模板依然支持shell中的<code>$</code>变量</p>
-                            <pre>for device in `/sbin/ifconfig -a | awk '/^e/ { print $1 }'`; do
-    mac=`ifconfig $device | grep HWaddr | awk '{ print $5 }'`
-    if [ "$device" == "eth0" -o "$device" == "em1" ]; then
-        echo "DEVICE=$device"    > /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "TYPE=Ethernet"     >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "BOOTPROTO=static"  >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "HWADDR=$mac"       >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "IPADDR={address}"  >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "NETMASK={netmask}" >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "GATEWAY={gateway}" >> /etc/sysconfig/network-scripts/ifcfg-$device
-        echo "ONBOOT=yes"        >> /etc/sysconfig/network-scripts/ifcfg-$device
-    fi
-done</pre>
+                            {{ form.template_script.description|safe }}
                         </div>
                     </div>
 
                     <div class="tab-pane breadcrumb" id="variable">
-                        <div class="span2">{{ form.template_vars.label|safe }}</div>
-                        <div class="span6">{{ form.template_vars(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.template_vars.label }}</div>
+                        <div class="span6">{{ form.template_vars(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>
-                            <p>用<code>,</code> 作为多个变量赋值的分隔符</p>
-                            <p>用<code>=</code> 作为变量赋值的分隔符</p>
-                            <strong>例如:</strong>
-                            <p><code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code></p>
+                            {{ form.template_vars.description|safe }}
                         </div>
                     </div>
 
@@ -92,13 +74,13 @@ done</pre>
                     <div id="commit" class="modal hide fade">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3>Warning!</h3>
+                            <h3>Oops!</h3>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure to do this operate??</p>
+                            <p>Continue to create this operate?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Don't Create</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
                             {{ form.submit(class="btn btn-danger") }}
                         </div>
                     </div>

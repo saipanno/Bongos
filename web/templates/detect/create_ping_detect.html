@@ -28,12 +28,12 @@
                 <div class="tab-content" style="padding-bottom: 9px;">
 
                     <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server_list.label|safe }}</div>
-                        <div class="span6">{{ form.server_list(class="span12", rows="10")|safe }}</div>
+                        <div class="span2">{{ form.server_list.label }}</div>
+                        <div class="span6">{{ form.server_list(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.server_list.description|safe }}</p>
+                            <p>{{ form.server_list.description }}</p>
                         </div>
                     </div>
 
@@ -43,13 +43,13 @@
                 <div id="commit" class="modal hide fade">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Warning!</h3>
+                        <h3>Oops!</h3>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure to do this detect??</p>
+                        <p>Continue to create this detect?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Don't Create</button>
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
                         {{ form.submit(class="btn btn-danger") }}
                     </div>
                 </div>

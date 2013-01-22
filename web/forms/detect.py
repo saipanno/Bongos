@@ -32,12 +32,12 @@ from web.models.base import SshConfig
 class CreateSshDetectForm(Form):
 
     next = HiddenField()
-    server_list = TextAreaField(u'address/hostname:', id='textarea', description=u'server you want to operated, support address or hostname.', default=u'None')
-    ssh_config = QuerySelectField(u'ssh login confg', id='select', description=u'ssh config', query_factory=SshConfig.query.all,  get_label='desc')
-    submit = SubmitField(u'Create', id='submit', description='submit')
+    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
+    ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='desc')
+    submit = SubmitField(u'Continue', id='submit')
 
 class CreatePingDetectForm(Form):
 
     next = HiddenField()
-    server_list = TextAreaField(u'address/hostname', id='textarea', description=u'server you want to operated, support address or hostname.', default=u'None')
-    submit = SubmitField(u'Create', id='submit', description='submit')
+    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
+    submit = SubmitField(u'Continue', id='submit')
