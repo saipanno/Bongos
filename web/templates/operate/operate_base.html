@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block active_operate %}active{% endblock %}
+
+{% block sidebar %}
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">REMOTE EXECUTE</li>
+                <li class="{% block active_predefined %}{% endblock %}"><a href="{{ url_for('show_predefined_operate_ctrl') }}">PreDefined</a></li>
+                <li class="{% block active_custom %}{% endblock %}"><a href="{{ url_for('show_custom_operate_ctrl') }}">User Custom</a></li>
+                <li class="nav-header">IPMI MANAGE</li>
+                <li class="{% block active_reboot %}{% endblock %}"><a href="#">Reboot</a></li>
+                <li class="{% block active_shutdown %}{% endblock %}"><a href="#">Shutdown</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

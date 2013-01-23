@@ -21,14 +21,17 @@ BRISEIS设计
 
 `http://briseis.saipanno.com/server`
 
-### 状态查询
+
+### 自动化操作
 
 #### 操作说明
 
-并发状态检测工具.支持如下三种检查类型类型:
+并发自动化远程执行及状态测试工具.支持如下几种操作:
 
 * SSH状态测试
 * PING状态测试
+* 预定义操作
+* 自定义操作
 
 #### URL设计
 
@@ -41,18 +44,6 @@ BRISEIS设计
 `http://briseis.saipanno.com/detect/create/ssh`  创建SSH联通性测试任务
 
 `http://briseis.saipanno.com/detect/create/ping`    创建PING联通性任务
-
-### 自动化操作
-
-#### 操作说明
-
-并发自动化远程执行工具.支持如下三种操作类型:
-
-* 预定义操作
-* 自定义操作
-* 从模板创建自定义操作
-
-#### URL设计
 
 `http://briseis.saipanno.com/operate` 操作单列表
 

@@ -25,7 +25,7 @@
 
 
 import time
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, session
 from sqlalchemy import desc
 
 from web import db
@@ -39,6 +39,13 @@ from web.models.detect import PingDetect
 
 from web.extensions import login_required
 
+
+@app.route('/detect')
+def index_detect_ctrl():
+
+    if request.method == 'GET':
+
+        return render_template('detect/detect_base.html')
 
 @app.route('/detect/show')
 @app.route('/detect/show/ping')
@@ -64,13 +71,14 @@ def create_ping_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = 'wangruoyan'
+        author = session['user'].username
+        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         if form.server_list.data == u'None':
             flash(u'Some input is None.', 'error')
             return redirect(url_for(''))
         else:
-            detect = PingDetect(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data)
+            detect = PingDetect(author, datetime, form.server_list.data)
             db.session.add(detect)
             db.session.commit()
 
@@ -99,13 +107,14 @@ def create_ssh_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = 'wangruoyan'
+        author = session['user'].username
+        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         if form.server_list.data == u'None' or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_ssh_detect_ctrl'))
         else:
-            detect = SshDetect(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.ssh_config.data.id)
+            detect = SshDetect(author, datetime, form.server_list.data, form.ssh_config.data.id)
             db.session.add(detect)
             db.session.commit()
 

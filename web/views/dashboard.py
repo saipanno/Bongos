@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/12.
+#                    Created at 2013/01/23.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -17,22 +17,21 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
 
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask import render_template, request, redirect, url_for, flash
 
-app = Flask(__name__)
-app.config.from_object('settings')
+from web import app
 
-db = SQLAlchemy(app)
 
-from web.views import base
-from web.views import detect
-from web.views import operate
-from web.views import dashboard
+@app.route('/dashboard')
+def index_dashboard_ctrl():
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/dashboard_base.html')
