@@ -23,12 +23,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-from flask import render_template, request
+from werkzeug.security import check_password_hash
+from flask import render_template, request, flash, redirect, url_for, session
 
 from web import app
 
 from web.forms.base import UserLoginForm
+
+from web.models.user import User
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -42,6 +44,42 @@ def index_ctrl():
 def user_login_ctrl():
 
     form = UserLoginForm()
+    next = request.values.get('next', url_for('index_ctrl'))
 
     if request.method == 'GET':
+
         return  render_template('login.html', form=form)
+
+    elif request.method == 'POST':
+
+        if form.username.data == u'None' or form.password.data == u'None':
+
+            flash(u'None of username/password.', 'error')
+            return redirect(url_for('user_login_ctrl'))
+
+        if session.get('is_login'):
+
+            flash(u'You are already login.', 'success')
+            return redirect(next)
+
+        user = User.query.filter_by(username=form.username.data).first()
+
+        if user is not None and check_password_hash(user.password, form.password.data):
+
+            session['is_login'] = True
+            session['user'] = user
+            flash(u'Login successful.', 'success')
+            return redirect(next)
+
+        else:
+
+            flash(u'Wrong username or password.', 'error')
+            return redirect(url_for('user_login_ctrl'))
+
+
+@app.route('/logout', methods=['GET'])
+def user_logout_ctrl():
+
+    session.pop('is_login', None)
+
+    return redirect(url_for('index_ctrl'))

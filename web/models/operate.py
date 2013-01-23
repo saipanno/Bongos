@@ -44,10 +44,11 @@ class PreDefinedOperate(db.Model):
     datetime = db.Column(db.String, nullable=False)
     server_list = db.Column(db.UnicodeText, nullable=False)
     script_id = db.Column(db.UnicodeText, nullable=False)
+    template_vars = db.Column(db.UnicodeText, default=None)
     ssh_config = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, author, datetime, server_list, script_id, ssh_config):
+    def __init__(self, author, datetime, server_list, script_id, template_vars, ssh_config):
 
         self.author = author
         self.datetime = datetime
@@ -55,6 +56,7 @@ class PreDefinedOperate(db.Model):
         self.status = 0
         self.script_id = script_id
         self.ssh_config = ssh_config
+        self.template_vars = template_vars
 
     def update_status(self, new_status):
         self.status = new_status
@@ -80,7 +82,7 @@ class CustomOperate(db.Model):
     ssh_config = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, author, datetime, server_list, template_script, ssh_config, template_vars):
+    def __init__(self, author, datetime, server_list, template_script, template_vars, ssh_config):
 
         self.author = author
         self.datetime = datetime

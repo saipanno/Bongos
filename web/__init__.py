@@ -25,14 +25,12 @@
 
 
 from flask import Flask
-from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('settings')
 
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
 
 from web.views import base
 from web.views import detect

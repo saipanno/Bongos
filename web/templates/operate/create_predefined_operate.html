@@ -24,7 +24,8 @@
                 <ul class="nav nav-pills">
                     <li class="active"><a href="#server" data-toggle="tab">1. Servers <i class="icon-arrow-right icon-white"></i></a></li>
                     <li class=""><a href="#script" data-toggle="tab">2. Script <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#auth" data-toggle="tab">3. Auth</a></li>
+                    <li class=""><a href="#variable" data-toggle="tab">3. Variable <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class=""><a href="#auth" data-toggle="tab">34. Auth</a></li>
                 </ul>
 
                 <div class="tab-content" style="padding-bottom: 9px;">
@@ -46,6 +47,16 @@
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
                             <p>{{ form.script_list.description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane breadcrumb" id="variable">
+                        <div class="span2">{{ form.template_vars.label }}</div>
+                        <div class="span6">{{ form.template_vars(class="span12", rows="10") }}</div>
+                        <div class="clearfix"></div>
+                        <div class="alert alert-block alert-success fade in">
+                            <strong>说明:</strong>
+                            {{ form.template_vars.description|safe }}
                         </div>
                     </div>
 

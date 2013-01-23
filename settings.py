@@ -33,6 +33,8 @@ HOST = '127.0.0.1'
 
 DEBUG = True
 
+PASS_SALT = 'wC7%wx'
+
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
 
 SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'

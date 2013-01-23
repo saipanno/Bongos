@@ -32,14 +32,20 @@ from web.models.operate import PreDefinedScript
 
 class CreatePreDefinedOperateForm(Form):
 
+    vars_desc = u'''<p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>
+<p>用<code>,</code> 作为多个变量赋值的分隔符</p>
+<p>用<code>=</code> 作为变量赋值的分隔符</p>
+<strong>例如:</strong>
+<p><code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code></p>'''
+
     next = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     script_list = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.', query_factory=PreDefinedScript.query.all,  get_label='desc')
+    template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')
     ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Continue', id='submit')
 
 class CreateCustomOperateForm(Form):
-
 
     script_desc = u'''<p>用<code>{</code>和<code>}</code>作为外部变量的定界符,模板中此类变量会自动按照变量文件中的定义进行替换.</p>
 <p>同时模板依然支持shell中的<code>$</code>变量</p>

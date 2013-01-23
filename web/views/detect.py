@@ -37,9 +37,12 @@ from web.forms.detect import CreateSshDetectForm
 from web.models.detect import SshDetect
 from web.models.detect import PingDetect
 
+from web.extensions import login_required
+
 
 @app.route('/detect/show')
 @app.route('/detect/show/ping')
+@login_required
 def show_ping_detect_ctrl():
 
     if request.method == 'GET':
@@ -50,6 +53,7 @@ def show_ping_detect_ctrl():
 
 @app.route('/detect/create', methods=("GET", "POST"))
 @app.route('/detect/create/ping', methods=("GET", "POST"))
+@login_required
 def create_ping_detect_ctrl():
 
     form = CreatePingDetectForm()
@@ -75,6 +79,7 @@ def create_ping_detect_ctrl():
 
 
 @app.route('/detect/show/ssh')
+@login_required
 def show_ssh_detect_ctrl():
 
     if request.method == 'GET':

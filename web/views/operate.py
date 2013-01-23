@@ -25,7 +25,7 @@
 
 
 import time
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, g
 from sqlalchemy import desc
 
 from web import db
@@ -37,9 +37,11 @@ from web.forms.operate import CreateCustomOperateForm
 from web.models.operate import PreDefinedOperate
 from web.models.operate import CustomOperate
 
+from web.extensions import login_required
 
 @app.route('/operate/show')
 @app.route('/operate/show/predefined')
+@login_required
 def show_predefined_operate_ctrl():
 
     if request.method == 'GET':
@@ -50,6 +52,7 @@ def show_predefined_operate_ctrl():
 
 @app.route('/operate/create', methods=("GET", "POST"))
 @app.route('/operate/create/default', methods=("GET", "POST"))
+@login_required
 def create_predefined_operate_ctrl():
 
     form = CreatePreDefinedOperateForm()
@@ -66,7 +69,7 @@ def create_predefined_operate_ctrl():
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_predefined_operate_ctrl'))
         else:
-            operate = PreDefinedOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.script_list.data.id, form.ssh_config.data.id)
+            operate = PreDefinedOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.script_list.data.id, form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 
@@ -75,6 +78,7 @@ def create_predefined_operate_ctrl():
 
 
 @app.route('/operate/show/custom')
+@login_required
 def show_custom_operate_ctrl():
 
     if request.method == 'GET':
@@ -85,6 +89,7 @@ def show_custom_operate_ctrl():
 
 
 @app.route('/operate/create/custom', methods=("GET", "POST"))
+@login_required
 def create_custom_operate_ctrl():
 
     form = CreateCustomOperateForm()
@@ -101,7 +106,7 @@ def create_custom_operate_ctrl():
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_custom_operate_ctrl'))
         else:
-            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.ssh_config.data.id, form.template_vars.data )
+            operate = CustomOperate(author, time.strftime('%Y-%m-%d %H:%M'), form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 
