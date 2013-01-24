@@ -29,7 +29,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 from web import db
 from web import app
 
-from web.models.base import PreDefinedScript
+from web.models.dashboard import PreDefinedScript
 
 from web.forms.dashboard import PreDefinedScriptCreate
 
