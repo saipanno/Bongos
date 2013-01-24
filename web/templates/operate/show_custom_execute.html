@@ -2,15 +2,15 @@
 
 {% import "macro.html" as ext %}
 
-{% block active_predefined %}active{% endblock %}
+{% block active_custom %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Remote Operate</a><span class="divider">/</span></li>
-            <li><a href="#">PreDefined Script</a> <span class="divider">/</span></li>
+            <li><a href="#">Remote Execute</a><span class="divider">/</span></li>
+            <li><a href="#">User Custom</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
         </ul>
 
@@ -18,9 +18,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">PreDefined</a>
+                <a class="brand" href="#">User Custom</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('create_predefined_operate_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Operate</a>
+                    <a href="{{ url_for('create_custom_execute_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Execute</a>
                 </div>
             </div>
         </div>
@@ -33,19 +33,21 @@
                 <th>DATETIME</th>
                 <th>SERVER</th>
                 <th>SCRIPT</th>
+                <th>VARS</th>
                 <th>STATUS</th>
             </tr>
             </thead>
             <tbody>
             {% for operate in operates %}
-            <tr>
-                <td>{{ operate.id }}</td>
-                <td>{{ operate.author }}</td>
-                <td>{{ operate.datetime }}</td>
-                <td>{{ operate.server_list }}</td>
-                <td>{{ operate.script_id }}</td>
-                <td>{{ operate.status }}</td>
-            </tr>
+                <tr>
+                    <td>{{ operate.id }}</td>
+                    <td>{{ operate.author }}</td>
+                    <td>{{ operate.datetime }}</td>
+                    <td>{{ operate.server_list }}</td>
+                    <td>{{ operate.template_script }}</td>
+                    <td>{{ operate.template_vars }}</td>
+                    <td>{{ operate.status }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

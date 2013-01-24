@@ -36,6 +36,7 @@ from web.forms.dashboard import PreDefinedScriptCreate
 from web.extensions import login_required
 
 @app.route('/dashboard')
+@login_required
 def index_dashboard_ctrl():
 
     if request.method == 'GET':

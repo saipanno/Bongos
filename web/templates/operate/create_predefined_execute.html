@@ -1,14 +1,14 @@
 {% extends "operate/operate_base.html" %}
 
-{% block active_custom %}active{% endblock %}
+{% block active_predefined %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="active"><a href="#">Remote Operate</a><span class="divider">/</span></li>
-            <li class="active"><a href="#">User Custom Script</a> <span class="divider">/</span></li>
+            <li class="active"><a href="#">Remote Execute</a><span class="divider">/</span></li>
+            <li class="active"><a href="#">PreDefined</a> <span class="divider">/</span></li>
             <li class="active">Create</li>
         </ul>
 
@@ -18,14 +18,14 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Create User Custom Operate
+                    Create PreDefined Operate
                 </legend>
 
                 <ul class="nav nav-pills">
                     <li class="active"><a href="#server" data-toggle="tab">1. Servers <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#template" data-toggle="tab">2. Template <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class=""><a href="#script" data-toggle="tab">2. Script <i class="icon-arrow-right icon-white"></i></a></li>
                     <li class=""><a href="#variable" data-toggle="tab">3. Variable <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#auth" data-toggle="tab">4. Auth</a></li>
+                    <li class=""><a href="#auth" data-toggle="tab">34. Auth</a></li>
                 </ul>
 
                 <div class="tab-content" style="padding-bottom: 9px;">
@@ -40,13 +40,13 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="template">
-                        <div class="span2">{{ form.template_script.label }}</div>
-                        <div class="span6">{{ form.template_script(class="span12", rows="10") }}</div>
+                    <div class="tab-pane breadcrumb" id="script">
+                        <div class="span2">{{ form.script_list.label }}</div>
+                        <div class="span6">{{ form.script_list(class="span12", multiple="multiple") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            {{ form.template_script.description|safe }}
+                            <p>{{ form.script_list.description }}</p>
                         </div>
                     </div>
 
@@ -69,20 +69,20 @@
                             <p>{{ form.ssh_config.description }}</p>
                         </div>
                     </div>
+                </div>
 
-                    <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
-                    <div id="commit" class="modal hide fade">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3>Oops!</h3>
-                        </div>
-                        <div class="modal-body">
-                            <p>Continue to create this operate?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                            {{ form.submit(class="btn btn-danger") }}
-                        </div>
+                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
+                <div id="commit" class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Oops!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Continue to create this operate?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        {{ form.submit(class="btn btn-danger") }}
                     </div>
                 </div>
             </form>

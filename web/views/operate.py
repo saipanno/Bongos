@@ -45,7 +45,6 @@ from web.models.operate import CustomOperate
 from web.extensions import login_required
 
 
-@app.route('/detect/show')
 @app.route('/detect/show/ping')
 @login_required
 def show_ping_detect_ctrl():
@@ -56,7 +55,7 @@ def show_ping_detect_ctrl():
 
         return render_template('operate/show_ping_detect.html', detects=detects)
 
-@app.route('/detect/create', methods=("GET", "POST"))
+
 @app.route('/detect/create/ping', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
@@ -123,13 +122,13 @@ def create_ssh_detect_ctrl():
 
 @app.route('/execute/show/predefined')
 @login_required
-def show_predefined_operate_ctrl():
+def show_predefined_execute_ctrl():
 
     if request.method == 'GET':
 
         operates = PreDefinedOperate.query.filter_by(author=session['user'].username).order_by(desc(PreDefinedOperate.id)).all()
 
-        return render_template('operate/show_predefined_operate.html', operates=operates)
+        return render_template('operate/show_predefined_execute.html', operates=operates)
 
 
 @app.route('/execute/create/predefined', methods=("GET", "POST"))
@@ -140,7 +139,7 @@ def create_predefined_operate_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/create_predefined_operate.html', form=form)
+        return render_template('operate/create_predefined_execute.html', form=form)
 
     elif request.method == 'POST':
 
@@ -149,36 +148,36 @@ def create_predefined_operate_ctrl():
 
         if form.server_list.data == u'None' or form.script_list.data is None or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
-            return redirect(url_for('show_predefined_operate_ctrl'))
+            return redirect(url_for('show_predefined_execute_ctrl'))
         else:
             operate = PreDefinedOperate(author, datetime, form.server_list.data, form.script_list.data.id, form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 
             flash(u'Create operate successful.', 'success')
-            return redirect(url_for('show_predefined_operate_ctrl'))
+            return redirect(url_for('show_predefined_execute_ctrl'))
 
 
 @app.route('/execute/show/custom')
 @login_required
-def show_custom_operate_ctrl():
+def show_custom_execute_ctrl():
 
     if request.method == 'GET':
 
         operates = CustomOperate.query.filter_by(author=session['user'].username).order_by(desc(CustomOperate.id)).all()
 
-        return render_template('operate/show_custom_operate.html', operates=operates)
+        return render_template('operate/show_custom_execute.html', operates=operates)
 
 
 @app.route('/execute/create/custom', methods=("GET", "POST"))
 @login_required
-def create_custom_operate_ctrl():
+def create_custom_execute_ctrl():
 
     form = CreateCustomOperateForm()
 
     if request.method == 'GET':
 
-        return  render_template('operate/create_custom_operate.html', form=form)
+        return  render_template('operate/create_custom_execute.html', form=form)
 
     elif request.method == 'POST':
 
@@ -187,7 +186,7 @@ def create_custom_operate_ctrl():
 
         if form.server_list.data == u'None' or form.template_script.data == u'None' or form.ssh_config.data is None:
             flash(u'Some input is None.', 'error')
-            return redirect(url_for('show_custom_operate_ctrl'))
+            return redirect(url_for('show_custom_execute_ctrl'))
         else:
             operate = CustomOperate(author, datetime, form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
@@ -195,4 +194,4 @@ def create_custom_operate_ctrl():
 
             flash(u'Create operate successful.', 'success')
 
-            return redirect(url_for('show_custom_operate_ctrl'))
+            return redirect(url_for('show_custom_execute_ctrl'))
