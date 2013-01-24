@@ -33,7 +33,3 @@ class UserLoginForm(Form):
     username = TextField(u'Username:', id='text', default=u'None')
     password = PasswordField(u'Password:', id='password', default=u'None')
     submit = SubmitField(u'Login', id='submit')
-
-class TopSearchForm(Form):
-
-    pass

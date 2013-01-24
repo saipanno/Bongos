@@ -28,7 +28,7 @@ from flask import render_template, request, flash, redirect, url_for, session
 
 from web import app
 
-from web.forms.base import UserLoginForm
+from web.forms.user import UserLoginForm
 
 from web.models.user import User
 
