@@ -26,13 +26,11 @@
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-#from flask.ext.superadmin import Admin
 
 app = Flask(__name__)
 app.config.from_object('settings')
 
 db = SQLAlchemy(app)
-#admin = Admin(app, name='Briseis Admin')
 
 from web.views import user
 from web.views import operate
