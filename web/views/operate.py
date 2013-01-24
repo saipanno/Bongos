@@ -31,23 +31,97 @@ from sqlalchemy import desc
 from web import db
 from web import app
 
+from web.forms.operate import CreatePingDetectForm
+from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedOperateForm
 from web.forms.operate import CreateCustomOperateForm
 
+from web.models.operate import SshDetect
+from web.models.operate import PingDetect
 from web.models.operate import PreDefinedOperate
 from web.models.operate import CustomOperate
 
+
 from web.extensions import login_required
 
-@app.route('/operate')
-def index_operate_ctrl():
+
+@app.route('/detect/show')
+@app.route('/detect/show/ping')
+@login_required
+def show_ping_detect_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/operate_base.html')
+        detects = PingDetect.query.filter_by(author=session['user'].username).order_by(desc(PingDetect.id)).all()
 
-@app.route('/operate/show')
-@app.route('/operate/show/predefined')
+        return render_template('operate/show_ping_detect.html', detects=detects)
+
+@app.route('/detect/create', methods=("GET", "POST"))
+@app.route('/detect/create/ping', methods=("GET", "POST"))
+@login_required
+def create_ping_detect_ctrl():
+
+    form = CreatePingDetectForm()
+
+    if request.method == 'GET':
+
+        return render_template('operate/create_ping_detect.html', form=form)
+
+    elif request.method == 'POST':
+
+        author = session['user'].username
+        datetime = time.strftime('%Y-%m-%d %H:%M')
+
+        if form.server_list.data == u'None':
+            flash(u'Some input is None.', 'error')
+            return redirect(url_for(''))
+        else:
+            detect = PingDetect(author, datetime, form.server_list.data)
+            db.session.add(detect)
+            db.session.commit()
+
+            flash(u'Create detect successful.', 'success')
+            return redirect(url_for('show_ping_detect_ctrl'))
+
+
+@app.route('/detect/show/ssh')
+@login_required
+def show_ssh_detect_ctrl():
+
+    if request.method == 'GET':
+
+        detects = SshDetect.query.filter_by(author=session['user'].username).order_by(desc(SshDetect.id)).all()
+
+        return render_template('operate/show_ssh_detect.html', detects=detects)
+
+@app.route('/detect/create/ssh', methods=("GET", "POST"))
+def create_ssh_detect_ctrl():
+
+    form = CreateSshDetectForm()
+
+    if request.method == 'GET':
+
+        return  render_template('operate/create_ssh_detect.html', form=form)
+
+    elif request.method == 'POST':
+
+        author = session['user'].username
+        datetime = time.strftime('%Y-%m-%d %H:%M')
+
+        if form.server_list.data == u'None' or form.ssh_config.data is None:
+            flash(u'Some input is None.', 'error')
+            return redirect(url_for('show_ssh_detect_ctrl'))
+        else:
+            detect = SshDetect(author, datetime, form.server_list.data, form.ssh_config.data.id)
+            db.session.add(detect)
+            db.session.commit()
+
+            flash(u'Create detect successful.', 'success')
+
+            return redirect(url_for('show_ssh_detect_ctrl'))
+
+
+@app.route('/execute/show/predefined')
 @login_required
 def show_predefined_operate_ctrl():
 
@@ -57,8 +131,8 @@ def show_predefined_operate_ctrl():
 
         return render_template('operate/show_predefined_operate.html', operates=operates)
 
-@app.route('/operate/create', methods=("GET", "POST"))
-@app.route('/operate/create/default', methods=("GET", "POST"))
+
+@app.route('/execute/create/predefined', methods=("GET", "POST"))
 @login_required
 def create_predefined_operate_ctrl():
 
@@ -85,7 +159,7 @@ def create_predefined_operate_ctrl():
             return redirect(url_for('show_predefined_operate_ctrl'))
 
 
-@app.route('/operate/show/custom')
+@app.route('/execute/show/custom')
 @login_required
 def show_custom_operate_ctrl():
 
@@ -96,7 +170,7 @@ def show_custom_operate_ctrl():
         return render_template('operate/show_custom_operate.html', operates=operates)
 
 
-@app.route('/operate/create/custom', methods=("GET", "POST"))
+@app.route('/execute/create/custom', methods=("GET", "POST"))
 @login_required
 def create_custom_operate_ctrl():
 

@@ -7,7 +7,7 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">APP</li>
-                <li class=""><a href="{{ url_for("show_predefined_ctrl") }}">PrdDefined Script</a></li>
+                <li class="{% block active_dashboard_predefined %}{% endblock %}"><a href="{{ url_for("show_predefined_ctrl") }}">PrdDefined Script</a></li>
                 <li class="nav-header">AUTH</li>
                 <li class=""><a href="#">User</a></li>
                 <li class=""><a href="#">Group</a></li>

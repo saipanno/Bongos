@@ -29,6 +29,19 @@ from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySe
 from web.models.dashboard import SshConfig, PreDefinedScript
 
 
+class CreateSshDetectForm(Form):
+
+    next = HiddenField()
+    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
+    ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='desc')
+    submit = SubmitField(u'Continue', id='submit')
+
+class CreatePingDetectForm(Form):
+
+    next = HiddenField()
+    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
+    submit = SubmitField(u'Continue', id='submit')
+
 class CreatePreDefinedOperateForm(Form):
 
     vars_desc = u'''<p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>

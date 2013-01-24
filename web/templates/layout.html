@@ -28,11 +28,7 @@
                 <a class="brand" href="#">BRISEIS</a>
 
                 <ul class="nav">
-                    <!--
-
-                    -->
-                    <li class="{% block active_detect %}{% endblock %}"><a href="{{ url_for("show_ping_detect_ctrl") }}">Detect</a></li>
-                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("show_predefined_operate_ctrl") }}">Operate</a></li>
+                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("show_ping_detect_ctrl") }}">Operate</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("index_dashboard_ctrl") }}">Dashboard</a></li>
                 </ul>
 

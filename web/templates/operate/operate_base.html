@@ -6,6 +6,9 @@
     <div class="span2">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
+                <li class="nav-header">STATE CHECK</li>
+                <li class="{% block active_ping %}{% endblock %}"><a href="{{ url_for('show_ping_detect_ctrl') }}">Ping</a></li>
+                <li class="{% block active_ssh %}{% endblock %}"><a href="{{ url_for('show_ssh_detect_ctrl') }}">Ssh</a></li>
                 <li class="nav-header">REMOTE EXECUTE</li>
                 <li class="{% block active_predefined %}{% endblock %}"><a href="{{ url_for('show_predefined_operate_ctrl') }}">PreDefined</a></li>
                 <li class="{% block active_custom %}{% endblock %}"><a href="{{ url_for('show_custom_operate_ctrl') }}">User Custom</a></li>

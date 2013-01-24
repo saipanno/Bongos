@@ -1,6 +1,6 @@
 {% extends "dashboard/dashboard_base.html" %}
 
-{% block active_ssh %}active{% endblock %}
+{% block active_dashboard_predefined %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -16,7 +16,7 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">Ping</a>
+                <a class="brand" href="#">PreDefined Script</a>
                 <div class="btn-group pull-right">
                     <a href="{{ url_for('create_predefined_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
                 </div>

@@ -29,6 +29,6 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField
 class PreDefinedScriptCreate(Form):
 
     name = TextField(u'脚本名称:', id='text', description=u'脚本名称', default=u'None')
-    desc = TextField(u'脚本描述:', id='text', description=u'脚本描述', default=u'None')
+    desc = TextAreaField(u'脚本描述:', id='text', description=u'脚本描述', default=u'None')
     script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=u'预定义脚本,支持模板功能', default=u'None')
     submit = SubmitField(u'Continue', id='submit', description='submit')
