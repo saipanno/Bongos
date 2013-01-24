@@ -23,7 +23,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import time
+import re
 from flask import render_template, request, redirect, url_for, flash, session
 
 from web import db
@@ -50,10 +50,20 @@ def show_predefined_ctrl():
 
     if request.method == 'GET':
 
+        regex = '^[0-9]+$'
+        operate_id = request.args.get('id', None)
+
+        #if operate_id is not None and re.match(regex, operate_id) is not None:
+
+        #    script = PreDefinedScript.query.filter_by(id=operate_id).first()
+
+        #    return render_template('dashboard/create_predefined_script.html', type='show', script=script)
+
+        #else:
+
         scripts = PreDefinedScript.query.all()
 
         return render_template('dashboard/show_predefined_script.html', scripts=scripts)
-
 
 @app.route('/dashboard/create/default', methods=("GET", "POST"))
 @login_required

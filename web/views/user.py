@@ -32,12 +32,15 @@ from web.forms.user import UserLoginForm
 
 from web.models.user import User
 
+from web.extensions import login_required
+
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def index_ctrl():
 
     if request.method == 'GET':
-        return  render_template('index.html')
+        return  redirect(url_for('show_ping_detect_ctrl'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -26,6 +26,7 @@
         <table class="table table-hover table-bordered table-condensed">
             <thead>
             <tr>
+                <th>ID</th>
                 <th>NAME</th>
                 <th>DESC</th>
                 <th>AUTHOR</th>
@@ -34,7 +35,8 @@
             <tbody>
             {% for script in scripts %}
                 <tr>
-                    <td>{{ script.name }}</td>
+                    <td>{{ script.id }}</td>
+                    <td><a href="{{ '%s%s' % (url_for('show_predefined_ctrl'), script.id) }}">{{ script.name }}</a></td>
                     <td>{{ script.desc }}</td>
                     <td>{{ script.author }}</td>
                 </tr>
