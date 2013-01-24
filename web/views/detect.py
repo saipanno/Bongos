@@ -54,7 +54,7 @@ def show_ping_detect_ctrl():
 
     if request.method == 'GET':
 
-        detects = PingDetect.query.order_by(desc(PingDetect.id)).all()
+        detects = PingDetect.query.filter_by(author=session['user'].username).order_by(desc(PingDetect.id)).all()
 
         return render_template('detect/show_ping_detect.html', detects=detects)
 
@@ -92,7 +92,7 @@ def show_ssh_detect_ctrl():
 
     if request.method == 'GET':
 
-        detects = SshDetect.query.order_by(desc(SshDetect.id)).all()
+        detects = SshDetect.query.filter_by(author=session['user'].username).order_by(desc(SshDetect.id)).all()
 
         return render_template('detect/show_ssh_detect.html', detects=detects)
 

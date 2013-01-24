@@ -1,0 +1,47 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block active_ssh %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Dashboard</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">PreDefined Script</a><span class="divider">/</span></li>
+            <li class="active">Show</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Ping</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_predefined_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>NAME</th>
+                <th>DESC</th>
+                <th>AUTHOR</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for script in scripts %}
+                <tr>
+                    <td>{{ script.name }}</td>
+                    <td>{{ script.desc }}</td>
+                    <td>{{ script.author }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}

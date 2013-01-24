@@ -94,18 +94,3 @@ class CustomOperate(db.Model):
 
     def update_status(self, new_status):
         self.status = new_status
-
-
-class PreDefinedScript(db.Model):
-
-    __tablename__ = 'predefined_script_list'
-
-    id   = db.Column(db.Integer, primary_key=True)
-    desc = db.Column(db.UnicodeText)
-    script = db.Column(db.UnicodeText)
-    author = db.Column(db.UnicodeText)
-
-    def __init__(self, desc, script, author):
-        self.desc = desc
-        self.script = script
-        self.author = author

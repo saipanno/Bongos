@@ -53,7 +53,7 @@ def show_predefined_operate_ctrl():
 
     if request.method == 'GET':
 
-        operates = PreDefinedOperate.query.order_by(desc(PreDefinedOperate.id)).all()
+        operates = PreDefinedOperate.query.filter_by(author=session['user'].username).order_by(desc(PreDefinedOperate.id)).all()
 
         return render_template('operate/show_predefined_operate.html', operates=operates)
 
@@ -91,7 +91,7 @@ def show_custom_operate_ctrl():
 
     if request.method == 'GET':
 
-        operates = CustomOperate.query.order_by(desc(CustomOperate.id)).all()
+        operates = CustomOperate.query.filter_by(author=session['user'].username).order_by(desc(CustomOperate.id)).all()
 
         return render_template('operate/show_custom_operate.html', operates=operates)
 
