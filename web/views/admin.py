@@ -110,15 +110,13 @@ def edit_script_ctrl(script_id):
     elif request.method == 'POST':
 
         if form.desc.data == u'' or form.script.data == u'':
+
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_script_ctrl'))
         else:
 
-            author = script.username
-
-            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
-            db.session.add(script)
+            form.populate_obj(script)
             db.session.commit()
 
-            flash(u'Create script successful.', 'success')
-            return redirect(url_for('show_script_ctrl'))
+            flash(u'Edit script successful.', 'success')
+            return redirect(url_for('list_script_ctrl'))
