@@ -7,15 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="Ruoyan Wong">
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/pygments-github.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/google-prettify.css') }}">
     {% block style %}{% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -38,6 +35,19 @@
             <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=saipanno&amp;repo=briseis&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" height="20px" scrolling="0" width="102px"></iframe>
             -->
         </div>
+
+        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/google-prettify.js') }}"></script>
+
+        <script>
+            !function ($) {
+                $(function(){
+                    window.prettyPrint && prettyPrint()
+                })
+            }(window.jQuery)
+        </script>
+
     </footer>
 
 </body>
