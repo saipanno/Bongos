@@ -56,8 +56,8 @@
                 </div>
             </div>
 
-            <div class="tab-content" style="padding-top:9px; padding-bottom: 9px;">
-                <pre class="span12 prettyprint" rows="10">{{ script.script }}</pre>
+            <div class="highlight" style="padding-top:9px; padding-bottom: 9px;">
+                {{ html|safe }}
             </div>
         </div>
     {% endif %}

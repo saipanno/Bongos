@@ -24,6 +24,9 @@
 # SOFTWARE.
 
 
+from pygments import highlight
+from pygments.lexers.shell import BashLexer
+from pygments.formatters.html import HtmlFormatter
 from flask import render_template, request, redirect, url_for, flash, session
 
 from web import db
@@ -63,7 +66,9 @@ def show_script_ctrl(script_id):
 
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-        return render_template('admin/show_script.html', script=script, type='Show')
+        html = highlight(script.script, BashLexer(), HtmlFormatter())
+
+        return render_template('admin/show_script.html', script=script, type='Show', html=html)
 
 
 @app.route('/admin/script/create', methods=("GET", "POST"))
