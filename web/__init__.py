@@ -34,4 +34,4 @@ db = SQLAlchemy(app)
 
 from web.views import user
 from web.views import operate
-from web.views import dashboard
+from web.views import admin

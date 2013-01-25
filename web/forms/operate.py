@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField
 
-from web.models.dashboard import SshConfig, PreDefinedScript
+from web.models.admin import SshConfig, PreDefinedScript
 
 
 class CreateSshDetectForm(Form):

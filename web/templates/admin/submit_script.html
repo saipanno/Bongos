@@ -1,15 +1,15 @@
-{% extends "dashboard/dashboard_base.html" %}
+{% extends "admin/admin_base.html" %}
 
-{% block active_dashboard_predefined %}active{% endblock %}
+{% block active_admin_script %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Dashboard</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">PreDefined Script</a><span class="divider">/</span></li>
-            <li class="active">Create</li>
+            <li class="#"><a href="#">Admin</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Script Manager</a><span class="divider">/</span></li>
+            <li class="active">{{ type }}</li>
         </ul>
 
         <div class="tabbable">
@@ -18,7 +18,9 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Create PreDefined Script
+
+                    {{ type }} Script
+
                 </legend>
 
                 <ul class="nav nav-pills">
@@ -61,7 +63,7 @@
 
                 </div>
 
-                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
+                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
                 <div id="commit" class="modal hide fade">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

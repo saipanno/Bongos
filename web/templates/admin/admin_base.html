@@ -6,12 +6,9 @@
     <div class="span2">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">APP</li>
-                <li class="{% block active_dashboard_predefined %}{% endblock %}"><a href="{{ url_for("show_predefined_ctrl") }}">PrdDefined Script</a></li>
-                <li class="nav-header">AUTH</li>
+                <li class="nav-header">MANAGER</li>
                 <li class=""><a href="#">User</a></li>
-                <li class=""><a href="#">Group</a></li>
-                <li class="nav-header">TASK</li>
+                <li class="{% block active_admin_script %}{% endblock %}"><a href="{{ url_for("list_script_ctrl") }}">Script</a></li>
                 <li class=""><a href="#">Detect</a></li>
                 <li class=""><a href="#">Operate</a></li>
                 <li class="nav-header">LOGGING</li>
