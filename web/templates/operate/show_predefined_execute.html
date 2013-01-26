@@ -2,7 +2,7 @@
 
 {% import "macro.html" as ext %}
 
-{% block active_predefined %}active{% endblock %}
+{% block active_operate_predefined %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -20,7 +20,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">PreDefined</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('create_predefined_operate_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Execute</a>
+                    <a href="{{ url_for('create_predefined_execute_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Execute</a>
                 </div>
             </div>
         </div>

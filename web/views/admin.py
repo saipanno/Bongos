@@ -30,8 +30,10 @@ from web import db
 from web import app
 
 from web.models.admin import PreDefinedScript
+from web.models.user import User
 
 from web.forms.admin import CreatePreDefinedScriptForm
+from web.forms.user import CreateUserForm
 
 from web.extensions import login_required
 
@@ -120,3 +122,54 @@ def edit_script_ctrl(script_id):
 
             flash(u'Edit script successful.', 'success')
             return redirect(url_for('list_script_ctrl'))
+
+
+@app.route('/admin/user/list')
+@login_required
+def list_user_ctrl():
+
+    if request.method == 'GET':
+
+        users = User.query.all()
+
+        return render_template('admin/show_user.html', users=users, type='List')
+
+
+@app.route('/admin/user/show/<int:user_id>')
+@login_required
+def show_user_ctrl(user_id):
+
+    if request.method == 'GET':
+
+        user = User.query.filter_by(id=user_id).first()
+
+        return render_template('admin/show_user.html', user=user, type='Show')
+
+
+@app.route('/admin/user/create', methods=("GET", "POST"))
+@login_required
+def create_user_ctrl():
+
+    form = CreatePreDefinedScriptForm(name=u'', desc=u'', script=u'')
+
+    if request.method == 'GET':
+
+        return render_template('admin/submit_user.html', form=form, type='Create')
+
+    elif request.method == 'POST':
+
+        if form.desc.data == u'' or form.script.data == u'':
+
+            flash(u'Some input is None.', 'error')
+
+        else:
+
+            author = session['user'].username
+
+            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
+            db.session.add(script)
+            db.session.commit()
+
+            flash(u'Create script successful.', 'success')
+
+        return redirect(url_for('show_script_ctrl'))

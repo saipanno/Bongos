@@ -24,12 +24,20 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField
+from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField
 
 
 class UserLoginForm(Form):
 
     next = HiddenField()
     username = TextField(u'Username:', id='text', default=u'None')
+    password = PasswordField(u'Password:', id='password', default=u'None')
+    submit = SubmitField(u'Login', id='submit')
+
+
+class CreateUserForm(Form):
+
+    username = TextField(u'Username:', id='text', default=u'None')
+    nickname = TextField(u'Nickname:', id='text', default=u'None')
     password = PasswordField(u'Password:', id='password', default=u'None')
     submit = SubmitField(u'Login', id='submit')

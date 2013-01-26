@@ -42,7 +42,7 @@ class CreatePingDetectForm(Form):
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     submit = SubmitField(u'Continue', id='submit')
 
-class CreatePreDefinedOperateForm(Form):
+class CreatePreDefinedExecuteForm(Form):
 
     vars_desc = u'''<p>用<code>|</code> 作为key(域名或IP地址)和value的分隔符</p>
 <p>用<code>,</code> 作为多个变量赋值的分隔符</p>
@@ -57,7 +57,7 @@ class CreatePreDefinedOperateForm(Form):
     ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='name')
     submit = SubmitField(u'Continue', id='submit')
 
-class CreateCustomOperateForm(Form):
+class CreateCustomExecuteForm(Form):
 
     script_desc = u'''<p>用<code>{</code>和<code>}</code>作为外部变量的定界符,模板中此类变量会自动按照变量文件中的定义进行替换.</p>
 <p>同时模板依然支持shell中的<code>$</code>变量</p>

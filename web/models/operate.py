@@ -87,7 +87,7 @@ class PingDetect(db.Model):
         self.status = new_status
 
 
-class PreDefinedOperate(db.Model):
+class PreDefinedExecute(db.Model):
     '''
     date:   time.strftime('%Y-%m-%d %H:%M')
 
@@ -121,7 +121,7 @@ class PreDefinedOperate(db.Model):
     def update_status(self, new_status):
         self.status = new_status
 
-class CustomOperate(db.Model):
+class CustomExecute(db.Model):
     '''
     date:   time.strftime('%Y-%m-%d %H:%M')
 

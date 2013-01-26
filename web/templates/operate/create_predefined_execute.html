@@ -1,6 +1,6 @@
 {% extends "operate/operate_base.html" %}
 
-{% block active_predefined %}active{% endblock %}
+{% block active_operate_predefined %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -18,7 +18,7 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Create PreDefined Operate
+                    Create PreDefined Execute
                 </legend>
 
                 <ul class="nav nav-pills">
@@ -78,7 +78,7 @@
                         <h3>Oops!</h3>
                     </div>
                     <div class="modal-body">
-                        <p>Continue to create this operate?</p>
+                        <p>Continue to create this execute?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
