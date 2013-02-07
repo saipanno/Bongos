@@ -25,12 +25,10 @@
 
 
 import os
-
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 PORT = 8080
 HOST = '127.0.0.1'
-
 DEBUG = True
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
