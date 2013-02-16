@@ -27,6 +27,7 @@
 from functools import wraps
 from flask import flash, url_for, session, request, redirect
 
+
 def login_required(f):
     """Redirect to login page if user not logged in"""
     @wraps(f)

@@ -36,12 +36,12 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
+from web.models.admin import PreDefinedScript
+
 from web.models.operate import SshDetect
 from web.models.operate import PingDetect
 from web.models.operate import PreDefinedExecute
 from web.models.operate import CustomExecute
-from web.models.admin import PreDefinedScript
-
 
 from web.extensions import login_required
 
@@ -129,7 +129,8 @@ def show_predefined_execute_ctrl():
 
         scripts = PreDefinedScript.query.all()
 
-        operates = PreDefinedExecute.query.filter_by(author=session['user'].username).order_by(desc(PreDefinedExecute.id)).all()
+        operates = PreDefinedExecute.query.filter_by(author=session['user'].username).order_by(desc(
+            PreDefinedExecute.id)).all()
 
         return render_template('operate/show_predefined_execute.html', operates=operates,scripts=scripts)
 
@@ -153,7 +154,8 @@ def create_predefined_execute_ctrl():
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_predefined_execute_ctrl'))
         else:
-            operate = PreDefinedExecute(author, datetime, form.server_list.data, form.script_list.data.id, form.template_vars.data, form.ssh_config.data.id)
+            operate = PreDefinedExecute(author, datetime, form.server_list.data, form.script_list.data.id,
+                                        form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 
@@ -191,7 +193,8 @@ def create_custom_execute_ctrl():
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_custom_execute_ctrl'))
         else:
-            operate = CustomExecute(author, datetime, form.server_list.data, form.template_script.data, form.template_vars.data, form.ssh_config.data.id)
+            operate = CustomExecute(author, datetime, form.server_list.data, form.template_script.data,
+                                    form.template_vars.data, form.ssh_config.data.id)
             db.session.add(operate)
             db.session.commit()
 

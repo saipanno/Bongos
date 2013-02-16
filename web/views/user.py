@@ -47,7 +47,7 @@ def index_ctrl():
 def user_login_ctrl():
 
     form = UserLoginForm()
-    next = request.values.get('next', url_for('index_ctrl'))
+    next_page = request.values.get('next', url_for('index_ctrl'))
 
     if request.method == 'GET':
 
@@ -63,7 +63,7 @@ def user_login_ctrl():
         if session.get('is_login'):
 
             flash(u'You are already login.', 'success')
-            return redirect(next)
+            return redirect(next_page)
 
         user = User.query.filter_by(username=form.username.data).first()
 
@@ -72,7 +72,7 @@ def user_login_ctrl():
             session['is_login'] = True
             session['user'] = user
             flash(u'Login successful.', 'success')
-            return redirect(next)
+            return redirect(next_page)
 
         else:
 

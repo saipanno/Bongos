@@ -32,8 +32,9 @@ from web import app
 from web.models.admin import PreDefinedScript
 from web.models.user import User
 
-from web.forms.admin import CreatePreDefinedScriptForm
 from web.forms.user import CreateUserForm
+
+from web.forms.admin import CreatePreDefinedScriptForm
 
 from web.extensions import login_required
 

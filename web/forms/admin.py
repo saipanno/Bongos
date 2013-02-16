@@ -26,6 +26,7 @@
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField
 
+
 class CreatePreDefinedScriptForm(Form):
 
     name = TextField(u'脚本名称:', id='text', description=u'脚本名称', default=u'None')

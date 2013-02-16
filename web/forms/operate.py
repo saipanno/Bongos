@@ -31,16 +31,18 @@ from web.models.admin import SshConfig, PreDefinedScript
 
 class CreateSshDetectForm(Form):
 
-    next = HiddenField()
+    next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Continue', id='submit')
 
+
 class CreatePingDetectForm(Form):
 
-    next = HiddenField()
+    next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     submit = SubmitField(u'Continue', id='submit')
+
 
 class CreatePreDefinedExecuteForm(Form):
 
@@ -50,12 +52,13 @@ class CreatePreDefinedExecuteForm(Form):
 <strong>例如:</strong>
 <p><code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code></p>'''
 
-    next = HiddenField()
+    next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     script_list = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.', query_factory=PreDefinedScript.query.all,  get_label='name')
     template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')
     ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='name')
     submit = SubmitField(u'Continue', id='submit')
+
 
 class CreateCustomExecuteForm(Form):
 
@@ -81,7 +84,7 @@ done</pre>'''
 <strong>例如:</strong>
 <p><code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code></p>'''
 
-    next = HiddenField()
+    next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     template_script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=script_desc, default=u'None')
     template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')

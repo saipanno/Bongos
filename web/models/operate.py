@@ -28,14 +28,14 @@ from web import db
 
 
 class SshDetect(db.Model):
-    '''
+    """
     date:   time.strftime('%Y-%m-%d %H:%M')
 
     status: 0: wait
             1: running
             3: success
             4: fail
-    '''
+    """
 
     __tablename__ = 'ssh_detect_list'
 
@@ -59,14 +59,14 @@ class SshDetect(db.Model):
 
 
 class PingDetect(db.Model):
-    '''
+    """
     date:   time.strftime('%Y-%m-%d %H:%M')
 
     status: 0: wait
             1: running
             3: success
             4: fail
-    '''
+    """
 
     __tablename__ = 'ping_detect_list'
 
@@ -88,14 +88,14 @@ class PingDetect(db.Model):
 
 
 class PreDefinedExecute(db.Model):
-    '''
+    """"
     date:   time.strftime('%Y-%m-%d %H:%M')
 
     status: 0: wait
             1: running
             3: success
             4: fail
-    '''
+    """""
 
     __tablename__ = 'predefined_operate_list'
 
@@ -121,15 +121,16 @@ class PreDefinedExecute(db.Model):
     def update_status(self, new_status):
         self.status = new_status
 
+
 class CustomExecute(db.Model):
-    '''
+    """
     date:   time.strftime('%Y-%m-%d %H:%M')
 
     status: 0: wait
             1: running
             3: success
             4: fail
-    '''
+    """
 
     __tablename__ = 'custom_operate_list'
 

@@ -29,7 +29,7 @@ from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitFie
 
 class UserLoginForm(Form):
 
-    next = HiddenField()
+    next_page = HiddenField()
     username = TextField(u'Username:', id='text', default=u'None')
     password = PasswordField(u'Password:', id='password', default=u'None')
     submit = SubmitField(u'Login', id='submit')
@@ -37,6 +37,7 @@ class UserLoginForm(Form):
 
 class CreateUserForm(Form):
 
+    next_page = HiddenField()
     username = TextField(u'Username:', id='text', default=u'None')
     nickname = TextField(u'Nickname:', id='text', default=u'None')
     password = PasswordField(u'Password:', id='password', default=u'None')
