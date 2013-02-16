@@ -8,7 +8,7 @@
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">Admin</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Script Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">User Manager</a><span class="divider">/</span></li>
             <li class="active">{{ type }}</li>
         </ul>
 
@@ -19,45 +19,56 @@
 
                 <legend>
 
-                    {{ type }} Script
+                    {{ type }} User
 
                 </legend>
 
                 <ul class="nav nav-pills">
-                    <li class="active"><a href="#name" data-toggle="tab">1. Name <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#desc" data-toggle="tab">2. Desc <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#script" data-toggle="tab">3. Script <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class="active"><a href="#username" data-toggle="tab">1. Name <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class=""><a href="#nickname" data-toggle="tab">2. Nickname <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class=""><a href="#password" data-toggle="tab">3. Password <i class="icon-arrow-right icon-white"></i></a></li>
+                    <li class=""><a href="#group" data-toggle="tab">4. Group <i class="icon-arrow-right icon-white"></i></a></li>
                 </ul>
 
                 <div class="tab-content" style="padding-bottom: 9px;">
 
-                    <div class="tab-pane active breadcrumb" id="name">
-                        <div class="span2">{{ form.name.label }}</div>
-                        <div class="span6">{{ form.name() }}</div>
+                    <div class="tab-pane active breadcrumb" id="username">
+                        <div class="span2">{{ form.username.label }}</div>
+                        <div class="span6">{{ form.username() }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.name.description }}</p>
+                            <p>{{ form.username.description }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="desc">
-                        <div class="span2">{{ form.desc.label }}</div>
-                        <div class="span6">{{ form.desc(class="span12", rows="10") }}</div>
+                    <div class="tab-pane breadcrumb" id="nickname">
+                        <div class="span2">{{ form.nickname.label }}</div>
+                        <div class="span6">{{ form.nickname(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.desc.description }}</p>
+                            <p>{{ form.nickname.description }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="script">
-                        <div class="span2">{{ form.script.label }}</div>
-                        <div class="span6">{{ form.script(class="span12", rows="10") }}</div>
+                    <div class="tab-pane breadcrumb" id="password">
+                        <div class="span2">{{ form.password.label }}</div>
+                        <div class="span6">{{ form.password(class="span12", rows="10") }}</div>
                         <div class="clearfix"></div>
                         <div class="alert alert-block alert-success fade in">
                             <strong>说明:</strong>
-                            <p>{{ form.script.description }}</p>
+                            <p>{{ form.password.description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane breadcrumb" id="group">
+                        <div class="span2">{{ form.group.label }}</div>
+                        <div class="span6">{{ form.group(class="span12", rows="10") }}</div>
+                        <div class="clearfix"></div>
+                        <div class="alert alert-block alert-success fade in">
+                            <strong>说明:</strong>
+                            <p>{{ form.group.description }}</p>
                         </div>
                     </div>
 

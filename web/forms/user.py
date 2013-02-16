@@ -41,4 +41,5 @@ class CreateUserForm(Form):
     username = TextField(u'Username:', id='text', default=u'None')
     nickname = TextField(u'Nickname:', id='text', default=u'None')
     password = PasswordField(u'Password:', id='password', default=u'None')
+    group = TextField(u'Group:', id='group', default=u'None')
     submit = SubmitField(u'Login', id='submit')

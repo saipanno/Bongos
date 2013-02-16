@@ -151,7 +151,7 @@ def show_user_ctrl(user_id):
 @login_required
 def create_user_ctrl():
 
-    form = CreatePreDefinedScriptForm(name=u'', desc=u'', script=u'')
+    form = CreateUserForm(username=u'', nickname=u'', password=u'', group=u'')
 
     if request.method == 'GET':
 
@@ -159,18 +159,16 @@ def create_user_ctrl():
 
     elif request.method == 'POST':
 
-        if form.desc.data == u'' or form.script.data == u'':
+        if form.username.data == u'' or form.nickname.data == u'' or form.password.data == u'':
 
             flash(u'Some input is None.', 'error')
 
         else:
 
-            author = session['user'].username
-
-            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
-            db.session.add(script)
+            user = PreDefinedScript(form.username.data, form.nickname.data, form.password.data)
+            db.session.add(user)
             db.session.commit()
 
-            flash(u'Create script successful.', 'success')
+            flash(u'Create user successful.', 'success')
 
-        return redirect(url_for('show_script_ctrl'))
+        return redirect(url_for('show_user_ctrl'))
