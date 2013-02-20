@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/02/16.
+#                    Created at 2013/02/20.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,3 +22,19 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+import subprocess
+
+
+def connectivity_checking(address, TIMEOUT=5, COUNT=5):
+
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, address)
+    try:
+        connectivity = subprocess.call(command, shell=True)
+    except OSError:
+        connectivity = -1
+    except ValueError:
+        connectivity = -2
+
+    return connectivity
