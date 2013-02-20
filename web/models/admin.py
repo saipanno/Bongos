@@ -28,15 +28,16 @@ from web import db
 
 
 class SshConfig(db.Model):
+
     __tablename__ = 'ssh_config_list'
-    id     = db.Column(db.Integer, primary_key=True)
+
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.UnicodeText)
     desc = db.Column(db.UnicodeText)
-    ssh_port   = db.Column(db.Integer)
-    ssh_user   = db.Column(db.Text)
+    ssh_port = db.Column(db.Integer)
+    ssh_user = db.Column(db.Text)
     user_password = db.Column(db.Text)
-    user_private_key  = db.Column(db.Text)
-
+    user_private_key = db.Column(db.Text)
 
     def __init__(self, name, desc, ssh_user, user_password, ssh_port, user_private_key=None):
         self.name = name
@@ -44,20 +45,20 @@ class SshConfig(db.Model):
         self.ssh_port = ssh_port
         self.ssh_user = ssh_user
         self.user_password = user_password
-        self.user_private_key  = user_private_key
+        self.user_private_key = user_private_key
 
 
 class PreDefinedScript(db.Model):
 
     __tablename__ = 'predefined_script_list'
 
-    id   = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.UnicodeText)
     desc = db.Column(db.UnicodeText)
     script = db.Column(db.UnicodeText)
     author = db.Column(db.UnicodeText)
 
-    def __init__(self, name ,desc, script, author):
+    def __init__(self, name, desc, script, author):
         self.name = name
         self.desc = desc
         self.script = script

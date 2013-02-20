@@ -33,7 +33,8 @@ class CreateSshDetectForm(Form):
 
     next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
-    ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='desc')
+    ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).',
+                                  query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Continue', id='submit')
 
 
@@ -54,15 +55,17 @@ class CreatePreDefinedExecuteForm(Form):
 
     next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
-    script_list = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.', query_factory=PreDefinedScript.query.all,  get_label='name')
+    script_list = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.',
+                                   query_factory=PreDefinedScript.query.all,  get_label='name')
     template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')
-    ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='name')
+    ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).',
+                                  query_factory=SshConfig.query.all,  get_label='name')
     submit = SubmitField(u'Continue', id='submit')
 
 
 class CreateCustomExecuteForm(Form):
 
-    script_desc = u'''<p>用<code>{</code>和<code>}</code>作为外部变量的定界符,模板中此类变量会自动按照变量文件中的定义进行替换.</p>
+    script_desc = u'''<p>用<code>{</code>和<code>}</code>作为外部变量的定界符,此类变量会自动按照变量文件中的定义进行替换.</p>
 <p>同时模板依然支持shell中的<code>$</code>变量</p>
 <pre>for device in `/sbin/ifconfig -a | awk '/^e/ { print $1 }'`; do
     mac=`ifconfig $device | grep HWaddr | awk '{ print $5 }'`
@@ -88,5 +91,6 @@ done</pre>'''
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'None')
     template_script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=script_desc, default=u'None')
     template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')
-    ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).', query_factory=SshConfig.query.all,  get_label='name')
+    ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).',
+                                  query_factory=SshConfig.query.all,  get_label='name')
     submit = SubmitField(u'Continue', id='submit', description='submit')

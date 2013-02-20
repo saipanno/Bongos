@@ -147,9 +147,9 @@ class CustomExecute(db.Model):
 
         self.author = author
         self.datetime = datetime
-        self.server_list  = server_list
+        self.server_list = server_list
         self.status = 0
-        self.template_script  = template_script
+        self.template_script = template_script
         self.ssh_config = ssh_config
         self.template_vars = template_vars
 

@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/23.
+#                    Created at 2013/02/16.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,27 +24,31 @@
 # SOFTWARE.
 
 
-from werkzeug.security import generate_password_hash
+import socket
+import subprocess
 
-from web import db
+
+def connectivity_checking(address, result, COUNT, TIMEOUT):
+
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, address)
+    try:
+        connectivity = subprocess.call(command, shell=True)
+    except Exception:
+        connectivity = -1
+    finally:
+        result[address] = connectivity
 
 
-class User(db.Model):
-
-    __tablename__ = 'user_list'
-
-    username = db.Column(db.UnicodeText, primary_key=True)
-    nickname = db.Column(db.UnicodeText)
-    password = db.Column(db.UnicodeText)
-    group = db.Column(db.UnicodeText)
-
-    def __init__(self, username, nickname, password, group):
-
-        self.username = username
-        self.nickname = nickname
-        self.password = password
-        self.group = group
-
-    def update_pass(self, new_password):
-
-        self.password = generate_password_hash(new_password, salt_length=8)
+def socket_checking(address, port, result, TIMEOUT):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(TIMEOUT)
+    status = 0
+    try:
+        s.connect((address, port))
+    except socket.timeout:
+        status = 1
+    except Exception:
+        status = -1
+    finally:
+        s.close()
+        result[address] = status
