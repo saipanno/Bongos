@@ -32,11 +32,7 @@ def connectivity_checking(address, TIMEOUT=5, COUNT=5):
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, address)
     try:
         connectivity = subprocess.call(command, shell=True)
-    except OSError:
-        connectivity = -1
-    except ValueError:
-        connectivity = -2
     except Exception:
-        connectivity = -10
+        connectivity = -1
 
     return connectivity
