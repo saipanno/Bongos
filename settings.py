@@ -41,7 +41,7 @@ SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x0
 # application config
 
 PARALLEL = True
-POOL_SIZE = 5
+POOL_SIZE = 2
 
 PING_COUNT = 5
 PING_TIMEOUT = 6

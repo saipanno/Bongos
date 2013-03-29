@@ -53,7 +53,8 @@ def main():
 
         elif operate_type == 'connectivity_checking':
 
-            with hide('stdout', 'running'):
+            #with hide('stdout', 'running'):
+            with show('running'):
 
                 output = execute(connectivity_checking, hosts=operate.get('hosts'))
                 print output

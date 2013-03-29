@@ -27,15 +27,14 @@
 from fabric.api import local, env
 
 
-def connectivity_checking(TIMEOUT=5, COUNT=5):
+def connectivity_checking(TIMEOUT=5, COUNT=6):
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
-    print command
 
     try:
-        connectivity = local(command, capture=True)
-
+        output = local(command, capture=True)
+        connectivity = output.return_code
     except Exception, e:
         connectivity = 'error: %s' % e
 
-    return connectivity.return_code
+    return connectivity
