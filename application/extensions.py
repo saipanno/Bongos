@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/16.
+#                    Created at 2013/03/29.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,22 @@
 # SOFTWARE.
 
 
-import os
-_basedir = os.path.abspath(os.path.dirname(__file__))
-
-# web config
-
-PORT = 8080
-HOST = '0.0.0.0'
-DEBUG = True
-
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-
-SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
+from werkzeug.utils import import_string
 
 
-# application config
+def config_from_object(obj):
 
-PARALLEL = True
-POOL_SIZE = 5
+    config = dict()
+
+    if isinstance(obj, basestring):
+        obj = import_string(obj)
+
+    for key in dir(obj):
+        if key.isupper():
+            config[key] = getattr(obj, key)
+
+    return config
+
+
+def get_operate_info():
+    pass

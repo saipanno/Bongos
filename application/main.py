@@ -22,3 +22,38 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+import time
+
+from fabric.api import env, run, hide, show, execute, parallel
+
+env.user = 'root'
+env.key_filename = '~/.ssh/ku_rsa'
+
+env.parallel = True
+env.pool_size = 3
+
+
+def running(script):
+
+    try:
+        output = run(script)
+    except Exception, e:
+        output = e
+
+    return output
+
+
+def main(script):
+
+    with hide('stdout', 'running'):
+        output = execute(running, script, hosts=['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'])
+
+    print output
+
+if __name__ == '__main__':
+
+    script = 'sleep 2; echo %s' % time.strftime("%Y%m%d%H%M")
+
+    main(script)

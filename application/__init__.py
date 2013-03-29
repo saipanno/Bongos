@@ -22,3 +22,18 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+from fabric.api import env, run, hide, show, execute, parallel
+
+from extensions import config_from_object, get_operate_info
+
+
+def main():
+
+    config = config_from_object('settings')
+
+    env.parallel = config.get('PARALLEL', True)
+    env.pool_size = config.get('POOL_SIZE', 250)
+
+    print config
