@@ -24,9 +24,12 @@
 # SOFTWARE.
 
 
+from time import sleep
 from fabric.api import env, run, hide, show, execute, parallel
 
-from extensions import config_from_object, get_operate_info
+from extensions import config_from_object, get_operate_information
+
+from module.connectivity import connectivity_checking
 
 
 def main():
@@ -36,4 +39,27 @@ def main():
     env.parallel = config.get('PARALLEL', True)
     env.pool_size = config.get('POOL_SIZE', 250)
 
-    print config
+    while 1:
+
+        # operate = get_operate_information()
+        operate = {'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
+                   'type': 'connectivity_checking'}
+
+        operate_type = operate.get('type', None)
+
+        if operate_type is None:
+
+            sleep(10)
+
+        elif operate_type == 'connectivity_checking':
+
+            with hide('stdout', 'running'):
+
+                output = execute(connectivity_checking, hosts=operate.get('hosts'))
+                print output
+
+        else:
+
+            print 'Error Operate Type.'
+
+        break

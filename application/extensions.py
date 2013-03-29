@@ -41,5 +41,5 @@ def config_from_object(obj):
     return config
 
 
-def get_operate_info():
+def get_operate_information():
     pass

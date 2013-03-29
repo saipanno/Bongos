@@ -24,15 +24,18 @@
 # SOFTWARE.
 
 
-import subprocess
+from fabric.api import local, env
 
 
-def connectivity_checking(address, TIMEOUT=5, COUNT=5):
+def connectivity_checking(TIMEOUT=5, COUNT=5):
 
-    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, address)
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
+    print command
+
     try:
-        connectivity = subprocess.call(command, shell=True)
-    except Exception:
-        connectivity = -1
+        connectivity = local(command, capture=True)
 
-    return connectivity
+    except Exception, e:
+        connectivity = 'error: %s' % e
+
+    return connectivity.return_code
