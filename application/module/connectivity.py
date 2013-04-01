@@ -29,6 +29,15 @@ from fabric.exceptions import NetworkError
 
 
 def ping_connectivity_checking(COUNT=5, TIMEOUT=5):
+    """
+    :Return:
+
+         0：success
+         1：fail
+        -1：auth error
+        -2：network error
+        -5：other error
+    """
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
 
