@@ -28,10 +28,6 @@ from fabric.api import env, run, local
 from fabric.exceptions import NetworkError
 
 
-# 结果说明
-
-
-
 def ping_connectivity_checking(COUNT=5, TIMEOUT=5):
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
