@@ -24,17 +24,31 @@
 # SOFTWARE.
 
 
-from fabric.api import env, local
+from fabric.api import env, run, local
 
 
-def connectivity_checking(config):
+def ping_connectivity_checking(COUNT=5, TIMEOUT=5):
 
-    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (config.get('PING_COUNT', 5),
-                                                       config.get('PING_TIMEOUT', 5),
-                                                       env.host)
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
 
     try:
         output = local(command, capture=True)
+        connectivity = output.return_code
+    except Exception, e:
+        connectivity = 'error: %s' % e
+
+    return connectivity
+
+
+def ssh_connectivity_checking(operate):
+
+    env.user = operate.get('user', None)
+    env.port = operate.get('port', None)
+    env.password = operate.get('password', None)
+    env.key_filename = operate.get('key_filename', None)
+
+    try:
+        output = run('uptime', shell=True, quiet=True)
         connectivity = output.return_code
     except Exception, e:
         connectivity = 'error: %s' % e
