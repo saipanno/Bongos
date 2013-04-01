@@ -24,12 +24,14 @@
 # SOFTWARE.
 
 
-from fabric.api import local, env
+from fabric.api import env, local
 
 
-def connectivity_checking(TIMEOUT=5, COUNT=6):
+def connectivity_checking(config):
 
-    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (config.get('PING_COUNT', 5),
+                                                       config.get('PING_TIMEOUT', 5),
+                                                       env.host)
 
     try:
         output = local(command, capture=True)

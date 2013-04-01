@@ -25,11 +25,11 @@
 
 
 from time import sleep
-from fabric.api import env, run, hide, show, execute, parallel
+from fabric.api import env, hide, show, execute
 
-from extensions import config_from_object, get_operate_information
+from application.extensions import config_from_object, get_operate_information
 
-from module.connectivity import connectivity_checking
+from application.module.connectivity import connectivity_checking
 
 
 def main():
@@ -53,14 +53,15 @@ def main():
 
         elif operate_type == 'connectivity_checking':
 
-            #with hide('stdout', 'running'):
-            with show('running'):
+            #with hide('stdout', 'stderr', 'running'):
+            with show('stdout', 'running'):
 
-                output = execute(connectivity_checking, hosts=operate.get('hosts'))
+                output = execute(connectivity_checking, hosts=operate.get('hosts'), config=config)
                 print output
 
         else:
 
             print 'Error Operate Type.'
 
+        # debug mode, exit the loop
         break
