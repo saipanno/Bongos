@@ -28,15 +28,14 @@ from fabric.api import env, run, local
 from fabric.exceptions import NetworkError
 
 
-def ping_connectivity_checking(COUNT=5, TIMEOUT=5):
+def ping_connectivity_checking(COUNT, TIMEOUT):
     """
     :Return:
 
-         0：success
-         1：fail
-        -1：auth error
-        -2：network error
-        -5：other error
+         0: success
+         1: fail
+        -2: network error
+        st: other error
     """
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
@@ -44,6 +43,8 @@ def ping_connectivity_checking(COUNT=5, TIMEOUT=5):
     try:
         output = local(command, capture=True)
         connectivity = output.return_code
+    except NetworkError:
+        connectivity = -2
     except Exception, e:
         connectivity = 'error: %s' % e
 
@@ -55,11 +56,11 @@ def ssh_connectivity_checking(operate):
     """
     :Return:
 
-         0：success
-         1：fail
-        -1：auth error
-        -2：network error
-        -5：other error
+         0: success
+         1: fail
+        -1: auth error
+        -2: network error
+        st: other error
     """
     env.user = operate.get('user', None)
     env.port = operate.get('port', None)
@@ -74,7 +75,6 @@ def ssh_connectivity_checking(operate):
     except NetworkError:
         connectivity = -2
     except Exception, e:
-        connectivity = e
-        # connectivity = 'error: %s' % e
+        connectivity = 'error: %s' % e
 
     return connectivity

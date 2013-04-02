@@ -34,27 +34,27 @@ from application.module.connectivity import ssh_connectivity_checking, ping_conn
 
 def main():
 
+    env.parallel = True
+    env.warn_only = True
+
     config = config_from_object('settings')
 
-    env.parallel = config.get('PARALLEL', True)
     env.pool_size = config.get('POOL_SIZE', 250)
-    # env.timeout = config.get('TIMEOUT', 30)
-    # env.command_timeout = config.get('COMMAND_TIMEOUT', 60)
-
-    env.warn_only = True
+    env.timeout = config.get('SSH_TIMEOUT', 30)
+    env.command_timeout = config.get('SSH_COMMAND_TIMEOUT', 60)
 
     while 1:
 
         # operate = get_operate_information()
 
-        # operate = {'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
-        # 'type': 'ping_connectivity_checking'}
-        operate = {'type': 'ssh_connectivity_checking',
-                   'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
-                   'user': 'root',
-                   'port': 22,
-                   'password': 'hello.com',
-                   'key_filename': '~/.ssh/ku_rsa'}
+        operate = {'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
+                   'type': 'ping_connectivity_checking'}
+        #operate = {'type': 'ssh_connectivity_checking',
+        #           'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
+        #           'user': 'root',
+        #           'port': 22,
+        #           'password': 'hello.com',
+        #           'key_filename': '~/.ssh/ku_rsa'}
 
         operate_type = operate.get('type', None)
 
@@ -64,15 +64,17 @@ def main():
 
         elif operate_type == 'ping_connectivity_checking':
 
-            with hide('stdout', 'stderr', 'running'):
+            with show('stdout', 'stderr', 'running'):
 
-                output = execute(ping_connectivity_checking, hosts=operate.get('hosts'))
+                output = execute(ping_connectivity_checking,
+                                 config.get('PING_COUNT', 5),
+                                 config.get('PING_TIMEOUT', 5),
+                                 hosts=operate.get('hosts'))
                 print output
 
         elif operate_type == 'ssh_connectivity_checking':
 
-            with hide('stdout', 'stderr', 'running', 'aborts'):
-            #with show('stdout', 'stderr', 'running'):
+            with show('stdout', 'stderr', 'running', 'aborts'):
 
                 output = execute(ssh_connectivity_checking, operate, hosts=operate.get('hosts'))
                 print output
