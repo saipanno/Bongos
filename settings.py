@@ -44,9 +44,9 @@ SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x0
 POOL_SIZE = 250
 
 # default is 5
-PING_COUNT = 2
+PING_COUNT = 5
 # default is 5
-PING_TIMEOUT = 2
+PING_TIMEOUT = 5
 
 # default is 30
 SSH_TIMEOUT = 30

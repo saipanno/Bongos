@@ -51,8 +51,7 @@ def ping_connectivity_checking(COUNT, TIMEOUT):
     return connectivity
 
 
-def ssh_connectivity_checking(operate):
-
+def ssh_connectivity_checking(operate, SSH_TIMEOUT, SSH_COMMAND_TIMEOUT):
     """
     :Return:
 
@@ -62,6 +61,9 @@ def ssh_connectivity_checking(operate):
         -2: network error
         st: other error
     """
+
+    env.timeout = SSH_TIMEOUT
+    env.command_timeout = SSH_COMMAND_TIMEOUT
     env.user = operate.get('user', None)
     env.port = operate.get('port', None)
     env.password = operate.get('password', None)
