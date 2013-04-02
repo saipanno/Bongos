@@ -51,7 +51,7 @@ def ping_connectivity_checking(COUNT, TIMEOUT):
     return connectivity
 
 
-def ssh_connectivity_checking(operate, SSH_TIMEOUT, SSH_COMMAND_TIMEOUT):
+def ssh_connectivity_checking(operate):
     """
     :Return:
 

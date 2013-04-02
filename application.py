@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-from application import main
+from application import app
 
 if __name__ == '__main__':
 
-    main()
+    app.run()

@@ -52,3 +52,11 @@ PING_TIMEOUT = 5
 SSH_TIMEOUT = 30
 # default is 60
 SSH_COMMAND_TIMEOUT = 60
+
+
+# db config
+
+SSH_DETECT_LIST = 'ssh_detect_list'
+PING_DETECT_LIST = 'ping_detect_list'
+CUSTOM_OPERATE_LIST = 'custom_operate_list'
+PREDEFINED_OPERATE_LIST = 'predefined_operate_list'
