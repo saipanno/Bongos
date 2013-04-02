@@ -56,7 +56,7 @@ def user_login_ctrl():
 
     elif request.method == 'POST':
 
-        if form.username.data == u'None' or form.password.data == u'None':
+        if form.username.data == u'' or form.password.data == u'':
 
             flash(u'None of username/password.', 'error')
             return redirect(url_for('user_login_ctrl'))

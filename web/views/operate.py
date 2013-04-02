@@ -72,9 +72,9 @@ def create_ping_detect_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'None':
-            flash(u'Some input is None.', 'error')
-            return redirect(url_for(''))
+        if form.server_list.data == u'':
+            flash(u'Some input is empty.', 'error')
+            return redirect(url_for('show_ping_detect_ctrl'))
         else:
             detect = PingDetect(author, datetime, form.server_list.data)
             db.session.add(detect)
@@ -108,8 +108,8 @@ def create_ssh_detect_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'None' or form.ssh_config.data is None:
-            flash(u'Some input is None.', 'error')
+        if form.server_list.data == u'' or form.ssh_config.data is None:
+            flash(u'Some input is empty.', 'error')
             return redirect(url_for('show_ssh_detect_ctrl'))
         else:
             detect = SshDetect(author, datetime, form.server_list.data, form.ssh_config.data.id)
@@ -150,8 +150,8 @@ def create_predefined_execute_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'None' or form.script_list.data is None or form.ssh_config.data is None:
-            flash(u'Some input is None.', 'error')
+        if form.server_list.data == u'' or form.script_list.data is None or form.ssh_config.data is None:
+            flash(u'Some input is empty.', 'error')
             return redirect(url_for('show_predefined_execute_ctrl'))
         else:
             operate = PreDefinedExecute(author, datetime, form.server_list.data, form.script_list.data.id,
@@ -189,8 +189,8 @@ def create_custom_execute_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'None' or form.template_script.data == u'None' or form.ssh_config.data is None:
-            flash(u'Some input is None.', 'error')
+        if form.server_list.data == u'' or form.template_script.data == u'None' or form.ssh_config.data is None:
+            flash(u'Some input is empty.', 'error')
             return redirect(url_for('show_custom_execute_ctrl'))
         else:
             operate = CustomExecute(author, datetime, form.server_list.data, form.template_script.data,
