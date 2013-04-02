@@ -28,6 +28,7 @@ from time import sleep
 from werkzeug.utils import import_string
 from fabric.api import env, hide, show, execute
 
+from web.models.operate import SshDetect, PingDetect, PreDefinedExecute, CustomExecute
 from application.module.connectivity import ssh_connectivity_checking, ping_connectivity_checking
 
 
@@ -49,7 +50,9 @@ class Briseis(object):
 
     def get_operate_information(self):
 
-        # TODO: 增加实际操作单获取逻辑。
+        # TODO: 增加实际操作单信息获取逻辑。
+
+        self.operate.clear()
 
         #operate = {'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
         #           'type': 'ping_connectivity_checking'}
@@ -62,25 +65,6 @@ class Briseis(object):
                    'key_filename': '~/.ssh/ku_rsa'}
 
         return operate
-
-    def ping_connectivity_checking(self, operate):
-
-        with show('stdout', 'stderr', 'running'):
-
-            output = execute(ping_connectivity_checking,
-                             self.config.get('PING_COUNT', 5),
-                             self.config.get('PING_TIMEOUT', 5),
-                             hosts=operate.get('hosts'))
-        return output
-
-    def ssh_connectivity_checking(self, operate):
-
-        with show('stdout', 'stderr', 'running', 'aborts'):
-
-            output = execute(ssh_connectivity_checking,
-                             operate,
-                             hosts=operate.get('hosts'))
-        return output
 
     def run(self):
 
@@ -103,12 +87,21 @@ class Briseis(object):
 
             elif operate_type == 'ping_connectivity_checking':
 
-                output = self.ping_connectivity_checking(operate)
+                with show('stdout', 'stderr', 'running'):
+
+                    output = execute(ping_connectivity_checking,
+                                     self.config.get('PING_COUNT', 5),
+                                     self.config.get('PING_TIMEOUT', 5),
+                                     hosts=operate.get('hosts'))
                 print output
 
             elif operate_type == 'ssh_connectivity_checking':
 
-                output = self.ssh_connectivity_checking(operate)
+                with show('stdout', 'stderr', 'running', 'aborts'):
+
+                    output = execute(ssh_connectivity_checking,
+                                     operate,
+                                     hosts=operate.get('hosts'))
                 print output
 
             else:
