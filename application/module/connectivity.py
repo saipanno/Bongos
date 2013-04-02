@@ -62,8 +62,6 @@ def ssh_connectivity_checking(operate, SSH_TIMEOUT, SSH_COMMAND_TIMEOUT):
         st: other error
     """
 
-    env.timeout = SSH_TIMEOUT
-    env.command_timeout = SSH_COMMAND_TIMEOUT
     env.user = operate.get('user', None)
     env.port = operate.get('port', None)
     env.password = operate.get('password', None)

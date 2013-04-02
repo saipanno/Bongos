@@ -78,8 +78,6 @@ def main():
 
                 output = execute(ssh_connectivity_checking,
                                  operate,
-                                 config.get('SSH_TIMEOUT', 30),
-                                 config.get('SSH_COMMAND_TIMEOUT', 60),
                                  hosts=operate.get('hosts'))
                 print output
 
