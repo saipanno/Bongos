@@ -25,6 +25,7 @@
 
 
 from web import db
+from web import app
 
 
 class SshDetect(db.Model):
@@ -37,7 +38,7 @@ class SshDetect(db.Model):
             4: fail
     """
 
-    __tablename__ = 'ssh_detect_list'
+    __tablename__ = app.config['SSH_DETECT_LIST']
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.UnicodeText, nullable=False)
@@ -68,7 +69,7 @@ class PingDetect(db.Model):
             4: fail
     """
 
-    __tablename__ = 'ping_detect_list'
+    __tablename__ = app.config['PING_DETECT_LIST']
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.UnicodeText, nullable=False)
@@ -97,7 +98,7 @@ class PreDefinedExecute(db.Model):
             4: fail
     """""
 
-    __tablename__ = 'predefined_operate_list'
+    __tablename__ = app.config['PREDEFINED_OPERATE_LIST']
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.UnicodeText, nullable=False)
@@ -132,7 +133,7 @@ class CustomExecute(db.Model):
             4: fail
     """
 
-    __tablename__ = 'custom_operate_list'
+    __tablename__ = app.config['CUSTOM_OPERATE_LIST']
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.UnicodeText, nullable=False)

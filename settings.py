@@ -27,35 +27,23 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-# web config
-
-PORT = 8080
-HOST = '0.0.0.0'
+# application config
 DEBUG = True
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-
+# web config
+PORT = 80
+HOST = '0.0.0.0'
 SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
 
+# fabric config
+POOL_SIZE = 250           # default is 250
+PING_COUNT = 5            # default is 5
+PING_TIMEOUT = 5          # default is 5
+SSH_TIMEOUT = 30          # default is 30
+SSH_COMMAND_TIMEOUT = 60  # default is 60
 
-# application config
-
-# default is 250
-POOL_SIZE = 250
-
-# default is 5
-PING_COUNT = 5
-# default is 5
-PING_TIMEOUT = 5
-
-# default is 30
-SSH_TIMEOUT = 30
-# default is 60
-SSH_COMMAND_TIMEOUT = 60
-
-
-# db config
-
+# database config
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
 SSH_DETECT_LIST = 'ssh_detect_list'
 PING_DETECT_LIST = 'ping_detect_list'
 CUSTOM_OPERATE_LIST = 'custom_operate_list'
