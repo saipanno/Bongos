@@ -38,8 +38,6 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
-from web.models.admin import PreDefinedScript
-
 from web.models.operate import SshDetect
 from web.models.operate import PreDefinedExecute
 from web.models.operate import CustomExecute
