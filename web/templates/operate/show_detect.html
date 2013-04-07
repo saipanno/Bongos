@@ -1,0 +1,54 @@
+{% extends "operate/operate_base.html" %}
+
+{% import "macro.html" as ext %}
+
+{% block active_operate_ssh %}{% if style == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operate_ping %}{% if style == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operate_custom %}{% if style == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operate_predefined %}{% if style == 'PreDefined' %}active{% endif %}{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Status Detect</a><span class="divider">/</span></li>
+            <li><a href="#">{{ style }}</a> <span class="divider">/</span></li>
+            <li class="active">Show</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">{{ style }}</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_ping_detect_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>USER</th>
+                <th>DATETIME</th>
+                <th>SERVER</th>
+                <th>STATUS</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for execute in executes %}
+            <tr>
+                <td>{{ execute.author }}</td>
+                <td>{{ execute.datetime }}</td>
+                <td>{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
+                <td>{{ execute.status }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}
