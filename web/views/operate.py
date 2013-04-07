@@ -38,59 +38,30 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
-from web.models.operate import SshDetect
 from web.models.operate import PreDefinedExecute
-from web.models.operate import CustomExecute
 from web.models.operate import Execute
 
 from web.extensions import login_required
+from web.extensions import format_address_list
+from web.extensions import format_template_vars
 
 
-@app.route('/detect/show/<style>')
+@app.route('/detect/show/<operate_type>')
 @login_required
-def show_detect_ctrl(style):
+def show_operate_ctrl(operate_type):
 
-    executes = Execute.query.filter_by(style=style).order_by(desc(Execute.id)).all()
-    return render_template('operate/show_detect.html', executes=executes, style=style)
+    executes = Execute.query.filter_by(operate_type=operate_type).order_by(desc(Execute.id)).all()
+    return render_template('operate/show_operate.html', executes=executes, operate_type=operate_type)
 
 
-@app.route('/detect/create/ping', methods=("GET", "POST"))
+@app.route('/detect/create/Ssh', methods=("GET", "POST"))
 @login_required
-def create_ping_detect_ctrl():
-
-    form = CreatePingDetectForm()
-
-    if request.method == 'GET':
-
-        return render_template('operate/create_ping_detect.html', form=form)
-
-    elif request.method == 'POST':
-
-        author = session['user'].username
-        datetime = time.strftime('%Y-%m-%d %H:%M')
-
-        if form.server_list.data == u'':
-
-            flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_detect_ctrl', style='Ping'))
-
-        style = 'PingDetect'
-        server_list = form.server_list.data
-        template_script = 'PingDetect'
-        template_vars = 'PingDetect'
-        ssh_config = 0
-        status = 'Waiting'
-
-        journal = Execute(author, datetime, style, server_list, template_script, template_vars, ssh_config, status)
-        db.session.add(journal)
-        db.session.commit()
-
-        flash(u'Create detect successful.', 'success')
-        return redirect(url_for('show_detect_ctrl', style='Ping'))
-
-
-@app.route('/detect/create/ssh', methods=("GET", "POST"))
 def create_ssh_detect_ctrl():
+
+    operate_type = 'Ssh'
+    template_script = 'Ssh'
+    template_vars = 'Ssh'
+    status = 'Waiting'
 
     form = CreateSshDetectForm()
 
@@ -103,50 +74,65 @@ def create_ssh_detect_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'' or form.ssh_config.data is None:
-            flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_detect_ctrl', style='Ssh'))
-        else:
-            detect = SshDetect(author, datetime, form.server_list.data, form.ssh_config.data.id)
-            db.session.add(detect)
-            db.session.commit()
+        server_list_dict = format_address_list(form.server_list.data)
+        if server_list_dict['status'] is not True:
+            flash(server_list_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
-            flash(u'Create detect successful.', 'success')
+        if form.ssh_config.data is None:
+            flash(u'None of ssh profile.', 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
-            return redirect(url_for('show_detect_ctrl', style='Ssh'))
+        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], template_script,
+                          template_vars, form.ssh_config.data.id, status)
+        db.session.add(journal)
+        db.session.commit()
+
+        flash(u'Create operate successful.', 'success')
+        return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
 
-@app.route('/execute/create/PreDefined', methods=("GET", "POST"))
+@app.route('/detect/create/Ping', methods=("GET", "POST"))
 @login_required
-def create_predefined_execute_ctrl():
+def create_ping_detect_ctrl():
 
-    form = CreatePreDefinedExecuteForm()
+    operate_type = 'Ping'
+    template_script = 'Ping'
+    template_vars = 'Ping'
+    ssh_config = 0
+    status = 'Waiting'
+
+    form = CreatePingDetectForm()
 
     if request.method == 'GET':
 
-        return render_template('operate/create_predefined_execute.html', form=form)
+        return render_template('operate/create_ping_detect.html', form=form)
 
     elif request.method == 'POST':
 
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'' or form.script_list.data is None or form.ssh_config.data is None:
-            flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_detect_ctrl', style='PreDefined'))
-        else:
-            operate = PreDefinedExecute(author, datetime, form.server_list.data, form.script_list.data.id,
-                                        form.template_vars.data, form.ssh_config.data.id)
-            db.session.add(operate)
-            db.session.commit()
+        server_list_dict = format_address_list(form.server_list.data)
+        if server_list_dict['status'] is not True:
+            flash(server_list_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Ping'))
 
-            flash(u'Create execute successful.', 'success')
-            return redirect(url_for('show_detect_ctrl', style='PreDefined'))
+        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], template_script,
+                          template_vars, ssh_config, status)
+        db.session.add(journal)
+        db.session.commit()
+
+        flash(u'Create operate successful.', 'success')
+        return redirect(url_for('show_operate_ctrl', operate_type='Ping'))
 
 
 @app.route('/execute/create/Custom', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
+
+    operate_type = 'Custom'
+    status = 'Waiting'
 
     form = CreateCustomExecuteForm()
 
@@ -159,15 +145,75 @@ def create_custom_execute_ctrl():
         author = session['user'].username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
-        if form.server_list.data == u'' or form.template_script.data == u'None' or form.ssh_config.data is None:
-            flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_detect_ctrl', style='Custom'))
-        else:
-            operate = CustomExecute(author, datetime, form.server_list.data, form.template_script.data,
-                                    form.template_vars.data, form.ssh_config.data.id)
-            db.session.add(operate)
-            db.session.commit()
+        server_list_dict = format_address_list(form.server_list.data)
+        if server_list_dict['status'] is not True:
+            flash(server_list_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
-            flash(u'Create execute successful.', 'success')
+        if form.template_script == u'':
+            flash(u'None of script input.', 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
-            return redirect(url_for('show_detect_ctrl', style='Custom'))
+        if form.ssh_config.data is None:
+            flash(u'None of ssh profile.', 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
+
+        template_vars_dict = format_template_vars(form.template_vars.data)
+        if template_vars_dict['status'] is not True:
+            flash(template_vars_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
+        template_vars = json.dumps(template_vars_dict['desc'])
+
+        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
+                          template_vars, form.ssh_config.data.id, status)
+        db.session.add(journal)
+        db.session.commit()
+
+        flash(u'Create operate successful.', 'success')
+        return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
+
+
+@app.route('/execute/create/PreDefined', methods=("GET", "POST"))
+@login_required
+def create_predefined_execute_ctrl():
+
+    operate_type = 'PreDefined'
+    status = 'Waiting'
+
+    form = CreatePreDefinedExecuteForm()
+
+    if request.method == 'GET':
+
+        return  render_template('operate/create_predefined_execute.html', form=form)
+
+    elif request.method == 'POST':
+
+        author = session['user'].username
+        datetime = time.strftime('%Y-%m-%d %H:%M')
+
+        server_list_dict = format_address_list(form.server_list.data)
+        if server_list_dict['status'] is not True:
+            flash(server_list_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
+
+        if form.template_script.data is None:
+            flash(u'None of script select.', 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
+
+        if form.ssh_config.data is None:
+            flash(u'None of ssh profile select.', 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
+
+        template_vars_dict = format_template_vars(form.template_vars.data)
+        if template_vars_dict['status'] is not True:
+            flash(template_vars_dict['desc'], 'error')
+            return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
+        template_vars = json.dumps(template_vars_dict['desc'])
+
+        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
+                          template_vars, form.ssh_config.data.id, status)
+        db.session.add(journal)
+        db.session.commit()
+
+        flash(u'Create operate successful.', 'success')
+        return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))

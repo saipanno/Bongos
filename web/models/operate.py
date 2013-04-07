@@ -170,18 +170,18 @@ class Execute(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.UnicodeText, nullable=False)
     datetime = db.Column(db.String, nullable=False)
-    style = db.Column(db.Integer, nullable=False)
+    operate_type = db.Column(db.Integer, nullable=False)
     server_list = db.Column(db.UnicodeText, nullable=False)
     template_script = db.Column(db.UnicodeText, nullable=False)
     template_vars = db.Column(db.UnicodeText, default=None)
     ssh_config = db.Column(db.Integer, nullable=False)
     status = db.Column(db.UnicodeText, nullable=False)
 
-    def __init__(self, author, datetime, style, server_list, template_script, template_vars, ssh_config, status):
+    def __init__(self, author, datetime, operate_type, server_list, template_script, template_vars, ssh_config, status):
 
         self.author = author
         self.datetime = datetime
-        self.style = style
+        self.operate_type = operate_type
         self.server_list = server_list
         self.template_script = template_script
         self.ssh_config = ssh_config

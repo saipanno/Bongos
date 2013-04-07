@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import re
 from functools import wraps
 from flask import flash, url_for, session, request, redirect
 
@@ -37,3 +38,62 @@ def login_required(f):
             return redirect(url_for('user_login_ctrl', next=request.url))
         return f(*args, **kwargs)
     return wrapper
+
+
+def verify_address(address):
+    """
+    Returns True if `address` is a valid IPv4 address.
+
+    >>> verify_address('192.168.1.1')
+    True
+    >>> verify_address('192.168.1.800')
+    False
+    >>> verify_address('192.168.1')
+    False
+    """
+    try:
+        octets = address.split('.')
+        if len(octets) != 4:
+            return False
+        for x in octets:
+            if not (0 <= int(x) <= 255):
+                return False
+    except ValueError:
+        return False
+    return True
+
+
+def format_address_list(address_list):
+
+    """
+    Returns an dict:
+        {'status': True|False, 'desc': 'message'}
+    Support sep:
+        comma     (,)
+        semicolon (;)
+        blank     ( )
+        newline   (\n)
+    Result sep:
+        String with blank sep.
+    """
+    if address_list == u'':
+        return {'status': False, 'desc': u'Empty server list.'}
+
+    try:
+        new_address_list = str()
+        for server in re.split(';|,| |\n', address_list):
+            if server == u'':
+                continue
+            address_status = verify_address(server.strip())
+            if address_status is not True:
+                return {'status': False, 'desc': u'Error server address: %s' % server}
+            new_address_list = '%s %s' % (new_address_list, server.strip())
+    except Exception, e:
+        return {'status': False, 'desc': u'%s' % e}
+
+    return {'status': True, 'desc': u'%s' % new_address_list.strip()}
+
+
+def format_template_vars(var_list):
+
+    return {'status': True, 'desc': var_list}

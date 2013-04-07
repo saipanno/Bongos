@@ -55,7 +55,7 @@ class CreatePreDefinedExecuteForm(Form):
 
     next_page = HiddenField()
     server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'')
-    script_list = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.',
+    template_script = QuerySelectField(u'预定义脚本:', id='select', description=u'较为常用的预定义脚本.',
                                    query_factory=PreDefinedScript.query.all,  get_label='name')
     template_vars = TextAreaField(u'模板变量:', id='textarea', description=vars_desc, default=u'None')
     ssh_config = QuerySelectField(u'SSH配置', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).',

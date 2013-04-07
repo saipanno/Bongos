@@ -2,6 +2,20 @@
 
 {% import "macro.html" as ext %}
 
+{% if operate_type == 'Ssh' %}
+    {% set operate_title = 'Detect' %}
+    {% set operate_create_url = url_for('create_ssh_detect_ctrl') %}
+{% elif operate_type == 'Ping' %}
+    {% set operate_title = 'Detect' %}
+    {% set operate_create_url = url_for('create_ping_detect_ctrl') %}
+{% elif operate_type == 'Custom' %}
+    {% set operate_title = 'Execute' %}
+    {% set operate_create_url = url_for('create_custom_execute_ctrl') %}
+{% elif operate_type == 'PreDefined' %}
+    {% set operate_title = 'Execute' %}
+    {% set operate_create_url = url_for('create_predefined_execute_ctrl') %}
+{% endif %}
+
 {% block active_operate_ssh %}{% if style == 'Ssh' %}active{% endif %}{% endblock %}
 {% block active_operate_ping %}{% if style == 'Ping' %}active{% endif %}{% endblock %}
 {% block active_operate_custom %}{% if style == 'Custom' %}active{% endif %}{% endblock %}
@@ -12,8 +26,8 @@
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Status Detect</a><span class="divider">/</span></li>
-            <li><a href="#">{{ style }}</a> <span class="divider">/</span></li>
+            <li><a href="#">{{ operate_title }}</a><span class="divider">/</span></li>
+            <li><a href="#">{{ operate_type }}</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
         </ul>
 
@@ -21,9 +35,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ style }}</a>
+                <a class="brand" href="#">{{ operate_type }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('create_ping_detect_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                    <a href="{{ operate_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
                 </div>
             </div>
         </div>
