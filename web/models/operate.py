@@ -156,3 +156,34 @@ class CustomExecute(db.Model):
 
     def update_status(self, new_status):
         self.status = new_status
+
+
+class Execute(db.Model):
+
+    """
+    date:   time.strftime('%Y-%m-%d %H:%M')
+
+    """
+
+    __tablename__ = app.config['OPERATE_LISTS']
+
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.UnicodeText, nullable=False)
+    datetime = db.Column(db.String, nullable=False)
+    style = db.Column(db.Integer, nullable=False)
+    server_list = db.Column(db.UnicodeText, nullable=False)
+    template_script = db.Column(db.UnicodeText, nullable=False)
+    template_vars = db.Column(db.UnicodeText, default=None)
+    ssh_config = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.UnicodeText, nullable=False)
+
+    def __init__(self, author, datetime, style, server_list, template_script, template_vars, ssh_config, status):
+
+        self.author = author
+        self.datetime = datetime
+        self.style = style
+        self.server_list = server_list
+        self.template_script = template_script
+        self.ssh_config = ssh_config
+        self.template_vars = template_vars
+        self.status = status

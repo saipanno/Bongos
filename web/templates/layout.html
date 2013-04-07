@@ -28,7 +28,7 @@
                 <a class="brand" href="{{ url_for('index_ctrl') }}">BRISEIS</a>
 
                 <ul class="nav">
-                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("show_ping_detect_ctrl") }}">Operate</a></li>
+                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("show_detect_ctrl", style='PingDetect') }}">Operate</a></li>
                     <li class="{% block active_admin %}{% endblock %}"><a href="{{ url_for("list_script_ctrl") }}">Admin</a></li>
                 </ul>
 

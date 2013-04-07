@@ -25,6 +25,8 @@
 
 
 import time
+import json
+
 from flask import render_template, request, redirect, url_for, flash, session
 from sqlalchemy import desc
 
@@ -39,22 +41,19 @@ from web.forms.operate import CreateCustomExecuteForm
 from web.models.admin import PreDefinedScript
 
 from web.models.operate import SshDetect
-from web.models.operate import PingDetect
 from web.models.operate import PreDefinedExecute
 from web.models.operate import CustomExecute
+from web.models.operate import Execute
 
 from web.extensions import login_required
 
 
-@app.route('/detect/show/ping')
+@app.route('/detect/show/<style>')
 @login_required
-def show_ping_detect_ctrl():
+def show_detect_ctrl(style):
 
-    if request.method == 'GET':
-
-        detects = PingDetect.query.filter_by(author=session['user'].username).order_by(desc(PingDetect.id)).all()
-
-        return render_template('operate/show_ping_detect.html', detects=detects)
+    executes = Execute.query.filter_by(style=style).order_by(desc(Execute.id)).all()
+    return render_template('operate/show_detect.html', executes=executes, style=style)
 
 
 @app.route('/detect/create/ping', methods=("GET", "POST"))
@@ -73,26 +72,24 @@ def create_ping_detect_ctrl():
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         if form.server_list.data == u'':
+
             flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_ping_detect_ctrl'))
-        else:
-            detect = PingDetect(author, datetime, form.server_list.data)
-            db.session.add(detect)
-            db.session.commit()
+            return redirect(url_for('show_detect_ctrl', style='Ping'))
 
-            flash(u'Create detect successful.', 'success')
-            return redirect(url_for('show_ping_detect_ctrl'))
+        style = 'PingDetect'
+        server_list = form.server_list.data
+        template_script = 'PingDetect'
+        template_vars = 'PingDetect'
+        ssh_config = 0
+        status = 'Waiting'
 
+        journal = Execute(author, datetime, style, server_list, template_script, template_vars, ssh_config, status)
+        db.session.add(journal)
+        db.session.commit()
 
-@app.route('/detect/show/ssh')
-@login_required
-def show_ssh_detect_ctrl():
+        flash(u'Create detect successful.', 'success')
+        return redirect(url_for('show_detect_ctrl', style='Ping'))
 
-    if request.method == 'GET':
-
-        detects = SshDetect.query.filter_by(author=session['user'].username).order_by(desc(SshDetect.id)).all()
-
-        return render_template('operate/show_ssh_detect.html', detects=detects)
 
 @app.route('/detect/create/ssh', methods=("GET", "POST"))
 def create_ssh_detect_ctrl():
@@ -110,7 +107,7 @@ def create_ssh_detect_ctrl():
 
         if form.server_list.data == u'' or form.ssh_config.data is None:
             flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_ssh_detect_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='Ssh'))
         else:
             detect = SshDetect(author, datetime, form.server_list.data, form.ssh_config.data.id)
             db.session.add(detect)
@@ -118,24 +115,10 @@ def create_ssh_detect_ctrl():
 
             flash(u'Create detect successful.', 'success')
 
-            return redirect(url_for('show_ssh_detect_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='Ssh'))
 
 
-@app.route('/execute/show/predefined')
-@login_required
-def show_predefined_execute_ctrl():
-
-    if request.method == 'GET':
-
-        scripts = PreDefinedScript.query.all()
-
-        operates = PreDefinedExecute.query.filter_by(author=session['user'].username).order_by(desc(
-            PreDefinedExecute.id)).all()
-
-        return render_template('operate/show_predefined_execute.html', operates=operates,scripts=scripts)
-
-
-@app.route('/execute/create/predefined', methods=("GET", "POST"))
+@app.route('/execute/create/PreDefined', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -152,7 +135,7 @@ def create_predefined_execute_ctrl():
 
         if form.server_list.data == u'' or form.script_list.data is None or form.ssh_config.data is None:
             flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_predefined_execute_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='PreDefined'))
         else:
             operate = PreDefinedExecute(author, datetime, form.server_list.data, form.script_list.data.id,
                                         form.template_vars.data, form.ssh_config.data.id)
@@ -160,21 +143,10 @@ def create_predefined_execute_ctrl():
             db.session.commit()
 
             flash(u'Create execute successful.', 'success')
-            return redirect(url_for('show_predefined_execute_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='PreDefined'))
 
 
-@app.route('/execute/show/custom')
-@login_required
-def show_custom_execute_ctrl():
-
-    if request.method == 'GET':
-
-        operates = CustomExecute.query.filter_by(author=session['user'].username).order_by(desc(CustomExecute.id)).all()
-
-        return render_template('operate/show_custom_execute.html', operates=operates)
-
-
-@app.route('/execute/create/custom', methods=("GET", "POST"))
+@app.route('/execute/create/Custom', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -191,7 +163,7 @@ def create_custom_execute_ctrl():
 
         if form.server_list.data == u'' or form.template_script.data == u'None' or form.ssh_config.data is None:
             flash(u'Some input is empty.', 'error')
-            return redirect(url_for('show_custom_execute_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='Custom'))
         else:
             operate = CustomExecute(author, datetime, form.server_list.data, form.template_script.data,
                                     form.template_vars.data, form.ssh_config.data.id)
@@ -200,4 +172,4 @@ def create_custom_execute_ctrl():
 
             flash(u'Create execute successful.', 'success')
 
-            return redirect(url_for('show_custom_execute_ctrl'))
+            return redirect(url_for('show_detect_ctrl', style='Custom'))
