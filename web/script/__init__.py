@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/16.
+#                    Created at 2013/02/20.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-
-import os
-_basedir = os.path.abspath(os.path.dirname(__file__))
-
-# application config
-DEBUG = True
-
-# web config
-PORT = 80
-HOST = '0.0.0.0'
-SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
-
-# fabric config
-POOL_SIZE = 250           # default is 250
-PING_COUNT = 5            # default is 6
-PING_TIMEOUT = 5          # default is 5
-SSH_TIMEOUT = 30          # default is 30
-SSH_COMMAND_TIMEOUT = 60  # default is 60
-
-# database config
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-SSH_DETECT_LIST = 'ssh_detect_list'
-PING_DETECT_LIST = 'ping_detect_list'
-CUSTOM_OPERATE_LIST = 'custom_operate_list'
-PREDEFINED_OPERATE_LIST = 'predefined_operate_list'
