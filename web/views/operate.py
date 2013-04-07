@@ -26,7 +26,6 @@
 
 import time
 import json
-
 from flask import render_template, request, redirect, url_for, flash, session
 from sqlalchemy import desc
 
@@ -38,7 +37,6 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
-from web.models.operate import PreDefinedExecute
 from web.models.operate import Execute
 
 from web.extensions import login_required
@@ -80,7 +78,7 @@ def create_ssh_detect_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
         if form.ssh_config.data is None:
-            flash(u'None of ssh profile.', 'error')
+            flash(u'None of ssh profile select', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
         journal = Execute(author, datetime, operate_type, server_list_dict['desc'], template_script,
@@ -151,11 +149,11 @@ def create_custom_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         if form.template_script == u'':
-            flash(u'None of script input.', 'error')
+            flash(u'None of remote script input.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         if form.ssh_config.data is None:
-            flash(u'None of ssh profile.', 'error')
+            flash(u'None of ssh profile select', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
@@ -197,7 +195,7 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
 
         if form.template_script.data is None:
-            flash(u'None of script select.', 'error')
+            flash(u'None of remote script select.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
 
         if form.ssh_config.data is None:
