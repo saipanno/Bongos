@@ -16,10 +16,10 @@
     {% set operate_create_url = url_for('create_predefined_execute_ctrl') %}
 {% endif %}
 
-{% block active_operate_ssh %}{% if style == 'Ssh' %}active{% endif %}{% endblock %}
-{% block active_operate_ping %}{% if style == 'Ping' %}active{% endif %}{% endblock %}
-{% block active_operate_custom %}{% if style == 'Custom' %}active{% endif %}{% endblock %}
-{% block active_operate_predefined %}{% if style == 'PreDefined' %}active{% endif %}{% endblock %}
+{% block active_operate_ssh %}{% if operate_type == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operate_ping %}{% if operate_type == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operate_custom %}{% if operate_type == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operate_predefined %}{% if operate_type == 'PreDefined' %}active{% endif %}{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -37,7 +37,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ operate_type }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ operate_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Detect</a>
+                    <a href="{{ operate_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add {{ operate_title }}</a>
                 </div>
             </div>
         </div>
@@ -54,10 +54,10 @@
             <tbody>
             {% for execute in executes %}
             <tr>
-                <td>{{ execute.author }}</td>
-                <td>{{ execute.datetime }}</td>
-                <td>{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
-                <td>{{ execute.status }}</td>
+                <td style="width: 10%">{{ execute.author }}</td>
+                <td style="width: 10%">{{ execute.datetime }}</td>
+                <td style="width: 30%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
+                <td style="width: 30%">{{ ext.get_operate_status(execute.status) }}</td>
             </tr>
             {% endfor %}
             </tbody>
