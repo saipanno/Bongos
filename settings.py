@@ -45,7 +45,6 @@ SSH_COMMAND_TIMEOUT = 60  # default is 60
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
 OPERATE_LISTS = 'operate_lists'
-SSH_DETECT_LIST = 'ssh_detect_list'
-PING_DETECT_LIST = 'ping_detect_list'
-CUSTOM_OPERATE_LIST = 'custom_operate_list'
-PREDEFINED_OPERATE_LIST = 'predefined_operate_list'
+USER_LISTS = 'user_lists'
+SSH_CONFIG_LISTS = 'ssh_config_lists'
+PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'

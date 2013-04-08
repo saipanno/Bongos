@@ -27,11 +27,12 @@
 from werkzeug.security import generate_password_hash
 
 from web import db
+from web import app
 
 
 class User(db.Model):
 
-    __tablename__ = 'user_list'
+    __tablename__ = app.config['USER_LISTS']
 
     username = db.Column(db.UnicodeText, primary_key=True)
     nickname = db.Column(db.UnicodeText)

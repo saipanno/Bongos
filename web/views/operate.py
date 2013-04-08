@@ -37,7 +37,7 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
-from web.models.operate import Execute
+from web.models.operate import OperateDB
 
 from web.extensions import login_required
 from web.extensions import format_address_list
@@ -48,7 +48,7 @@ from web.extensions import format_template_vars
 @login_required
 def show_operate_ctrl(operate_type):
 
-    executes = Execute.query.filter_by(operate_type=operate_type).order_by(desc(Execute.id)).all()
+    executes = OperateDB.query.filter_by(operate_type=operate_type).order_by(desc(OperateDB.id)).all()
     return render_template('operate/show_operate.html', executes=executes, operate_type=operate_type)
 
 
@@ -81,8 +81,8 @@ def create_ssh_detect_ctrl():
             flash(u'None of ssh profile select', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
-        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], template_script,
-                          template_vars, form.ssh_config.data.id, status)
+        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], template_script,
+                            template_vars, form.ssh_config.data.id, status)
         db.session.add(journal)
         db.session.commit()
 
@@ -116,8 +116,8 @@ def create_ping_detect_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Ping'))
 
-        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], template_script,
-                          template_vars, ssh_config, status)
+        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], template_script,
+                            template_vars, ssh_config, status)
         db.session.add(journal)
         db.session.commit()
 
@@ -162,8 +162,8 @@ def create_custom_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
         template_vars = json.dumps(template_vars_dict['desc'])
 
-        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
-                          template_vars, form.ssh_config.data.id, status)
+        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
+                            template_vars, form.ssh_config.data.id, status)
         db.session.add(journal)
         db.session.commit()
 
@@ -208,8 +208,8 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
         template_vars = json.dumps(template_vars_dict['desc'])
 
-        journal = Execute(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
-                          template_vars, form.ssh_config.data.id, status)
+        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
+                            template_vars, form.ssh_config.data.id, status)
         db.session.add(journal)
         db.session.commit()
 
