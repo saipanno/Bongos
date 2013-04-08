@@ -78,7 +78,7 @@ def create_ssh_detect_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
         if form.ssh_config.data is None:
-            flash(u'None of ssh profile select', 'error')
+            flash(u'没有选择SSH配置', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
         journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], template_script,
@@ -86,7 +86,7 @@ def create_ssh_detect_ctrl():
         db.session.add(journal)
         db.session.commit()
 
-        flash(u'Create operate successful.', 'success')
+        flash(u'成功创建操作.', 'success')
         return redirect(url_for('show_operate_ctrl', operate_type='Ssh'))
 
 
@@ -121,7 +121,7 @@ def create_ping_detect_ctrl():
         db.session.add(journal)
         db.session.commit()
 
-        flash(u'Create operate successful.', 'success')
+        flash(u'成功创建操作.', 'success')
         return redirect(url_for('show_operate_ctrl', operate_type='Ping'))
 
 
@@ -149,11 +149,11 @@ def create_custom_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         if form.template_script == u'':
-            flash(u'None of remote script input.', 'error')
+            flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         if form.ssh_config.data is None:
-            flash(u'None of ssh profile select', 'error')
+            flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
@@ -167,7 +167,7 @@ def create_custom_execute_ctrl():
         db.session.add(journal)
         db.session.commit()
 
-        flash(u'Create operate successful.', 'success')
+        flash(u'成功创建操作.', 'success')
         return redirect(url_for('show_operate_ctrl', operate_type='Custom'))
 
 
@@ -195,11 +195,11 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
 
         if form.template_script.data is None:
-            flash(u'None of remote script select.', 'error')
+            flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
 
         if form.ssh_config.data is None:
-            flash(u'None of ssh profile select.', 'error')
+            flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
@@ -213,5 +213,5 @@ def create_predefined_execute_ctrl():
         db.session.add(journal)
         db.session.commit()
 
-        flash(u'Create operate successful.', 'success')
+        flash(u'成功创建操作.', 'success')
         return redirect(url_for('show_operate_ctrl', operate_type='PreDefined'))

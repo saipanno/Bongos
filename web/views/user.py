@@ -57,12 +57,12 @@ def user_login_ctrl():
 
         if form.username.data == u'' or form.password.data == u'':
 
-            flash(u'None of username/password.', 'error')
+            flash(u'错误的用户名或密码.', 'error')
             return redirect(url_for('user_login_ctrl'))
 
         if session.get('is_login'):
 
-            flash(u'You are already login.', 'success')
+            flash(u'已经登录.', 'success')
             return redirect(next_page)
 
         user = User.query.filter_by(username=form.username.data).first()
@@ -71,12 +71,12 @@ def user_login_ctrl():
 
             session['is_login'] = True
             session['user'] = user
-            flash(u'Login successful.', 'success')
+            flash(u'登录成功.', 'success')
             return redirect(next_page)
 
         else:
 
-            flash(u'Wrong username or password.', 'error')
+            flash(u'错误的用户名或密码.', 'error')
             return redirect(url_for('user_login_ctrl'))
 
 

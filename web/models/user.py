@@ -37,15 +37,9 @@ class User(db.Model):
     username = db.Column(db.UnicodeText, primary_key=True)
     nickname = db.Column(db.UnicodeText)
     password = db.Column(db.UnicodeText)
-    group = db.Column(db.UnicodeText)
 
-    def __init__(self, username, nickname, password, group):
+    def __init__(self, username, nickname, password):
 
         self.username = username
         self.nickname = nickname
-        self.password = password
-        self.group = group
-
-    def update_pass(self, new_password):
-
-        self.password = generate_password_hash(new_password, salt_length=8)
+        self.password = generate_password_hash(password, salt_length=8)

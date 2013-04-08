@@ -77,7 +77,7 @@ def format_address_list(address_list):
         String with blank sep.
     """
     if address_list == u'':
-        return {'status': False, 'desc': u'Empty server list.'}
+        return {'status': False, 'desc': u'空白服务器列表.'}
 
     try:
         new_address_list = str()
@@ -86,7 +86,7 @@ def format_address_list(address_list):
                 continue
             address_status = verify_address(server.strip())
             if address_status is not True:
-                return {'status': False, 'desc': u'Error server address: %s' % server}
+                return {'status': False, 'desc': u'错误的服务器地址: %s' % server}
             new_address_list = '%s %s' % (new_address_list, server.strip())
     except Exception, e:
         return {'status': False, 'desc': u'%s' % e}
@@ -94,6 +94,30 @@ def format_address_list(address_list):
     return {'status': True, 'desc': u'%s' % new_address_list.strip()}
 
 
-def format_template_vars(var_list):
+def format_template_vars(template_vars):
 
-    return {'status': True, 'desc': var_list}
+    address_vars_group = dict()
+
+    for oneline in template_vars.split('\n'):
+        # 跳过template_vars中的空行
+        if oneline == u'':
+            continue
+        try:
+            address = oneline.split('|')[0]
+            if address == u'':
+                return {'status': False, 'desc': u'错误的变量赋值，不存在address关键字.'}
+            address_vars = oneline.split('|')[1]
+            address_vars_group[address.strip()] = dict()
+            for var in address_vars.split(','):
+                try:
+                    key = var.split('=')[0].strip()
+                    if key == u'':
+                        continue
+                    value = var.split('=')[1].strip()
+                    address_vars_group[address.strip()][key] = value
+                except IndexError:
+                    return {'status': False, 'desc': u'错误的变量赋值: %s' % var}
+        except IndexError:
+            return {'status': False, 'desc': u'错误的变量赋值: %s' % oneline}
+
+    return {'status': True, 'desc': address_vars_group}

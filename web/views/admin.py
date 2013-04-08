@@ -165,7 +165,7 @@ def create_user_ctrl():
 
         else:
 
-            user = PreDefinedScript(form.username.data, form.nickname.data, form.password.data)
+            user = User(form.username.data, form.nickname.data, form.password.data)
             db.session.add(user)
             db.session.commit()
 
