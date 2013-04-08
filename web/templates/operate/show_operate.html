@@ -56,8 +56,8 @@
             <tr>
                 <td style="width: 10%">{{ execute.author }}</td>
                 <td style="width: 10%">{{ execute.datetime }}</td>
-                <td style="width: 30%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
-                <td style="width: 30%">{{ ext.get_operate_status(execute.status) }}</td>
+                <td style="width: 40%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
+                <td style="width: 20%">{{ ext.get_operate_status(execute.status) }}</td>
             </tr>
             {% endfor %}
             </tbody>

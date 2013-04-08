@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+from sqlalchemy import desc
 from flask import render_template, request, redirect, url_for, flash, session
 
 from web import db
@@ -31,6 +32,7 @@ from web import app
 
 from web.models.admin import PreDefinedScript
 from web.models.user import User
+from web.models.operate import OperateDB
 
 from web.forms.user import CreateUserForm
 
@@ -172,3 +174,12 @@ def create_user_ctrl():
             flash(u'Create user successful.', 'success')
 
         return redirect(url_for('show_user_ctrl'))
+
+
+@app.route('/admin/operate')
+@login_required
+def manage_operate_ctrl():
+
+    executes = OperateDB.query.order_by(desc(OperateDB.id)).all()
+
+    return render_template('admin/show_operate.html', executes=executes)
