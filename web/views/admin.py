@@ -118,6 +118,7 @@ def edit_script_ctrl(script_id):
 
             flash(u'Some input is None.', 'error')
             return redirect(url_for('show_script_ctrl'))
+
         else:
 
             form.populate_obj(script)

@@ -28,7 +28,7 @@ from time import sleep
 from werkzeug.utils import import_string
 from fabric.api import env, hide, show, execute
 
-from web.models.operate import SshDetect, PingDetect, PreDefinedExecute, CustomExecute
+from web.models.operate import OperateDB
 from application.module.connectivity import ssh_connectivity_checking, ping_connectivity_checking
 
 
