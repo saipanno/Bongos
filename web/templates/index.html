@@ -1,2 +1,71 @@
-{% extends "layout.html" %}
+{% extends "header.html" %}
 
+{% import "macro.html" as ext %}
+
+{% block style %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a class="brand" href="{{ url_for('index_ctrl') }}">BRISEIS</a>
+
+                <ul class="nav">
+                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("list_operate_ctrl", operate_type='Ssh') }}">Operate</a></li>
+                    <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("list_user_ctrl") }}">Dashboard</a></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ session['user'].nickname }}<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Setting</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{ url_for("user_logout_ctrl") }}">Quit</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="navbar-search pull-right" action="">
+                    <input class="search-query span2" placeholder="Search" type="text">
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+
+            {% block sidebar %}
+
+            {% endblock %}
+
+            {% block main %}
+
+                {{ ext.feedback_message() }}
+
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
