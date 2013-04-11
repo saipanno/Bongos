@@ -36,11 +36,11 @@ from web.models.user import User
 from web.extensions import login_required
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 @login_required
 def index_ctrl():
 
-    return  redirect(url_for('list_operate_ctrl', operate_type='Ping'))
+    return  redirect(url_for('list_operate_ctrl', operate_type='Ssh'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
