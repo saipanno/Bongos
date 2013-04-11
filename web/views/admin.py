@@ -83,9 +83,13 @@ def create_script_ctrl():
 
     elif request.method == 'POST':
 
-        if form.desc.data == u'' or form.script.data == u'':
+        if form.desc.data == u'':
 
-            flash(u'Some input is None.', 'error')
+            flash(u'请输入脚本描述.', 'error')
+
+        elif form.script.data == u'':
+
+            flash(u'请输入脚本.', 'error')
 
         else:
 
@@ -95,7 +99,7 @@ def create_script_ctrl():
             db.session.add(script)
             db.session.commit()
 
-            flash(u'Create script successful.', 'success')
+            flash(u'创建预定义脚本成功.', 'success')
 
         return redirect(url_for('show_script_ctrl'))
 
@@ -114,9 +118,14 @@ def edit_script_ctrl(script_id):
 
     elif request.method == 'POST':
 
-        if form.desc.data == u'' or form.script.data == u'':
+        if form.desc.data == u'':
 
-            flash(u'Some input is None.', 'error')
+            flash(u'请输入脚本描述.', 'error')
+            return redirect(url_for('show_script_ctrl'))
+
+        elif form.script.data == u'':
+
+            flash(u'请输入脚本.', 'error')
             return redirect(url_for('show_script_ctrl'))
 
         else:
@@ -125,7 +134,7 @@ def edit_script_ctrl(script_id):
             db.session.commit()
 
             flash(u'Edit script successful.', 'success')
-            return redirect(url_for('list_script_ctrl'))
+            return redirect(url_for('list_all_operate_ctrl'))
 
 
 @app.route('/admin/user/list')
@@ -162,9 +171,17 @@ def create_user_ctrl():
 
     elif request.method == 'POST':
 
-        if form.username.data == u'' or form.nickname.data == u'' or form.password.data == u'':
+        if form.username.data == u'':
 
-            flash(u'Some input is None.', 'error')
+            flash(u'请输入用户名.', 'error')
+
+        elif form.nickname.data == u'':
+
+            flash(u'请输入昵称.', 'error')
+
+        elif form.password.data == u'':
+
+            flash(u'请输入密码.', 'error')
 
         else:
 
@@ -172,14 +189,14 @@ def create_user_ctrl():
             db.session.add(user)
             db.session.commit()
 
-            flash(u'Create user successful.', 'success')
+            flash(u'创建用户成功.', 'success')
 
         return redirect(url_for('show_user_ctrl'))
 
 
-@app.route('/admin/operate')
+@app.route('/admin/operate/list')
 @login_required
-def manage_operate_ctrl():
+def list_all_operate_ctrl():
 
     executes = OperateDB.query.order_by(desc(OperateDB.id)).all()
 

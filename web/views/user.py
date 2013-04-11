@@ -40,7 +40,7 @@ from web.extensions import login_required
 @login_required
 def index_ctrl():
 
-    return  redirect(url_for('show_operate_ctrl', operate_type='Ping'))
+    return  redirect(url_for('list_operate_ctrl', operate_type='Ping'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
