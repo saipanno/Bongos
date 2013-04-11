@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block active_dashboard %}active{% endblock %}
+
+{% block sidebar %}
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">MANAGER</li>
+                <li class="{% block active_dashboard_user %}{% endblock %}"><a href="{{ url_for("list_user_ctrl") }}">User</a></li>
+                <li class="{% block active_dashboard_script %}{% endblock %}"><a href="{{ url_for("list_script_ctrl") }}">Script</a></li>
+                <li class="{% block active_dashboard_operate %}{% endblock %}"><a href="{{ url_for("list_all_operate_ctrl") }}">Operate</a></li>
+                <li class="nav-header">LOGGING</li>
+                <li class=""><a href="#">User</a></li>
+                <li class=""><a href="#">Task</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

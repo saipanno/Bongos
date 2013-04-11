@@ -41,7 +41,7 @@ from web.forms.admin import CreatePreDefinedScriptForm
 from web.extensions import login_required
 
 
-@app.route('/manager/script/list')
+@app.route('/dashboard/script/list')
 @login_required
 def list_script_ctrl():
 
@@ -49,10 +49,10 @@ def list_script_ctrl():
 
         scripts = PreDefinedScript.query.all()
 
-        return render_template('manager/show_script.html', scripts=scripts, type='List')
+        return render_template('dashboard/show_script.html', scripts=scripts, type='List')
 
 
-@app.route('/manager/script/show/<int:script_id>')
+@app.route('/dashboard/script/show/<int:script_id>')
 @login_required
 def show_script_ctrl(script_id):
 
@@ -60,10 +60,10 @@ def show_script_ctrl(script_id):
 
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-        return render_template('manager/show_script.html', script=script, type='Show')
+        return render_template('dashboard/show_script.html', script=script, type='Show')
 
 
-@app.route('/manager/script/create', methods=("GET", "POST"))
+@app.route('/dashboard/script/create', methods=("GET", "POST"))
 @login_required
 def create_script_ctrl():
 
@@ -71,7 +71,7 @@ def create_script_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('manager/submit_script.html', form=form, type='Create')
+        return render_template('dashboard/submit_script.html', form=form, type='Create')
 
     elif request.method == 'POST':
 
@@ -96,7 +96,7 @@ def create_script_ctrl():
         return redirect(url_for('show_script_ctrl'))
 
 
-@app.route('/manager/script/edit/<int:script_id>', methods=("GET", "POST"))
+@app.route('/dashboard/script/edit/<int:script_id>', methods=("GET", "POST"))
 @login_required
 def edit_script_ctrl(script_id):
 
@@ -106,7 +106,7 @@ def edit_script_ctrl(script_id):
 
     if request.method == 'GET':
 
-        return render_template('manager/submit_script.html', type='Edit', form=form, script=script)
+        return render_template('dashboard/submit_script.html', type='Edit', form=form, script=script)
 
     elif request.method == 'POST':
 
@@ -129,7 +129,7 @@ def edit_script_ctrl(script_id):
             return redirect(url_for('list_all_operate_ctrl'))
 
 
-@app.route('/manager/user/list')
+@app.route('/dashboard/user/list')
 @login_required
 def list_user_ctrl():
 
@@ -137,10 +137,10 @@ def list_user_ctrl():
 
         users = User.query.all()
 
-        return render_template('manager/show_user.html', users=users, type='List')
+        return render_template('dashboard/show_user.html', users=users, type='List')
 
 
-@app.route('/manager/user/show/<int:user_id>')
+@app.route('/dashboard/user/show/<int:user_id>')
 @login_required
 def show_user_ctrl(user_id):
 
@@ -148,10 +148,10 @@ def show_user_ctrl(user_id):
 
         user = User.query.filter_by(id=user_id).first()
 
-        return render_template('manager/show_user.html', user=user, type='Show')
+        return render_template('dashboard/show_user.html', user=user, type='Show')
 
 
-@app.route('/admin/user/create', methods=("GET", "POST"))
+@app.route('/dashboard/user/create', methods=("GET", "POST"))
 @login_required
 def create_user_ctrl():
 
@@ -159,7 +159,7 @@ def create_user_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('manager/submit_user.html', form=form, type='Create')
+        return render_template('dashboard/submit_user.html', form=form, type='Create')
 
     elif request.method == 'POST':
 
@@ -186,10 +186,10 @@ def create_user_ctrl():
         return redirect(url_for('show_user_ctrl'))
 
 
-@app.route('/manager/operate/list')
+@app.route('/dashboard/operate/list')
 @login_required
 def list_all_operate_ctrl():
 
     executes = OperateDB.query.order_by(desc(OperateDB.id)).all()
 
-    return render_template('manager/show_operate.html', executes=executes)
+    return render_template('dashboard/show_operate.html', executes=executes)

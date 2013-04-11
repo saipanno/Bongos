@@ -1,13 +1,13 @@
-{% extends "manager/manager_base.html" %}
+{% extends "dashboard/dashboard_base.html" %}
 
-{% block active_manager_script %}active{% endblock %}
+{% block active_dashboard_script %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Dashboard</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">Script Manager</a><span class="divider">/</span></li>
             <li class="active">{{ type }}</li>
         </ul>
