@@ -1,6 +1,6 @@
-{% extends "admin/admin_base.html" %}
+{% extends "manager/manager_base.html" %}
 
-{% block active_admin_user %}active{% endblock %}
+{% block active_manager_script %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -8,7 +8,7 @@
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">Admin</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">User Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Script Manager</a><span class="divider">/</span></li>
             <li class="active">{{ type }}</li>
         </ul>
 
@@ -18,9 +18,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">User Manager</a>
+                <a class="brand" href="#">Script Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
+                    <a href="{{ url_for('create_script_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Script</a>
                 </div>
             </div>
         </div>
@@ -28,20 +28,21 @@
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
-                <th>USERNAME</th>
-                <th>NICKNAME</th>
+                <th>NAME</th>
+                <th>DESC</th>
+                <th>AUTHOR</th>
                 <th>OPERATE</th>
             </tr>
             </thead>
             <tbody>
-                {% for user in users %}
+                {% for script in scripts %}
                     <tr>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.nickname }}</td>
+                        <td>{{ script.name }}</td>
+                        <td>{{ script.desc }}</td>
+                        <td>{{ script.author }}</td>
                         <td>
-                            <a href="#" class="btn btn-small btn-success">启用</a>
-                            <a href="#" class="btn btn-small btn-success">禁用</a>
-                            <a href="#" class="btn btn-small btn-success">删除</a>
+                            <a href="{{ url_for('show_script_ctrl', script_id=script.id)}}" class="btn btn-small btn-success">查看</a>
+                            <a href="{{ url_for('edit_script_ctrl', script_id=script.id)}}" class="btn btn-small btn-success">编辑</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -54,7 +55,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ script.name }}</a>
                 <div class="btn-group pull-right">
-                    <a href="#" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit User</a>
+                    <a href="{{ url_for('edit_script_ctrl', script_id=script.id)}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
                 </div>
             </div>
 
