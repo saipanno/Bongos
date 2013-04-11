@@ -62,7 +62,7 @@ def ssh_connectivity_checking(operate):
         st: other error
     """
 
-    env.user = operate.get('user', None)
+    env.user = operate.get('username', None)
     env.port = operate.get('port', None)
     env.password = operate.get('password', None)
     env.key_filename = operate.get('key_filename', None)

@@ -26,10 +26,12 @@
 
 from time import sleep
 from werkzeug.utils import import_string
-from fabric.api import env, hide, show, execute
+from fabric.api import env, hide, execute
 
-from web.models.operate import OperateDB
-from application.module.connectivity import ssh_connectivity_checking, ping_connectivity_checking
+from web.models.operate import OperateDb
+from web.models.dashboard import SshConfig
+
+from application.modules.connectivity import ssh_connectivity_checking, ping_connectivity_checking
 
 
 class Briseis(object):
@@ -50,21 +52,31 @@ class Briseis(object):
 
     def get_operate_information(self):
 
-        # TODO: 增加实际操作单信息获取逻辑。
-
         self.operate.clear()
 
-        #operate = {'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
-        #           'type': 'ping_connectivity_checking'}
+        operate_fetch = OperateDb.query.filter_by(status=u'0').first()
 
-        operate = {'type': 'ssh_connectivity_checking',
-                   'hosts': ['122.11.45.162', '122.11.45.38', '122.11.45.126', '122.11.45.157'],
-                   'user': 'root',
-                   'port': 22,
-                   'password': 'hello.com',
-                   'key_filename': '~/.ssh/ku_rsa'}
+        if operate_fetch is not None:
 
-        return operate
+            if operate_fetch.operate_type == u'Ping':
+
+                self.operate['operate_type'] = u'Ping'
+                self.operate['server_list'] = operate_fetch.server_list.split()
+
+            elif operate_fetch.operate_type == u'Ssh':
+
+                ssh_config_id = operate_fetch.ssh_config
+                ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
+
+                self.operate['operate_type'] = u'Ssh'
+                self.operate['server_list'] = operate_fetch.server_list.split()
+                self.operate['username'] = ssh_config.user
+                self.operate['port'] = ssh_config.port
+                self.operate['password'] = ssh_config.password
+                self.operate['key_filename'] = ssh_config.key_filename
+
+        # Operate_fetch为空时,直接返回空字典
+        return self.operate
 
     def run(self):
 
@@ -79,29 +91,31 @@ class Briseis(object):
 
             operate = self.get_operate_information()
 
-            operate_type = operate.get('type', None)
+            print operate
+
+            operate_type = operate.get('operate_type', None)
 
             if operate_type is None:
 
                 sleep(10)
 
-            elif operate_type == 'ping_connectivity_checking':
+            elif operate_type == u'Ping':
 
-                with show('stdout', 'stderr', 'running'):
+                with hide('stdout', 'stderr', 'running', 'aborts'):
 
                     output = execute(ping_connectivity_checking,
                                      self.config.get('PING_COUNT', 5),
                                      self.config.get('PING_TIMEOUT', 5),
-                                     hosts=operate.get('hosts'))
+                                     hosts=operate.get('server_list'))
                 print output
 
-            elif operate_type == 'ssh_connectivity_checking':
+            elif operate_type == u'Ssh':
 
-                with show('stdout', 'stderr', 'running', 'aborts'):
+                with hide('stdout', 'stderr', 'running', 'aborts'):
 
                     output = execute(ssh_connectivity_checking,
                                      operate,
-                                     hosts=operate.get('hosts'))
+                                     hosts=operate.get('server_list'))
                 print output
 
             else:

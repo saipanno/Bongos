@@ -37,7 +37,7 @@ from web.forms.operate import CreateSshDetectForm
 from web.forms.operate import CreatePreDefinedExecuteForm
 from web.forms.operate import CreateCustomExecuteForm
 
-from web.models.operate import OperateDB
+from web.models.operate import OperateDb
 
 from web.extensions import login_required
 from web.extensions import format_address_list
@@ -48,7 +48,7 @@ from web.extensions import format_template_vars
 @login_required
 def list_operate_ctrl(operate_type):
 
-    executes = OperateDB.query.filter_by(operate_type=operate_type).order_by(desc(OperateDB.id)).all()
+    executes = OperateDb.query.filter_by(operate_type=operate_type).order_by(desc(OperateDb.id)).all()
 
     return render_template('operate/list_operate.html', executes=executes, operate_type=operate_type)
 

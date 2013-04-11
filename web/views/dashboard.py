@@ -32,7 +32,7 @@ from web import app
 
 from web.models.dashboard import PreDefinedScript
 from web.models.user import User
-from web.models.operate import OperateDB
+from web.models.operate import OperateDb
 
 from web.forms.user import CreateUserForm
 
@@ -190,6 +190,6 @@ def create_user_ctrl():
 @login_required
 def list_all_operate_ctrl():
 
-    executes = OperateDB.query.order_by(desc(OperateDB.id)).all()
+    executes = OperateDb.query.order_by(desc(OperateDb.id)).all()
 
     return render_template('dashboard/show_operate.html', executes=executes)

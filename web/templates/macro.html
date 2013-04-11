@@ -18,6 +18,8 @@
         <span class="label label-success">成功</span>
     {% elif status == '2' %}
         <span class="label label-warning">错误</span>
+    {% elif status == '5' %}
+        <span class="label label-warning">执行中</span>
     {% else %}
         <span class="label label-important">异常结果</span>
     {% endif %}

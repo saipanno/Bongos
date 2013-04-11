@@ -28,7 +28,7 @@ from web import db
 from web import app
 
 
-class OperateDB(db.Model):
+class OperateDb(db.Model):
 
     """
     date:   time.strftime('%Y-%m-%d %H:%M')
