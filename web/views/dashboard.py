@@ -30,13 +30,13 @@ from flask import render_template, request, redirect, url_for, flash, session
 from web import db
 from web import app
 
-from web.models.admin import PreDefinedScript
+from web.models.dashboard import PreDefinedScript
 from web.models.user import User
 from web.models.operate import OperateDB
 
 from web.forms.user import CreateUserForm
 
-from web.forms.admin import CreatePreDefinedScriptForm
+from web.forms.dashboard import CreatePreDefinedScriptForm
 
 from web.extensions import login_required
 
