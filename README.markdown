@@ -1,4 +1,4 @@
-BRISEIS设计
+BROOMHILDA设计
 ===
 
 # 功能设计
@@ -35,30 +35,30 @@ BRISEIS设计
 
 #### URL设计
 
-`http://briseis.saipanno.com/detect`         检测单列表
+`http://broomhilda.saipanno.com/detect`         检测单列表
 
-`http://briseis.saipanno.com/detect/{id}`    显示操作单细节
+`http://broomhilda.saipanno.com/detect/{id}`    显示操作单细节
 
-`http://briseis.saipanno.com/detect/create`  创建标准操作单,默认为`/check/create/ping`任务
+`http://broomhilda.saipanno.com/detect/create`  创建标准操作单,默认为`/check/create/ping`任务
 
-`http://briseis.saipanno.com/detect/create/ssh`  创建SSH联通性测试任务
+`http://broomhilda.saipanno.com/detect/create/ssh`  创建SSH联通性测试任务
 
-`http://briseis.saipanno.com/detect/create/ping`    创建PING联通性任务
+`http://broomhilda.saipanno.com/detect/create/ping`    创建PING联通性任务
 
-`http://briseis.saipanno.com/operate` 操作单列表
+`http://broomhilda.saipanno.com/operate` 操作单列表
 
-`http://briseis.saipanno.com/operate/{id}` 显示操作单细节
+`http://broomhilda.saipanno.com/operate/{id}` 显示操作单细节
 
-`http://briseis.saipanno.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
+`http://broomhilda.saipanno.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
 
-`http://briseis.saipanno.com/operate/create/define`   创建标准操作单
+`http://broomhilda.saipanno.com/operate/create/define`   创建标准操作单
 
-`http://briseis.saipanno.com/operate/create/custom`   创建自定义操作单
+`http://broomhilda.saipanno.com/operate/create/custom`   创建自定义操作单
 
 
 ### 个人管理
 
-`http://briseis.saipanno.com/setting` 显示,修改个人信息
+`http://broomhilda.saipanno.com/setting` 显示,修改个人信息
 
 
 # 应用布局设计
