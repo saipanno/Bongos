@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from application.briseis import Briseis
+from application.main import Controller
 
-app = Briseis()
+app = Controller()
 app.config_from_object('settings')

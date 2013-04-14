@@ -34,7 +34,7 @@ from web.models.dashboard import SshConfig
 from application.modules.connectivity import ssh_connectivity_checking, ping_connectivity_checking
 
 
-class Briseis(object):
+class Controller(object):
 
     def __init__(self):
 

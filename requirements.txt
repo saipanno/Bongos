@@ -1,0 +1,4 @@
+Fabric
+Flask
+Flask-WTF
+Flask-SQLAlchemy
