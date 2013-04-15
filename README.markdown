@@ -36,14 +36,21 @@ BROOMHILDA设计
 #### URL设计
 
 `http://broomhilda.saipanno.com/operate`
+
 `http://broomhilda.saipanno.com/operate/list/Ssh`
+
 `http://broomhilda.saipanno.com/operate/list/Ping`
+
 `http://broomhilda.saipanno.com/operate/list/Custom`
+
 `http://broomhilda.saipanno.com/operate/list/PreDefined`
 
 `http://broomhilda.saipanno.com/dashboard`
+
 `http://broomhilda.saipanno.com/dashboard/user/list`
+
 `http://broomhilda.saipanno.com/dashboard/script/list`
+
 `http://broomhilda.saipanno.com/dashboard/operate/list`
 
 ### 个人管理
