@@ -1,4 +1,9 @@
-Fabric
-Flask
-Flask-WTF
-Flask-SQLAlchemy
+Fabric==1.6.0
+Flask==0.9
+Flask-SQLAlchemy==0.16
+Flask-WTF==0.8.3
+Jinja2==2.6
+SQLAlchemy==0.8.0
+WTForms==1.0.3
+Werkzeug==0.8.3
+paramiko==1.10.1
