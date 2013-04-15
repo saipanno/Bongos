@@ -11,15 +11,15 @@ BROOMHILDA设计
 
 ### 首页
 
-`http://briseis.saipanno.com`
+`http://broomhilda.saipanno.com`
 
 ### 机架展示
 
-`http://briseis.saipanno.com/rack`
+`http://broomhilda.saipanno.com/rack`
 
 ### 服务器管理
 
-`http://briseis.saipanno.com/server`
+`http://broomhilda.saipanno.com/server`
 
 
 ### 自动化操作
@@ -35,30 +35,19 @@ BROOMHILDA设计
 
 #### URL设计
 
-`http://broomhilda.saipanno.com/detect`         检测单列表
+`http://broomhilda.saipanno.com/operate`
+`http://broomhilda.saipanno.com/operate/list/Ssh`
+`http://broomhilda.saipanno.com/operate/list/Ping`
+`http://broomhilda.saipanno.com/operate/list/Custom`
+`http://broomhilda.saipanno.com/operate/list/PreDefined`
 
-`http://broomhilda.saipanno.com/detect/{id}`    显示操作单细节
-
-`http://broomhilda.saipanno.com/detect/create`  创建标准操作单,默认为`/check/create/ping`任务
-
-`http://broomhilda.saipanno.com/detect/create/ssh`  创建SSH联通性测试任务
-
-`http://broomhilda.saipanno.com/detect/create/ping`    创建PING联通性任务
-
-`http://broomhilda.saipanno.com/operate` 操作单列表
-
-`http://broomhilda.saipanno.com/operate/{id}` 显示操作单细节
-
-`http://broomhilda.saipanno.com/operate/create` 创建标准操作单,默认为`/operate/create/default`任务
-
-`http://broomhilda.saipanno.com/operate/create/define`   创建标准操作单
-
-`http://broomhilda.saipanno.com/operate/create/custom`   创建自定义操作单
-
+`http://broomhilda.saipanno.com/dashboard`
+`http://broomhilda.saipanno.com/dashboard/user/list`
+`http://broomhilda.saipanno.com/dashboard/script/list`
+`http://broomhilda.saipanno.com/dashboard/operate/list`
 
 ### 个人管理
 
 `http://broomhilda.saipanno.com/setting` 显示,修改个人信息
-
 
 # 应用布局设计
