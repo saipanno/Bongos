@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/02/22.
+#                    Created at 2013/04/16.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,46 @@
 # SOFTWARE.
 
 
-from application.controller import Controller
+import json
+from fabric.api import env, hide, local, execute
+from fabric.exceptions import NetworkError
 
-app = Controller()
-app.config_from_object('settings')
+from web import db
+
+
+def ping_connectivity_checking(COUNT, TIMEOUT):
+    """
+    :Return:
+
+         0: success
+         1: fail
+        -2: network error
+        st: other error
+    """
+
+    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
+
+    try:
+        output = local(command, capture=True)
+        connectivity = output.return_code
+    except NetworkError:
+        connectivity = -2
+    except Exception, e:
+        connectivity = 'error: %s' % e
+
+    return connectivity
+
+
+def execute_ping_task(config, task):
+
+    with hide('stdout', 'stderr', 'running', 'aborts'):
+
+        do = execute(ping_connectivity_checking,
+                     config.get('PING_COUNT', 5),
+                     config.get('PING_TIMEOUT', 5),
+                     hosts=task.server_list.split())
+
+    task.status = 1
+    task.result = json.dumps(do, ensure_ascii=False)
+
+    db.session.commit()

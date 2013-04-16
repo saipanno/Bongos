@@ -164,7 +164,7 @@ def create_custom_execute_ctrl():
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('show_operate_ctrl', operate_type=operate_type))
-        template_vars = json.dumps(template_vars_dict['desc'])
+        template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
                             template_vars, form.ssh_config.data.id, status, result)
@@ -211,7 +211,7 @@ def create_predefined_execute_ctrl():
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
-        template_vars = json.dumps(template_vars_dict['desc'])
+        template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
                             template_vars, form.ssh_config.data.id, status, result)
