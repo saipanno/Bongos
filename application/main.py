@@ -24,14 +24,115 @@
 # SOFTWARE.
 
 
+import json
 from time import sleep
 from werkzeug.utils import import_string
 from fabric.api import env, hide, execute
 
+from web import db
+
 from web.models.operate import OperateDb
 from web.models.dashboard import SshConfig
+from web.models.dashboard import PreDefinedScript
+
 
 from application.modules.connectivity import ssh_connectivity_checking, ping_connectivity_checking
+
+
+def get_operate_information():
+
+    operate = dict()
+
+    operate_fetch = OperateDb.query.filter_by(status=u'0').first()
+
+    if operate_fetch is not None:
+
+        if operate_fetch.operate_type == u'Ping':
+
+            operate['operate_type'] = operate_fetch.operate_type
+            operate['server_list'] = operate_fetch.server_list.split()
+
+        elif operate_fetch.operate_type == u'Ssh':
+
+            ssh_config_id = operate_fetch.ssh_config
+            try:
+                ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
+            except Exception, e:
+                operate['message'] = e
+                return operate
+
+            operate['operate_type'] = operate_fetch.operate_type
+            operate['server_list'] = operate_fetch.server_list.split()
+            operate['username'] = ssh_config.username
+            operate['port'] = ssh_config.port
+            operate['password'] = ssh_config.password
+            operate['key_filename'] = ssh_config.key_filename
+
+        elif operate_fetch.operate_type == u'PreDefined':
+
+            try:
+                ssh_config_id = int(operate_fetch.ssh_config)
+                ssh_config = SshConfig.query.filter_by(ssh_config_id).first()
+            except Exception, e:
+                operate['message'] = e
+                return operate
+
+            try:
+                predefined_script_id = int(operate_fetch.template_script)
+                predefined_script = PreDefinedScript.query.filter_by(id=predefined_script_id).first()
+            except Exception, e:
+                operate['message'] = e
+                return  operate
+
+            try:
+                operate['template_vars'] = json.loads(operate_fetch.template_vars)
+            except Exception, e:
+                operate['message'] = e
+                return operate
+
+            operate['operate_type'] = operate_fetch.operate_type
+            operate['server_list'] = operate_fetch.server_list.split()
+            operate['predefined_script'] = predefined_script
+            operate['username'] = ssh_config.username
+            operate['port'] = ssh_config.port
+            operate['password'] = ssh_config.password
+            operate['key_filename'] = ssh_config.key_filename
+
+        elif operate_fetch.operate_type == u'Custom':
+
+            try:
+                ssh_config_id = int(operate_fetch.ssh_config)
+                ssh_config = SshConfig.query.filter_by(ssh_config_id).first()
+            except Exception, e:
+                operate['message'] = e
+                return operate
+
+            try:
+                operate['template_vars'] = json.loads(operate_fetch.template_vars)
+            except Exception, e:
+                operate['message'] = e
+                return operate
+
+            operate['operate_type'] = operate_fetch.operate_type
+            operate['server_list'] = operate_fetch.server_list.split()
+            operate['template_script'] = operate_fetch.template_script
+            operate['username'] = ssh_config.username
+            operate['port'] = ssh_config.port
+            operate['password'] = ssh_config.password
+            operate['key_filename'] = ssh_config.key_filename
+
+    #STATUS:
+    #  0: 队列中
+    #  1: 成功
+    #  2: 错误
+    #  5: 执行中
+    #  other: 异常错误
+
+    operate_fetch.status = 5
+    db.session.commit()
+
+    # Operate_fetch为空时,直接返回空字典
+    return operate
 
 
 class Controller(object):
@@ -39,7 +140,6 @@ class Controller(object):
     def __init__(self):
 
         self.config = dict()
-        self.operate = dict()
 
     def config_from_object(self, obj):
 
@@ -49,34 +149,6 @@ class Controller(object):
         for key in dir(obj):
             if key.isupper():
                 self.config[key] = getattr(obj, key)
-
-    def get_operate_information(self):
-
-        self.operate.clear()
-
-        operate_fetch = OperateDb.query.filter_by(status=u'0').first()
-
-        if operate_fetch is not None:
-
-            if operate_fetch.operate_type == u'Ping':
-
-                self.operate['operate_type'] = u'Ping'
-                self.operate['server_list'] = operate_fetch.server_list.split()
-
-            elif operate_fetch.operate_type == u'Ssh':
-
-                ssh_config_id = operate_fetch.ssh_config
-                ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
-
-                self.operate['operate_type'] = u'Ssh'
-                self.operate['server_list'] = operate_fetch.server_list.split()
-                self.operate['username'] = ssh_config.user
-                self.operate['port'] = ssh_config.port
-                self.operate['password'] = ssh_config.password
-                self.operate['key_filename'] = ssh_config.key_filename
-
-        # Operate_fetch为空时,直接返回空字典
-        return self.operate
 
     def run(self):
 
@@ -89,7 +161,7 @@ class Controller(object):
 
         while 1:
 
-            operate = self.get_operate_information()
+            operate = get_operate_information()
 
             print operate
 

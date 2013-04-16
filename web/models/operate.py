@@ -31,7 +31,12 @@ from web import app
 class OperateDb(db.Model):
 
     """
-    date:   time.strftime('%Y-%m-%d %H:%M')
+    DATE:   time.strftime('%Y-%m-%d %H:%M')
+    STATUS: 0: 队列中
+            1: 成功
+            2: 错误
+            5: 执行中
+            other: 异常错误
 
     """
 

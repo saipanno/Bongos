@@ -83,7 +83,7 @@ def create_ssh_detect_ctrl():
             flash(u'没有选择SSH配置', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], template_script,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -119,7 +119,7 @@ def create_ping_detect_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], template_script,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
                             template_vars, ssh_config, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -166,7 +166,7 @@ def create_custom_execute_ctrl():
             return redirect(url_for('show_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'])
 
-        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -213,7 +213,7 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'])
 
-        journal = OperateDB(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()
