@@ -31,13 +31,13 @@ from fabric.exceptions import NetworkError
 from web import db
 
 
-def ping_connectivity_checking(COUNT, TIMEOUT):
+def final_ping_checking(COUNT, TIMEOUT):
     """
     :Return:
 
          0: success
          1: fail
-        -2: network error
+         2: network error
         st: other error
     """
 
@@ -47,18 +47,22 @@ def ping_connectivity_checking(COUNT, TIMEOUT):
         output = local(command, capture=True)
         connectivity = output.return_code
     except NetworkError:
-        connectivity = -2
+        connectivity = 2
     except Exception, e:
-        connectivity = 'error: %s' % e
+        connectivity = '%s' % e
 
     return connectivity
 
 
-def execute_ping_task(config, task):
+def ping_connectivity_checking(config, task):
+
+    # 修改任务状态，标记为操作中。
+    task.status = 5
+    db.session.commit()
 
     with hide('stdout', 'stderr', 'running', 'aborts'):
 
-        do = execute(ping_connectivity_checking,
+        do = execute(final_ping_checking,
                      config.get('PING_COUNT', 5),
                      config.get('PING_TIMEOUT', 5),
                      hosts=task.server_list.split())

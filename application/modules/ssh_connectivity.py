@@ -33,7 +33,7 @@ from web import db
 from web.models.dashboard import SshConfig
 
 
-def ssh_connectivity_checking(operate):
+def final_ssh_checking(user, port, password, key_filename):
     """
     :Return:
 
@@ -44,52 +44,48 @@ def ssh_connectivity_checking(operate):
         st: other error
     """
 
-    env.user = operate.get('username', None)
-    env.port = operate.get('port', None)
-    env.password = operate.get('password', None)
-    env.key_filename = operate.get('key_filename', None)
+    env.user = user
+    env.port = port
+    env.password = password
+    env.key_filename = key_filename
 
     try:
-        output = run('uptime', shell=True, quiet=True)
+        output = run('ls', shell=True, quiet=True)
         connectivity = output.return_code
     except SystemExit:
         connectivity = -1
     except NetworkError:
         connectivity = -2
     except Exception, e:
-        connectivity = 'error: %s' % e
+        connectivity = '%s' % e
 
     return connectivity
 
 
-def execute_ssh_task(task):
+def ssh_connectivity_checking(config, task):
 
-    ssh_config_id = task.ssh_config
+    # 修改任务状态，标记为操作中。
+    task.status = 5
+    db.session.commit()
+
     try:
+        ssh_config_id = task.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
     except Exception, e:
-        do = e
+        task.status = 2
+        task.result = '%s' % e
         ssh_config = None
 
-        task.status = 2
+    with hide('stdout', 'stderr', 'running', 'aborts'):
 
-    if ssh_config is not None:
-        env.user = ssh_config.username
-        env.port = ssh_config.port
-        env.password = ssh_config.password
-        env.key_filename = ssh_config.key_filename
+        do = execute(final_ssh_checking,
+                     ssh_config.username,
+                     ssh_config.port,
+                     ssh_config.password,
+                     ssh_config.key_filename,
+                     hosts=task.server_list.split())
 
-        with hide('stdout', 'stderr', 'running', 'aborts'):
-
-            do = execute(ssh_connectivity_checking,
-                         task,
-                         hosts=task.server_list.split())
-
-        task.status = 1
-    else:
-        task.status = 2
-        do = 'error ssh config.'
-
+    task.status = 1
     task.result = json.dumps(do, ensure_ascii=False)
 
     db.session.commit()

@@ -93,7 +93,7 @@ def create_script_ctrl():
 
             flash(u'创建预定义脚本成功.', 'success')
 
-        return redirect(url_for('show_script_ctrl'))
+        return redirect(url_for('list_script_ctrl'))
 
 
 @app.route('/dashboard/script/edit/<int:script_id>', methods=("GET", "POST"))
@@ -113,12 +113,12 @@ def edit_script_ctrl(script_id):
         if form.desc.data == u'':
 
             flash(u'请输入脚本描述.', 'error')
-            return redirect(url_for('show_script_ctrl'))
+            return redirect(url_for('list_script_ctrl'))
 
         elif form.script.data == u'':
 
             flash(u'请输入脚本.', 'error')
-            return redirect(url_for('show_script_ctrl'))
+            return redirect(url_for('list_script_ctrl'))
 
         else:
 
@@ -126,7 +126,7 @@ def edit_script_ctrl(script_id):
             db.session.commit()
 
             flash(u'Edit script successful.', 'success')
-            return redirect(url_for('list_all_operate_ctrl'))
+            return redirect(url_for('list_script_ctrl'))
 
 
 @app.route('/dashboard/user/list')
@@ -183,7 +183,7 @@ def create_user_ctrl():
 
             flash(u'创建用户成功.', 'success')
 
-        return redirect(url_for('show_user_ctrl'))
+        return redirect(url_for('list_user_ctrl'))
 
 
 @app.route('/dashboard/operate/list')

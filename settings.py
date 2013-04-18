@@ -48,3 +48,7 @@ OPERATE_LISTS = 'operate_lists'
 USER_LISTS = 'user_lists'
 SSH_CONFIG_LISTS = 'ssh_config_lists'
 PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'
+
+# logging config
+LOGGING_LEVEL = 'INFO'
+LOGGING_FILENAME = os.path.join(_basedir, 'bromhilda.log')
