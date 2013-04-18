@@ -27,10 +27,8 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-# application config
-DEBUG = True
-
 # web config
+DEBUG = True
 PORT = 80
 HOST = '0.0.0.0'
 SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
