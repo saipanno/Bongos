@@ -28,6 +28,8 @@
                 <a class="brand" href="{{ url_for('index_ctrl') }}">BONGOS</a>
 
                 <ul class="nav">
+                    <li class="{% block active_rack %}{% endblock %}"><a href="#">Rack</a></li>
+                    <li class="{% block active_server %}{% endblock %}"><a href="#">Server</a></li>
                     <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("list_operate_ctrl", operate_type='Ssh') }}">Operate</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
