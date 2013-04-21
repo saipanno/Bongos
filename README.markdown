@@ -1,4 +1,4 @@
-BROOMHILDA设计
+BONGOS设计
 ===
 
 # 功能设计
@@ -11,15 +11,15 @@ BROOMHILDA设计
 
 ### 首页
 
-`http://broomhilda.saipanno.com`
+`http://bongos.saipanno.com`
 
 ### 机架展示
 
-`http://broomhilda.saipanno.com/rack`
+`http://bongos.saipanno.com/rack`
 
 ### 服务器管理
 
-`http://broomhilda.saipanno.com/server`
+`http://bongos.saipanno.com/server`
 
 
 ### 自动化操作
@@ -35,26 +35,26 @@ BROOMHILDA设计
 
 #### URL设计
 
-`http://broomhilda.saipanno.com/operate`
+`http://bongos.saipanno.com/operate`
 
-`http://broomhilda.saipanno.com/operate/list/Ssh`
+`http://bongos.saipanno.com/operate/list/Ssh`
 
-`http://broomhilda.saipanno.com/operate/list/Ping`
+`http://bongos.saipanno.com/operate/list/Ping`
 
-`http://broomhilda.saipanno.com/operate/list/Custom`
+`http://bongos.saipanno.com/operate/list/Custom`
 
-`http://broomhilda.saipanno.com/operate/list/PreDefined`
+`http://bongos.saipanno.com/operate/list/PreDefined`
 
-`http://broomhilda.saipanno.com/dashboard`
+`http://bongos.saipanno.com/dashboard`
 
-`http://broomhilda.saipanno.com/dashboard/user/list`
+`http://bongos.saipanno.com/dashboard/user/list`
 
-`http://broomhilda.saipanno.com/dashboard/script/list`
+`http://bongos.saipanno.com/dashboard/script/list`
 
-`http://broomhilda.saipanno.com/dashboard/operate/list`
+`http://bongos.saipanno.com/dashboard/operate/list`
 
 ### 个人管理
 
-`http://broomhilda.saipanno.com/setting` 显示,修改个人信息
+`http://bongos.saipanno.com/setting` 显示,修改个人信息
 
 # 应用布局设计
