@@ -25,54 +25,59 @@
 
 
 import json
-from fabric.api import env, hide, local, execute
-from fabric.exceptions import NetworkError
+from fabric.api import env, hide, show, local, execute
+from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
-from extensions import logger
+from application.extensions import logger
 
 
-def final_ping_checking(operate, COUNT, TIMEOUT):
+def final_ping_checking(COUNT, TIMEOUT, operate):
     """
     :Return:
 
          0: success
          1: fail
          2: network error
-         3: other error
+         3: command timeout
+         5: other error
     """
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
 
     try:
-        output = local(command, capture=True)
-        connectivity = output.return_code
+        result = local(command, capture=True)
+        connectivity = result.return_code
     except NetworkError:
         connectivity = 2
-    except Exception, e:
-        logger.exception(e)
+    except CommandTimeout:
         connectivity = 3
+    except Exception, e:
+        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
+        connectivity = 5
 
     return connectivity
 
 
 def ping_connectivity_checking(config, operate):
 
-    logger.info('ID:%s, TYPE:%s, AUTHOR:%s, HOSTS: %s' %
-             (operate.id, operate.operate_type, operate.author, operate.server_list))
+    logger.info('TYPE:%s, ID:%s, HOSTS: %s' % (operate.operate_type, operate.id, operate.server_list))
 
     # 修改任务状态，标记为操作中。
     operate.status = 5
     db.session.commit()
 
-    with hide('stdout', 'stderr', 'running', 'aborts'):
+    with hide('everything'):
 
         do = execute(final_ping_checking,
                      config.get('PING_COUNT', 5),
                      config.get('PING_TIMEOUT', 5),
+                     operate,
                      hosts=operate.server_list.split())
 
     operate.status = 1
     operate.result = json.dumps(do, ensure_ascii=False)
 
     db.session.commit()
+
+    logger.info('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, 'Operate Finished.'))

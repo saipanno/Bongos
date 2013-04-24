@@ -26,23 +26,25 @@
 
 import json
 from fabric.api import env, run, hide, execute
-from fabric.exceptions import NetworkError
+from fabric.exceptions import NetworkError, CommandTimeout
+from sqlalchemy.exc import SQLAlchemyError
 
 from web import db
-from extensions import logger
+from application.extensions import logger
 
 from web.models.dashboard import SshConfig
 
 
-def final_ssh_checking(user, port, password, key_filename):
+def final_ssh_checking(user, port, password, key_filename, operate):
     """
     :Return:
 
          0: success
          1: fail
-        -1: auth error
-        -2: network error
-        st: other error
+         2: auth error
+         3: network error
+         4: command timeout
+         5: other error
     """
 
     env.user = user
@@ -54,19 +56,21 @@ def final_ssh_checking(user, port, password, key_filename):
         output = run('ls', shell=True, quiet=True)
         connectivity = output.return_code
     except SystemExit:
-        connectivity = -1
+        connectivity = 2
     except NetworkError:
-        connectivity = -2
+        connectivity = 3
+    except CommandTimeout:
+        connectivity = 4
     except Exception, e:
-        connectivity = '%s' % e
+        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
+        connectivity = 5
 
     return connectivity
 
 
 def ssh_connectivity_checking(config, operate):
 
-    logger.info('ID:%s, TYPE:%s, AUTHOR:%s, HOSTS: %s' %
-             (operate.id, operate.operate_type, operate.author, operate.server_list))
+    logger.info('TYPE:%s, ID:%s, HOSTS: %s' % (operate.operate_type, operate.id, operate.server_list))
 
     # 修改任务状态，标记为操作中。
     operate.status = 5
@@ -75,22 +79,30 @@ def ssh_connectivity_checking(config, operate):
     try:
         ssh_config_id = operate.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
-    except Exception, e:
-        logger.exception()
+    except SQLAlchemyError, e:
+        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
         operate.status = 2
-        operate.result = '%s' % e
+        operate.result = 'internal database error'
+        ssh_config = None
+    except Exception, e:
+        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
+        operate.status = 2
+        operate.result = 'error ssh configuration'
         ssh_config = None
 
-    with hide('stdout', 'stderr', 'running', 'aborts'):
+    with hide('everything'):
 
         do = execute(final_ssh_checking,
                      ssh_config.username,
                      ssh_config.port,
                      ssh_config.password,
                      ssh_config.key_filename,
+                     operate,
                      hosts=operate.server_list.split())
 
     operate.status = 1
     operate.result = json.dumps(do, ensure_ascii=False)
 
     db.session.commit()
+
+    logger.info('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, 'Operate Finished.'))

@@ -114,7 +114,7 @@ def custom_script_execute(config, task):
 
     if ssh_config is not None and template_script is not None and template_vars is not None:
 
-        with hide('stdout', 'stderr', 'running', 'aborts', 'status', 'warnings', 'user'):
+        with hide('everything'):
 
             do = execute(final_custom_execute,
                          ssh_config.username,

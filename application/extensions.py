@@ -22,3 +22,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+import logging
+
+import settings
+
+
+logging.basicConfig(filename=settings.APP_LOG_FILENAME,
+                    level=logging.INFO,
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s: %(message)s')
+
+logger = logging.getLogger('bongos.app')

@@ -36,10 +36,3 @@ db = SQLAlchemy(app)
 from web.views import user
 from web.views import operate
 from web.views import dashboard
-
-#logging.basicConfig(filename=app.config['WEB_LOG_FILENAME'],
-#                    level=logging.INFO,
-#                    filemode='a',
-#                    format='%(asctime)s - %(levelname)s: %(message)s')
-#
-#log = logging.getLogger('web')

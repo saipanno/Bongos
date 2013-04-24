@@ -28,7 +28,7 @@ from time import sleep
 from werkzeug.utils import import_string
 from fabric.api import env
 
-from extensions import logger
+from application.extensions import logger
 
 from web.models.operate import OperateDb
 
@@ -68,9 +68,9 @@ class Controller(object):
 
             operate = OperateDb.query.filter_by(status=u'0').first()
 
-            if operate is not None:
+            logger.info(u'Try to check for new tasks.')
 
-                logger.info(u'Get New Task.')
+            if operate is not None:
 
                 if operate.operate_type == u'Ping':
 
