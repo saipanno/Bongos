@@ -29,6 +29,7 @@ from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError
 
 from web import db
+from extensions import logger
 
 from web.models.dashboard import SshConfig
 
@@ -62,18 +63,22 @@ def final_ssh_checking(user, port, password, key_filename):
     return connectivity
 
 
-def ssh_connectivity_checking(config, task):
+def ssh_connectivity_checking(config, operate):
+
+    logger.info('ID:%s, TYPE:%s, AUTHOR:%s, HOSTS: %s' %
+             (operate.id, operate.operate_type, operate.author, operate.server_list))
 
     # 修改任务状态，标记为操作中。
-    task.status = 5
+    operate.status = 5
     db.session.commit()
 
     try:
-        ssh_config_id = task.ssh_config
+        ssh_config_id = operate.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
     except Exception, e:
-        task.status = 2
-        task.result = '%s' % e
+        logger.exception()
+        operate.status = 2
+        operate.result = '%s' % e
         ssh_config = None
 
     with hide('stdout', 'stderr', 'running', 'aborts'):
@@ -83,9 +88,9 @@ def ssh_connectivity_checking(config, task):
                      ssh_config.port,
                      ssh_config.password,
                      ssh_config.key_filename,
-                     hosts=task.server_list.split())
+                     hosts=operate.server_list.split())
 
-    task.status = 1
-    task.result = json.dumps(do, ensure_ascii=False)
+    operate.status = 1
+    operate.result = json.dumps(do, ensure_ascii=False)
 
     db.session.commit()

@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/12.
+#                    Created at 2013/04/16.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,15 @@
 # SOFTWARE.
 
 
-#import logging
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+import logging
 
-app = Flask(__name__)
-app.config.from_object('settings')
+from application import app
 
-db = SQLAlchemy(app)
+logger = logging.getLogger('bongos.app')
 
-from web.views import user
-from web.views import operate
-from web.views import dashboard
+filehandler = logging.FileHandler(app.config['APP_LOG_FILENAME'])
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-#logging.basicConfig(filename=app.config['WEB_LOG_FILENAME'],
-#                    level=logging.INFO,
-#                    filemode='a',
-#                    format='%(asctime)s - %(levelname)s: %(message)s')
-#
-#log = logging.getLogger('web')
+logger.addHandler(filehandler)
+logger.setFormatter(formatter)
+logger.setLevel(logging.DEBUG)

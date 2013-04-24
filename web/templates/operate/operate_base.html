@@ -13,8 +13,8 @@
                 <li class="{% block active_operate_predefined %}{% endblock %}"><a href="{{ url_for('list_operate_ctrl', operate_type='PreDefined') }}">PreDefined</a></li>
                 <li class="{% block active_operate_custom %}{% endblock %}"><a href="{{ url_for('list_operate_ctrl', operate_type='Custom') }}">User Custom</a></li>
                 <li class="nav-header">IPMI OVER LAN</li>
-                <li class="{% block active_operate_reboot %}{% endblock %}"><a href="#">Reboot</a></li>
-                <li class="{% block active_operate_shutdown %}{% endblock %}"><a href="#">Shutdown</a></li>
+                <li class="{% block active_operate_reboot %}{% endblock %}"><a href="#">Power</a></li>
+                <li class="{% block active_operate_shutdown %}{% endblock %}"><a href="#">Boot Device</a></li>
             </ul>
         </div>
     </div>

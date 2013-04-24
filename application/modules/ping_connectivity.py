@@ -29,16 +29,17 @@ from fabric.api import env, hide, local, execute
 from fabric.exceptions import NetworkError
 
 from web import db
+from extensions import logger
 
 
-def final_ping_checking(COUNT, TIMEOUT):
+def final_ping_checking(operate, COUNT, TIMEOUT):
     """
     :Return:
 
          0: success
          1: fail
          2: network error
-        st: other error
+         3: other error
     """
 
     command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
@@ -49,15 +50,19 @@ def final_ping_checking(COUNT, TIMEOUT):
     except NetworkError:
         connectivity = 2
     except Exception, e:
-        connectivity = '%s' % e
+        logger.exception(e)
+        connectivity = 3
 
     return connectivity
 
 
-def ping_connectivity_checking(config, task):
+def ping_connectivity_checking(config, operate):
+
+    logger.info('ID:%s, TYPE:%s, AUTHOR:%s, HOSTS: %s' %
+             (operate.id, operate.operate_type, operate.author, operate.server_list))
 
     # 修改任务状态，标记为操作中。
-    task.status = 5
+    operate.status = 5
     db.session.commit()
 
     with hide('stdout', 'stderr', 'running', 'aborts'):
@@ -65,9 +70,9 @@ def ping_connectivity_checking(config, task):
         do = execute(final_ping_checking,
                      config.get('PING_COUNT', 5),
                      config.get('PING_TIMEOUT', 5),
-                     hosts=task.server_list.split())
+                     hosts=operate.server_list.split())
 
-    task.status = 1
-    task.result = json.dumps(do, ensure_ascii=False)
+    operate.status = 1
+    operate.result = json.dumps(do, ensure_ascii=False)
 
     db.session.commit()

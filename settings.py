@@ -49,4 +49,5 @@ PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'
 
 # logging config
 LOGGING_LEVEL = 'INFO'
-LOGGING_FILENAME = os.path.join(_basedir, 'bromhilda.log')
+WEB_LOG_FILENAME = os.path.join(_basedir, 'web.log')
+APP_LOG_FILENAME = os.path.join(_basedir, 'application.log')

@@ -28,6 +28,8 @@ from time import sleep
 from werkzeug.utils import import_string
 from fabric.api import env
 
+from extensions import logger
+
 from web.models.operate import OperateDb
 
 from application.modules.ssh_connectivity import ssh_connectivity_checking
@@ -56,6 +58,8 @@ class Controller(object):
         env.parallel = True
         env.warn_only = True
 
+        logger.info(u'Start Background Services.')
+
         env.pool_size = self.config.get('POOL_SIZE', 250)
         env.timeout = self.config.get('SSH_TIMEOUT', 30)
         env.command_timeout = self.config.get('SSH_COMMAND_TIMEOUT', 60)
@@ -63,11 +67,10 @@ class Controller(object):
         while 1:
 
             operate = OperateDb.query.filter_by(status=u'0').first()
-            print operate
 
             if operate is not None:
 
-                print operate.operate_type
+                logger.info(u'Get New Task.')
 
                 if operate.operate_type == u'Ping':
 
