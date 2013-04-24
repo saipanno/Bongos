@@ -25,7 +25,9 @@
 
 
 from application import app
+from application.extensions import logger
 
 if __name__ == '__main__':
 
+    logger.info(u'Start Background Services.')
     app.run()

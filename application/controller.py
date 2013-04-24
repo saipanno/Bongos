@@ -58,8 +58,6 @@ class Controller(object):
         env.parallel = True
         env.warn_only = True
 
-        logger.info(u'Start Background Services.')
-
         env.pool_size = self.config.get('POOL_SIZE', 250)
         env.timeout = self.config.get('SSH_TIMEOUT', 30)
         env.command_timeout = self.config.get('SSH_COMMAND_TIMEOUT', 60)
