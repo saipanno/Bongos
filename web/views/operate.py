@@ -199,7 +199,7 @@ def create_predefined_execute_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        if form.template_script.data is None:
+        if form.template_script.data.id == 1:
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
