@@ -13,7 +13,7 @@
         </ul>
 
         <div class="tabbable">
-            <form method="post" action="">
+            <form method="post" class="form-horizontal" action="">
 
                 {{ form.hidden_tag() }}
 
@@ -21,56 +21,39 @@
                     Create User Custom Execute
                 </legend>
 
-                <ul class="nav nav-pills">
-                    <li class="active"><a href="#server" data-toggle="tab">1. Servers <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#template" data-toggle="tab">2. Template <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#variable" data-toggle="tab">3. Variable <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#auth" data-toggle="tab">4. Auth</a></li>
-                </ul>
-
-                <div class="tab-content" style="padding-bottom: 9px;">
-
-                    <div class="tab-pane active breadcrumb" id="server">
-                        <div class="span2">{{ form.server_list.label }}</div>
-                        <div class="span6">{{ form.server_list(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.server_list.description }}</p>
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">{{ form.server_list.label }}</label>
+                    <div class="controls">
+                        {{ form.server_list(class="span6", rows="10") }}
+                        <p class="help-block">{{ form.server_list.description }}</p>
                     </div>
+                </div>
 
-                    <div class="tab-pane breadcrumb" id="template">
-                        <div class="span2">{{ form.template_script.label }}</div>
-                        <div class="span6">{{ form.template_script(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            {{ form.template_script.description|safe }}
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">{{ form.template_script.label }}</label>
+                    <div class="controls">
+                        {{ form.template_script(class="span6", rows="10") }}
+                        <p class="help-block">{{ form.template_script.description|safe }}</p>
                     </div>
+                </div>
 
-                    <div class="tab-pane breadcrumb" id="variable">
-                        <div class="span2">{{ form.template_vars.label }}</div>
-                        <div class="span6">{{ form.template_vars(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            {{ form.template_vars.description|safe }}
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">{{ form.template_vars.label }}</label>
+                    <div class="controls">
+                        {{ form.template_vars(class="span6", rows="10") }}
+                        <p class="help-block">{{ form.template_vars.description|safe }}</p>
                     </div>
+                </div>
 
-                    <div class="tab-pane breadcrumb" id="auth">
-                        <div class="span2">{{ form.ssh_config.label }}</div>
-                        <div class="span6">{{ form.ssh_config(class="span12", multiple="multiple") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.ssh_config.description }}</p>
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">{{ form.ssh_config.label }}</label>
+                    <div class="controls">
+                        {{ form.ssh_config(class="span6") }}
+                        <p class="help-block">{{ form.ssh_config.description }}</p>
                     </div>
+                </div>
 
-                    <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">Submit</a>
+                    <a href="#commit" role="button" class="btn btn-primary pull-right" data-toggle="modal">Submit</a>
                     <div id="commit" class="modal hide fade">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

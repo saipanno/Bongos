@@ -79,7 +79,7 @@ def create_ssh_detect_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data is None:
+        if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
@@ -156,7 +156,7 @@ def create_custom_execute_ctrl():
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data is None:
+        if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
@@ -203,7 +203,7 @@ def create_predefined_execute_ctrl():
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data is None:
+        if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
