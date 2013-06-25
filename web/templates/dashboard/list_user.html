@@ -9,35 +9,40 @@
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">User</a><span class="divider">/</span></li>
-            <li class="active">Show</li>
+            <li class="active">{{ type }}</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ user.username }}</a>
+                <a class="brand" href="#">User Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="#" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit User</a>
+                    <a href="{{ url_for('create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
                 </div>
             </div>
+        </div>
 
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>USERNAME</th>
-                        <th>NICKNAME</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>USERNAME</th>
+                <th>NICKNAME</th>
+                <th>OPERATE</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
                     <tr>
                         <td>{{ user.username }}</td>
                         <td>{{ user.nickname }}</td>
+                        <td>
+                            <a href="{{ url_for('show_user_ctrl', username=user.username) }}">查看</a>
+                        </td>
                     </tr>
-                </tbody>
-            </table>
-
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div>
 {% endblock %}

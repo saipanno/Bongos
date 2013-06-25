@@ -49,7 +49,7 @@ def list_script_ctrl():
 
         scripts = PreDefinedScript.query.all()
 
-        return render_template('dashboard/show_script.html', scripts=scripts, type='List')
+        return render_template('dashboard/list_script.html', scripts=scripts)
 
 
 @app.route('/dashboard/script/<int:script_id>/show')
@@ -60,7 +60,7 @@ def show_script_ctrl(script_id):
 
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-        return render_template('dashboard/show_script.html', script=script, type='Show')
+        return render_template('dashboard/show_script.html', script=script)
 
 
 @app.route('/dashboard/script/create', methods=("GET", "POST"))
@@ -71,7 +71,7 @@ def create_script_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('dashboard/submit_script.html', form=form, type='Create')
+        return render_template('dashboard/edit_script.html', form=form, type='Create')
 
     elif request.method == 'POST':
 
@@ -106,7 +106,7 @@ def edit_script_ctrl(script_id):
 
     if request.method == 'GET':
 
-        return render_template('dashboard/submit_script.html', type='Edit', form=form, script=script)
+        return render_template('dashboard/edit_script.html', type='Edit', form=form, script=script)
 
     elif request.method == 'POST':
 
@@ -137,18 +137,18 @@ def list_user_ctrl():
 
         users = User.query.all()
 
-        return render_template('dashboard/show_user.html', users=users, type='List')
+        return render_template('dashboard/list_user.html', users=users)
 
 
-@app.route('/dashboard/user/<int:user_id>/show')
+@app.route('/dashboard/user/<username>/show')
 @login_required
-def show_user_ctrl(user_id):
+def show_user_ctrl(username):
 
     if request.method == 'GET':
 
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(username=username).first()
 
-        return render_template('dashboard/show_user.html', user=user, type='Show')
+        return render_template('dashboard/show_user.html', user=user)
 
 
 @app.route('/dashboard/user/create', methods=("GET", "POST"))
@@ -159,7 +159,7 @@ def create_user_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('dashboard/submit_user.html', form=form, type='Create')
+        return render_template('dashboard/edit_user.html', form=form, type='Create')
 
     elif request.method == 'POST':
 
