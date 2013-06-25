@@ -220,3 +220,12 @@ def create_predefined_execute_ctrl():
 
         flash(u'成功创建操作.', 'success')
         return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+
+
+@app.route('/operate/show/<int:operate_id>')
+@login_required
+def show_operate_ctrl(operate_id):
+
+    execute = OperateDb.query.filter_by(id=operate_id).first()
+
+    return render_template('operate/show_operate.html', execute=execute)

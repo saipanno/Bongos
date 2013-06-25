@@ -62,7 +62,7 @@ class Controller(object):
         env.timeout = self.config.get('SSH_TIMEOUT', 30)
         env.command_timeout = self.config.get('SSH_COMMAND_TIMEOUT', 60)
 
-        while 1:
+        while True:
 
             operate = OperateDb.query.filter_by(status=u'0').first()
 
@@ -95,6 +95,3 @@ class Controller(object):
             else:
 
                 sleep(10)
-
-            # debug mode, exit the loop
-            break
