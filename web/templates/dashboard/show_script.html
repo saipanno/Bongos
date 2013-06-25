@@ -41,8 +41,8 @@
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author }}</td>
                         <td>
-                            <a href="{{ url_for('show_script_ctrl', script_id=script.id)}}" class="btn btn-small btn-success">查看</a>
-                            <a href="{{ url_for('edit_script_ctrl', script_id=script.id)}}" class="btn btn-small btn-success">编辑</a>
+                            <a href="{{ url_for('show_script_ctrl', script_id=script.id)}}">查看</a>
+                            <a href="{{ url_for('edit_script_ctrl', script_id=script.id)}}">编辑</a>
                         </td>
                     </tr>
                 {% endfor %}

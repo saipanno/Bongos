@@ -28,20 +28,20 @@
             <tr>
                 <th>USER</th>
                 <th>DATETIME</th>
-                <th>TYPE</th>
                 <th>SERVER</th>
                 <th>STATUS</th>
+                <th>OPERATE</th>
             </tr>
             </thead>
             <tbody>
             {% for execute in executes %}
-            <tr>
-                <td style="width: 10%">{{ execute.author }}</td>
-                <td style="width: 10%">{{ execute.datetime }}</td>
-                <td style="width: 10%">{{ execute.operate_type }}</td>
-                <td style="width: 40%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
-                <td style="width: 10%">{{ ext.get_operate_status(execute.status) }}</td>
-            </tr>
+                <tr>
+                    <td style="width: 10%">{{ execute.author }}</td>
+                    <td style="width: 10%">{{ execute.datetime }}</td>
+                    <td style="width: 40%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
+                    <td style="width: 10%">{{ ext.get_operate_status(execute.status) }}</td>
+                    <td style="width: 10%"><a href="{{ url_for('show_operate_ctrl', operate_id=execute.id)}}">查看</a></td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

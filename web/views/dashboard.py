@@ -52,6 +52,17 @@ def list_script_ctrl():
         return render_template('dashboard/show_script.html', scripts=scripts, type='List')
 
 
+@app.route('/dashboard/script/<int:script_id>/show')
+@login_required
+def show_script_ctrl(script_id):
+
+    if request.method == 'GET':
+
+        script = PreDefinedScript.query.filter_by(id=script_id).first()
+
+        return render_template('dashboard/show_script.html', script=script, type='Show')
+
+
 @app.route('/dashboard/script/create', methods=("GET", "POST"))
 @login_required
 def create_script_ctrl():
@@ -83,17 +94,6 @@ def create_script_ctrl():
             flash(u'创建预定义脚本成功.', 'success')
 
         return redirect(url_for('list_script_ctrl'))
-
-
-@app.route('/dashboard/script/<int:script_id>/show')
-@login_required
-def show_script_ctrl(script_id):
-
-    if request.method == 'GET':
-
-        script = PreDefinedScript.query.filter_by(id=script_id).first()
-
-        return render_template('dashboard/show_script.html', script=script, type='Show')
 
 
 @app.route('/dashboard/script/<int:script_id>/edit', methods=("GET", "POST"))
@@ -140,6 +140,17 @@ def list_user_ctrl():
         return render_template('dashboard/show_user.html', users=users, type='List')
 
 
+@app.route('/dashboard/user/<int:user_id>/show')
+@login_required
+def show_user_ctrl(user_id):
+
+    if request.method == 'GET':
+
+        user = User.query.filter_by(id=user_id).first()
+
+        return render_template('dashboard/show_user.html', user=user, type='Show')
+
+
 @app.route('/dashboard/user/create', methods=("GET", "POST"))
 @login_required
 def create_user_ctrl():
@@ -175,21 +186,10 @@ def create_user_ctrl():
         return redirect(url_for('list_user_ctrl'))
 
 
-@app.route('/dashboard/user/<int:user_id>/show')
-@login_required
-def show_user_ctrl(user_id):
-
-    if request.method == 'GET':
-
-        user = User.query.filter_by(id=user_id).first()
-
-        return render_template('dashboard/show_user.html', user=user, type='Show')
-
-
 @app.route('/dashboard/operate/list')
 @login_required
 def list_all_operate_ctrl():
 
     executes = OperateDb.query.order_by(desc(OperateDb.id)).all()
 
-    return render_template('dashboard/show_operate.html', executes=executes)
+    return render_template('dashboard/list_operate.html', executes=executes)
