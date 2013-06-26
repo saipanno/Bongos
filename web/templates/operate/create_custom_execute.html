@@ -21,35 +21,38 @@
                     Create User Custom Execute
                 </legend>
 
-                <div class="control-group">
-                    <label class="control-label">{{ form.server_list.label }}</label>
-                    <div class="controls">
-                        {{ form.server_list(class="span6", rows="10") }}
-                        <p class="help-block">{{ form.server_list.description }}</p>
-                    </div>
-                </div>
+                <div class="box form-container row-fluid form-horizontal">
 
-                <div class="control-group">
-                    <label class="control-label">{{ form.template_script.label }}</label>
-                    <div class="controls">
-                        {{ form.template_script(class="span6", rows="10") }}
-                        <p class="help-block">{{ form.template_script.description|safe }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.server_list.label }}</label>
+                        <div class="controls">
+                            {{ form.server_list(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.server_list.description|safe }}</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="control-group">
-                    <label class="control-label">{{ form.template_vars.label }}</label>
-                    <div class="controls">
-                        {{ form.template_vars(class="span6", rows="10") }}
-                        <p class="help-block">{{ form.template_vars.description|safe }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.template_script.label }}</label>
+                        <div class="controls">
+                            {{ form.template_script(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.template_script.description|safe }}</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="control-group">
-                    <label class="control-label">{{ form.ssh_config.label }}</label>
-                    <div class="controls">
-                        {{ form.ssh_config(class="span6") }}
-                        <p class="help-block">{{ form.ssh_config.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.template_vars.label }}</label>
+                        <div class="controls">
+                            {{ form.template_vars(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.template_vars.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.ssh_config.label }}</label>
+                        <div class="controls">
+                            {{ form.ssh_config(class="span6") }}
+                            <p class="help-block">{{ form.ssh_config.description|safe }}</p>
+                        </div>
                     </div>
                 </div>
 

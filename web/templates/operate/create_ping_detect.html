@@ -21,12 +21,16 @@
                     Create Ping Detect
                 </legend>
 
-                <div class="control-group">
-                    <label class="control-label">{{ form.server_list.label }}</label>
-                    <div class="controls">
-                        {{ form.server_list(class="span6", rows="10") }}
-                        <p class="help-block">{{ form.server_list.description }}</p>
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.server_list.label }}</label>
+                        <div class="controls">
+                            {{ form.server_list(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.server_list.description|safe }}</p>
+                        </div>
                     </div>
+
                 </div>
 
                 <a href="#commit" role="button" class="btn btn-primary pull-right" data-toggle="modal">Submit</a>
@@ -43,6 +47,7 @@
                         {{ form.submit(class="btn btn-danger") }}
                     </div>
                 </div>
+
             </form>
         </div>
     </div>

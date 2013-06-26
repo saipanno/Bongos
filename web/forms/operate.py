@@ -71,11 +71,12 @@ class CreateCustomExecuteForm(Form):
 
     server_desc = u'支持域名或IP地址,一行一个.'
 
-    script_desc = u'''<p>用 <code>{</code> 和 <code>}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
-    同时模板依然支持shell中的 <code>$</code> 变量。'''
+    script_desc = u'''用 <code>{</code> 和 <code>}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
+    同时模板依然支持shell中的 <code>$</code> 变量。 如：
+<code>device=eth1; echo "IPADDR={address}"  >> /etc/sysconfig/network-scripts/ifcfg-$device</code>'''
 
-    vars_desc = u'''<p>用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
-    用 <code>=</code> 作为单变量的赋值符。 如:</p>
+    vars_desc = u'''用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
+    用 <code>=</code> 作为单变量的赋值符。 如:
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
     config_desc = u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).'
