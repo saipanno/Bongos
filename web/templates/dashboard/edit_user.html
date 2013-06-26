@@ -18,57 +18,40 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-
                     {{ type }} User
-
                 </legend>
 
-                <ul class="nav nav-pills">
-                    <li class="active"><a href="#username" data-toggle="tab">1. Name <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#nickname" data-toggle="tab">2. Nickname <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#password" data-toggle="tab">3. Password <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#group" data-toggle="tab">4. Group <i class="icon-arrow-right icon-white"></i></a></li>
-                </ul>
+                <div class="box form-container row-fluid form-horizontal">
 
-                <div class="tab-content" style="padding-bottom: 9px;">
-
-                    <div class="tab-pane active breadcrumb" id="username">
-                        <div class="span2">{{ form.username.label }}</div>
-                        <div class="span6">{{ form.username() }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.username.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.username.label }}</label>
+                        <div class="controls">
+                            {{ form.username() }}
+                            <p class="help-block">{{ form.username.description|safe }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="nickname">
-                        <div class="span2">{{ form.nickname.label }}</div>
-                        <div class="span6">{{ form.nickname(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.nickname.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.nickname.label }}</label>
+                        <div class="controls">
+                            {{ form.nickname() }}
+                            <p class="help-block">{{ form.nickname.description|safe }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="password">
-                        <div class="span2">{{ form.password.label }}</div>
-                        <div class="span6">{{ form.password(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.password.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.password.label }}</label>
+                        <div class="controls">
+                            {{ form.password() }}
+                            <p class="help-block">{{ form.password.description|safe }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="group">
-                        <div class="span2">{{ form.group.label }}</div>
-                        <div class="span6">{{ form.group(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.group.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.group.label }}</label>
+                        <div class="controls">
+                            {{ form.group() }}
+                            <p class="help-block">{{ form.group.description|safe }}</p>
                         </div>
                     </div>
 

@@ -18,46 +18,32 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-
                     {{ type }} Script
-
                 </legend>
 
-                <ul class="nav nav-pills">
-                    <li class="active"><a href="#name" data-toggle="tab">1. Name <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#desc" data-toggle="tab">2. Desc <i class="icon-arrow-right icon-white"></i></a></li>
-                    <li class=""><a href="#script" data-toggle="tab">3. Script <i class="icon-arrow-right icon-white"></i></a></li>
-                </ul>
+                <div class="box form-container row-fluid form-horizontal">
 
-                <div class="tab-content" style="padding-bottom: 9px;">
-
-                    <div class="tab-pane active breadcrumb" id="name">
-                        <div class="span2">{{ form.name.label }}</div>
-                        <div class="span6">{{ form.name() }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.name.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.name.label }}</label>
+                        <div class="controls">
+                            {{ form.name() }}
+                            <p class="help-block">{{ form.name.description|safe }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="desc">
-                        <div class="span2">{{ form.desc.label }}</div>
-                        <div class="span6">{{ form.desc(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.desc.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.desc.label }}</label>
+                        <div class="controls">
+                            {{ form.desc(class="span6") }}
+                            <p class="help-block">{{ form.desc.description|safe }}</p>
                         </div>
                     </div>
 
-                    <div class="tab-pane breadcrumb" id="script">
-                        <div class="span2">{{ form.script.label }}</div>
-                        <div class="span6">{{ form.script(class="span12", rows="10") }}</div>
-                        <div class="clearfix"></div>
-                        <div class="alert alert-block alert-success fade in">
-                            <strong>说明:</strong>
-                            <p>{{ form.script.description }}</p>
+                    <div class="control-group">
+                        <label class="control-label">{{ form.script.label }}</label>
+                        <div class="controls">
+                            {{ form.script(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.script.description|safe }}</p>
                         </div>
                     </div>
 
