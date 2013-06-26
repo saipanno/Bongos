@@ -48,7 +48,7 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def is_authorized(self):
+    def is_authenticated(self):
         return True
 
     def is_active(self):

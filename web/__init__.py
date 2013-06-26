@@ -29,7 +29,6 @@ from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from web.models.user import User
 
 app = Flask(__name__)
 app.config.from_object('settings')
@@ -44,8 +43,3 @@ login_manager.login_view = "user_login_ctrl"
 from web.views import user
 from web.views import operate
 from web.views import dashboard
-
-
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(id)

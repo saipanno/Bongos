@@ -25,19 +25,15 @@
 
 
 import re
-from functools import wraps
-from flask import flash, url_for, session, request, redirect
+
+from web import login_manager
+
+from web.models.user import User
 
 
-def login_required(f):
-    """Redirect to login page if user not logged in"""
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if not session.get('is_login'):
-            flash('Login Required.', 'error')
-            return redirect(url_for('user_login_ctrl', next=request.url))
-        return f(*args, **kwargs)
-    return wrapper
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(id)
 
 
 def verify_address(address):

@@ -38,8 +38,7 @@ class UserLoginForm(Form):
 class CreateUserForm(Form):
 
     next_page = HiddenField()
+    email = TextField(u'Email:', id='email', default=u'')
     username = TextField(u'Username:', id='text', default=u'')
-    nickname = TextField(u'Nickname:', id='text', default=u'')
     password = PasswordField(u'Password:', id='password', default=u'')
-    group = TextField(u'Group:', id='group', default=u'')
     submit = SubmitField(u'Login', id='submit')

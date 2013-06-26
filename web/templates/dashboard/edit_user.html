@@ -24,6 +24,14 @@
                 <div class="box form-container row-fluid form-horizontal">
 
                     <div class="control-group">
+                        <label class="control-label">{{ form.email.label }}</label>
+                        <div class="controls">
+                            {{ form.email() }}
+                            <p class="help-block">{{ form.email.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
                         <label class="control-label">{{ form.username.label }}</label>
                         <div class="controls">
                             {{ form.username() }}
@@ -32,26 +40,10 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.nickname.label }}</label>
-                        <div class="controls">
-                            {{ form.nickname() }}
-                            <p class="help-block">{{ form.nickname.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
                         <label class="control-label">{{ form.password.label }}</label>
                         <div class="controls">
                             {{ form.password() }}
                             <p class="help-block">{{ form.password.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.group.label }}</label>
-                        <div class="controls">
-                            {{ form.group() }}
-                            <p class="help-block">{{ form.group.description|safe }}</p>
                         </div>
                     </div>
 

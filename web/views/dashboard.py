@@ -139,13 +139,13 @@ def list_user_ctrl():
         return render_template('dashboard/list_user.html', users=users)
 
 
-@app.route('/dashboard/user/<username>/show')
+@app.route('/dashboard/user/<int:user_id>/show')
 @login_required
-def show_user_ctrl(username):
+def show_user_ctrl(user_id):
 
     if request.method == 'GET':
 
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(id=user_id).first()
 
         return render_template('dashboard/show_user.html', user=user)
 

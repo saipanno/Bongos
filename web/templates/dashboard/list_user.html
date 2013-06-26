@@ -26,18 +26,18 @@
         <table class="table table-hover table-bordered table-striped">
             <thead>
             <tr>
-                <th>USERNAME</th>
-                <th>NICKNAME</th>
-                <th>OPERATE</th>
+                <th>邮箱</th>
+                <th>用户名</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                     <tr>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.nickname }}</td>
                         <td>
-                            <a href="{{ url_for('show_user_ctrl', username=user.username) }}">查看</a>
+                            <a href="{{ url_for('show_user_ctrl', user_id=user.id) }}">查看</a>
                         </td>
                     </tr>
                 {% endfor %}
