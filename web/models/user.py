@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from web import db
 from web import app
@@ -34,12 +34,28 @@ class User(db.Model):
 
     __tablename__ = app.config['USER_LISTS']
 
-    username = db.Column(db.UnicodeText, primary_key=True)
-    nickname = db.Column(db.UnicodeText)
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.UnicodeText, unique=True)
+    username = db.Column(db.UnicodeText)
     password = db.Column(db.UnicodeText)
 
-    def __init__(self, username, nickname, password):
+    def __init__(self, email, username, password):
 
+        self.email = email
         self.username = username
-        self.nickname = nickname
         self.password = generate_password_hash(password, salt_length=8)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def is_authorized(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)

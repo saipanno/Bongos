@@ -26,6 +26,7 @@
 
 from sqlalchemy import desc
 from flask import render_template, request, redirect, url_for, flash, session
+from flask.ext.login import login_required, current_user
 
 from web import db
 from web import app
@@ -37,8 +38,6 @@ from web.models.operate import OperateDb
 from web.forms.user import CreateUserForm
 
 from web.forms.dashboard import CreatePreDefinedScriptForm
-
-from web.extensions import login_required
 
 
 @app.route('/dashboard/script/list')
@@ -178,7 +177,7 @@ def create_user_ctrl():
         else:
 
             user = User(form.username.data, form.nickname.data, form.password.data)
-            db.session.add(user)
+            db.session.add(current_user())
             db.session.commit()
 
             flash(u'创建用户成功.', 'success')

@@ -24,23 +24,20 @@
 # SOFTWARE.
 
 
-from werkzeug.security import check_password_hash
-from flask import render_template, request, flash, redirect, url_for, session
-
+from flask import render_template, request, flash, redirect, url_for
+from flask.ext.login import login_user, logout_user, login_required
 from web import app
 
 from web.forms.user import UserLoginForm
 
 from web.models.user import User
 
-from web.extensions import login_required
-
 
 @app.route('/')
 @login_required
 def index_ctrl():
 
-    return  redirect(url_for('list_operate_ctrl', operate_type='Ssh'))
+    return redirect(url_for('list_operate_ctrl', operate_type='Ssh'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,31 +48,22 @@ def user_login_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('login.html', form=form)
+        return render_template('login.html', form=form)
 
     elif request.method == 'POST':
 
-        if form.username.data == u'' or form.password.data == u'':
+        if form.email.data == u'' or form.password.data == u'':
 
             flash(u'错误的用户名或密码.', 'error')
             return redirect(url_for('user_login_ctrl'))
 
-        if session.get('is_login'):
+        user = User.query.filter_by(email=form.email.data).first()
 
-            flash(u'已经登录.', 'success')
-            return redirect(next_page)
-
-        user = User.query.filter_by(username=form.username.data).first()
-
-        if user is not None and check_password_hash(user.password, form.password.data):
-
-            session['is_login'] = True
-            session['user'] = user
+        if user is not None and user.check_password(form.password.data):
+            login_user(user)
             flash(u'登录成功.', 'success')
             return redirect(next_page)
-
         else:
-
             flash(u'错误的用户名或密码.', 'error')
             return redirect(url_for('user_login_ctrl'))
 
@@ -83,6 +71,6 @@ def user_login_ctrl():
 @app.route('/logout', methods=['GET'])
 def user_logout_ctrl():
 
-    session.pop('is_login', None)
+    logout_user()
 
     return redirect(url_for('index_ctrl'))

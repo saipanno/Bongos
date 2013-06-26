@@ -28,6 +28,7 @@ import time
 import json
 from flask import render_template, request, redirect, url_for, flash, session
 from sqlalchemy import desc
+from flask.ext.login import login_required
 
 from web import db
 from web import app
@@ -39,7 +40,6 @@ from web.forms.operate import CreateCustomExecuteForm
 
 from web.models.operate import OperateDb
 
-from web.extensions import login_required
 from web.extensions import format_address_list
 from web.extensions import format_template_vars
 
