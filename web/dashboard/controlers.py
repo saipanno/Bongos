@@ -36,10 +36,10 @@ from web.user.forms import CreateUserForm
 from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 
-dashboard = Blueprint('dashboard', __name__)
+dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 
-@dashboard.route('/dashboard/script/list')
+@dashboard.route('/script/list')
 @login_required
 def list_script_ctrl():
 
@@ -50,7 +50,7 @@ def list_script_ctrl():
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 
-@dashboard.route('/dashboard/script/<int:script_id>/show')
+@dashboard.route('/script/<int:script_id>/show')
 @login_required
 def show_script_ctrl(script_id):
 
@@ -61,7 +61,7 @@ def show_script_ctrl(script_id):
         return render_template('dashboard/predefined_script.html', script=script, type='show')
 
 
-@dashboard.route('/dashboard/script/create', methods=("GET", "POST"))
+@dashboard.route('/script/create', methods=("GET", "POST"))
 @login_required
 def create_script_ctrl():
 
@@ -94,7 +94,7 @@ def create_script_ctrl():
         return redirect(url_for('dashboard.list_script_ctrl'))
 
 
-@dashboard.route('/dashboard/script/<int:script_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/script/<int:script_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_script_ctrl(script_id):
 
@@ -127,7 +127,7 @@ def edit_script_ctrl(script_id):
             return redirect(url_for('dashboard.list_script_ctrl'))
 
 
-@dashboard.route('/dashboard/user/list')
+@dashboard.route('/user/list')
 @login_required
 def list_user_ctrl():
 
@@ -138,7 +138,7 @@ def list_user_ctrl():
         return render_template('dashboard/user.html', users=users, type='list')
 
 
-@dashboard.route('/dashboard/user/create', methods=("GET", "POST"))
+@dashboard.route('/user/create', methods=("GET", "POST"))
 @login_required
 def create_user_ctrl():
 
@@ -173,7 +173,7 @@ def create_user_ctrl():
         return redirect(url_for('dashboard.list_user_ctrl'))
 
 
-@dashboard.route('/dashboard/user/<int:user_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_user_ctrl(user_id):
 
@@ -209,7 +209,7 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.list_user_ctrl'))
 
 
-@dashboard.route('/dashboard/ssh_config/list')
+@dashboard.route('/ssh_config/list')
 @login_required
 def list_ssh_config_ctrl():
 
@@ -220,7 +220,7 @@ def list_ssh_config_ctrl():
         return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
 
-@dashboard.route('/dashboard/ssh_config/create', methods=("GET", "POST"))
+@dashboard.route('/ssh_config/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_config_ctrl():
 
@@ -256,7 +256,7 @@ def create_ssh_config_ctrl():
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
 
-@dashboard.route('/dashboard/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_ssh_config_ctrl(config_id):
 

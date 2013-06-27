@@ -41,10 +41,10 @@ from web.extensions import format_address_list
 from web.extensions import format_template_vars
 
 
-operate = Blueprint('operate', __name__)
+operate = Blueprint('operate', __name__, url_prefix='/operate')
 
 
-@operate.route('/operate/<operate_type>/list')
+@operate.route('/<operate_type>/list')
 @login_required
 def list_operate_ctrl(operate_type):
 
@@ -53,7 +53,7 @@ def list_operate_ctrl(operate_type):
     return render_template('operate/list_operate.html', executes=executes, operate_type=operate_type)
 
 
-@operate.route('/operate/Ssh/create', methods=("GET", "POST"))
+@operate.route('/Ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -79,7 +79,7 @@ def create_ssh_detect_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data.id == 1:
+        if form.ssh_config.data.id is None:
             flash(u'没有选择SSH配置', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
@@ -92,7 +92,7 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@operate.route('/operate/Ping/create', methods=("GET", "POST"))
+@operate.route('/Ping/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -128,7 +128,7 @@ def create_ping_detect_ctrl():
         return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@operate.route('/operate/Custom/create', methods=("GET", "POST"))
+@operate.route('/Custom/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -156,7 +156,7 @@ def create_custom_execute_ctrl():
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data.id == 1:
+        if form.ssh_config.data.id is None:
             flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
@@ -175,7 +175,7 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@operate.route('/operate/PreDefined/create', methods=("GET", "POST"))
+@operate.route('/PreDefined/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -199,11 +199,11 @@ def create_predefined_execute_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.template_script.data.id == 1:
+        if form.template_script.data.id is None:
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.ssh_config.data.id == 1:
+        if form.ssh_config.data.id is None:
             flash(u'没有选择SSH配置.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
@@ -222,7 +222,7 @@ def create_predefined_execute_ctrl():
         return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@operate.route('/operate/<int:operate_id>/show')
+@operate.route('/<int:operate_id>/show')
 @login_required
 def show_operate_ctrl(operate_id):
 
