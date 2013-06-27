@@ -44,15 +44,32 @@
             <tr>
                 <th>用户</th>
                 <th>创建时间</th>
-                <th>结果</th>
+                <th>类型</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td style="width: 15%">{{ execute.author }}</td>
-                <td style="width: 15%">{{ execute.datetime }}</td>
-                <td style="width: 50%">{{ execute.result }}</td>
+                <td>{{ execute.author }}</td>
+                <td>{{ execute.datetime }}</td>
+                <td>{{ execute.operate_type }}</td>
             </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>IP地址</th>
+                <th>结果</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%- for key, value in operate_result.items() %}
+            <tr>
+                <td class="span2">{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
 

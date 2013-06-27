@@ -44,7 +44,7 @@ from web.extensions import format_address_list
 from web.extensions import format_template_vars
 
 
-@app.route('/operate/list/<operate_type>')
+@app.route('/operate/<operate_type>/list')
 @login_required
 def list_operate_ctrl(operate_type):
 
@@ -53,7 +53,7 @@ def list_operate_ctrl(operate_type):
     return render_template('operate/list_operate.html', executes=executes, operate_type=operate_type)
 
 
-@app.route('/operate/create/Ssh', methods=("GET", "POST"))
+@app.route('/operate/Ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -92,7 +92,7 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/create/Ping', methods=("GET", "POST"))
+@app.route('/operate/Ping/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -128,7 +128,7 @@ def create_ping_detect_ctrl():
         return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/create/Custom', methods=("GET", "POST"))
+@app.route('/operate/Custom/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -175,7 +175,7 @@ def create_custom_execute_ctrl():
         return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/create/PreDefined', methods=("GET", "POST"))
+@app.route('/operate/PreDefined/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -222,10 +222,11 @@ def create_predefined_execute_ctrl():
         return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/show/<int:operate_id>')
+@app.route('/operate/<int:operate_id>/show')
 @login_required
 def show_operate_ctrl(operate_id):
 
     execute = OperateDb.query.filter_by(id=operate_id).first()
+    operate_result = json.loads(execute.result)
 
-    return render_template('operate/show_operate.html', execute=execute)
+    return render_template('operate/show_operate.html', execute=execute, operate_result=operate_result)
