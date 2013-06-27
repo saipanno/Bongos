@@ -37,7 +37,7 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "user_login_ctrl"
+login_manager.login_view = "user.user_login_ctrl"
 
 
 from web.user.controlers import user

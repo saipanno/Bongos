@@ -46,7 +46,7 @@ def index_ctrl():
 def user_login_ctrl():
 
     form = UserLoginForm()
-    next_page = request.values.get('next', url_for('index_ctrl'))
+    next_page = request.values.get('next', url_for('user.index_ctrl'))
 
     if request.method == 'GET':
 
