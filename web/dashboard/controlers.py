@@ -29,11 +29,13 @@ from flask.ext.login import login_required, current_user
 
 from web import db
 
-from web.dashboard.models import SshConfig, PreDefinedScript
 from web.user.models import User
-
 from web.user.forms import CreateUserForm
+
+from web.dashboard.models import SshConfig, PreDefinedScript
 from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
+
+from web.extensions import validate_email, validate_username, validate_password
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -142,7 +144,7 @@ def list_user_ctrl():
 @login_required
 def create_user_ctrl():
 
-    form = CreateUserForm(username=u'', nickname=u'', password=u'', group=u'')
+    form = CreateUserForm()
 
     if request.method == 'GET':
 
@@ -150,20 +152,19 @@ def create_user_ctrl():
 
     elif request.method == 'POST':
 
-        if form.username.data == u'':
+        if not validate_email(form.email.data):
+            flash(u'不符合要求的邮箱地址.', 'error')
 
-            flash(u'请输入用户名.', 'error')
+        elif not validate_username(form.username.data):
+            flash(u'不符合要求的用户名.', 'error')
 
-        elif form.email.data == u'':
+        elif form.password.data != form.confirm_password.data:
+            flash(u'请输入相同的密码.', 'error')
 
-            flash(u'请输入邮箱地址.', 'error')
-
-        elif form.password.data == u'':
-
-            flash(u'请输入密码.', 'error')
+        elif not validate_password(form.password.data):
+            flash(u'不符合要求的密码.', 'error')
 
         else:
-
             user = User(form.email.data, form.username.data, form.password.data)
             db.session.add(user)
             db.session.commit()
@@ -179,25 +180,25 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = CreateUserForm(email=user.email, username=user.username, password=user.password)
+    form = CreateUserForm(email=user.email, username=user.username, password=user.password, confirm_password=user.password)
 
     if request.method == 'GET':
 
-        return render_template('dashboard/user.html', form=form, type='create')
+        return render_template('dashboard/user.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
-        if form.email.data == u'':
+        if not validate_email(form.email.data):
+            flash(u'不符合要求的邮箱地址.', 'error')
 
-            flash(u'请输入邮箱地址.', 'error')
+        elif not validate_username(form.username.data):
+            flash(u'不符合要求的用户名.', 'error')
 
-        elif form.username.data == u'':
+        elif form.password.data != form.confirm_password.data:
+            flash(u'请输入相同的密码.', 'error')
 
-            flash(u'请输入用户名.', 'error')
-
-        elif form.password.data == u'':
-
-            flash(u'请输入密码.', 'error')
+        elif not validate_password(form.password.data):
+            flash(u'不符合要求的密码.', 'error')
 
         else:
 

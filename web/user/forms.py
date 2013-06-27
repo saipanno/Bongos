@@ -30,15 +30,16 @@ from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitFie
 class UserLoginForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email:', id='email', default=u'')
-    password = PasswordField(u'Password:', id='password', default=u'')
+    email = TextField(u'Email:', id='email')
+    password = PasswordField(u'Password:', id='password')
     submit = SubmitField(u'Login', id='submit')
 
 
 class CreateUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email:', id='email', default=u'')
-    username = TextField(u'Username:', id='text', default=u'')
-    password = PasswordField(u'Password:', id='password', default=u'')
+    email = TextField(u'Email:', id='email')
+    username = TextField(u'Username:', id='text')
+    password = PasswordField(u'Password:', id='password')
+    confirm_password = PasswordField(u'Repeat Password:', id='confirm_password')
     submit = SubmitField(u'Login', id='submit')

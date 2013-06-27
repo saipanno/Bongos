@@ -117,3 +117,21 @@ def format_template_vars(template_vars):
             return {'status': False, 'desc': u'错误的变量赋值: %s' % oneline}
 
     return {'status': True, 'desc': address_vars_group}
+
+
+def validate_email(email):
+    EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")   # TODO:更新邮箱正则表达式，当前无法正常工作
+
+    # return not email and EMAIL_RE.match(email)
+    return True
+
+
+def validate_username(username):
+    USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+
+    return username and USER_RE.match(username)
+
+
+def validate_password(password):
+    PASSWORD_RE = re.compile(r".{6,20}$")
+    return password and PASSWORD_RE.match(password)
