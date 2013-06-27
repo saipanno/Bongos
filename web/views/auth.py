@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required
 from web import app
 
@@ -32,6 +32,8 @@ from web.forms.user import UserLoginForm
 
 from web.models.user import User
 
+
+auth = Blueprint('auth', __name__)
 
 @app.route('/')
 @login_required
