@@ -20,7 +20,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">User Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
+                    <a href="{{ url_for('dashboard.create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.username }}</td>
                         <td>
-                            <a href="{{ url_for('edit_user_ctrl', user_id=user.id) }}">编辑</a>
+                            <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
                         </td>
                     </tr>
                 {% endfor %}

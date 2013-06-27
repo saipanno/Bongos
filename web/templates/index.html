@@ -25,13 +25,13 @@
                     <span class="icon-bar"></span>
                 </a>
 
-                <a class="brand" href="{{ url_for('index_ctrl') }}">BONGOS</a>
+                <a class="brand" href="{{ url_for('user.index_ctrl') }}">BONGOS</a>
 
                 <ul class="nav">
                     <li class="{% block active_deploy %}{% endblock %}"><a href="#">Deploy</a></li>
                     <li class="{% block active_syslog %}{% endblock %}"><a href="#">Syslog</a></li>
-                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("list_operate_ctrl", operate_type='Ssh') }}">Operate</a></li>
-                    <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("list_user_ctrl") }}">Dashboard</a></li>
+                    <li class="{% block active_operate %}{% endblock %}"><a href="{{ url_for("operate.list_operate_ctrl", operate_type='Ssh') }}">Operate</a></li>
+                    <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 
                 <ul class="nav pull-right">
@@ -40,7 +40,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#">Setting</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ url_for("user_logout_ctrl") }}">Quit</a></li>
+                            <li><a href="{{ url_for("user.user_logout_ctrl") }}">Quit</a></li>
                         </ul>
                     </li>
                 </ul>

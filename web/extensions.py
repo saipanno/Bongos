@@ -28,7 +28,7 @@ import re
 
 from web import login_manager
 
-from web.models.user import User
+from web.user.models import User
 
 
 @login_manager.user_loader

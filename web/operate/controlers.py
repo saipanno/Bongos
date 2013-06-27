@@ -26,25 +26,25 @@
 
 import time
 import json
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from sqlalchemy import desc
 from flask.ext.login import login_required, current_user
 
 from web import db
-from web import app
 
-from web.forms.operate import CreatePingDetectForm
-from web.forms.operate import CreateSshDetectForm
-from web.forms.operate import CreatePreDefinedExecuteForm
-from web.forms.operate import CreateCustomExecuteForm
+from web.operate.forms import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
+    CreateCustomExecuteForm
 
-from web.models.operate import OperateDb
+from web.operate.models import OperateDb
 
 from web.extensions import format_address_list
 from web.extensions import format_template_vars
 
 
-@app.route('/operate/<operate_type>/list')
+operate = Blueprint('operate', __name__)
+
+
+@operate.route('/operate/<operate_type>/list')
 @login_required
 def list_operate_ctrl(operate_type):
 
@@ -53,7 +53,7 @@ def list_operate_ctrl(operate_type):
     return render_template('operate/list_operate.html', executes=executes, operate_type=operate_type)
 
 
-@app.route('/operate/Ssh/create', methods=("GET", "POST"))
+@operate.route('/operate/Ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -77,11 +77,11 @@ def create_ssh_detect_ctrl():
         server_list_dict = format_address_list(form.server_list.data)
         if server_list_dict['status'] is not True:
             flash(server_list_dict['desc'], 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置', 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
                             template_vars, form.ssh_config.data.id, status, result)
@@ -89,10 +89,10 @@ def create_ssh_detect_ctrl():
         db.session.commit()
 
         flash(u'成功创建操作.', 'success')
-        return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+        return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/Ping/create', methods=("GET", "POST"))
+@operate.route('/operate/Ping/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -117,7 +117,7 @@ def create_ping_detect_ctrl():
         server_list_dict = format_address_list(form.server_list.data)
         if server_list_dict['status'] is not True:
             flash(server_list_dict['desc'], 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
                             template_vars, ssh_config, status, result)
@@ -125,10 +125,10 @@ def create_ping_detect_ctrl():
         db.session.commit()
 
         flash(u'成功创建操作.', 'success')
-        return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+        return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/Custom/create', methods=("GET", "POST"))
+@operate.route('/operate/Custom/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -150,20 +150,20 @@ def create_custom_execute_ctrl():
         server_list_dict = format_address_list(form.server_list.data)
         if server_list_dict['status'] is not True:
             flash(server_list_dict['desc'], 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         if form.template_script == u'':
             flash(u'没有选择待执行脚本.', 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置.', 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
-            return redirect(url_for('show_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.show_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
@@ -172,10 +172,10 @@ def create_custom_execute_ctrl():
         db.session.commit()
 
         flash(u'成功创建操作.', 'success')
-        return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+        return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/PreDefined/create', methods=("GET", "POST"))
+@operate.route('/operate/PreDefined/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -197,20 +197,20 @@ def create_predefined_execute_ctrl():
         server_list_dict = format_address_list(form.server_list.data)
         if server_list_dict['status'] is not True:
             flash(server_list_dict['desc'], 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         if form.template_script.data.id == 1:
             flash(u'没有选择待执行脚本.', 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         if form.ssh_config.data.id == 1:
             flash(u'没有选择SSH配置.', 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
-            return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+            return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
         journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
@@ -219,10 +219,10 @@ def create_predefined_execute_ctrl():
         db.session.commit()
 
         flash(u'成功创建操作.', 'success')
-        return redirect(url_for('list_operate_ctrl', operate_type=operate_type))
+        return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
 
-@app.route('/operate/<int:operate_id>/show')
+@operate.route('/operate/<int:operate_id>/show')
 @login_required
 def show_operate_ctrl(operate_id):
 

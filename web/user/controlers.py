@@ -26,21 +26,23 @@
 
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required
-from web import app
 
-from web.forms.user import UserLoginForm
+from web.user.forms import UserLoginForm
 
-from web.models.user import User
+from web.user.models import User
 
 
-@app.route('/')
+user = Blueprint('user', __name__)
+
+
+@user.route('/')
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('list_operate_ctrl', operate_type='Ssh'))
+    return redirect(url_for('operate.list_operate_ctrl', operate_type='Ssh'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@user.route('/login', methods=['GET', 'POST'])
 def user_login_ctrl():
 
     form = UserLoginForm()
@@ -55,7 +57,7 @@ def user_login_ctrl():
         if form.email.data == u'' or form.password.data == u'':
 
             flash(u'错误的用户名或密码.', 'error')
-            return redirect(url_for('user_login_ctrl'))
+            return redirect(url_for('user.user_login_ctrl'))
 
         user = User.query.filter_by(email=form.email.data).first()
 
@@ -65,12 +67,12 @@ def user_login_ctrl():
             return redirect(next_page)
         else:
             flash(u'错误的用户名或密码.', 'error')
-            return redirect(url_for('user_login_ctrl'))
+            return redirect(url_for('user.user_login_ctrl'))
 
 
-@app.route('/logout', methods=['GET'])
+@user.route('/logout', methods=['GET'])
 def user_logout_ctrl():
 
     logout_user()
 
-    return redirect(url_for('index_ctrl'))
+    return redirect(url_for('user.index_ctrl'))

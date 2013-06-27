@@ -4,16 +4,16 @@
 
 {% if execute.operate_type == 'Ssh' %}
     {% set operate_title = 'Detect' %}
-    {% set operate_create_url = url_for('create_ssh_detect_ctrl') %}
+    {% set operate_create_url = url_for('operate.create_ssh_detect_ctrl') %}
 {% elif execute.operate_type == 'Ping' %}
     {% set operate_title = 'Detect' %}
-    {% set operate_create_url = url_for('create_ping_detect_ctrl') %}
+    {% set operate_create_url = url_for('operate.create_ping_detect_ctrl') %}
 {% elif execute.operate_type == 'Custom' %}
     {% set operate_title = 'Execute' %}
-    {% set operate_create_url = url_for('create_custom_execute_ctrl') %}
+    {% set operate_create_url = url_for('operate.create_custom_execute_ctrl') %}
 {% elif execute.operate_type == 'PreDefined' %}
     {% set operate_title = 'Execute' %}
-    {% set operate_create_url = url_for('create_predefined_execute_ctrl') %}
+    {% set operate_create_url = url_for('operate.create_predefined_execute_ctrl') %}
 {% endif %}
 
 {% block active_operate_ssh %}{% if execute.operate_type == 'Ssh' %}active{% endif %}{% endblock %}

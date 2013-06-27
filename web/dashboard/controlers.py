@@ -24,21 +24,22 @@
 # SOFTWARE.
 
 
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
 
 from web import db
-from web import app
 
-from web.models.dashboard import SshConfig, PreDefinedScript
-from web.models.user import User
+from web.dashboard.models import SshConfig, PreDefinedScript
+from web.user.models import User
 
-from web.forms.user import CreateUserForm
-
-from web.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
+from web.user.forms import CreateUserForm
+from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 
-@app.route('/dashboard/script/list')
+dashboard = Blueprint('dashboard', __name__)
+
+
+@dashboard.route('/dashboard/script/list')
 @login_required
 def list_script_ctrl():
 
@@ -49,7 +50,7 @@ def list_script_ctrl():
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 
-@app.route('/dashboard/script/<int:script_id>/show')
+@dashboard.route('/dashboard/script/<int:script_id>/show')
 @login_required
 def show_script_ctrl(script_id):
 
@@ -60,7 +61,7 @@ def show_script_ctrl(script_id):
         return render_template('dashboard/predefined_script.html', script=script, type='show')
 
 
-@app.route('/dashboard/script/create', methods=("GET", "POST"))
+@dashboard.route('/dashboard/script/create', methods=("GET", "POST"))
 @login_required
 def create_script_ctrl():
 
@@ -90,10 +91,10 @@ def create_script_ctrl():
 
             flash(u'创建预定义脚本成功.', 'success')
 
-        return redirect(url_for('list_script_ctrl'))
+        return redirect(url_for('dashboard.list_script_ctrl'))
 
 
-@app.route('/dashboard/script/<int:script_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/dashboard/script/<int:script_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_script_ctrl(script_id):
 
@@ -110,12 +111,12 @@ def edit_script_ctrl(script_id):
         if form.desc.data == u'':
 
             flash(u'请输入脚本描述.', 'error')
-            return redirect(url_for('list_script_ctrl'))
+            return redirect(url_for('dashboard.list_script_ctrl'))
 
         elif form.script.data == u'':
 
             flash(u'请输入脚本.', 'error')
-            return redirect(url_for('list_script_ctrl'))
+            return redirect(url_for('dashboard.list_script_ctrl'))
 
         else:
 
@@ -123,10 +124,10 @@ def edit_script_ctrl(script_id):
             db.session.commit()
 
             flash(u'Edit script successful.', 'success')
-            return redirect(url_for('list_script_ctrl'))
+            return redirect(url_for('dashboard.list_script_ctrl'))
 
 
-@app.route('/dashboard/user/list')
+@dashboard.route('/dashboard/user/list')
 @login_required
 def list_user_ctrl():
 
@@ -137,7 +138,7 @@ def list_user_ctrl():
         return render_template('dashboard/user.html', users=users, type='list')
 
 
-@app.route('/dashboard/user/create', methods=("GET", "POST"))
+@dashboard.route('/dashboard/user/create', methods=("GET", "POST"))
 @login_required
 def create_user_ctrl():
 
@@ -169,10 +170,10 @@ def create_user_ctrl():
 
             flash(u'创建用户成功.', 'success')
 
-        return redirect(url_for('list_user_ctrl'))
+        return redirect(url_for('dashboard.list_user_ctrl'))
 
 
-@app.route('/dashboard/user/<int:user_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/dashboard/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_user_ctrl(user_id):
 
@@ -205,10 +206,10 @@ def edit_user_ctrl(user_id):
 
             flash(u'编辑用户成功.', 'success')
 
-        return redirect(url_for('list_user_ctrl'))
+        return redirect(url_for('dashboard.list_user_ctrl'))
 
 
-@app.route('/dashboard/ssh_config/list')
+@dashboard.route('/dashboard/ssh_config/list')
 @login_required
 def list_ssh_config_ctrl():
 
@@ -219,7 +220,7 @@ def list_ssh_config_ctrl():
         return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
 
-@app.route('/dashboard/ssh_config/create', methods=("GET", "POST"))
+@dashboard.route('/dashboard/ssh_config/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_config_ctrl():
 
@@ -252,10 +253,10 @@ def create_ssh_config_ctrl():
 
             flash(u'创建SSH配置成功.', 'success')
 
-        return redirect(url_for('list_ssh_config_ctrl'))
+        return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
 
-@app.route('/dashboard/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/dashboard/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_ssh_config_ctrl(config_id):
 
@@ -289,4 +290,4 @@ def edit_ssh_config_ctrl(config_id):
 
             flash(u'编辑SSH配置成功.', 'success')
 
-        return redirect(url_for('list_ssh_config_ctrl'))
+        return redirect(url_for('dashboard.list_ssh_config_ctrl'))

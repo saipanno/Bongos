@@ -32,7 +32,7 @@ from web import app
 
 class User(db.Model):
 
-    __tablename__ = app.config['USER_LISTS']
+    __tablename__ = 'new_user_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.UnicodeText, unique=True)

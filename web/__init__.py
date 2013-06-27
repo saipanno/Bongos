@@ -40,6 +40,10 @@ login_manager.init_app(app)
 login_manager.login_view = "user_login_ctrl"
 
 
-from web.views import index
-from web.views import operate
-from web.views import dashboard
+from web.user.controlers import user
+from web.operate.controlers import operate
+from web.dashboard.controlers import dashboard
+
+app.register_blueprint(user)
+app.register_blueprint(operate)
+app.register_blueprint(dashboard)
