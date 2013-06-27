@@ -1,6 +1,7 @@
 env
+
+*.log
+*.pyc
+
 .idea
 .DS_Store
-
-*.pyc
-*.log
