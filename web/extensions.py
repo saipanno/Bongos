@@ -32,8 +32,8 @@ from web.models.user import User
 
 
 @login_manager.user_loader
-def load_user(id):
-    return User.query.get(id)
+def load_user(user_id):
+    return User.query.get(user_id)
 
 
 def verify_address(address):
