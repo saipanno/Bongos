@@ -40,6 +40,6 @@ login_manager.init_app(app)
 login_manager.login_view = "user_login_ctrl"
 
 
-from web.views import user
+from web.views import index
 from web.views import operate
 from web.views import dashboard

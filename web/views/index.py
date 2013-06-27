@@ -33,8 +33,6 @@ from web.forms.user import UserLoginForm
 from web.models.user import User
 
 
-auth = Blueprint('auth', __name__)
-
 @app.route('/')
 @login_required
 def index_ctrl():
