@@ -26,9 +26,9 @@
 
 import time
 import json
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, request, redirect, url_for, flash
 from sqlalchemy import desc
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 
 from web import db
 from web import app
@@ -71,7 +71,7 @@ def create_ssh_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = session['user'].username
+        author = current_user.username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -111,7 +111,7 @@ def create_ping_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = session['user'].username
+        author = current_user.username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -144,7 +144,7 @@ def create_custom_execute_ctrl():
 
     elif request.method == 'POST':
 
-        author = session['user'].username
+        author = current_user.username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -191,7 +191,7 @@ def create_predefined_execute_ctrl():
 
     elif request.method == 'POST':
 
-        author = session['user'].username
+        author = current_user.username
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -227,6 +227,9 @@ def create_predefined_execute_ctrl():
 def show_operate_ctrl(operate_id):
 
     execute = OperateDb.query.filter_by(id=operate_id).first()
-    operate_result = json.loads(execute.result)
+    try:
+        operate_result = json.loads(execute.result)
+    except:
+        operate_result = 0
 
     return render_template('operate/show_operate.html', execute=execute, operate_result=operate_result)
