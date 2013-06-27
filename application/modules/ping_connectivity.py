@@ -25,7 +25,7 @@
 
 
 import json
-from fabric.api import env, hide, show, local, execute
+from fabric.api import env, hide, local, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db

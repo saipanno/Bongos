@@ -31,7 +31,7 @@ from fabric.exceptions import NetworkError
 
 from web import db
 
-from web.models.dashboard import SshConfig
+from web.dashboard.models import SshConfig
 
 
 def create_script_from_template(template_script, template_vars, address):

@@ -32,7 +32,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from web import db
 from application.extensions import logger
 
-from web.models.dashboard import SshConfig
+from web.dashboard.models import SshConfig
 
 
 def final_ssh_checking(user, port, password, key_filename, operate):
