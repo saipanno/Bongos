@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField
 
 
 class CreatePreDefinedScriptForm(Form):
@@ -32,4 +32,15 @@ class CreatePreDefinedScriptForm(Form):
     name = TextField(u'脚本名称:', id='text', description=u'脚本名称', default=u'')
     desc = TextAreaField(u'脚本描述:', id='text', description=u'脚本描述', default=u'')
     script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=u'预定义脚本,支持模板功能', default=u'')
+    submit = SubmitField(u'Continue', id='submit', description='submit')
+
+
+class CreateSshConfigForm(Form):
+
+    name = TextField(u'SSH配置名称:', id='text', description=u'配置名称', default=u'')
+    desc = TextField(u'SSH配置描述:', id='text', description=u'配置描述', default=u'')
+    port = IntegerField(u'SSH端口:', id='port', description=u'SSH端口', default=22)
+    username = TextField(u'SSH用户名:', id='text', description=u'SSH用户名', default=u'')
+    password = TextField(u'SSH密码:', id='text', description=u'SSH密码', default=u'')
+    key_filename = TextField(u'SSH密钥:', id='text', description=u'SSH密钥', default=u'')
     submit = SubmitField(u'Continue', id='submit', description='submit')

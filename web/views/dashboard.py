@@ -24,20 +24,18 @@
 # SOFTWARE.
 
 
-from sqlalchemy import desc
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, request, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 
 from web import db
 from web import app
 
-from web.models.dashboard import PreDefinedScript
+from web.models.dashboard import SshConfig, PreDefinedScript
 from web.models.user import User
-from web.models.operate import OperateDb
 
 from web.forms.user import CreateUserForm
 
-from web.forms.dashboard import CreatePreDefinedScriptForm
+from web.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 
 @app.route('/dashboard/script/list')
@@ -48,7 +46,7 @@ def list_script_ctrl():
 
         scripts = PreDefinedScript.query.all()
 
-        return render_template('dashboard/list_script.html', scripts=scripts)
+        return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 
 @app.route('/dashboard/script/<int:script_id>/show')
@@ -59,7 +57,7 @@ def show_script_ctrl(script_id):
 
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-        return render_template('dashboard/show_script.html', script=script)
+        return render_template('dashboard/predefined_script.html', script=script, type='show')
 
 
 @app.route('/dashboard/script/create', methods=("GET", "POST"))
@@ -70,7 +68,7 @@ def create_script_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('dashboard/edit_script.html', form=form, type='Create')
+        return render_template('dashboard/predefined_script.html', form=form, type='create')
 
     elif request.method == 'POST':
 
@@ -84,7 +82,7 @@ def create_script_ctrl():
 
         else:
 
-            author = session['user'].username
+            author = current_user.username
 
             script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
             db.session.add(script)
@@ -105,7 +103,7 @@ def edit_script_ctrl(script_id):
 
     if request.method == 'GET':
 
-        return render_template('dashboard/edit_script.html', type='Edit', form=form, script=script)
+        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
 
     elif request.method == 'POST':
 
@@ -136,18 +134,7 @@ def list_user_ctrl():
 
         users = User.query.all()
 
-        return render_template('dashboard/list_user.html', users=users)
-
-
-@app.route('/dashboard/user/<int:user_id>/show')
-@login_required
-def show_user_ctrl(user_id):
-
-    if request.method == 'GET':
-
-        user = User.query.filter_by(id=user_id).first()
-
-        return render_template('dashboard/show_user.html', user=user)
+        return render_template('dashboard/user.html', users=users, type='list')
 
 
 @app.route('/dashboard/user/create', methods=("GET", "POST"))
@@ -158,7 +145,7 @@ def create_user_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('dashboard/edit_user.html', form=form, type='Create')
+        return render_template('dashboard/user.html', form=form, type='create')
 
     elif request.method == 'POST':
 
@@ -166,9 +153,9 @@ def create_user_ctrl():
 
             flash(u'请输入用户名.', 'error')
 
-        elif form.nickname.data == u'':
+        elif form.email.data == u'':
 
-            flash(u'请输入昵称.', 'error')
+            flash(u'请输入邮箱地址.', 'error')
 
         elif form.password.data == u'':
 
@@ -176,8 +163,8 @@ def create_user_ctrl():
 
         else:
 
-            user = User(form.username.data, form.nickname.data, form.password.data)
-            db.session.add(current_user())
+            user = User(form.email.data, form.username.data, form.password.data)
+            db.session.add(user)
             db.session.commit()
 
             flash(u'创建用户成功.', 'success')
@@ -185,10 +172,121 @@ def create_user_ctrl():
         return redirect(url_for('list_user_ctrl'))
 
 
-@app.route('/dashboard/operate/list')
+@app.route('/dashboard/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
-def list_all_operate_ctrl():
+def edit_user_ctrl(user_id):
 
-    executes = OperateDb.query.order_by(desc(OperateDb.id)).all()
+    user = User.query.filter_by(id=user_id).first()
 
-    return render_template('dashboard/list_operate.html', executes=executes)
+    form = CreateUserForm(email=user.email, username=user.username, password=user.password)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/user.html', form=form, type='create')
+
+    elif request.method == 'POST':
+
+        if form.email.data == u'':
+
+            flash(u'请输入邮箱地址.', 'error')
+
+        elif form.username.data == u'':
+
+            flash(u'请输入用户名.', 'error')
+
+        elif form.password.data == u'':
+
+            flash(u'请输入密码.', 'error')
+
+        else:
+
+            form.populate_obj(user)
+            db.session.commit()
+
+            flash(u'编辑用户成功.', 'success')
+
+        return redirect(url_for('list_user_ctrl'))
+
+
+@app.route('/dashboard/ssh_config/list')
+@login_required
+def list_ssh_config_ctrl():
+
+    if request.method == 'GET':
+
+        ssh_configs = SshConfig.query.all()
+
+        return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
+
+
+@app.route('/dashboard/ssh_config/create', methods=("GET", "POST"))
+@login_required
+def create_ssh_config_ctrl():
+
+    form = CreateSshConfigForm(name=u'', desc=u'', port=22, username=u'', password=u'', key_filename=u'')
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/ssh_config.html', form=form, type='create')
+
+    elif request.method == 'POST':
+
+        if form.name.data == u'':
+
+            flash(u'请输入.', 'error')
+
+        elif form.desc.data == u'':
+
+            flash(u'请输入邮箱地址.', 'error')
+
+        elif form.password.data == u'':
+
+            flash(u'请输入密码.', 'error')
+
+        else:
+
+            ssh_config = SshConfig(form.name.data, form.desc.data, form.port.data, form.username.data,
+                                   form.password.data, form.key_filename.data)
+            db.session.add(ssh_config)
+            db.session.commit()
+
+            flash(u'创建SSH配置成功.', 'success')
+
+        return redirect(url_for('list_ssh_config_ctrl'))
+
+
+@app.route('/dashboard/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_ssh_config_ctrl(config_id):
+
+    config = SshConfig.query.filter_by(id=config_id).first()
+
+    form = CreateSshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
+                               password=config.password, key_filename=config.key_filename)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/ssh_config.html', form=form, type='edit')
+
+    elif request.method == 'POST':
+
+        if form.name.data == u'':
+
+            flash(u'请输入.', 'error')
+
+        elif form.desc.data == u'':
+
+            flash(u'请输入邮箱地址.', 'error')
+
+        elif form.password.data == u'':
+
+            flash(u'请输入密码.', 'error')
+
+        else:
+
+            form.populate_obj(config)
+            db.session.commit()
+
+            flash(u'编辑SSH配置成功.', 'success')
+
+        return redirect(url_for('list_ssh_config_ctrl'))

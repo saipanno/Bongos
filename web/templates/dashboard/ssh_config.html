@@ -1,0 +1,238 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% import "macro.html" as ext %}
+
+{% block active_dashboard_ssh_config %}active{% endblock %}
+
+
+{% block main %}
+    <div class="span10">
+
+    {% if type == 'list' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Manager</a><span class="divider">/</span></li>
+            <li><a href="#">Ssh Config</a> <span class="divider">/</span></li>
+            <li class="active">List</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Ssh Config Manager</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_ssh_config_ctrl') }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Config</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>NAME</th>
+                <th>DESC</th>
+                <th>PORT</th>
+                <th>USERNAME</th>
+                <th>PASSWORD</th>
+                <th>KEYFILE</th>
+                <th>OPERATE</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ssh_config in ssh_configs %}
+                <tr>
+                    <td>{{ ssh_config.name }}</td>
+                    <td>{{ ssh_config.desc }}</td>
+                    <td>{{ ssh_config.port }}</td>
+                    <td>{{ ssh_config.port }}</td>
+                    <td>{{ ssh_config.username }}</td>
+                    <td>{{ ssh_config.password }}</td>
+                    <td>{{ ssh_config.key_filename }}</td>
+                    <td><a href="{{ url_for('edit_ssh_config_ctrl', config_id=ssh_config.id) }}">编辑</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% elif type == 'create' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Manager</a><span class="divider">/</span></li>
+            <li><a href="#">Ssh Config</a> <span class="divider">/</span></li>
+            <li class="active">Create</li>
+        </ul>
+
+        <div class="tabbable">
+            <form method="post" class="form-horizontal" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Create Ssh Config
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.name.label }}</label>
+                        <div class="controls">
+                            {{ form.name(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.name.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.desc.label }}</label>
+                        <div class="controls">
+                            {{ form.desc(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.port.label }}</label>
+                        <div class="controls">
+                            {{ form.port() }}
+                            <p class="help-block">{{ form.port.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.username.label }}</label>
+                        <div class="controls">
+                            {{ form.username(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.username.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.password.label }}</label>
+                        <div class="controls">
+                            {{ form.password(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.password.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.key_filename.label }}</label>
+                        <div class="controls">
+                            {{ form.key_filename(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.key_filename.description|safe }}</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#commit" role="button" class="btn btn-primary pull-right" data-toggle="modal">Submit</a>
+                <div id="commit" class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Oops!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Continue to create this config?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    {% elif type == 'edit' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">Manager</a><span class="divider">/</span></li>
+            <li><a href="#">Ssh Config</a> <span class="divider">/</span></li>
+            <li class="active">Edit</li>
+        </ul>
+
+        <div class="tabbable">
+            <form method="post" class="form-horizontal" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Edit Ssh Config
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.name.label }}</label>
+                        <div class="controls">
+                            {{ form.name(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.name.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.desc.label }}</label>
+                        <div class="controls">
+                            {{ form.desc(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.port.label }}</label>
+                        <div class="controls">
+                            {{ form.port() }}
+                            <p class="help-block">{{ form.port.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.username.label }}</label>
+                        <div class="controls">
+                            {{ form.username(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.username.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.password.label }}</label>
+                        <div class="controls">
+                            {{ form.password(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.password.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.key_filename.label }}</label>
+                        <div class="controls">
+                            {{ form.key_filename(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.key_filename.description|safe }}</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#commit" role="button" class="btn btn-primary pull-right" data-toggle="modal">Submit</a>
+                <div id="commit" class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Oops!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Continue to edit this config?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    {% endif %}
+
+    </div>
+{% endblock %}

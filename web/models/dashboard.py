@@ -35,16 +35,16 @@ class SshConfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.UnicodeText)
     desc = db.Column(db.UnicodeText)
-    username = db.Column(db.Text)
     port = db.Column(db.Integer)
+    username = db.Column(db.Text)
     password = db.Column(db.Text)
     key_filename = db.Column(db.Text)
 
-    def __init__(self, name, desc, username, port, password, key_filename=None):
+    def __init__(self, name, desc, port, username, password, key_filename=None):
         self.name = name
         self.desc = desc
-        self.username = username
         self.port = port
+        self.username = username
         self.password = password
         self.key_filename = key_filename
 

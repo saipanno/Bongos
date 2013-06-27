@@ -1,0 +1,178 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block active_dashboard_user %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        {% if type == 'list' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">User</a><span class="divider">/</span></li>
+            <li class="active">List</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">User Manager</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>邮箱</th>
+                <th>用户名</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_user_ctrl', user_id=user.id) }}">编辑</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% elif type == 'create' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">User</a><span class="divider">/</span></li>
+                <li class="active">Create</li>
+            </ul>
+
+            <div class="tabbable">
+                <form method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Create User
+                    </legend>
+
+                    <div class="box form-container row-fluid form-horizontal">
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.email.label }}</label>
+                            <div class="controls">
+                                {{ form.email() }}
+                                <p class="help-block">{{ form.email.description|safe }}</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.username.label }}</label>
+                            <div class="controls">
+                                {{ form.username() }}
+                                <p class="help-block">{{ form.username.description|safe }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.password.label }}</label>
+                            <div class="controls">
+                                {{ form.password() }}
+                                <p class="help-block">{{ form.password.description|safe }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
+                    <div id="commit" class="modal hide fade">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3>Oops!</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>Continue to do this operate?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                            {{ form.submit(class="btn btn-danger") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        {% elif type == 'edit' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">User</a><span class="divider">/</span></li>
+            <li class="active">Edit</li>
+        </ul>
+
+        <div class="tabbable">
+            <form method="post" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Edit User
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.email.label }}</label>
+                        <div class="controls">
+                            {{ form.email() }}
+                            <p class="help-block">{{ form.email.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.username.label }}</label>
+                        <div class="controls">
+                            {{ form.username() }}
+                            <p class="help-block">{{ form.username.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.password.label }}</label>
+                        <div class="controls">
+                            {{ form.password() }}
+                            <p class="help-block">{{ form.password.description|safe }}</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
+                <div id="commit" class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Oops!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Continue to do this operate?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    {% endif %}
+
+    </div>
+{% endblock %}
