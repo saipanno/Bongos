@@ -147,7 +147,7 @@
                 <div class="box form-container row-fluid form-horizontal">
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.name.label }}</label>
+                        <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name() }}
                             <p class="help-block">{{ form.name.description|safe }}</p>
@@ -155,7 +155,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.desc.label }}</label>
+                        <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6") }}
                             <p class="help-block">{{ form.desc.description|safe }}</p>
@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.script.label }}</label>
+                        <label class="control-label">{{ form.script.label|safe }}</label>
                         <div class="controls">
                             {{ form.script(class="span6", rows="10") }}
                             <p class="help-block">{{ form.script.description|safe }}</p>

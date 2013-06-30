@@ -32,22 +32,22 @@ from web.dashboard.models import SshConfig, PreDefinedScript
 class CreateSshDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'')
-    ssh_config = QuerySelectField(u'SSH配置:', id='select', description=u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).',
-                                  query_factory=SshConfig.query.all,  get_label='desc')
+    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+                                description=u'Support IP Address.')
+    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
 
 class CreatePingDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'服务器列表:', id='textarea', description=u'支持域名或IP地址,一行一个.', default=u'')
+    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+                                description=u'Support IP Address.')
     submit = SubmitField(u'Save', id='submit')
 
 
 class CreatePreDefinedExecuteForm(Form):
-
-    server_desc = u'支持域名或IP地址,一行一个.'
 
     script_desc = u'较为常用的预定义脚本.'
 
@@ -58,12 +58,13 @@ class CreatePreDefinedExecuteForm(Form):
     config_desc = u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).'
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'服务器列表:', id='textarea', description=server_desc, default=u'')
+    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+                                description=u'Support IP Address.')
     template_script = QuerySelectField(u'预定义脚本:', id='select', description=script_desc,
                                        query_factory=PreDefinedScript.query.all,  get_label='desc')
-    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc, default=u'')
-    ssh_config = QuerySelectField(u'SSH配置', id='select', description=config_desc, query_factory=SshConfig.query.all,
-                                  get_label='desc')
+    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc)
+    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
 
@@ -82,9 +83,10 @@ class CreateCustomExecuteForm(Form):
     config_desc = u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).'
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'服务器列表:', id='textarea', description=server_desc, default=u'')
-    template_script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=script_desc, default=u'')
-    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc, default=u'')
-    ssh_config = QuerySelectField(u'SSH配置', id='select', description=config_desc, query_factory=SshConfig.query.all,
-                                  get_label='desc')
+    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+                                description=u'Support IP Address.')
+    template_script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=script_desc)
+    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc)
+    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit', description='submit')

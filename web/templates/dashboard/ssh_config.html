@@ -77,7 +77,7 @@
                 <div class="box form-container row-fluid form-horizontal">
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.name.label }}</label>
+                        <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name(class="span6", rows="10") }}
                             <p class="help-block">{{ form.name.description|safe }}</p>
@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.desc.label }}</label>
+                        <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6", rows="10") }}
                             <p class="help-block">{{ form.desc.description|safe }}</p>
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.port.label }}</label>
+                        <label class="control-label">{{ form.port.label|safe }}</label>
                         <div class="controls">
                             {{ form.port() }}
                             <p class="help-block">{{ form.port.description|safe }}</p>
@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.username.label }}</label>
+                        <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
                             {{ form.username(class="span6", rows="10") }}
                             <p class="help-block">{{ form.username.description|safe }}</p>
@@ -109,7 +109,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.password.label }}</label>
+                        <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
                             {{ form.password(class="span6", rows="10") }}
                             <p class="help-block">{{ form.password.description|safe }}</p>
@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.key_filename.label }}</label>
+                        <label class="control-label">{{ form.key_filename.label|safe }}</label>
                         <div class="controls">
                             {{ form.key_filename(class="span6", rows="10") }}
                             <p class="help-block">{{ form.key_filename.description|safe }}</p>
@@ -154,7 +154,7 @@
                 <div class="box form-container row-fluid form-horizontal">
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.name.label }}</label>
+                        <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name(class="span6", rows="10") }}
                             <p class="help-block">{{ form.name.description|safe }}</p>
@@ -162,7 +162,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.desc.label }}</label>
+                        <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6", rows="10") }}
                             <p class="help-block">{{ form.desc.description|safe }}</p>
@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.port.label }}</label>
+                        <label class="control-label">{{ form.port.label|safe }}</label>
                         <div class="controls">
                             {{ form.port() }}
                             <p class="help-block">{{ form.port.description|safe }}</p>
@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.username.label }}</label>
+                        <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
                             {{ form.username(class="span6", rows="10") }}
                             <p class="help-block">{{ form.username.description|safe }}</p>
@@ -186,7 +186,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.password.label }}</label>
+                        <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
                             {{ form.password(class="span6", rows="10") }}
                             <p class="help-block">{{ form.password.description|safe }}</p>
@@ -194,7 +194,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.key_filename.label }}</label>
+                        <label class="control-label">{{ form.key_filename.label|safe }}</label>
                         <div class="controls">
                             {{ form.key_filename(class="span6", rows="10") }}
                             <p class="help-block">{{ form.key_filename.description|safe }}</p>

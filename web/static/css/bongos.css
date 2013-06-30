@@ -46,3 +46,8 @@
     float: none;
     margin-left: 20px;
 }
+
+.required {
+    color: red;
+    font-weight:bold
+}
