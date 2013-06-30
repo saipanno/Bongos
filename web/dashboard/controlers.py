@@ -30,7 +30,7 @@ from flask.ext.login import login_required, current_user
 from web import db
 
 from web.user.models import User
-from web.user.forms import CreateUserForm
+from web.user.forms import CreateUserForm, EditUserForm
 
 from web.dashboard.models import SshConfig, PreDefinedScript
 from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
@@ -180,7 +180,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = CreateUserForm(email=user.email, username=user.username, password=user.password, confirm_password=user.password)
+    form = EditUserForm(email=user.email, username=user.username)
 
     if request.method == 'GET':
 
@@ -193,12 +193,6 @@ def edit_user_ctrl(user_id):
 
         elif not validate_username(form.username.data):
             flash(u'不符合要求的用户名.', 'error')
-
-        elif form.password.data != form.confirm_password.data:
-            flash(u'请输入相同的密码.', 'error')
-
-        elif not validate_password(form.password.data):
-            flash(u'不符合要求的密码.', 'error')
 
         else:
 

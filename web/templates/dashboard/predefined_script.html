@@ -119,20 +119,10 @@
 
                 </div>
 
-                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
-                <div id="commit" class="modal hide fade">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Oops!</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Continue to create this script?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                        {{ form.submit(class="btn btn-danger") }}
-                    </div>
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
                 </div>
+
             </form>
         </div>
 
@@ -182,20 +172,10 @@
 
                 </div>
 
-                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
-                <div id="commit" class="modal hide fade">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Oops!</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Continue to edit this script?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                        {{ form.submit(class="btn btn-danger") }}
-                    </div>
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
                 </div>
+
             </form>
         </div>
 

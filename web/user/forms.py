@@ -42,4 +42,20 @@ class CreateUserForm(Form):
     username = TextField(u'Username:', id='text')
     password = PasswordField(u'Password:', id='password')
     confirm_password = PasswordField(u'Repeat Password:', id='confirm_password')
-    submit = SubmitField(u'Login', id='submit')
+    submit = SubmitField(u'Save', id='submit')
+
+
+class EditUserForm(Form):
+
+    next_page = HiddenField()
+    email = TextField(u'Email:', id='email')
+    username = TextField(u'Username:', id='text')
+    submit = SubmitField(u'Save', id='submit')
+
+
+class ChangePasswordForm(Form):
+
+    next_page = HiddenField()
+    new_password = PasswordField(u'New Password:', id='new_password')
+    confirm_password = PasswordField(u'Repeat New Password:', id='confirm_new_password')
+    submit = SubmitField(u'Save', id='submit')

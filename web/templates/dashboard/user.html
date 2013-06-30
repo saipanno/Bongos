@@ -101,20 +101,10 @@
 
                     </div>
 
-                    <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
-                    <div id="commit" class="modal hide fade">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3>Oops!</h3>
-                        </div>
-                        <div class="modal-body">
-                            <p>Continue to create this user?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                            {{ form.submit(class="btn btn-danger") }}
-                        </div>
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
                     </div>
+
                 </form>
             </div>
         {% elif type == 'edit' %}
@@ -153,38 +143,12 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.password.label }}</label>
-                        <div class="controls">
-                            {{ form.password() }}
-                            <p class="help-block">{{ form.password.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.confirm_password.label }}</label>
-                        <div class="controls">
-                            {{ form.confirm_password() }}
-                            <p class="help-block">{{ form.confirm_password.description|safe }}</p>
-                        </div>
-                    </div>
-
                 </div>
 
-                <a href="#commit" role="button" class="btn btn-success pull-right" data-toggle="modal">{{ type }}</a>
-                <div id="commit" class="modal hide fade">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Oops!</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Continue to edit this user profile?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                        {{ form.submit(class="btn btn-danger") }}
-                    </div>
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
                 </div>
+
             </form>
         </div>
 
