@@ -32,7 +32,7 @@ class CreatePreDefinedScriptForm(Form):
     name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Script Name.')
     desc = TextAreaField(u'Description<span class="required">*</span>', id='text', description=u'Script Description.')
     script = TextAreaField(u'Script<span class="required">*</span>', id='textarea',
-                           description=u'PreDefined Script, Support Templates')
+                           description=u'PreDefined Script, Support External Variables.')
     submit = SubmitField(u'Save', id='submit', description='submit')
 
 

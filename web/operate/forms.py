@@ -49,28 +49,24 @@ class CreatePingDetectForm(Form):
 
 class CreatePreDefinedExecuteForm(Form):
 
-    script_desc = u'较为常用的预定义脚本.'
-
     vars_desc = u'''<p>用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
     用 <code>=</code> 作为单变量的赋值符。 如:</p>
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
-    config_desc = u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).'
-
     next_page = HiddenField()
     server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    template_script = QuerySelectField(u'预定义脚本:', id='select', description=script_desc,
-                                       query_factory=PreDefinedScript.query.all,  get_label='desc')
-    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc)
+    template_script = QuerySelectField(u'PreDefined Script<span class="required">*</span>', id='select',
+                                       description=u'Select PreDefined Script.', query_factory=PreDefinedScript.query.all,
+                                       get_label='desc')
+    template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
+                                  description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
                                   description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
 
 class CreateCustomExecuteForm(Form):
-
-    server_desc = u'支持域名或IP地址,一行一个.'
 
     script_desc = u'''用 <code>{</code> 和 <code>}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
     同时模板依然支持shell中的 <code>$</code> 变量。 如：
@@ -80,13 +76,12 @@ class CreateCustomExecuteForm(Form):
     用 <code>=</code> 作为单变量的赋值符。 如:
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
-    config_desc = u'SSH配置.包含SSH端口,用户名,密码以及密钥(可选).'
-
     next_page = HiddenField()
     server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    template_script = TextAreaField(u'脚本/脚本模板:', id='textarea', description=script_desc)
-    template_vars = TextAreaField(u'自定义变量:', id='textarea', description=vars_desc)
+    template_script = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
+    template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
+                                  description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
                                   description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit', description='submit')
