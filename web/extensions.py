@@ -120,10 +120,8 @@ def format_template_vars(template_vars):
 
 
 def validate_email(email):
-    EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")   # TODO:更新邮箱正则表达式，当前无法正常工作
-
-    # return not email and EMAIL_RE.match(email)
-    return True
+    EMAIL_RE = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
+    return email and EMAIL_RE.match(email)
 
 
 def validate_username(username):
@@ -133,5 +131,5 @@ def validate_username(username):
 
 
 def validate_password(password):
-    PASSWORD_RE = re.compile(r".{6,20}$")
+    PASSWORD_RE = re.compile(r".{8,20}$")
     return password and PASSWORD_RE.match(password)
