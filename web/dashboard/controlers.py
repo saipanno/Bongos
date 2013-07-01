@@ -85,7 +85,7 @@ def create_script_ctrl():
 
         else:
 
-            author = current_user.username
+            author = current_user.name
 
             script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
             db.session.add(script)
