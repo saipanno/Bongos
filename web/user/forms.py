@@ -39,7 +39,7 @@ class CreateUserForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email<span class="required">*</span>', id='email', description=u'Required.')
-    username = TextField(u'Username<span class="required">*</span>', id='text', description=u'Required.')
+    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Required.')
     password = PasswordField(u'Password<span class="required">*</span>', id='password', description=u'Required.')
     confirm_password = PasswordField(u'Repeat Password<span class="required">*</span>', id='confirm_password',
                                      description=u'Required.')
@@ -50,7 +50,7 @@ class EditUserForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email<span class="required">*</span>', id='email', description=u'Required.')
-    username = TextField(u'Username<span class="required">*</span>', id='text', description=u'Required.')
+    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Required.')
     now_password = PasswordField(u'Now Password<span class="required">*</span>', id='now_password',
                                  description=u'Now Password')
     new_password = PasswordField(u'New Password<span class="required">*</span>', id='new_password',

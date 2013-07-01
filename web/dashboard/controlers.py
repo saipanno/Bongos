@@ -67,7 +67,7 @@ def show_script_ctrl(script_id):
 @login_required
 def create_script_ctrl():
 
-    form = CreatePreDefinedScriptForm(name=u'', desc=u'', script=u'')
+    form = CreatePreDefinedScriptForm()
 
     if request.method == 'GET':
 
@@ -155,7 +155,7 @@ def create_user_ctrl():
         if not validate_email(form.email.data):
             flash(u'不符合要求的邮箱地址.', 'error')
 
-        elif not validate_username(form.username.data):
+        elif not validate_username(form.name.data):
             flash(u'不符合要求的用户名.', 'error')
 
         elif form.password.data != form.confirm_password.data:
@@ -165,7 +165,7 @@ def create_user_ctrl():
             flash(u'不符合要求的密码.', 'error')
 
         else:
-            user = User(form.email.data, form.username.data, form.password.data)
+            user = User(form.email.data, form.name.data, form.password.data)
             db.session.add(user)
             db.session.commit()
 
@@ -180,7 +180,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, username=user.username)
+    form = EditUserForm(email=user.email, name=user.name)
 
     if request.method == 'GET':
 
@@ -191,8 +191,27 @@ def edit_user_ctrl(user_id):
         if not validate_email(form.email.data):
             flash(u'不符合要求的邮箱地址.', 'error')
 
-        elif not validate_username(form.username.data):
+        elif not validate_username(form.name.data):
             flash(u'不符合要求的用户名.', 'error')
+
+        elif form.new_password.data != form.confirm_password.data:
+            flash(u'两次密码不一致.', 'error')
+
+        elif len(form.new_password.data) > 0:
+
+            if user.check_password(form.now_password.data):
+
+                if validate_password(form.new_password.data):
+                    user.update_password(form.new_password.data)
+
+                    form.populate_obj(user)
+                    db.session.commit()
+
+                    flash(u'编辑用户成功.', 'success')
+                else:
+                    flash(u'密码不符合要求.', 'error')
+            else:
+                flash(u'当前密码错误.', 'error')
 
         else:
 
@@ -219,7 +238,7 @@ def list_ssh_config_ctrl():
 @login_required
 def create_ssh_config_ctrl():
 
-    form = CreateSshConfigForm(name=u'', desc=u'', port=22, username=u'', password=u'', key_filename=u'')
+    form = CreateSshConfigForm()
 
     if request.method == 'GET':
 

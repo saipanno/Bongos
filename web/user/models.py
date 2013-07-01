@@ -36,20 +36,20 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.UnicodeText, unique=True)
-    username = db.Column(db.UnicodeText)
+    name = db.Column(db.UnicodeText)
     password = db.Column(db.UnicodeText)
 
-    def __init__(self, email, username, password):
+    def __init__(self, email, name, password):
 
         self.email = email
-        self.username = username
+        self.name = name
         self.password = generate_password_hash(password, salt_length=8)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
     def update_password(self, new_password):
-        pass
+        self.password = generate_password_hash(new_password, salt_length=8)
 
     def is_authenticated(self):
         return True

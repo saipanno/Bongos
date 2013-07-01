@@ -37,7 +37,7 @@
                 {% for user in users %}
                     <tr>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.username }}</td>
+                        <td>{{ user.name }}</td>
                         <td>
                             <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
                         </td>
@@ -75,10 +75,10 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">{{ form.username.label|safe }}</label>
+                            <label class="control-label">{{ form.name.label|safe }}</label>
                             <div class="controls">
-                                {{ form.username() }}
-                                <p class="help-block">{{ form.username.description|safe }}</p>
+                                {{ form.name() }}
+                                <p class="help-block">{{ form.name.description|safe }}</p>
                             </div>
 
                         </div>
@@ -130,16 +130,16 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.email.label }}</label>
                         <div class="controls">
-                            {{ form.email() }}
+                            {{ form.email(class="uneditable-input") }}
                             <p class="help-block">{{ form.email.description|safe }}</p>
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.username.label }}</label>
+                        <label class="control-label">{{ form.name.label }}</label>
                         <div class="controls">
-                            {{ form.username() }}
-                            <p class="help-block">{{ form.username.description|safe }}</p>
+                            {{ form.name() }}
+                            <p class="help-block">{{ form.name.description|safe }}</p>
                         </div>
                     </div>
 
