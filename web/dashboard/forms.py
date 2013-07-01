@@ -33,7 +33,7 @@ class CreatePreDefinedScriptForm(Form):
     desc = TextAreaField(u'Description<span class="required">*</span>', id='text', description=u'Script Description.')
     script = TextAreaField(u'Script<span class="required">*</span>', id='textarea',
                            description=u'PreDefined Script, Support External Variables.')
-    submit = SubmitField(u'Save', id='submit', description='submit')
+    submit = SubmitField(u'Save', id='submit')
 
 
 class CreateSshConfigForm(Form):
@@ -45,4 +45,4 @@ class CreateSshConfigForm(Form):
     password = TextField(u'Password<span class="required">*</span>', id='text')
     key_filename = TextField(u'Secret Key<span class="required">*</span>:', id='text',
                              description=u'The Path of Secret Key')
-    submit = SubmitField(u'Save', id='submit', description='submit')
+    submit = SubmitField(u'Save', id='submit')

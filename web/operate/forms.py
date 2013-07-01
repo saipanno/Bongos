@@ -84,4 +84,4 @@ class CreateCustomExecuteForm(Form):
                                   description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
                                   description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
-    submit = SubmitField(u'Save', id='submit', description='submit')
+    submit = SubmitField(u'Save', id='submit')
