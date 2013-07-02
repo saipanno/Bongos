@@ -38,7 +38,7 @@ from application.modules.custom_execute import custom_script_execute
 from application.modules.predefined_execute import predefined_script_execute
 
 
-class Controller(object):
+class Scheduler(object):
 
     def __init__(self):
 
@@ -61,36 +61,32 @@ class Controller(object):
         env.pool_size = self.config.get('POOL_SIZE', 250)
         env.timeout = self.config.get('SSH_TIMEOUT', 30)
         env.command_timeout = self.config.get('SSH_COMMAND_TIMEOUT', 60)
+        env.disable_known_hosts = self.config.get('DISABLE_KNOWN_HOSTS', True)
 
         while True:
 
             operate = OperateDb.query.filter_by(status=u'0').first()
 
-            logger.info(u'Try to check for new tasks.')
-
             if operate is not None:
 
                 if operate.operate_type == u'Ping':
-
+                    logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
                     ping_connectivity_checking(self.config, operate)
 
                 elif operate.operate_type == u'Ssh':
-
+                    logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
                     ssh_connectivity_checking(self.config, operate)
 
                 elif operate.operate_type == u'Custom':
-
+                    logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
                     custom_script_execute(self.config, operate)
 
                 elif operate.operate_type == u'PreDefined':
-
-                    print operate
-
+                    logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
                     predefined_script_execute(self.config, operate)
 
                 else:
-
-                    print 'Error Operate Type.'
+                    logger.error('Error type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
 
             else:
 

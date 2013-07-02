@@ -40,6 +40,7 @@ PING_COUNT = 5            # default is 6
 PING_TIMEOUT = 5          # default is 5
 SSH_TIMEOUT = 30          # default is 30
 SSH_COMMAND_TIMEOUT = 60  # default is 60
+DISABLE_KNOWN_HOSTS = True  # default is True
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')

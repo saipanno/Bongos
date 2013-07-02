@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from application.controller import Controller
+from application.scheduler import Scheduler
 
-app = Controller()
+app = Scheduler()
 app.config_from_object('settings')
