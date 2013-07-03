@@ -261,7 +261,7 @@ def create_ssh_config_ctrl():
         else:
 
             ssh_config = SshConfig(form.name.data, form.desc.data, form.port.data, form.username.data,
-                                   form.password.data, form.key_filename.data)
+                                   form.password.data, form.private_key.data)
             db.session.add(ssh_config)
             db.session.commit()
 
@@ -277,7 +277,7 @@ def edit_ssh_config_ctrl(config_id):
     config = SshConfig.query.filter_by(id=config_id).first()
 
     form = CreateSshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
-                               password=config.password, key_filename=config.key_filename)
+                               password=config.password, private_key=config.private_key)
 
     if request.method == 'GET':
 

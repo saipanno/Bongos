@@ -35,7 +35,7 @@ from web.dashboard.models import SshConfig, PreDefinedScript
 from application.extensions import logger
 
 
-def final_predefined_execute(user, port, password, key_filename, script_template, template_vars):
+def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
     """
     :Return:
 
@@ -65,7 +65,7 @@ def final_predefined_execute(user, port, password, key_filename, script_template
     env.user = user
     env.port = port
     env.password = password
-    env.key_filename = key_filename
+    env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
 
@@ -181,7 +181,7 @@ def predefined_script_execute(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              ssh_config.key_filename,
+                              ssh_config.private_key,
                               script_template,
                               template_vars,
                               hosts=operate.server_list.split())

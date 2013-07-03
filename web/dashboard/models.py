@@ -38,15 +38,15 @@ class SshConfig(db.Model):
     port = db.Column(db.Integer)
     username = db.Column(db.Text)
     password = db.Column(db.Text)
-    key_filename = db.Column(db.Text)
+    private_key = db.Column(db.Text)
 
-    def __init__(self, name, desc, port, username, password, key_filename=None):
+    def __init__(self, name, desc, port, username, password, private_key=None):
         self.name = name
         self.desc = desc
         self.port = port
         self.username = username
         self.password = password
-        self.key_filename = key_filename
+        self.private_key = private_key
 
 
 class PreDefinedScript(db.Model):

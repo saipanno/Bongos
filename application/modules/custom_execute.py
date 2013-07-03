@@ -43,7 +43,7 @@ def create_script_from_template(script_template, template_vars, address):
     return script
 
 
-def final_custom_execute(user, port, password, key_filename, script_template, template_vars):
+def final_custom_execute(user, port, password, private_key, script_template, template_vars):
     """
     :Return:
 
@@ -73,7 +73,7 @@ def final_custom_execute(user, port, password, key_filename, script_template, te
     env.user = user
     env.port = port
     env.password = password
-    env.key_filename = key_filename
+    env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
 
@@ -90,7 +90,7 @@ def final_custom_execute(user, port, password, key_filename, script_template, te
     # SystemExit 无异常说明字符串
     except SystemExit:
         fruit['code'] = 2
-        fruit['msg'] = 'Authentication failed'
+        fruit['msg'] = 'Authentication failed, exit'
 
     # CommandTimeout 无异常说明字符串
     except CommandTimeout:
@@ -180,7 +180,7 @@ def custom_script_execute(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              ssh_config.key_filename,
+                              ssh_config.private_key,
                               operate.script_template,
                               template_vars,
                               hosts=operate.server_list.split())

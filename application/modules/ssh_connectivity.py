@@ -33,7 +33,7 @@ from web.dashboard.models import SshConfig
 from application.extensions import logger
 
 
-def final_ssh_checking(user, port, password, key_filename):
+def final_ssh_checking(user, port, password, private_key):
     """
     :Return:
 
@@ -63,7 +63,7 @@ def final_ssh_checking(user, port, password, key_filename):
     env.user = user
     env.port = port
     env.password = password
-    env.key_filename = key_filename
+    env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
 
@@ -160,7 +160,7 @@ def ssh_connectivity_checking(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              ssh_config.key_filename,
+                              ssh_config.private_key,
                               hosts=operate.server_list.split())
 
         operate.status = 1

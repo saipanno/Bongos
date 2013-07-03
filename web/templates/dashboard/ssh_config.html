@@ -48,7 +48,7 @@
                     <td>{{ ssh_config.port }}</td>
                     <td>{{ ssh_config.username }}</td>
                     <td>{{ ssh_config.password }}</td>
-                    <td>{{ ssh_config.key_filename }}</td>
+                    <td>{{ ssh_config.private_key }}</td>
                     <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}">编辑</a></td>
                 </tr>
             {% endfor %}
@@ -116,10 +116,10 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.key_filename.label|safe }}</label>
+                        <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
-                            {{ form.key_filename(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.key_filename.description|safe }}</p>
+                            {{ form.private_key(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.private_key.description|safe }}</p>
                         </div>
                     </div>
 
@@ -193,10 +193,10 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">{{ form.key_filename.label|safe }}</label>
+                        <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
-                            {{ form.key_filename(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.key_filename.description|safe }}</p>
+                            {{ form.private_key(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.private_key.description|safe }}</p>
                         </div>
                     </div>
 
