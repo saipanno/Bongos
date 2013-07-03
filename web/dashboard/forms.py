@@ -29,10 +29,13 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 
 class CreatePreDefinedScriptForm(Form):
 
+    script_desc = u'''用 <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
+    同时模板依然支持shell中的 <code>$</code> 变量。 如：
+<code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
+
     name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Script Name.')
     desc = TextAreaField(u'Description<span class="required">*</span>', id='text', description=u'Script Description.')
-    script = TextAreaField(u'Script<span class="required">*</span>', id='textarea',
-                           description=u'PreDefined Script, Support External Variables.')
+    script = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
     submit = SubmitField(u'Save', id='submit')
 
 

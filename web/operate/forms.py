@@ -68,9 +68,9 @@ class CreatePreDefinedExecuteForm(Form):
 
 class CreateCustomExecuteForm(Form):
 
-    script_desc = u'''用 <code>{</code> 和 <code>}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
+    script_desc = u'''用 <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
     同时模板依然支持shell中的 <code>$</code> 变量。 如：
-<code>device=eth1; echo "IPADDR={address}"  >> /etc/sysconfig/network-scripts/ifcfg-$device</code>'''
+<code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
     vars_desc = u'''用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
     用 <code>=</code> 作为单变量的赋值符。 如:
