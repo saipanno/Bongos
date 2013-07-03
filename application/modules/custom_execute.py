@@ -34,16 +34,16 @@ from web.dashboard.models import SshConfig
 from application.extensions import logger
 
 
-def create_script_from_template(template_script, template_vars, address):
+def create_script_from_template(script_template, template_vars, address):
 
-    template = Template(template_script)
+    template = Template(script_template)
 
     script = template.render(template_vars[address])
 
     return script
 
 
-def final_custom_execute(user, port, password, key_filename, template_script, template_vars):
+def final_custom_execute(user, port, password, key_filename, script_template, template_vars):
     """
     :Return:
 
@@ -77,7 +77,7 @@ def final_custom_execute(user, port, password, key_filename, template_script, te
 
     fruit = dict(code=100, msg='')
 
-    template = Template(template_script)
+    template = Template(script_template)
     script = template.render(template_vars[env.host])
 
     try:
@@ -181,7 +181,7 @@ def custom_script_execute(operate):
                               ssh_config.port,
                               ssh_config.password,
                               ssh_config.key_filename,
-                              operate.template_script,
+                              operate.script_template,
                               template_vars,
                               hosts=operate.server_list.split())
 

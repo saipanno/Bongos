@@ -35,7 +35,7 @@ from web.dashboard.models import SshConfig, PreDefinedScript
 from application.extensions import logger
 
 
-def final_predefined_execute(user, port, password, key_filename, template_script, template_vars):
+def final_predefined_execute(user, port, password, key_filename, script_template, template_vars):
     """
     :Return:
 
@@ -69,7 +69,7 @@ def final_predefined_execute(user, port, password, key_filename, template_script
 
     fruit = dict(code=100, msg='')
 
-    template = Template(template_script)
+    template = Template(script_template)
     script = template.render(template_vars[env.host])
 
     try:
@@ -157,8 +157,8 @@ def predefined_script_execute(operate):
                      (operate.id, operate.operate_type, operate.status, message))
 
     try:
-        predefined_script_id = operate.template_script
-        template_script = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
+        predefined_script_id = operate.script_template
+        script_template = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
     except Exception, e:
         operate.status = 2
         message = 'Failed to get the script template. %s' % e
@@ -182,7 +182,7 @@ def predefined_script_execute(operate):
                               ssh_config.port,
                               ssh_config.password,
                               ssh_config.key_filename,
-                              template_script,
+                              script_template,
                               template_vars,
                               hosts=operate.server_list.split())
 

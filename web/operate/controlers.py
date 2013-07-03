@@ -58,7 +58,7 @@ def list_operate_ctrl(operate_type):
 def create_ssh_detect_ctrl():
 
     operate_type = u'Ssh'
-    template_script = u'Ssh'
+    script_template = u'Ssh'
     template_vars = u'Ssh'
     status = u'0'
     result = u''
@@ -83,7 +83,7 @@ def create_ssh_detect_ctrl():
             flash(u'没有选择SSH配置', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], script_template,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -97,7 +97,7 @@ def create_ssh_detect_ctrl():
 def create_ping_detect_ctrl():
 
     operate_type = u'Ping'
-    template_script = u'Ping'
+    script_template = u'Ping'
     template_vars = u'Ping'
     ssh_config = 0
     status = u'0'
@@ -119,7 +119,7 @@ def create_ping_detect_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], template_script,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], script_template,
                             template_vars, ssh_config, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -152,7 +152,7 @@ def create_custom_execute_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.template_script == u'':
+        if form.script_template == u'':
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
@@ -166,7 +166,7 @@ def create_custom_execute_ctrl():
             return redirect(url_for('operate.show_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
-        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.script_template.data,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()
@@ -199,7 +199,7 @@ def create_predefined_execute_ctrl():
             flash(server_list_dict['desc'], 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
-        if form.template_script.data.id is None:
+        if form.script_template.data.id is None:
             flash(u'没有选择待执行脚本.', 'error')
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
 
@@ -213,7 +213,7 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
         template_vars = json.dumps(template_vars_dict['desc'], ensure_ascii=False)
 
-        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.template_script.data.id,
+        journal = OperateDb(author, datetime, operate_type, server_list_dict['desc'], form.script_template.data.id,
                             template_vars, form.ssh_config.data.id, status, result)
         db.session.add(journal)
         db.session.commit()

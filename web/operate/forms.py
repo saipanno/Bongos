@@ -56,7 +56,7 @@ class CreatePreDefinedExecuteForm(Form):
     next_page = HiddenField()
     server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    template_script = QuerySelectField(u'PreDefined Script<span class="required">*</span>', id='select',
+    script_template = QuerySelectField(u'PreDefined Script<span class="required">*</span>', id='select',
                                        description=u'Select PreDefined Script.',
                                        query_factory=PreDefinedScript.query.all, get_label='desc')
     template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
@@ -79,7 +79,7 @@ class CreateCustomExecuteForm(Form):
     next_page = HiddenField()
     server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    template_script = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
+    script_template = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
     template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
                                   description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
