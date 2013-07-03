@@ -42,12 +42,11 @@ def final_ping_checking(COUNT, TIMEOUT, operate):
 
          0: SSH SUCCESS(成功)
          1: SSH FAIL(超时, RESET, NO_ROUTE)
-         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误)
+         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+         4: COMMAND FAIL(ERROR OUTPUT FORMAT)
 
-         5: NETWORK ERROR(IP无法解析)
-
-         10: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-         11: COMMAND FAIL(ERROR OUTPUT FORMAT)
+         10: NETWORK ERROR(IP无法解析)
 
          20: OTHER ERROR
 
