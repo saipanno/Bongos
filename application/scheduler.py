@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from time import sleep
+import time
 from werkzeug.utils import import_string
 from fabric.api import env
 
@@ -69,6 +69,9 @@ class Scheduler(object):
 
             if operate is not None:
 
+                logger.info('Started a new operating unit. ID: %s, TYPE: %s, HOSTS: %s' %
+                            (operate.id, operate.operate_type, operate.server_list))
+
                 if operate.operate_type == u'Ping':
                     ping_connectivity_checking(self.config, operate)
 
@@ -84,11 +87,8 @@ class Scheduler(object):
                 else:
                     logger.error('The wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
 
-                logger.info('Started a new operating unit. ID: %s, TYPE: %s, HOSTS: %s' %
-                            (operate.id, operate.operate_type, operate.server_list))
+            #else:
 
-            else:
-
-                sleep(10)
+            #    time.sleep(10)
 
             break

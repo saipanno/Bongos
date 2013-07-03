@@ -25,7 +25,7 @@
 
 
 import json
-from fabric.api import env, hide, local, execute
+from fabric.api import env, hide, show, local, execute
 
 from web import db
 from application.extensions import logger
@@ -88,10 +88,10 @@ def ping_connectivity_checking(config, operate):
     """
 
     # 修改任务状态，标记为操作中。
-    operate.status = 5
-    db.session.commit()
+    #operate.status = 5
+    #db.session.commit()
 
-    with hide('everything'):
+    with show('everything'):
 
         do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
                           operate, hosts=operate.server_list.split())
@@ -106,4 +106,5 @@ def ping_connectivity_checking(config, operate):
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operate.id, operate.operate_type, operate.status, message))
 
-    db.session.commit()
+    print operate.result
+    #db.session.commit()
