@@ -71,7 +71,7 @@ def create_ssh_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = current_user.username
+        author = current_user.name
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -111,7 +111,7 @@ def create_ping_detect_ctrl():
 
     elif request.method == 'POST':
 
-        author = current_user.username
+        author = current_user.name
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -144,7 +144,7 @@ def create_custom_execute_ctrl():
 
     elif request.method == 'POST':
 
-        author = current_user.username
+        author = current_user.name
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
@@ -191,7 +191,7 @@ def create_predefined_execute_ctrl():
 
     elif request.method == 'POST':
 
-        author = current_user.username
+        author = current_user.name
         datetime = time.strftime('%Y-%m-%d %H:%M')
 
         server_list_dict = format_address_list(form.server_list.data)
