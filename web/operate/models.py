@@ -53,7 +53,8 @@ class OperateDb(db.Model):
     status = db.Column(db.UnicodeText, nullable=False)
     result = db.Column(db.UnicodeText, nullable=False)
 
-    def __init__(self, author, datetime, operate_type, server_list, template_script, template_vars, ssh_config, status, result):
+    def __init__(self, author, datetime, operate_type, server_list, template_script, template_vars,
+                 ssh_config, status, result):
 
         self.author = author
         self.datetime = datetime

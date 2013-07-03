@@ -26,7 +26,6 @@
 
 import json
 from fabric.api import env, hide, local, execute
-from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
 from application.extensions import logger
@@ -36,32 +35,50 @@ def final_ping_checking(COUNT, TIMEOUT, operate):
     """
     :Return:
 
-         0: success
-         1: fail
-         2: network error
-         3: command timeout
-         5: other error
+        default return: dict(code=20, msg='')
+
+         0: PING SUCCESS(可联通)
+         1: PING FAIL(超时)
+
+         0: SSH SUCCESS(成功)
+         1: SSH FAIL(超时, RESET, NO_ROUTE)
+         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误)
+
+         5: NETWORK ERROR(IP无法解析)
+
+         10: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+         11: COMMAND FAIL(ERROR OUTPUT FORMAT)
+
+         20: OTHER ERROR
+
     """
 
-    command = 'ping -c%s -W%s %s >> /dev/null 2>&1' % (COUNT, TIMEOUT, env.host)
+    connectivity = dict(code=20, msg='')
+    command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
 
     try:
-        result = local(command, capture=True)
-        connectivity = result.return_code
-    except NetworkError:
-        connectivity = 2
-    except CommandTimeout:
-        connectivity = 3
+        output = local(command, capture=True)
+        if output.return_code == 0:
+            connectivity['code'] = 0
+        elif output.return_code == 1:
+            connectivity['code'] = 1
+        elif output.return_code == 2 and 'unknown host' in output.stderr:
+            connectivity['code'] = 5
+
+        if output.return_code != 0:
+            connectivity['msg'] = output.stderr
+
     except Exception, e:
-        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
-        connectivity = 5
+        connectivity['msg'] = '%s' % e
+
+    if connectivity['code'] > 1:
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operate.id, operate.operate_type, connectivity['code'], connectivity['msg']))
 
     return connectivity
 
 
 def ping_connectivity_checking(config, operate):
-
-    logger.info('TYPE:%s, ID:%s, HOSTS: %s' % (operate.operate_type, operate.id, operate.server_list))
 
     # 修改任务状态，标记为操作中。
     operate.status = 5
@@ -69,15 +86,17 @@ def ping_connectivity_checking(config, operate):
 
     with hide('everything'):
 
-        do = execute(final_ping_checking,
-                     config.get('PING_COUNT', 5),
-                     config.get('PING_TIMEOUT', 5),
-                     operate,
-                     hosts=operate.server_list.split())
+        do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
+                          operate, hosts=operate.server_list.split())
 
     operate.status = 1
-    operate.result = json.dumps(do, ensure_ascii=False)
+
+    try:
+        operate.result = json.dumps(do_exec, ensure_ascii=False)
+    except Exception, e:
+        operate.result = 'internal error: %s' % e
 
     db.session.commit()
 
-    logger.info('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, 'Operate Finished.'))
+    logger.info(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                (operate.id, operate.operate_type, '1', 'Operate Finished.'))

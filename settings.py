@@ -36,10 +36,10 @@ SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x0
 
 # fabric config
 POOL_SIZE = 250           # default is 250
-PING_COUNT = 5            # default is 6
+PING_COUNT = 4            # default is 4
 PING_TIMEOUT = 5          # default is 5
 SSH_TIMEOUT = 30          # default is 30
-SSH_COMMAND_TIMEOUT = 60  # default is 60
+SSH_COMMAND_TIMEOUT = 120  # default is 60
 DISABLE_KNOWN_HOSTS = True  # default is True
 
 # database config
