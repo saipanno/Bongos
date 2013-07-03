@@ -31,7 +31,7 @@ from web import db
 from application.extensions import logger
 
 
-def final_ping_checking(COUNT, TIMEOUT, operate):
+def final_ping_checking(COUNT, TIMEOUT):
     """
     :Return:
 
@@ -52,28 +52,29 @@ def final_ping_checking(COUNT, TIMEOUT, operate):
 
     """
 
-    connectivity = dict(code=20, msg='')
+    fruit = dict(code=20, msg='')
+
     command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
 
     try:
         output = local(command, capture=True)
         if output.return_code == 0:
-            connectivity['code'] = 0
+            fruit['code'] = 0
         elif output.return_code == 1:
-            connectivity['code'] = 1
+            fruit['code'] = 1
         elif output.return_code == 2 and 'unknown host' in output.stderr:
-            connectivity['code'] = 10
-            connectivity['msg'] = 'Network address error'
+            fruit['code'] = 10
+            fruit['msg'] = 'Network address error'
 
     except Exception, e:
-        connectivity['code'] = 20
-        connectivity['msg'] = '%s' % e
+        fruit['code'] = 20
+        fruit['msg'] = '%s' % e
 
         logger.warning(u'UNKNOWN FAILS. MESSAGE: Ping %s fails, except status is %s, except message is %s' %
-                       (env.host, connectivity['code'], connectivity['msg']))
+                       (env.host, fruit['code'], fruit['msg']))
 
     finally:
-        return connectivity
+        return fruit
 
 
 def ping_connectivity_checking(config, operate):
@@ -94,7 +95,7 @@ def ping_connectivity_checking(config, operate):
     with show('everything'):
 
         do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
-                          operate, hosts=operate.server_list.split())
+                          hosts=operate.server_list.split())
 
     operate.status = 1
 

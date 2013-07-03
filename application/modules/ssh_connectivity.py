@@ -29,12 +29,11 @@ from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
+from web.dashboard.models import SshConfig
 from application.extensions import logger
 
-from web.dashboard.models import SshConfig
 
-
-def final_ssh_checking(user, port, password, key_filename, operate):
+def final_ssh_checking(user, port, password, key_filename):
     """
     :Return:
 
@@ -66,66 +65,66 @@ def final_ssh_checking(user, port, password, key_filename, operate):
     env.password = password
     env.key_filename = key_filename
 
-    connectivity = dict(code=100, msg='')
+    fruit = dict(code=100, msg='')
 
     try:
         output = run('uptime', shell=True, quiet=True)
         if output.return_code == 0:
-            connectivity['code'] = 0
+            fruit['code'] = 0
         else:
-            connectivity['code'] = 20
+            fruit['code'] = 20
 
     # SystemExit 无异常说明字符串
     except SystemExit:
-        connectivity['code'] = 2
-        connectivity['msg'] = 'Authentication failed'
+        fruit['code'] = 2
+        fruit['msg'] = 'Authentication failed'
 
     # CommandTimeout 无异常说明字符串
     except CommandTimeout:
-        connectivity['code'] = 3
-        connectivity['msg'] = 'Script execute timeout'
+        fruit['code'] = 3
+        fruit['msg'] = 'Script execute timeout'
 
     except NetworkError, e:
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            connectivity['code'] = 1
-            connectivity['msg'] = 'Connect timeout'
+            fruit['code'] = 1
+            fruit['msg'] = 'Connect timeout'
 
         elif 'Name lookup failed for' in e.__str__():
-            connectivity['code'] = 10
-            connectivity['msg'] = 'Network address error'
+            fruit['code'] = 10
+            fruit['msg'] = 'Network address error'
 
         elif 'Authentication failed' in e.__str__():
-            connectivity['code'] = 2
-            connectivity['msg'] = 'Authentication failed'
+            fruit['code'] = 2
+            fruit['msg'] = 'Authentication failed'
 
         # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
         elif 'Private key file is encrypted' in e.__str__():
-            connectivity['code'] = 2
-            connectivity['msg'] = 'Private key file is encrypted'
+            fruit['code'] = 2
+            fruit['msg'] = 'Private key file is encrypted'
 
         elif 'not match pre-existing key' in e.__str__():
-            connectivity['code'] = 2
-            connectivity['msg'] = 'Host key verification failed'
+            fruit['code'] = 2
+            fruit['msg'] = 'Host key verification failed'
 
         else:
-            connectivity['code'] = 20
-            connectivity['msg'] = '%s' % e
+            fruit['code'] = 20
+            fruit['msg'] = '%s' % e
             logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, connectivity['code'], connectivity['msg']))
+                           (env.host, fruit['code'], fruit['msg']))
 
     except Exception, e:
         if 'No such file or directory' in e:
-            connectivity['code'] = 2
-            connectivity['msg'] = 'Can\'t find private key'
+            fruit['code'] = 2
+            fruit['msg'] = 'Can\'t find private key'
         else:
-            connectivity['code'] = 20
-            connectivity['msg'] = '%s' % e
+            fruit['code'] = 20
+            fruit['msg'] = '%s' % e
 
             logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, connectivity['code'], connectivity['msg']))
+                           (env.host, fruit['code'], fruit['msg']))
 
     finally:
-        return connectivity
+        return fruit
 
 
 def ssh_connectivity_checking(operate):
@@ -153,7 +152,7 @@ def ssh_connectivity_checking(operate):
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operate.id, operate.operate_type, operate.status, message))
 
-    else:
+    if operate.status != 2:
 
         with show('everything'):
 
@@ -162,7 +161,6 @@ def ssh_connectivity_checking(operate):
                               ssh_config.port,
                               ssh_config.password,
                               ssh_config.key_filename,
-                              operate,
                               hosts=operate.server_list.split())
 
         operate.status = 1

@@ -79,10 +79,10 @@ class Scheduler(object):
                     ssh_connectivity_checking(operate)
 
                 elif operate.operate_type == u'Custom':
-                    custom_script_execute(self.config, operate)
+                    custom_script_execute(operate)
 
                 elif operate.operate_type == u'PreDefined':
-                    predefined_script_execute(self.config, operate)
+                    predefined_script_execute(operate)
 
                 else:
                     logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))

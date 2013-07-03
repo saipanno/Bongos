@@ -24,38 +24,42 @@
 # SOFTWARE.
 
 
-import re
 import json
-from fabric.api import env, run, hide, execute
-from fabric.exceptions import NetworkError
+from jinja2 import Template
+from fabric.api import env, run, hide, show, execute
+from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
 
 from web.dashboard.models import SshConfig, PreDefinedScript
-
-
-def create_script_from_template(template_script, template_vars, address):
-
-    if len(template_vars) > 0:
-
-        try:
-            for key, value in template_vars[address].items():
-                template_script = re.sub('{%s}' % key, value, template_script)
-        except Exception, e:
-            template_script = None
-
-    return template_script
+from application.extensions import logger
 
 
 def final_predefined_execute(user, port, password, key_filename, template_script, template_vars):
     """
     :Return:
 
-         0: success
-         1: fail
-         2: auth error
-         3: network error
-         5: other error
+        default return: dict(code=20, msg='')
+
+        0: PING SUCCESS(可联通)
+        1: PING FAIL(超时)
+
+        0: SSH SUCCESS(成功)
+        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+
+        10: NETWORK ERROR(IP无法解析)
+
+        20: OTHER ERROR
+        100: DEFAULT
+
+        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
+        CommandTimeout = ["socket.timeout"]
+
+        SSH密码认证是先key_file，后password.
+
     """
 
     env.user = user
@@ -63,70 +67,133 @@ def final_predefined_execute(user, port, password, key_filename, template_script
     env.password = password
     env.key_filename = key_filename
 
-    script = create_script_from_template(template_script, template_vars, env.host)
+    fruit = dict(code=100, msg='')
 
-    if script is not None:
+    template = Template(template_script)
+    script = template.render(template_vars[env.host])
 
-        try:
-            output = run(script, shell=True, quiet=True)
-            connectivity = output.return_code
-        except SystemExit:
-            connectivity = 2
-        except NetworkError:
-            connectivity = 3
-        except Exception, e:
-            connectivity = 5
+    try:
+        output = run(script, shell=True, quiet=True)
+        if output.return_code == 0:
+            fruit['code'] = 0
+        else:
+            fruit['code'] = 20
 
-    else:
+    # SystemExit 无异常说明字符串
+    except SystemExit:
+        fruit['code'] = 2
+        fruit['msg'] = 'Authentication failed'
 
-        connectivity = 6
+    # CommandTimeout 无异常说明字符串
+    except CommandTimeout:
+        fruit['code'] = 3
+        fruit['msg'] = 'Script execute timeout'
 
-    return connectivity
+    except NetworkError, e:
+        if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
+            fruit['code'] = 1
+            fruit['msg'] = 'Connect timeout'
+
+        elif 'Name lookup failed for' in e.__str__():
+            fruit['code'] = 10
+            fruit['msg'] = 'Network address error'
+
+        elif 'Authentication failed' in e.__str__():
+            fruit['code'] = 2
+            fruit['msg'] = 'Authentication failed'
+
+        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
+        elif 'Private key file is encrypted' in e.__str__():
+            fruit['code'] = 2
+            fruit['msg'] = 'Private key file is encrypted'
+
+        elif 'not match pre-existing key' in e.__str__():
+            fruit['code'] = 2
+            fruit['msg'] = 'Host key verification failed'
+
+        else:
+            fruit['code'] = 20
+            fruit['msg'] = '%s' % e
+            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (env.host, fruit['code'], fruit['msg']))
+
+    except Exception, e:
+        if 'No such file or directory' in e:
+            fruit['code'] = 2
+            fruit['msg'] = 'Can\'t find private key'
+        else:
+            fruit['code'] = 20
+            fruit['msg'] = '%s' % e
+
+            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (env.host, fruit['code'], fruit['msg']))
+
+    finally:
+        return fruit
 
 
-def predefined_script_execute(config, task):
+def predefined_script_execute(operate):
+    """
+    :Return:
+
+        0: 队列中
+        1: 已完成
+        2: 内部错误
+        5: 执行中
+
+    """
 
     # 修改任务状态，标记为操作中。
-    task.status = 5
-    db.session.commit()
+    #operate.status = 5
+    #db.session.commit()
 
     try:
-        ssh_config_id = task.ssh_config
+        ssh_config_id = operate.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
     except Exception, e:
-        task.status = 2
-        task.result = u'%s' % e
-        ssh_config = None
+        operate.status = 2
+        message = 'Failed to get the ssh configuration. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operate.id, operate.operate_type, operate.status, message))
 
     try:
-        predefined_script_id = task.template_script
+        predefined_script_id = operate.template_script
         template_script = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
     except Exception, e:
-        task.status = 2
-        task.result = u'%s' % e
-        template_script = None
+        operate.status = 2
+        message = 'Failed to get the script template. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operate.id, operate.operate_type, operate.status, message))
 
     try:
-        template_vars = json.loads(task.template_vars)
+        template_vars = json.loads(operate.template_vars)
     except Exception, e:
-        task.status = 2
-        task.result = u'%s' % e
-        template_vars = None
+        operate.status = 2
+        message = 'Failed to load template vars. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operate.id, operate.operate_type, operate.status, message))
 
-    if ssh_config is not None and template_script is not None and template_vars is not None:
+    if operate.status != 2:
 
-        with hide('everything'):
+        with show('everything'):
 
-            do = execute(final_predefined_execute,
-                         ssh_config.username,
-                         ssh_config.port,
-                         ssh_config.password,
-                         ssh_config.key_filename,
-                         template_script,
-                         template_vars,
-                         hosts=task.server_list.split())
+            do_exec = execute(final_predefined_execute,
+                              ssh_config.username,
+                              ssh_config.port,
+                              ssh_config.password,
+                              ssh_config.key_filename,
+                              template_script,
+                              template_vars,
+                              hosts=operate.server_list.split())
 
-        task.status = 1
-        task.result = json.dumps(do, ensure_ascii=False)
+        operate.status = 1
+        try:
+            operate.result = json.dumps(do_exec, ensure_ascii=False)
+        except Exception, e:
+            operate.status = 2
+            message = 'Integrate data error. %s' % e
+            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                         (operate.id, operate.operate_type, operate.status, message))
 
-    db.session.commit()
+    print operate.result
+    #db.session.commit()
