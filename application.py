@@ -29,5 +29,5 @@ from application.extensions import logger
 
 if __name__ == '__main__':
 
-    logger.info(u'Start Background Services.')
+    logger.info(u'Start bongos background services.')
     app.run()

@@ -111,8 +111,8 @@ def final_ssh_checking(user, port, password, key_filename, operate):
         else:
             connectivity['code'] = 20
             connectivity['msg'] = '%s' % e
-            logger.warning(u'ID:%s, TYPE:%s, MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (operate.id, operate.operate_type, env.host, connectivity['code'], connectivity['msg']))
+            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (env.host, connectivity['code'], connectivity['msg']))
 
     except Exception, e:
         if 'No such file or directory' in e:
@@ -122,17 +122,16 @@ def final_ssh_checking(user, port, password, key_filename, operate):
             connectivity['code'] = 20
             connectivity['msg'] = '%s' % e
 
-            logger.warning(u'ID:%s, TYPE:%s, MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (operate.id, operate.operate_type, env.host, connectivity['code'], connectivity['msg']))
+            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (env.host, connectivity['code'], connectivity['msg']))
 
-    return connectivity
+    finally:
+        return connectivity
 
 
 def ssh_connectivity_checking(operate):
     """
     :Return:
-
-        default return: dict(code=20, msg='')
 
         0: 队列中
         1: 已完成
@@ -141,8 +140,6 @@ def ssh_connectivity_checking(operate):
 
     """
 
-    logger.info('TYPE:%s, ID:%s, HOSTS: %s' % (operate.operate_type, operate.id, operate.server_list))
-
     # 修改任务状态，标记为操作中。
     operate.status = 5
     db.session.commit()
@@ -150,21 +147,15 @@ def ssh_connectivity_checking(operate):
     try:
         ssh_config_id = operate.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
-    except SQLAlchemyError, e:
-        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
-        operate.status = 2
-        operate.result = 'internal database error'
-        logger.warning(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                       (operate.id, operate.operate_type, operate.status, '%s' % e))
 
     except Exception, e:
-        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
         operate.status = 2
-        operate.result = 'error ssh configuration'
-        logger.warning(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                       (operate.id, operate.operate_type, operate.status, '%s' % e))
+        message = 'Failed to get the ssh configuration. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operate.id, operate.operate_type, operate.status, message))
 
-    if operate.status == 5:
+    else:
+
         with show('everything'):
 
             do_exec = execute(final_ssh_checking,
@@ -176,7 +167,14 @@ def ssh_connectivity_checking(operate):
                               hosts=operate.server_list.split())
 
         operate.status = 1
-        operate.result = json.dumps(do_exec, ensure_ascii=False)
+
+        try:
+            operate.result = json.dumps(do_exec, ensure_ascii=False)
+        except Exception, e:
+            operate.status = 2
+            message = 'Integrate data error. %s' % e
+            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                         (operate.id, operate.operate_type, operate.status, message))
 
     print operate.result
     db.session.commit()
