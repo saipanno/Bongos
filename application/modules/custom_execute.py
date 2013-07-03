@@ -34,15 +34,6 @@ from web.dashboard.models import SshConfig
 from application.extensions import logger
 
 
-def create_script_from_template(script_template, template_vars, address):
-
-    template = Template(script_template)
-
-    script = template.render(template_vars[address])
-
-    return script
-
-
 def final_custom_execute(user, port, password, private_key, script_template, template_vars):
     """
     :Return:
