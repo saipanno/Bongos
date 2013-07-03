@@ -91,3 +91,5 @@ class Scheduler(object):
             else:
 
                 sleep(10)
+
+            break

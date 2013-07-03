@@ -25,7 +25,7 @@
 
 
 import json
-from fabric.api import env, run, hide, execute
+from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -39,12 +39,27 @@ def final_ssh_checking(user, port, password, key_filename, operate):
     """
     :Return:
 
-         0: success
-         1: fail
-         2: auth error
-         3: network error
-         4: command timeout
-         5: other error
+        default return: dict(code=20, msg='')
+
+        0: PING SUCCESS(可联通)
+        1: PING FAIL(超时)
+
+        0: SSH SUCCESS(成功)
+        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+
+        10: NETWORK ERROR(IP无法解析)
+
+        20: OTHER ERROR
+        100: DEFAULT
+
+        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
+        CommandTimeout = ["socket.timeout"]
+
+        SSH密码认证是先key_file，后password.
+
     """
 
     env.user = user
@@ -52,18 +67,58 @@ def final_ssh_checking(user, port, password, key_filename, operate):
     env.password = password
     env.key_filename = key_filename
 
+    connectivity = dict(code=100, msg='')
+
     try:
-        output = run('ls', shell=True, quiet=True)
-        connectivity = output.return_code
+        output = run('uptime', shell=True, quiet=True)
+        if output.return_code == 0:
+            connectivity['code'] = 0
+        else:
+            connectivity = dict(code=101, msg='')
+
+    # SystemExit 无异常说明字符串
     except SystemExit:
-        connectivity = 2
-    except NetworkError:
-        connectivity = 3
+        connectivity = dict(code=2, msg='Authentication failed')
+
+    except NetworkError, e:
+        if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
+            connectivity = dict(code=1, msg='Connect timeout')
+
+        elif 'Name lookup failed for' in e.__str__():
+            connectivity['code'] = 10
+            connectivity['msg'] = 'Network address error. %s' % e
+
+        elif 'Authentication failed' in e.__str__():
+            connectivity = dict(code=2, msg='Authentication failed')
+
+        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
+        elif 'Private key file is encrypted' in e.__str__():
+            connectivity = dict(code=2, msg='Private key file is encrypted')
+
+        elif 'not match pre-existing key' in e.__str__():
+            connectivity['code'] = 2
+            connectivity['msg'] = 'Host key verification failed'
+
+        else:
+            connectivity['code'] = 2
+            connectivity['msg'] = '%s' % e
+            logger.warning(u'ID:%s, TYPE:%s, MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (operate.id, operate.operate_type, env.host, connectivity['code'], connectivity['msg']))
+
+    # CommandTimeout 无异常说明字符串
     except CommandTimeout:
-        connectivity = 4
+        connectivity = dict(code=3, msg='Script execute timeout')
+
     except Exception, e:
-        logger.error('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, e))
-        connectivity = 5
+        if 'No such file or directory' in e:
+            connectivity['code'] = 2
+            connectivity['msg'] = 'Can\'t find private key.'
+        else:
+            connectivity['code'] = 20
+            connectivity['msg'] = '%s' % e
+
+            logger.warning(u'ID:%s, TYPE:%s, MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+                           (operate.id, operate.operate_type, env.host, connectivity['code'], connectivity['msg']))
 
     return connectivity
 
@@ -73,8 +128,8 @@ def ssh_connectivity_checking(config, operate):
     logger.info('TYPE:%s, ID:%s, HOSTS: %s' % (operate.operate_type, operate.id, operate.server_list))
 
     # 修改任务状态，标记为操作中。
-    operate.status = 5
-    db.session.commit()
+    #operate.status = 5
+    #db.session.commit()
 
     try:
         ssh_config_id = operate.ssh_config
@@ -90,7 +145,7 @@ def ssh_connectivity_checking(config, operate):
         operate.result = 'error ssh configuration'
         ssh_config = None
 
-    with hide('everything'):
+    with show('everything'):
 
         do = execute(final_ssh_checking,
                      ssh_config.username,
@@ -100,9 +155,12 @@ def ssh_connectivity_checking(config, operate):
                      operate,
                      hosts=operate.server_list.split())
 
-    operate.status = 1
+    #operate.status = 1
     operate.result = json.dumps(do, ensure_ascii=False)
+
+    print operate.result
 
     db.session.commit()
 
-    logger.info('TYPE:%s, ID:%s, MESSAGE: %s' % (operate.operate_type, operate.id, 'Operate Finished.'))
+    logger.info(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                (operate.id, operate.operate_type, '1', 'Operate Finished.'))
