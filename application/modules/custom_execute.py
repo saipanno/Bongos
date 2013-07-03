@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-import re
 import json
+from jinja2 import Template
 from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError
 
@@ -36,15 +36,11 @@ from web.dashboard.models import SshConfig
 
 def create_script_from_template(template_script, template_vars, address):
 
-    if len(template_vars) > 0:
+    template = Template(template_script)
 
-        try:
-            for key, value in template_vars[address].items():
-                template_script = re.sub('{%s}' % key, value, template_script)
-        except Exception, e:
-            template_script = None
+    script = template.render(template_vars[address])
 
-    return template_script
+    return script
 
 
 def final_custom_execute(user, port, password, key_filename, template_script, template_vars):

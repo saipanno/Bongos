@@ -85,7 +85,7 @@ class Scheduler(object):
                     predefined_script_execute(self.config, operate)
 
                 else:
-                    logger.error('The wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
+                    logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
 
             #else:
 
