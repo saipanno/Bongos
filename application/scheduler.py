@@ -75,7 +75,7 @@ class Scheduler(object):
 
                 elif operate.operate_type == u'Ssh':
                     logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
-                    ssh_connectivity_checking(self.config, operate)
+                    ssh_connectivity_checking(operate)
 
                 elif operate.operate_type == u'Custom':
                     logger.info('Start a new operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))

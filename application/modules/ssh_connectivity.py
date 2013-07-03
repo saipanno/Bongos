@@ -128,7 +128,7 @@ def final_ssh_checking(user, port, password, key_filename, operate):
     return connectivity
 
 
-def ssh_connectivity_checking(config, operate):
+def ssh_connectivity_checking(operate):
     """
     :Return:
 
