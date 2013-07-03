@@ -63,7 +63,7 @@ def final_ping_checking(COUNT, TIMEOUT, operate):
         elif output.return_code == 1:
             connectivity['code'] = 1
         elif output.return_code == 2 and 'unknown host' in output.stderr:
-            connectivity['code'] = 5
+            connectivity['code'] = 10
 
         if output.return_code != 0:
             connectivity['msg'] = output.stderr
