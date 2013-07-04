@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, PasswordField
 
 
 class CreatePreDefinedScriptForm(Form):
@@ -45,7 +45,7 @@ class CreateSshConfigForm(Form):
     desc = TextField(u'Description<span class="required">*</span>', id='text', description=u'Config Description')
     port = IntegerField(u'Port<span class="required">*</span>', id='port', description=u'Ssh Server Port.', default=22)
     username = TextField(u'Username<span class="required">*</span>', id='text')
-    password = TextField(u'Password<span class="required">*</span>', id='text')
+    password = PasswordField(u'Password<span class="required">*</span>', id='text')
     private_key = TextField(u'Private Key<span class="required">*</span>:', id='text',
-                            description=u'Path of private key file')
+                            description=u'Private key filename')
     submit = SubmitField(u'Save', id='submit')
