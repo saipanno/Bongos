@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import os
 import logging
 
 import settings
@@ -35,3 +36,11 @@ logging.basicConfig(filename=settings.APP_LOG_FILENAME,
                     format='%(asctime)s - %(levelname)s: %(message)s')
 
 logger = logging.getLogger('bongos.app')
+
+
+def get_private_key_path(filename):
+
+    if filename is not u'':
+        return os.path.join(settings.PRIVATE_KEY_PATH, filename)
+    else:
+        return None

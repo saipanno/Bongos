@@ -30,7 +30,7 @@ from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
 from web.dashboard.models import SshConfig
-from application.extensions import logger
+from application.extensions import logger, get_private_key_path
 
 
 def final_ssh_checking(user, port, password, private_key):
@@ -63,7 +63,7 @@ def final_ssh_checking(user, port, password, private_key):
     env.user = user
     env.port = port
     env.password = password
-    if private_key is not u'':
+    if private_key is not None:
         env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
@@ -161,7 +161,7 @@ def ssh_connectivity_checking(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              ssh_config.private_key,
+                              get_private_key_path(ssh_config.private_key),
                               hosts=operate.server_list.split())
 
         operate.status = 1

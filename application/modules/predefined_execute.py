@@ -32,7 +32,7 @@ from fabric.exceptions import NetworkError, CommandTimeout
 from web import db
 
 from web.dashboard.models import SshConfig, PreDefinedScript
-from application.extensions import logger
+from application.extensions import logger, get_private_key_path
 
 
 def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
@@ -65,13 +65,13 @@ def final_predefined_execute(user, port, password, private_key, script_template,
     env.user = user
     env.port = port
     env.password = password
-    if private_key is not u'':
+    if private_key is not None:
         env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
 
     template = Template(script_template)
-    script = template.render(template_vars[env.host])
+    script = template.render(template_vars.get(env.host, dict()))
 
     try:
         output = run(script, shell=True, quiet=True)
@@ -184,7 +184,7 @@ def predefined_script_execute(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              ssh_config.private_key,
+                              get_private_key_path(ssh_config.private_key),
                               script_template,
                               template_vars,
                               hosts=operate.server_list.split())
