@@ -35,24 +35,25 @@ def final_ping_checking(COUNT, TIMEOUT):
     """
     :Return:
 
-        default return: dict(code=20, msg='')
+        default return: dict(code=100, msg='')
 
-         0: PING SUCCESS(可联通)
-         1: PING FAIL(超时)
+        0: PING SUCCESS(可联通)
+        1: PING FAIL(超时)
 
-         0: SSH SUCCESS(成功)
-         1: SSH FAIL(超时, RESET, NO_ROUTE)
-         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
-         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-         4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+        0: SSH SUCCESS(成功)
+        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
 
-         10: NETWORK ERROR(IP无法解析)
+        10: NETWORK ERROR(IP无法解析)
 
-         20: OTHER ERROR
+        20: OTHER ERROR
+        100: DEFAULT
 
     """
 
-    fruit = dict(code=20, msg='')
+    fruit = dict(code=100, msg='')
 
     command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
 
@@ -89,10 +90,10 @@ def ping_connectivity_checking(config, operate):
     """
 
     # 修改任务状态，标记为操作中。
-    #operate.status = 5
-    #db.session.commit()
+    operate.status = 5
+    db.session.commit()
 
-    with show('everything'):
+    with hide('everything'):
 
         do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
                           hosts=operate.server_list.split())
@@ -107,5 +108,4 @@ def ping_connectivity_checking(config, operate):
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operate.id, operate.operate_type, operate.status, message))
 
-    print operate.result
-    #db.session.commit()
+    db.session.commit()

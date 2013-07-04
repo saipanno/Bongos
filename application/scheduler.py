@@ -87,8 +87,8 @@ class Scheduler(object):
                 else:
                     logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
 
-            #else:
+            else:
 
-            #    time.sleep(10)
+                time.sleep(10)
 
-            break
+            #break

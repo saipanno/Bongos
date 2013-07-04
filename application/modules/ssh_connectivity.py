@@ -37,7 +37,7 @@ def final_ssh_checking(user, port, password, private_key):
     """
     :Return:
 
-        default return: dict(code=20, msg='')
+        default return: dict(code=100, msg='')
 
         0: PING SUCCESS(可联通)
         1: PING FAIL(超时)
@@ -56,14 +56,15 @@ def final_ssh_checking(user, port, password, private_key):
         NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
         CommandTimeout = ["socket.timeout"]
 
-        SSH密码认证是先key_file，后password.
+        SSH认证是先看private_key，后看password.
 
     """
 
     env.user = user
     env.port = port
     env.password = password
-    env.key_filename = private_key
+    if private_key is not u'':
+        env.key_filename = private_key
 
     fruit = dict(code=100, msg='')
 
@@ -139,8 +140,8 @@ def ssh_connectivity_checking(operate):
     """
 
     # 修改任务状态，标记为操作中。
-    #operate.status = 5
-    #db.session.commit()
+    operate.status = 5
+    db.session.commit()
 
     try:
         ssh_config_id = operate.ssh_config
@@ -154,7 +155,7 @@ def ssh_connectivity_checking(operate):
 
     if operate.status != 2:
 
-        with show('everything'):
+        with hide('everything'):
 
             do_exec = execute(final_ssh_checking,
                               ssh_config.username,
@@ -173,7 +174,4 @@ def ssh_connectivity_checking(operate):
             logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                          (operate.id, operate.operate_type, operate.status, message))
 
-    print operate.result
-    #db.session.commit()
-
-
+    db.session.commit()
