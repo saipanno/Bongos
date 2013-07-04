@@ -32,6 +32,7 @@ DEBUG = True
 PORT = 80
 HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
+PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
 SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
 
 # fabric config
