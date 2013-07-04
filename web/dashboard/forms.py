@@ -46,6 +46,6 @@ class CreateSshConfigForm(Form):
     port = IntegerField(u'Port<span class="required">*</span>', id='port', description=u'Ssh Server Port.', default=22)
     username = TextField(u'Username<span class="required">*</span>', id='text')
     password = TextField(u'Password<span class="required">*</span>', id='text')
-    private_key = TextField(u'Secret Key<span class="required">*</span>:', id='text',
-                            description=u'The path of private key')
+    private_key = TextField(u'Private Key<span class="required">*</span>:', id='text',
+                            description=u'Path of private key file')
     submit = SubmitField(u'Save', id='submit')
