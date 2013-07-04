@@ -122,9 +122,11 @@ def format_template_vars(template_vars):
 def validate_email(email):
     EMAIL_RE = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
 
-    user = User.query.filter_by(email=email)
+    user = User.query.filter_by(email=email).all()
 
-    return email and not user and EMAIL_RE.match(email)
+    if user is not None:
+        return False
+    return email and EMAIL_RE.match(email)
 
 
 def validate_username(username):
