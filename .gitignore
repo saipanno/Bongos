@@ -2,6 +2,7 @@ env
 
 *.log
 *.pyc
+*.key
 
 .idea
 .DS_Store
