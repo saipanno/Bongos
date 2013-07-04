@@ -62,6 +62,7 @@
             <thead>
             <tr>
                 <th>IP地址</th>
+                <th>返回值</th>
                 <th>结果</th>
             </tr>
             </thead>
@@ -69,7 +70,8 @@
             {%- for key, value in operate_result.items() %}
             <tr>
                 <td class="span2">{{ key }}</td>
-                <td>{{ value }}</td>
+                <td>{{ value['code'] }}</td>
+                <td>{{ value['msg'] }}</td>
             </tr>
             {% endfor %}
             </tbody>
