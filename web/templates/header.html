@@ -37,6 +37,7 @@
         <script src="{{ url_for('static', filename='js/bongos.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
         <script src="{{ url_for('static', filename='js/google-prettify.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
 
         <script>
             !function ($) {
@@ -44,6 +45,18 @@
                     window.prettyPrint && prettyPrint()
                 })
             }(window.jQuery)
+        </script>
+
+        <script type="text/javascript" charset="utf-8">
+            $.extend( $.fn.dataTableExt.oStdClasses, {
+                "sSortAsc": "header headerSortDown",
+                "sSortDesc": "header headerSortUp",
+                "sSortable": "header"
+            } );
+            /* Table initialisation */
+            $(document).ready(function() {
+                $('#output-table').dataTable();
+            } );
         </script>
 
     </footer>

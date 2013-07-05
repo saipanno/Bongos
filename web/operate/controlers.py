@@ -59,12 +59,20 @@ def show_operate_ctrl(operate_id):
 
     try:
         execute = OperateDb.query.filter_by(id=operate_id).first()
-        operate_result = json.loads(execute.result)
 
     except Exception:
         flash(u'获取操作单信息错误.', 'error')
-        return redirect(url_for('operate.list_operate_ctrl'))
+        return redirect(url_for('index_ctrl'))
 
+    if execute is None:
+        flash(u'不存在的操作单.', 'error')
+        return redirect(url_for('index_ctrl'))
+
+    elif execute.result == u'':
+        flash(u'操作单尚未执行完毕.', 'info')
+        return redirect(url_for('operate.list_operate_ctrl', operate_type=execute.operate_type))
+
+    operate_result = json.loads(execute.result)
     return render_template('operate/show_operate.html', execute=execute, operate_result=operate_result)
 
 
