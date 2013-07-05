@@ -9,3 +9,4 @@ env
 
 sqlite.db
 settings.py
+supervisord.conf
