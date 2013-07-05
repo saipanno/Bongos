@@ -53,6 +53,21 @@ def list_operate_ctrl(operate_type):
     return render_template('operate/list_operate.html', executes=executes, operate_type=operate_type)
 
 
+@operate.route('/<int:operate_id>/show')
+@login_required
+def show_operate_ctrl(operate_id):
+
+    try:
+        execute = OperateDb.query.filter_by(id=operate_id).first()
+        operate_result = json.loads(execute.result)
+
+    except Exception:
+        flash(u'获取操作单信息错误.', 'error')
+        return redirect(url_for('operate.list_operate_ctrl'))
+
+    return render_template('operate/show_operate.html', execute=execute, operate_result=operate_result)
+
+
 @operate.route('/Ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
@@ -220,16 +235,3 @@ def create_predefined_execute_ctrl():
 
         flash(u'成功创建操作.', 'success')
         return redirect(url_for('operate.list_operate_ctrl', operate_type=operate_type))
-
-
-@operate.route('/<int:operate_id>/show')
-@login_required
-def show_operate_ctrl(operate_id):
-
-    execute = OperateDb.query.filter_by(id=operate_id).first()
-    try:
-        operate_result = json.loads(execute.result)
-    except:
-        operate_result = 0
-
-    return render_template('operate/show_operate.html', execute=execute, operate_result=operate_result)
