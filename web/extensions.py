@@ -124,7 +124,7 @@ def validate_email(email):
 
     user = User.query.filter_by(email=email).all()
 
-    if user is not None:
+    if user:
         return False
     return email and EMAIL_RE.match(email)
 
