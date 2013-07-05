@@ -63,7 +63,8 @@
             <tr>
                 <th>IP地址</th>
                 <th>返回值</th>
-                <th>结果</th>
+                <th>标准输出</th>
+                <th>错误输出</th>
             </tr>
             </thead>
             <tbody>
@@ -72,6 +73,7 @@
                 <td class="span2">{{ key }}</td>
                 <td>{{ value['code'] }}</td>
                 <td>{{ value['msg'] }}</td>
+                <td>{{ value['error'] }}</td>
             </tr>
             {% endfor %}
             </tbody>
