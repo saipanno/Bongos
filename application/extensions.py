@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import re
 import os
 import logging
 
@@ -38,9 +39,21 @@ logging.basicConfig(filename=settings.APP_LOG_FILENAME,
 logger = logging.getLogger('bongos.app')
 
 
-def get_private_key_path(filename):
+def generate_private_path(filename):
 
     if filename is not u'':
         return os.path.join(settings.PRIVATE_KEY_PATH, filename)
     else:
         return None
+
+
+def analysis_script_output(output):
+
+    # \S 匹配所有非空字符
+    # +? 匹配前面正则一次或多次，非贪婪模式
+    regexp = u'BD:\S+?:EOF'
+
+    fruit = re.findall(regexp, output)
+
+    # 字符串掐头去尾操作，删除BD:和:EOF
+    return ' '.join(fruit[3:][:-4])

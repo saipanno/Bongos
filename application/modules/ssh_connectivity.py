@@ -30,7 +30,7 @@ from fabric.exceptions import NetworkError, CommandTimeout
 
 from web import db
 from web.dashboard.models import SshConfig
-from application.extensions import logger, get_private_key_path
+from application.extensions import logger, generate_private_path, analysis_script_output
 
 
 def final_ssh_checking(user, port, password, private_key):
@@ -70,59 +70,64 @@ def final_ssh_checking(user, port, password, private_key):
 
     try:
         output = run('uptime', shell=True, quiet=True)
+
         if output.return_code == 0:
             fruit['code'] = 0
+            fruit['msg'] = analysis_script_output(output.stdout)
         else:
             fruit['code'] = 20
+            # SSH联通性测试，不再保存命令输出。
+            #fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
     except SystemExit:
         fruit['code'] = 2
-        fruit['msg'] = 'Authentication failed'
+        fruit['error'] = 'Authentication failed'
 
     # CommandTimeout 无异常说明字符串
     except CommandTimeout:
         fruit['code'] = 3
-        fruit['msg'] = 'Script execute timeout'
+        fruit['error'] = 'Script execute timeout'
 
     except NetworkError, e:
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
             fruit['code'] = 1
-            fruit['msg'] = 'Connect timeout'
+            fruit['error'] = 'Connect timeout'
 
         elif 'Name lookup failed for' in e.__str__():
             fruit['code'] = 10
-            fruit['msg'] = 'Network address error'
+            fruit['error'] = 'Network address error'
 
         elif 'Authentication failed' in e.__str__():
             fruit['code'] = 2
-            fruit['msg'] = 'Authentication failed'
+            fruit['error'] = 'Authentication failed'
 
         # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
         elif 'Private key file is encrypted' in e.__str__():
             fruit['code'] = 2
-            fruit['msg'] = 'Private key file is encrypted'
+            fruit['error'] = 'Private key file is encrypted'
 
         elif 'not match pre-existing key' in e.__str__():
             fruit['code'] = 2
-            fruit['msg'] = 'Host key verification failed'
+            fruit['error'] = 'Host key verification failed'
 
         else:
             fruit['code'] = 20
-            fruit['msg'] = '%s' % e
+            fruit['error'] = '%s' % e
             logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['msg']))
+                           (env.host, fruit['code'], fruit['error']))
 
     except Exception, e:
         if 'No such file or directory' in e:
             fruit['code'] = 2
-            fruit['msg'] = 'Can\'t find private key'
+            fruit['error'] = 'Can\'t find private key'
         else:
             fruit['code'] = 20
-            fruit['msg'] = '%s' % e
+            fruit['error'] = '%s' % e
 
             logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['msg']))
+                           (env.host, fruit['code'], fruit['error']))
 
     finally:
         return fruit
@@ -161,7 +166,7 @@ def ssh_connectivity_checking(operate):
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
-                              get_private_key_path(ssh_config.private_key),
+                              generate_private_path(ssh_config.private_key),
                               hosts=operate.server_list.split())
 
         operate.status = 1
