@@ -55,7 +55,9 @@
             } );
             /* Table initialisation */
             $(document).ready(function() {
-                $('#output-table').dataTable();
+                $('#output-table').dataTable( {
+                    "sPaginationType": "bootstrap"
+                } );
             } );
         </script>
 
