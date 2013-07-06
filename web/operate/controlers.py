@@ -27,7 +27,7 @@
 import time
 import json
 from flask import render_template, request, redirect, url_for, flash, Blueprint
-from sqlalchemy import desc
+from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 
 from web import db
@@ -57,16 +57,18 @@ def list_operate_ctrl(operate_type):
 @login_required
 def show_operate_ctrl(operate_id):
 
+    default_next_page = request.values.get('next', url_for('user.index_ctrl'))
+
     try:
         execute = OperateDb.query.filter_by(id=operate_id).first()
 
-    except Exception:
+    except exc.SQLAlchemyError:
         flash(u'获取操作单信息错误.', 'error')
-        return redirect(url_for('index_ctrl'))
+        return redirect(default_next_page)
 
     if execute is None:
         flash(u'不存在的操作单.', 'error')
-        return redirect(url_for('index_ctrl'))
+        return redirect(default_next_page)
 
     elif execute.result == u'':
         flash(u'操作单尚未执行完毕.', 'info')

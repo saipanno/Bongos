@@ -26,6 +26,7 @@
 
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
+from sqlalchemy import exc
 
 from web import db
 
@@ -56,11 +57,20 @@ def list_script_ctrl():
 @login_required
 def show_script_ctrl(script_id):
 
-    if request.method == 'GET':
+    default_next_page = request.values.get('next', url_for('user.index_ctrl'))
 
+    try:
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-        return render_template('dashboard/predefined_script.html', script=script, type='show')
+    except exc.SQLAlchemyError:
+        flash(u'获取预定义脚本信息错误.', 'error')
+        return redirect(default_next_page)
+
+    if script is None:
+        flash(u'不存在的预定义脚本.', 'error')
+        return redirect(default_next_page)
+
+    return render_template('dashboard/predefined_script.html', script=script, type='show')
 
 
 @dashboard.route('/script/create', methods=("GET", "POST"))

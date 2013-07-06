@@ -46,7 +46,7 @@ def index_ctrl():
 def user_login_ctrl():
 
     form = UserLoginForm()
-    next_page = request.values.get('next', url_for('user.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('user.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -64,7 +64,7 @@ def user_login_ctrl():
         if user is not None and user.check_password(form.password.data):
             login_user(user)
             flash(u'登录成功.', 'success')
-            return redirect(next_page)
+            return redirect(default_next_page)
         else:
             flash(u'错误的用户名或密码.', 'error')
             return redirect(url_for('user.user_login_ctrl'))
