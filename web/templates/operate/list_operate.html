@@ -2,24 +2,24 @@
 
 {% import "macro.html" as ext %}
 
-{% if operate_type == 'Ssh' %}
+{% if type == 'Ssh' %}
     {% set operate_title = 'Detect' %}
     {% set operate_create_url = url_for('operate.create_ssh_detect_ctrl') %}
-{% elif operate_type == 'Ping' %}
+{% elif type == 'Ping' %}
     {% set operate_title = 'Detect' %}
     {% set operate_create_url = url_for('operate.create_ping_detect_ctrl') %}
-{% elif operate_type == 'Custom' %}
+{% elif type == 'Custom' %}
     {% set operate_title = 'Execute' %}
     {% set operate_create_url = url_for('operate.create_custom_execute_ctrl') %}
-{% elif operate_type == 'PreDefined' %}
+{% elif type == 'PreDefined' %}
     {% set operate_title = 'Execute' %}
     {% set operate_create_url = url_for('operate.create_predefined_execute_ctrl') %}
 {% endif %}
 
-{% block active_operate_ssh %}{% if operate_type == 'Ssh' %}active{% endif %}{% endblock %}
-{% block active_operate_ping %}{% if operate_type == 'Ping' %}active{% endif %}{% endblock %}
-{% block active_operate_custom %}{% if operate_type == 'Custom' %}active{% endif %}{% endblock %}
-{% block active_operate_predefined %}{% if operate_type == 'PreDefined' %}active{% endif %}{% endblock %}
+{% block active_operate_ssh %}{% if type == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operate_ping %}{% if type == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operate_custom %}{% if type == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operate_predefined %}{% if type == 'PreDefined' %}active{% endif %}{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -27,7 +27,7 @@
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li><a href="#">{{ operate_title }}</a><span class="divider">/</span></li>
-            <li><a href="#">{{ operate_type }}</a> <span class="divider">/</span></li>
+            <li><a href="#">{{ type }}</a> <span class="divider">/</span></li>
             <li class="active">List</li>
         </ul>
 
@@ -35,14 +35,14 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ operate_type }} {{ operate_title }}</a>
+                <a class="brand" href="#">{{ type }} {{ operate_title }}</a>
                 <div class="btn-group pull-right">
                     <a href="{{ operate_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add {{ operate_title }}</a>
                 </div>
             </div>
         </div>
 
-        <table class="table table-hover table-bordered table-condensed table-striped" id="output-table">
+        <table class="table table-hover table-bordered table-condensed table-striped">
             <thead>
             <tr>
                 <th>用户</th>
@@ -55,11 +55,11 @@
             <tbody>
             {% for execute in executes %}
             <tr>
-                <td style="width: 10%">{{ execute.author }}</td>
-                <td style="width: 10%">{{ execute.datetime }}</td>
-                <td style="width: 40%">{{ execute.server_list }}</td> <!-- TODO: 增加省略显示或固定字符省略溢出 -->
-                <td style="width: 10%">{{ ext.get_operate_status(execute.status) }}</td>
-                <td style="width: 10%"><a href="{{ url_for('operate.show_operate_ctrl', operate_id=execute.id)}}">查看</a></td>
+                <td class="span1">{{ execute.author }}</td>
+                <td class="span1">{{ execute.datetime }}</td>
+                <td class="span5">{{ execute.server_list }}</td>
+                <td class="span1">{{ ext.get_operate_status(execute.status) }}</td>
+                <td class="span1"><a href="{{ url_for('operate.show_operate_ctrl', operate_id=execute.id)}}">查看</a></td>
             </tr>
             {% endfor %}
             </tbody>

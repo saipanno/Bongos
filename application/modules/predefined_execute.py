@@ -158,7 +158,7 @@ def predefined_script_execute(operate):
         operate.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.operate_type, operate.status, message))
+                     (operate.id, operate.type, operate.status, message))
 
     try:
         predefined_script_id = operate.script_template
@@ -167,7 +167,7 @@ def predefined_script_execute(operate):
         operate.status = 2
         message = 'Failed to get the script template. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.operate_type, operate.status, message))
+                     (operate.id, operate.type, operate.status, message))
 
     try:
         template_vars = json.loads(operate.template_vars)
@@ -175,7 +175,7 @@ def predefined_script_execute(operate):
         operate.status = 2
         message = 'Failed to load template vars. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.operate_type, operate.status, message))
+                     (operate.id, operate.type, operate.status, message))
 
     if operate.status != 2:
 
@@ -197,6 +197,6 @@ def predefined_script_execute(operate):
             operate.status = 2
             message = 'Integrate data error. %s' % e
             logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operate.id, operate.operate_type, operate.status, message))
+                         (operate.id, operate.type, operate.status, message))
 
     db.session.commit()

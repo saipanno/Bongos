@@ -70,22 +70,22 @@ class Scheduler(object):
             if operate is not None:
 
                 logger.info('Started a new operating unit. ID: %s, TYPE: %s, HOSTS: %s' %
-                            (operate.id, operate.operate_type, operate.server_list))
+                            (operate.id, operate.type, operate.server_list))
 
-                if operate.operate_type == u'Ping':
+                if operate.type == u'Ping':
                     ping_connectivity_checking(self.config, operate)
 
-                elif operate.operate_type == u'Ssh':
+                elif operate.type == u'Ssh':
                     ssh_connectivity_checking(operate)
 
-                elif operate.operate_type == u'Custom':
+                elif operate.type == u'Custom':
                     custom_script_execute(operate)
 
-                elif operate.operate_type == u'PreDefined':
+                elif operate.type == u'PreDefined':
                     predefined_script_execute(operate)
 
                 else:
-                    logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.operate_type))
+                    logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.type))
 
             else:
 

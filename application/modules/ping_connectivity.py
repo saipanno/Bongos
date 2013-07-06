@@ -106,6 +106,6 @@ def ping_connectivity_checking(config, operate):
         operate.status = 2
         message = 'Integrate data error. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.operate_type, operate.status, message))
+                     (operate.id, operate.type, operate.status, message))
 
     db.session.commit()

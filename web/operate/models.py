@@ -43,9 +43,9 @@ class OperateDb(db.Model):
     __tablename__ = app.config['OPERATE_LISTS']
 
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.UnicodeText, nullable=False)
+    author = db.Column(db.String, nullable=False)
     datetime = db.Column(db.String, nullable=False)
-    operate_type = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Integer, nullable=False)
     server_list = db.Column(db.UnicodeText, nullable=False)
     script_template = db.Column(db.UnicodeText, nullable=False)
     template_vars = db.Column(db.UnicodeText, nullable=False)
@@ -53,12 +53,12 @@ class OperateDb(db.Model):
     status = db.Column(db.UnicodeText, nullable=False)
     result = db.Column(db.UnicodeText, nullable=False)
 
-    def __init__(self, author, datetime, operate_type, server_list, script_template, template_vars,
+    def __init__(self, author, datetime, type, server_list, script_template, template_vars,
                  ssh_config, status, result):
 
         self.author = author
         self.datetime = datetime
-        self.operate_type = operate_type
+        self.type = type
         self.server_list = server_list
         self.script_template = script_template
         self.ssh_config = ssh_config
