@@ -9,7 +9,6 @@
 
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/google-prettify.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bongos.css') }}">
     {% block style %}{% endblock %}
 
@@ -37,14 +36,6 @@
         <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
         <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bongos.js') }}"></script>
-
-        <script>
-            !function ($) {
-                $(function(){
-                    window.prettyPrint && prettyPrint()
-                })
-            }(window.jQuery)
-        </script>
 
         <script type="text/javascript" charset="utf-8">
             $.extend( $.fn.dataTableExt.oStdClasses, {
