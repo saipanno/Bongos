@@ -35,7 +35,7 @@ class CreateSshDetectForm(Form):
     server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
-                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
+                                  query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
 
@@ -62,7 +62,7 @@ class CreatePreDefinedExecuteForm(Form):
     template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
                                   description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
-                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
+                                  query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
 
@@ -83,5 +83,5 @@ class CreateCustomExecuteForm(Form):
     template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
                                   description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
-                                  description=u'Ssh Config', query_factory=SshConfig.query.all,  get_label='desc')
+                                  query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')

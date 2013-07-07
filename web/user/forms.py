@@ -38,23 +38,19 @@ class UserLoginForm(Form):
 class CreateUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email<span class="required">*</span>', id='email', description=u'Required.')
-    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Required.')
-    password = PasswordField(u'Password<span class="required">*</span>', id='password', description=u'Required.')
-    confirm_password = PasswordField(u'Repeat Password<span class="required">*</span>', id='confirm_password',
-                                     description=u'Required.')
+    email = TextField(u'Email<span class="required">*</span>', id='email')
+    name = TextField(u'Name<span class="required">*</span>', id='name')
+    password = PasswordField(u'Password<span class="required">*</span>', id='password')
+    confirm_password = PasswordField(u'Confirm Password<span class="required">*</span>', id='confirm_password')
     submit = SubmitField(u'Save', id='submit')
 
 
 class EditUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email<span class="required">*</span>', id='email', description=u'Required.')
-    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Required.')
-    now_password = PasswordField(u'Now Password<span class="required">*</span>', id='now_password',
-                                 description=u'Now Password')
-    new_password = PasswordField(u'New Password<span class="required">*</span>', id='new_password',
-                                 description=u'New Password You Want.')
-    confirm_password = PasswordField(u'Repeat New Password<span class="required">*</span>', id='confirm_password',
-                                     description=u'Repeat New Password to Confirm.')
-    submit = SubmitField(u'Save', id='submit')
+    email = TextField(u'Email<span class="required">*</span>', id='email')
+    name = TextField(u'Name<span class="required">*</span>', id='name')
+    now_password = PasswordField(u'Password<span class="required">*</span>', id='password')
+    new_password = PasswordField(u'New Password<span class="required">*</span>', id='new_password')
+    confirm_password = PasswordField(u'Confirm New Password<span class="required">*</span>', id='confirm_password')
+    submit = SubmitField(u'Update', id='submit')

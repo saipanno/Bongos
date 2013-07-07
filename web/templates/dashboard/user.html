@@ -7,44 +7,44 @@
 
         {% if type == 'list' %}
 
-        <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">User</a><span class="divider">/</span></li>
-            <li class="active">List</li>
-        </ul>
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">User</a><span class="divider">/</span></li>
+                <li class="active">List</li>
+            </ul>
 
-        {{ ext.feedback_message() }}
+            {{ ext.feedback_message() }}
 
-        <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">User Manager</a>
-                <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <a class="brand" href="#">User Manager</a>
+                    <div class="btn-group pull-right">
+                        <a href="{{ url_for('dashboard.create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add User</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <table class="table table-hover table-bordered table-striped">
-            <thead>
-            <tr>
-                <th>邮箱</th>
-                <th>用户名</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>
-                            <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>邮箱</th>
+                    <th>用户名</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>
+                                <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
         {% elif type == 'create' %}
 
@@ -70,7 +70,7 @@
                             <label class="control-label">{{ form.email.label|safe }}</label>
                             <div class="controls">
                                 {{ form.email() }}
-                                <p class="help-block">{{ form.email.description|safe }}</p>
+                                {% if form.email.description %}<p class="help-block">{{ form.email.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
@@ -78,7 +78,7 @@
                             <label class="control-label">{{ form.name.label|safe }}</label>
                             <div class="controls">
                                 {{ form.name() }}
-                                <p class="help-block">{{ form.name.description|safe }}</p>
+                                {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                             </div>
 
                         </div>
@@ -87,7 +87,7 @@
                             <label class="control-label">{{ form.password.label|safe }}</label>
                             <div class="controls">
                                 {{ form.password() }}
-                                <p class="help-block">{{ form.password.description|safe }}</p>
+                                {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
@@ -95,7 +95,7 @@
                             <label class="control-label">{{ form.confirm_password.label|safe }}</label>
                             <div class="controls">
                                 {{ form.confirm_password() }}
-                                <p class="help-block">{{ form.confirm_password.description|safe }}</p>
+                                {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
@@ -106,78 +106,82 @@
                     </div>
 
                 </form>
+
             </div>
+
         {% elif type == 'edit' %}
 
-        <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">User</a><span class="divider">/</span></li>
-            <li class="active">Edit</li>
-        </ul>
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">User</a><span class="divider">/</span></li>
+                <li class="active">Edit</li>
+            </ul>
 
-        <div class="tabbable">
-            <form method="post" action="">
+            <div class="tabbable">
+                <form method="post" action="">
 
-                {{ form.hidden_tag() }}
+                    {{ form.hidden_tag() }}
 
-                <legend>
-                    Edit User
-                </legend>
+                    <legend>
+                        Edit User
+                    </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                    <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.email.label }}</label>
-                        <div class="controls">
-                            {{ form.email(class="uneditable-input") }}
-                            <p class="help-block">{{ form.email.description|safe }}</p>
+                        <div class="control-group">
+                            <label class="control-label">{{ form.email.label }}</label>
+                            <div class="controls">
+                                {{ form.email(class="uneditable-input") }}
+                                {% if form.email.description %}<p class="help-block">{{ form.email.description|safe }}</p>{% endif %}
+                            </div>
                         </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.name.label }}</label>
+                            <div class="controls">
+                                {{ form.name() }}
+                                {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.now_password.label }}</label>
+                            <div class="controls">
+                                {{ form.now_password() }}
+                                {% if form.now_password.description %}<p class="help-block">{{ form.now_password.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.new_password.label }}</label>
+                            <div class="controls">
+                                {{ form.new_password() }}
+                                {% if form.new_password.description %}<p class="help-block">{{ form.new_password.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.confirm_password.label }}</label>
+                            <div class="controls">
+                                {{ form.confirm_password() }}
+                                {% if form.confirm_passwrod.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.name.label }}</label>
-                        <div class="controls">
-                            {{ form.name() }}
-                            <p class="help-block">{{ form.name.description|safe }}</p>
-                        </div>
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
                     </div>
 
+                </form>
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.now_password.label }}</label>
-                        <div class="controls">
-                            {{ form.now_password() }}
-                            <p class="help-block">{{ form.now_password.description|safe }}</p>
-                        </div>
-                    </div>
+            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.new_password.label }}</label>
-                        <div class="controls">
-                            {{ form.new_password() }}
-                            <p class="help-block">{{ form.new_password.description|safe }}</p>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.confirm_password.label }}</label>
-                        <div class="controls">
-                            {{ form.confirm_password() }}
-                            <p class="help-block">{{ form.confirm_password.description|safe }}</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="form-actions">
-                    {{ form.submit(class="btn btn-danger") }}
-                </div>
-
-            </form>
-        </div>
-
-    {% endif %}
+        {% endif %}
 
     </div>
+
 {% endblock %}

@@ -33,17 +33,17 @@ class CreatePreDefinedScriptForm(Form):
     同时模板依然支持shell中的 <code>$</code> 变量。 如：
 <code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
-    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Script Name.')
-    desc = TextAreaField(u'Description<span class="required">*</span>', id='text', description=u'Script Description.')
+    name = TextField(u'Name<span class="required">*</span>', id='text')
+    desc = TextAreaField(u'Description<span class="required">*</span>', id='text')
     script = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
     submit = SubmitField(u'Save', id='submit')
 
 
 class CreateSshConfigForm(Form):
 
-    name = TextField(u'Name<span class="required">*</span>', id='text', description=u'Config Name')
-    desc = TextField(u'Description<span class="required">*</span>', id='text', description=u'Config Description')
-    port = IntegerField(u'Port<span class="required">*</span>', id='port', description=u'Ssh Server Port.', default=22)
+    name = TextField(u'Name<span class="required">*</span>', id='text')
+    desc = TextField(u'Description<span class="required">*</span>', id='text')
+    port = IntegerField(u'Port<span class="required">*</span>', id='port', default=22)
     username = TextField(u'Username<span class="required">*</span>', id='text')
     password = PasswordField(u'Password<span class="required">*</span>', id='text')
     private_key = TextField(u'Private Key<span class="required">*</span>:', id='text',

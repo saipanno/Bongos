@@ -77,7 +77,7 @@
                         <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.name.description|safe }}</p>
+                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -85,7 +85,7 @@
                         <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -93,7 +93,7 @@
                         <label class="control-label">{{ form.port.label|safe }}</label>
                         <div class="controls">
                             {{ form.port() }}
-                            <p class="help-block">{{ form.port.description|safe }}</p>
+                            {% if form.port.description %}<p class="help-block">{{ form.port.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -101,7 +101,7 @@
                         <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
                             {{ form.username(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.username.description|safe }}</p>
+                            {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@
                         <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
                             {{ form.password(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.password.description|safe }}</p>
+                            {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@
                         <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
                             {{ form.private_key(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.private_key.description|safe }}</p>
+                            {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -154,7 +154,7 @@
                         <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.name.description|safe }}</p>
+                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -162,7 +162,7 @@
                         <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -170,7 +170,7 @@
                         <label class="control-label">{{ form.port.label|safe }}</label>
                         <div class="controls">
                             {{ form.port() }}
-                            <p class="help-block">{{ form.port.description|safe }}</p>
+                            {% if form.port.description %}<p class="help-block">{{ form.port.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -178,7 +178,7 @@
                         <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
                             {{ form.username(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.username.description|safe }}</p>
+                            {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -186,7 +186,7 @@
                         <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
                             {{ form.password(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.password.description|safe }}</p>
+                            {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -194,7 +194,7 @@
                         <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
                             {{ form.private_key(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.private_key.description|safe }}</p>
+                            {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 

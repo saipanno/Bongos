@@ -97,7 +97,7 @@
                         <label class="control-label">{{ form.name.label }}</label>
                         <div class="controls">
                             {{ form.name() }}
-                            <p class="help-block">{{ form.name.description|safe }}</p>
+                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -105,7 +105,7 @@
                         <label class="control-label">{{ form.desc.label }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6") }}
-                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -113,7 +113,7 @@
                         <label class="control-label">{{ form.script.label }}</label>
                         <div class="controls">
                             {{ form.script(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.script.description|safe }}</p>
+                            {% if form.script.description %}<p class="help-block">{{ form.script.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -150,7 +150,7 @@
                         <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
                             {{ form.name() }}
-                            <p class="help-block">{{ form.name.description|safe }}</p>
+                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -158,7 +158,7 @@
                         <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
                             {{ form.desc(class="span6") }}
-                            <p class="help-block">{{ form.desc.description|safe }}</p>
+                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -166,7 +166,7 @@
                         <label class="control-label">{{ form.script.label|safe }}</label>
                         <div class="controls">
                             {{ form.script(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.script.description|safe }}</p>
+                            {% if form.script.description %}<p class="help-block">{{ form.script.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
