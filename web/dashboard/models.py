@@ -33,12 +33,12 @@ class SshConfig(db.Model):
     __tablename__ = app.config['SSH_CONFIG_LISTS']
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.UnicodeText)
-    desc = db.Column(db.UnicodeText)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(255))
     port = db.Column(db.Integer)
-    username = db.Column(db.Text)
-    password = db.Column(db.Text)
-    private_key = db.Column(db.Text)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+    private_key = db.Column(db.String(50))
 
     def __init__(self, name, desc, port, username, password, private_key=None):
         self.name = name
@@ -54,10 +54,10 @@ class PreDefinedScript(db.Model):
     __tablename__ = app.config['PREDEFINED_SCRIPT_LISTS']
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.UnicodeText)
-    desc = db.Column(db.UnicodeText)
-    script = db.Column(db.UnicodeText)
-    author = db.Column(db.UnicodeText)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(255))
+    script = db.Column(db.Text)
+    author = db.Column(db.String(50))
 
     def __init__(self, name, desc, script, author):
         self.name = name

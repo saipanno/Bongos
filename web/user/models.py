@@ -35,9 +35,9 @@ class User(db.Model):
     __tablename__ = app.config['USER_LISTS']
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.UnicodeText, unique=True)
-    name = db.Column(db.UnicodeText)
-    password = db.Column(db.UnicodeText)
+    email = db.Column(db.String(50), unique=True)
+    name = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(50))
 
     def __init__(self, email, name, password):
 
