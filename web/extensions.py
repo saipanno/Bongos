@@ -126,15 +126,22 @@ def validate_email(email):
 
     if user:
         return False
-    return email and EMAIL_RE.match(email)
+    else:
+        return email and EMAIL_RE.match(email)
 
 
 def validate_username(username):
     USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 
-    return username and USER_RE.match(username)
+    user = User.query.filter_by(name=username).all()
+
+    if user:
+        return False
+    else:
+        return username and USER_RE.match(username)
 
 
 def validate_password(password):
     PASSWORD_RE = re.compile(r".{8,20}$")
+
     return password and PASSWORD_RE.match(password)
