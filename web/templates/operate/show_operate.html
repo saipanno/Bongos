@@ -2,24 +2,24 @@
 
 {% import "macro.html" as ext %}
 
-{% if execute.type == 'Ssh' %}
+{% if execute.kind == 'Ssh' %}
     {% set operate_title = 'Detect' %}
     {% set operate_create_url = url_for('operate.create_ssh_detect_ctrl') %}
-{% elif execute.type == 'Ping' %}
+{% elif execute.kind == 'Ping' %}
     {% set operate_title = 'Detect' %}
     {% set operate_create_url = url_for('operate.create_ping_detect_ctrl') %}
-{% elif execute.type == 'Custom' %}
+{% elif execute.kind == 'Custom' %}
     {% set operate_title = 'Execute' %}
     {% set operate_create_url = url_for('operate.create_custom_execute_ctrl') %}
-{% elif execute.type == 'PreDefined' %}
+{% elif execute.kind == 'PreDefined' %}
     {% set operate_title = 'Execute' %}
     {% set operate_create_url = url_for('operate.create_predefined_execute_ctrl') %}
 {% endif %}
 
-{% block active_operate_ssh %}{% if execute.type == 'Ssh' %}active{% endif %}{% endblock %}
-{% block active_operate_ping %}{% if execute.type == 'Ping' %}active{% endif %}{% endblock %}
-{% block active_operate_custom %}{% if execute.type == 'Custom' %}active{% endif %}{% endblock %}
-{% block active_operate_predefined %}{% if execute.type == 'PreDefined' %}active{% endif %}{% endblock %}
+{% block active_operate_ssh %}{% if execute.kind == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operate_ping %}{% if execute.kind == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operate_custom %}{% if execute.kind == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operate_predefined %}{% if execute.kind == 'PreDefined' %}active{% endif %}{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -27,7 +27,7 @@
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li><a href="#">{{ operate_title }}</a><span class="divider">/</span></li>
-            <li><a href="#">{{ execute.type }}</a> <span class="divider">/</span></li>
+            <li><a href="#">{{ execute.kind }}</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
         </ul>
 
@@ -35,7 +35,7 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ execute.type }} {{ operate_title }}</a>
+                <a class="brand" href="#">{{ execute.kind }} {{ operate_title }}</a>
             </div>
         </div>
 
