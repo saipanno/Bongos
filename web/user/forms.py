@@ -38,19 +38,20 @@ class UserLoginForm(Form):
 class CreateUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email<span class="required">*</span>', id='email')
-    name = TextField(u'Name<span class="required">*</span>', id='name')
-    password = PasswordField(u'Password<span class="required">*</span>', id='password')
-    confirm_password = PasswordField(u'Confirm Password<span class="required">*</span>', id='confirm_password')
+    email = TextField(u'Email  <span class="required">*</span>', id='email')
+    name = TextField(u'Name  <span class="required">*</span>', id='name')
+    password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
+    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>', id='confirm_password')
     submit = SubmitField(u'Save', id='submit')
 
 
 class EditUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email<span class="required">*</span>', id='email')
-    name = TextField(u'Name<span class="required">*</span>', id='name')
-    now_password = PasswordField(u'Password<span class="required">*</span>', id='password')
-    new_password = PasswordField(u'New Password<span class="required">*</span>', id='new_password')
-    confirm_password = PasswordField(u'Confirm New Password<span class="required">*</span>', id='confirm_password')
+    email = TextField(u'Email  <span class="required">*</span>', id='email')
+    name = TextField(u'Name  <span class="required">*</span>', id='name')
+    now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
+    new_password = PasswordField(u'New Password  <span class="required">*</span>',
+                                 id='new_password', description=u'At least eight')
+    confirm_password = PasswordField(u'Confirm New Password  <span class="required">*</span>', id='confirm_password')
     submit = SubmitField(u'Update', id='submit')

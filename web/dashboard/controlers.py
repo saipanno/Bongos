@@ -37,8 +37,6 @@ from web.user.forms import CreateUserForm, EditUserForm
 from web.dashboard.models import SshConfig, PreDefinedScript
 from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
 
-from web.extensions import validate_email, validate_username, validate_password
-
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -163,27 +161,38 @@ def create_user_ctrl():
 
     elif request.method == 'POST':
 
-        if not validate_email(form.email.data):
-            flash(u'不符合要求的邮箱地址.', 'error')
+        redirect_url = url_for('dashboard.create_user_ctrl')
 
-        elif not validate_username(form.name.data):
-            flash(u'不符合要求的用户名.', 'error')
+        if form.email.data == u'':
+            flash(u'Email can\'t be empty', 'error')
+        elif User.query.filter_by(email=form.email.data).all():
+            flash(u'The current email is already in use', 'error')
+        elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
+            flash(u'Incorrect e-mail address', 'error')
 
+        elif form.name.data == u'':
+            flash(u'Name can\'t be empty', 'error')
+        elif User.query.filter_by(name=form.name.data).all():
+            flash(u'The current name is already in use', 'error')
+        elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.name.data):
+            flash(u'Incorrect name format', 'error')
+
+        elif form.password.data == u'' or form.confirm_password.data == u'':
+            flash(u'Password can\'t be empty', 'error')
         elif form.password.data != form.confirm_password.data:
-            flash(u'请输入相同的密码.', 'error')
-
-        elif not validate_password(form.password.data):
-            flash(u'不符合要求的密码.', 'error')
+            flash(u'Please enter the same password', 'error')
+        elif not re.match(".{8,20}$", form.password.data):
+            flash(u'Incorrect password format', 'error')
 
         else:
             user = User(form.email.data, form.name.data, form.password.data)
             db.session.add(user)
             db.session.commit()
 
-            flash(u'创建用户成功.', 'success')
+            flash(u'Create user successfully', 'success')
+            redirect_url = url_for('dashboard.list_user_ctrl')
 
-        return redirect(url_for('dashboard.list_user_ctrl'))
-
+        return redirect(redirect_url)
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
@@ -199,37 +208,45 @@ def edit_user_ctrl(user_id):
 
     elif request.method == 'POST':
 
-        if not validate_email(form.email.data):
-            flash(u'不符合要求的邮箱地址.', 'error')
+        if form.email.data != user.email and form.email.data != u'':
+            if User.query.filter_by(email=form.email.data).all():
+                flash(u'The current email is already in use', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
+                flash(u'Incorrect e-mail address', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            else:
+                user.email = form.email.data
 
-        elif not validate_username(form.name.data):
-            flash(u'不符合要求的用户名.', 'error')
+        if form.name.data != user.name and form.name.data != u'':
+            if User.query.filter_by(name=form.name.data).all():
+                flash(u'The current name is already in use', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.email.data):
+                flash(u'Incorrect name format', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            else:
+                user.name = form.name.data
 
-        elif form.new_password.data != form.confirm_password.data:
-            flash(u'两次密码不一致.', 'error')
-
-        elif len(form.new_password.data) > 0:
+        if len(form.new_password.data) > 0:
 
             if user.check_password(form.now_password.data):
 
-                if validate_password(form.new_password.data):
+                if form.new_password.data != form.confirm_password.data:
+                    flash(u'Please enter the same password', 'error')
+                    return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+                elif not re.match(".{8,20}$", form.new_password.data):
+                    flash(u'Incorrect password format', 'error')
+                    return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+                else:
                     user.update_password(form.new_password.data)
 
-                    form.populate_obj(user)
-                    db.session.commit()
-
-                    flash(u'编辑用户成功.', 'success')
-                else:
-                    flash(u'密码不符合要求.', 'error')
             else:
-                flash(u'当前密码错误.', 'error')
+                flash(u'Current password is incorrect', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
 
-        else:
-
-            form.populate_obj(user)
-            db.session.commit()
-
-            flash(u'编辑用户成功.', 'success')
+        db.session.commit()
+        flash(u'Update user settings successfully', 'success')
 
         return redirect(url_for('dashboard.list_user_ctrl'))
 
@@ -274,14 +291,14 @@ def create_ssh_config_ctrl():
 
         elif form.username.data == u'':
             flash(u'Username can\'t be empty', 'error')
-        elif not re.match("^[a-z0-9]{1,20}$", form.username.data):
-            flash(u'Wrong username format', 'error')
+        elif not re.match("^[a-zA-Z0-9]{1,20}$", form.username.data):
+            flash(u'Incorrect username format', 'error')
 
         elif form.password.data == u'':
             flash(u'Password can\'t be empty', 'error')
 
         elif form.private_key.data != u'' and not re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
-            flash(u'Wrong key filename', 'error')
+            flash(u'Incorrect key filename format', 'error')
 
         else:
 
@@ -329,10 +346,10 @@ def edit_ssh_config_ctrl(config_id):
             return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
         if form.username.data != config.username and form.username.data != u'':
-            if re.match("^[a-z0-9]{1,20}$", form.username.data):
+            if re.match("^[a-zA-Z0-9]{1,20}$", form.username.data):
                 config.username = form.username.data
             else:
-                flash(u'Wrong username format', 'error')
+                flash(u'Incorrect username format', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
         if form.password.data != config.password and form.password.data != u'':
@@ -342,7 +359,7 @@ def edit_ssh_config_ctrl(config_id):
             if re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
                 config.private_key = form.private_key.data
             else:
-                flash(u'Wrong key filename', 'error')
+                flash(u'Incorrect key filename format', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
         db.session.commit()
