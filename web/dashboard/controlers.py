@@ -24,11 +24,12 @@
 # SOFTWARE.
 
 
+from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
-from sqlalchemy import exc
 
 from web import db
+from web import app
 
 from web.user.models import User
 from web.user.forms import CreateUserForm, EditUserForm
@@ -287,7 +288,7 @@ def edit_ssh_config_ctrl(config_id):
     config = SshConfig.query.filter_by(id=config_id).first()
 
     form = CreateSshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
-                               password=config.password, private_key=config.private_key)
+                               private_key=config.private_key)
 
     if request.method == 'GET':
 
@@ -295,23 +296,43 @@ def edit_ssh_config_ctrl(config_id):
 
     elif request.method == 'POST':
 
-        if form.name.data == u'':
+        if form.name.data != config.name and form.name.data != u'':
+            if SshConfig.query.filter_by(name=form.name.data).all():
+                flash(u'新名称已被占用.', 'error')
+                return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
+            else:
+                config.name = form.name.data
 
-            flash(u'请输入.', 'error')
+        if form.desc.data != config.desc and form.desc.data != u'':
+            config.desc = form.desc.data
 
-        elif form.desc.data == u'':
+        try:
+            if form.port.data != config.port and form.port.data != u'':
+                config.port = int(form.port.data)
+        except TypeError:
+            flash(u'端口号不符合要求.', 'error')
+            return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
-            flash(u'请输入邮箱地址.', 'error')
+        if form.username.data != config.username and form.username.data != u'':
+            config.username = form.username.data
+            #if re.match("^[a-z0-9]{1,20}$", form.username.data):
+            #    config.username = form.username.data
+            #else:
+            #    flash(u'当前用户名不符合规范.', 'error')
+            #    return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
-        elif form.password.data == u'':
+        if form.password.data != config.password and form.password.data != u'':
+                config.password = form.password.data
 
-            flash(u'请输入密码.', 'error')
+        if form.private_key.data != config.private_key and form.private_key.data != u'':
+            config.private_key = form.private_key.data
+            #if re.match("^[a-zA-Z0-9]{1,20}\.key$", form.private_key.data):
+            #    config.private_key = form.private_key.data
+            #else:
+            #    flash(u'请输入正确的密钥名称.', 'error')
+            #    return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
-        else:
+        db.session.commit()
 
-            form.populate_obj(config)
-            db.session.commit()
-
-            flash(u'编辑SSH配置成功.', 'success')
-
+        flash(u'编辑SSH配置成功.', 'success')
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))

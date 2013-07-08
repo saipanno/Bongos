@@ -62,6 +62,8 @@
             <li class="active">Create</li>
         </ul>
 
+        {{ ext.feedback_message() }}
+
         <div class="tabbable">
             <form method="post" action="">
 
@@ -100,7 +102,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
-                            {{ form.username(class="span6", rows="10") }}
+                            {{ form.username(class="span6") }}
                             {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -108,7 +110,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
-                            {{ form.password(class="span6", rows="10") }}
+                            {{ form.password(class="span6") }}
                             {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -116,7 +118,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
-                            {{ form.private_key(class="span6", rows="10") }}
+                            {{ form.private_key(class="span8", rows="10") }}
                             {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -139,6 +141,8 @@
             <li class="active">Edit</li>
         </ul>
 
+        {{ ext.feedback_message() }}
+
         <div class="tabbable">
             <form method="post" action="">
 
@@ -153,7 +157,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.name.label|safe }}</label>
                         <div class="controls">
-                            {{ form.name(class="span6", rows="10") }}
+                            {{ form.name(class="span6") }}
                             {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -161,7 +165,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.desc.label|safe }}</label>
                         <div class="controls">
-                            {{ form.desc(class="span6", rows="10") }}
+                            {{ form.desc(class="span6") }}
                             {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -177,7 +181,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.username.label|safe }}</label>
                         <div class="controls">
-                            {{ form.username(class="span6", rows="10") }}
+                            {{ form.username(class="span6") }}
                             {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -185,7 +189,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.password.label|safe }}</label>
                         <div class="controls">
-                            {{ form.password(class="span6", rows="10") }}
+                            {{ form.password(class="span6") }}
                             {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
                         </div>
                     </div>
@@ -193,7 +197,7 @@
                     <div class="control-group">
                         <label class="control-label">{{ form.private_key.label|safe }}</label>
                         <div class="controls">
-                            {{ form.private_key(class="span6", rows="10") }}
+                            {{ form.private_key(class="span6") }}
                             {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
                         </div>
                     </div>
