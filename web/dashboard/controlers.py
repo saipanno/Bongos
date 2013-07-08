@@ -84,25 +84,29 @@ def create_script_ctrl():
 
     elif request.method == 'POST':
 
-        if form.desc.data == u'':
+        author = current_user.name
+        redirect_url = url_for('dashboard.create_script_ctrl')
 
-            flash(u'请输入脚本描述.', 'error')
+        if form.name.data == u'':
+            flash(u'Name can\'t be empty', 'error')
+        elif PreDefinedScript.query.filter_by(name=form.name.data).all():
+            flash(u'The current name is already in use', 'error')
+
+        elif form.desc.data == u'':
+            flash(u'Script description can\'t be empty', 'error')
 
         elif form.script.data == u'':
-
-            flash(u'请输入脚本.', 'error')
+            flash(u'Script can\'t be empty', 'error')
 
         else:
-
-            author = current_user.name
 
             script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
             db.session.add(script)
             db.session.commit()
 
-            flash(u'创建预定义脚本成功.', 'success')
+            flash(u'Create predefined script successfully', 'success')
 
-        return redirect(url_for('dashboard.list_script_ctrl'))
+        return redirect(redirect_url)
 
 
 @dashboard.route('/script/<int:script_id>/edit', methods=("GET", "POST"))
@@ -119,23 +123,16 @@ def edit_script_ctrl(script_id):
 
     elif request.method == 'POST':
 
-        if form.desc.data == u'':
+        if form.desc.data != script.desc and form.desc.data != u'':
+            script.desc = form.desc.data
 
-            flash(u'请输入脚本描述.', 'error')
-            return redirect(url_for('dashboard.list_script_ctrl'))
+        if form.script.data != script.desc and form.script.data != u'':
+            script.script = form.script.data
 
-        elif form.script.data == u'':
+        db.session.commit()
 
-            flash(u'请输入脚本.', 'error')
-            return redirect(url_for('dashboard.list_script_ctrl'))
-
-        else:
-
-            form.populate_obj(script)
-            db.session.commit()
-
-            flash(u'Edit script successful.', 'success')
-            return redirect(url_for('dashboard.list_script_ctrl'))
+        flash(u'Update predefined script successfully.', 'success')
+        return redirect(url_for('dashboard.list_script_ctrl'))
 
 
 @dashboard.route('/user/list')
@@ -193,6 +190,7 @@ def create_user_ctrl():
             redirect_url = url_for('dashboard.list_user_ctrl')
 
         return redirect(redirect_url)
+
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required

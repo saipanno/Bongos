@@ -34,7 +34,7 @@ class CreatePreDefinedScriptForm(Form):
 <code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
     name = TextField(u'Name  <span class="required">*</span>', id='text', description=u'Unrepeatable')
-    desc = TextAreaField(u'Description  <span class="required">*</span>', id='text')
+    desc = TextField(u'Description  <span class="required">*</span>', id='text')
     script = TextAreaField(u'Script  <span class="required">*</span>', id='textarea', description=script_desc)
     submit = SubmitField(u'Save', id='submit')
 
