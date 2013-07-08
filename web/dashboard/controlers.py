@@ -259,28 +259,28 @@ def create_ssh_config_ctrl():
 
         redirect_url = url_for('dashboard.create_ssh_config_ctrl')
 
-        if form.name.data != u'':
+        if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
         elif SshConfig.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
 
-        elif form.desc.data != u'':
+        elif form.desc.data == u'':
             flash(u'Description can\'t be empty', 'error')
 
-        elif form.port.data != u'':
+        elif form.port.data == u'':
             flash(u'Port can\'t be empty', 'error')
         elif form.port.data is None:
             flash(u'Port can only be an integer', 'error')
 
-        elif form.username.data != u'':
+        elif form.username.data == u'':
             flash(u'Username can\'t be empty', 'error')
         elif not re.match("^[a-z0-9]{1,20}$", form.username.data):
             flash(u'Wrong username format', 'error')
 
-        elif form.password.data != u'':
+        elif form.password.data == u'':
             flash(u'Password can\'t be empty', 'error')
 
-        elif not re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
+        elif form.private_key.data != u'' and not re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
             flash(u'Wrong key filename', 'error')
 
         else:
