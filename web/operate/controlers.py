@@ -68,15 +68,15 @@ def show_operate_ctrl(operate_id):
         execute = OperateDb.query.filter_by(id=operate_id).first()
 
     except exc.SQLAlchemyError:
-        flash(u'获取操作单信息错误.', 'error')
+        flash(u'Internal database error', 'error')
         return redirect(default_next_page)
 
     if execute is None:
-        flash(u'不存在的操作单.', 'error')
+        flash(u'The operating does not exist.', 'error')
         return redirect(default_next_page)
 
     elif execute.result == u'':
-        flash(u'操作单尚未执行完毕.', 'info')
+        flash(u'Operation has not completed', 'info')
         return redirect(url_for('operate.list_operate_ctrl', kind=execute.kind))
 
     fruits = json.loads(execute.result)
