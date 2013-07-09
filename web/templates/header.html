@@ -37,17 +37,17 @@
         <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bongos.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.dataTables.ColReorderWithResize.js') }}"></script>
 
         <script type="text/javascript" charset="utf-8">
-            $.extend( $.fn.dataTableExt.oStdClasses, {
-                "sSortAsc": "header headerSortDown",
-                "sSortDesc": "header headerSortUp",
-                "sSortable": "header"
-            } );
             /* Table initialisation */
             $(document).ready(function() {
                 $('#output-table').dataTable( {
-                    "sPaginationType": "bootstrap"
+                    "sPaginationType": "bootstrap",
+                    "sSortAsc": "header headerSortDown",
+                    "sSortDesc": "header headerSortUp",
+                    "sSortable": "header",
+                    "sDom": "Rlfrtip"
                 } );
             } );
         </script>
