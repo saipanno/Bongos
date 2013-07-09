@@ -89,6 +89,8 @@ def create_script_ctrl():
 
         if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
+        elif re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+            flash(u'Incorrect name format', 'error')
         elif PreDefinedScript.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
 
@@ -122,6 +124,11 @@ def edit_script_ctrl(script_id):
         return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
 
     elif request.method == 'POST':
+
+        if form.name.data != script.name and form.name.data != u'':
+            if not re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+                flash(u'Incorrect name format', 'error')
+                return redirect(url_for('dashboard.edit_script_ctrl', script_id=script_id))
 
         if form.desc.data != script.desc and form.desc.data != u'':
             script.desc = form.desc.data
@@ -276,6 +283,8 @@ def create_ssh_config_ctrl():
 
         if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
+        elif re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+            flash(u'Incorrect name format', 'error')
         elif SshConfig.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
 
@@ -330,6 +339,9 @@ def edit_ssh_config_ctrl(config_id):
             if SshConfig.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
+            elif not re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+                flash(u'Incorrect name format', 'error')
+                return redirect(url_for('dashboard.edit_ssh_config_ctrl', script_id=config_id))
             else:
                 config.name = form.name.data
 

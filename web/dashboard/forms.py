@@ -33,7 +33,8 @@ class CreatePreDefinedScriptForm(Form):
     同时模板依然支持shell中的 <code>$</code> 变量。 如：
 <code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
-    name = TextField(u'Name  <span class="required">*</span>', id='text', description=u'Unrepeatable')
+    name = TextField(u'Name  <span class="required">*</span>', id='text',
+                     description=u'Unrepeatable. Contain only letters, numbers, and underscores (5-25 characters)')
     desc = TextField(u'Description  <span class="required">*</span>', id='text')
     script = TextAreaField(u'Script  <span class="required">*</span>', id='textarea', description=script_desc)
     submit = SubmitField(u'Save', id='submit')
@@ -41,7 +42,8 @@ class CreatePreDefinedScriptForm(Form):
 
 class CreateSshConfigForm(Form):
 
-    name = TextField(u'Name  <span class="required">*</span>', id='text', description=u'Unrepeatable')
+    name = TextField(u'Name  <span class="required">*</span>', id='text',
+                     description=u'Unrepeatable. Contain only letters, numbers, and underscores (5-25 characters)')
     desc = TextField(u'Description  <span class="required">*</span>', id='text')
     port = IntegerField(u'Port  <span class="required">*</span>', id='port', default=22)
     username = TextField(u'Username  <span class="required">*</span>', id='text', default=u'root')
