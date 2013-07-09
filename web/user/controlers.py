@@ -56,17 +56,17 @@ def user_login_ctrl():
 
         if form.email.data == u'' or form.password.data == u'':
 
-            flash(u'错误的用户名或密码.', 'error')
+            flash(u'Email and password can\'t be empty', 'error')
             return redirect(url_for('user.user_login_ctrl'))
 
         user = User.query.filter_by(email=form.email.data).first()
 
         if user is not None and user.check_password(form.password.data):
             login_user(user)
-            flash(u'登录成功.', 'success')
+            flash(u'Login successful', 'success')
             return redirect(default_next_page)
         else:
-            flash(u'错误的用户名或密码.', 'error')
+            flash(u'Incorrect email or password', 'error')
             return redirect(url_for('user.user_login_ctrl'))
 
 
