@@ -73,7 +73,7 @@ def format_address_list(address_list):
         String with blank sep.
     """
     if address_list == u'':
-        return {'status': False, 'desc': u'空白服务器列表.'}
+        return {'status': False, 'desc': u'Server list can\'t be empty'}
 
     try:
         new_address_list = str()
@@ -82,12 +82,12 @@ def format_address_list(address_list):
                 continue
             address_status = verify_address(server.strip())
             if address_status is not True:
-                return {'status': False, 'desc': u'错误的服务器地址: %s' % server}
+                return {'status': False, 'desc': u'Incorrect IP address: %s' % server}
             new_address_list = '%s %s' % (new_address_list, server.strip())
     except Exception, e:
         return {'status': False, 'desc': u'%s' % e}
 
-    return {'status': True, 'desc': u'%s' % new_address_list.strip()}
+    return {'status': True, 'servers': u'%s' % new_address_list.strip()}
 
 
 def format_template_vars(template_vars):
@@ -101,7 +101,7 @@ def format_template_vars(template_vars):
         try:
             address = oneline.split('|')[0]
             if address == u'':
-                return {'status': False, 'desc': u'错误的变量赋值，不存在address关键字.'}
+                return {'status': False, 'desc': u'Incorrect external variables: %s' % oneline}
             address_vars = oneline.split('|')[1]
             address_vars_group[address.strip()] = dict()
             for var in address_vars.split(','):
@@ -112,36 +112,8 @@ def format_template_vars(template_vars):
                     value = var.split('=')[1].strip()
                     address_vars_group[address.strip()][key] = value
                 except IndexError:
-                    return {'status': False, 'desc': u'错误的变量赋值: %s' % var}
+                    return {'status': False, 'desc': u'Incorrect external variables: %s' % oneline}
         except IndexError:
-            return {'status': False, 'desc': u'错误的变量赋值: %s' % oneline}
+            return {'status': False, 'desc': u'Incorrect external variables: %s' % oneline}
 
-    return {'status': True, 'desc': address_vars_group}
-
-
-def validate_email(email):
-    EMAIL_RE = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
-
-    user = User.query.filter_by(email=email).all()
-
-    if user:
-        return False
-    else:
-        return email and EMAIL_RE.match(email)
-
-
-def validate_username(username):
-    USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-
-    user = User.query.filter_by(name=username).all()
-
-    if user:
-        return False
-    else:
-        return username and USER_RE.match(username)
-
-
-def validate_password(password):
-    PASSWORD_RE = re.compile(r".{8,20}$")
-
-    return password and PASSWORD_RE.match(password)
+    return {'status': True, 'vars': address_vars_group}

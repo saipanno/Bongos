@@ -32,9 +32,9 @@ from web.dashboard.models import SshConfig, PreDefinedScript
 class CreateSshDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
                                   query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
@@ -42,7 +42,7 @@ class CreateSshDetectForm(Form):
 class CreatePingDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
     submit = SubmitField(u'Save', id='submit')
 
@@ -54,14 +54,13 @@ class CreatePreDefinedExecuteForm(Form):
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    script_template = QuerySelectField(u'PreDefined Script<span class="required">*</span>', id='select',
+    script_template = QuerySelectField(u'PreDefined Script  <span class="required">*</span>', id='select',
                                        description=u'Select PreDefined Script.',
                                        query_factory=PreDefinedScript.query.all, get_label='desc')
-    template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
-                                  description=vars_desc)
-    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+    template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
+    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
                                   query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
 
@@ -77,11 +76,10 @@ class CreateCustomExecuteForm(Form):
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List<span class="required">*</span>', id='textarea',
+    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
                                 description=u'Support IP Address.')
-    script_template = TextAreaField(u'Script<span class="required">*</span>', id='textarea', description=script_desc)
-    template_vars = TextAreaField(u'External Variables<span class="required">*</span>', id='textarea',
-                                  description=vars_desc)
-    ssh_config = QuerySelectField(u'Ssh Config<span class="required">*</span>', id='select',
+    script_template = TextAreaField(u'Script Template  <span class="required">*</span>', id='textarea', description=script_desc)
+    template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
+    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
                                   query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Save', id='submit')
