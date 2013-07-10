@@ -32,40 +32,40 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 
 from web import db
 
-from web.operate.forms import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
+from web.operation.forms import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm
 
-from web.operate.models import OperateDb
+from web.operation.models import OperationDb
 from web.user.models import User
 
 from web.extensions import format_address_list
 from web.extensions import format_template_vars
 
 
-operate = Blueprint('operate', __name__, url_prefix='/operate')
+operation = Blueprint('operation', __name__, url_prefix='/operation')
 
 
-@operate.route('/<kind>/list')
+@operation.route('/<kind>/list')
 @login_required
-def list_operate_ctrl(kind):
+def list_operation_ctrl(kind):
 
-    executes = OperateDb.query.filter_by(kind=kind).order_by(desc(OperateDb.id)).all()
+    executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
 
     for execute in executes:
         user = User.query.filter_by(id=int(execute.author)).first()
         execute.author = user.name
 
-    return render_template('operate/list_operate.html', executes=executes, kind=kind)
+    return render_template('operation/list_operation.html', executes=executes, kind=kind)
 
 
-@operate.route('/<int:operate_id>/show')
+@operation.route('/<int:operation_id>/show')
 @login_required
-def show_operate_ctrl(operate_id):
+def show_operation_ctrl(operation_id):
 
     default_next_page = request.values.get('next', url_for('user.index_ctrl'))
 
     try:
-        execute = OperateDb.query.filter_by(id=operate_id).first()
+        execute = OperationDb.query.filter_by(id=operation_id).first()
 
     except exc.SQLAlchemyError:
         flash(u'Internal database error', 'error')
@@ -77,13 +77,13 @@ def show_operate_ctrl(operate_id):
 
     elif execute.result == u'':
         flash(u'Operation has not completed', 'info')
-        return redirect(url_for('operate.list_operate_ctrl', kind=execute.kind))
+        return redirect(url_for('operation.list_operation_ctrl', kind=execute.kind))
 
     fruits = json.loads(execute.result)
-    return render_template('operate/show_operate.html', execute=execute, fruits=fruits)
+    return render_template('operation/show_operation.html', execute=execute, fruits=fruits)
 
 
-@operate.route('/Ssh/create', methods=("GET", "POST"))
+@operation.route('/Ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -93,7 +93,7 @@ def create_ssh_detect_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operate/create_ssh_detect.html', form=form)
+        return  render_template('operation/create_ssh_detect.html', form=form)
 
     elif request.method == 'POST':
 
@@ -103,21 +103,21 @@ def create_ssh_detect_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operate.create_ssh_detect_ctrl'))
+            return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
         if form.ssh_config.data.id is None:
             flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operate.create_ssh_detect_ctrl'))
+            return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
-        operate = OperateDb(author, datetime, kind, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
-        db.session.add(operate)
+        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
+        db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operate.list_operate_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operate.route('/Ping/create', methods=("GET", "POST"))
+@operation.route('/Ping/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -127,7 +127,7 @@ def create_ping_detect_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operate/create_ping_detect.html', form=form)
+        return render_template('operation/create_ping_detect.html', form=form)
 
     elif request.method == 'POST':
 
@@ -137,17 +137,17 @@ def create_ping_detect_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operate.create_ping_detect_ctrl'))
+            return redirect(url_for('operation.create_ping_detect_ctrl'))
 
-        operate = OperateDb(author, datetime, kind, fruit['servers'], u'', u'', 0, 0, u'')
-        db.session.add(operate)
+        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', 0, 0, u'')
+        db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operate.list_operate_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operate.route('/Custom/create', methods=("GET", "POST"))
+@operation.route('/Custom/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -157,7 +157,7 @@ def create_custom_execute_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operate/create_custom_execute.html', form=form)
+        return  render_template('operation/create_custom_execute.html', form=form)
 
     elif request.method == 'POST':
 
@@ -167,32 +167,32 @@ def create_custom_execute_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operate.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_ctrl'))
 
         if form.script_template == u'':
             flash(u'Script template can\'t be empty', 'error')
-            return redirect(url_for('operate.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_ctrl'))
 
         if form.ssh_config.data.id is None:
             flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operate.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_ctrl'))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
-            return redirect(url_for('operate.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_ctrl'))
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
-        operate = OperateDb(author, datetime, kind, fruit['servers'], form.script_template.data,
-                            template_vars, form.ssh_config.data.id, 0, u'')
-        db.session.add(operate)
+        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data,
+                                template_vars, form.ssh_config.data.id, 0, u'')
+        db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operate.list_operate_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operate.route('/PreDefined/create', methods=("GET", "POST"))
+@operation.route('/PreDefined/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -202,7 +202,7 @@ def create_predefined_execute_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operate/create_predefined_execute.html', form=form)
+        return  render_template('operation/create_predefined_execute.html', form=form)
 
     elif request.method == 'POST':
 
@@ -212,26 +212,26 @@ def create_predefined_execute_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operate.create_predefined_execute_ctrl'))
+            return redirect(url_for('operation.create_predefined_execute_ctrl'))
 
         if form.script_template.data.id is None:
             flash(u'PreDefined script is not selected', 'error')
-            return redirect(url_for('operate.create_predefined_execute_ctrl'))
+            return redirect(url_for('operation.create_predefined_execute_ctrl'))
 
         if form.ssh_config.data.id is None:
             flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operate.create_predefined_execute_ctrl'))
+            return redirect(url_for('operation.create_predefined_execute_ctrl'))
 
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
-            return redirect(url_for('operate.create_predefined_execute_ctrl'))
+            return redirect(url_for('operation.create_predefined_execute_ctrl'))
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
-        operate = OperateDb(author, datetime, kind, fruit['servers'], form.script_template.data.id,
-                            template_vars, form.ssh_config.data.id, 0, u'')
-        db.session.add(operate)
+        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data.id,
+                                template_vars, form.ssh_config.data.id, 0, u'')
+        db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operate.list_operate_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', kind=kind))

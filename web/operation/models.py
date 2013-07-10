@@ -28,7 +28,7 @@ from web import db
 from web import app
 
 
-class OperateDb(db.Model):
+class OperationDb(db.Model):
 
     """
     DATE:   time.strftime('%Y-%m-%d %H:%M')
@@ -40,7 +40,7 @@ class OperateDb(db.Model):
 
     """
 
-    __tablename__ = app.config['OPERATE_LISTS']
+    __tablename__ = app.config['OPERATION_LISTS']
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.String(50))

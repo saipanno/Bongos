@@ -1,32 +1,32 @@
-{% extends "operate/base.html" %}
+{% extends "operation/base.html" %}
 
 {% import "macro.html" as ext %}
 
 {% if execute.kind == 'Ssh' %}
-    {% set operate_title = 'Detect' %}
-    {% set operate_create_url = url_for('operate.create_ssh_detect_ctrl') %}
+    {% set operation_title = 'Detect' %}
+    {% set operation_create_url = url_for('operation.create_ssh_detect_ctrl') %}
 {% elif execute.kind == 'Ping' %}
-    {% set operate_title = 'Detect' %}
-    {% set operate_create_url = url_for('operate.create_ping_detect_ctrl') %}
+    {% set operation_title = 'Detect' %}
+    {% set operation_create_url = url_for('operation.create_ping_detect_ctrl') %}
 {% elif execute.kind == 'Custom' %}
-    {% set operate_title = 'Execute' %}
-    {% set operate_create_url = url_for('operate.create_custom_execute_ctrl') %}
+    {% set operation_title = 'Execute' %}
+    {% set operation_create_url = url_for('operation.create_custom_execute_ctrl') %}
 {% elif execute.kind == 'PreDefined' %}
-    {% set operate_title = 'Execute' %}
-    {% set operate_create_url = url_for('operate.create_predefined_execute_ctrl') %}
+    {% set operation_title = 'Execute' %}
+    {% set operation_create_url = url_for('operation.create_predefined_execute_ctrl') %}
 {% endif %}
 
-{% block active_operate_ssh %}{% if execute.kind == 'Ssh' %}active{% endif %}{% endblock %}
-{% block active_operate_ping %}{% if execute.kind == 'Ping' %}active{% endif %}{% endblock %}
-{% block active_operate_custom %}{% if execute.kind == 'Custom' %}active{% endif %}{% endblock %}
-{% block active_operate_predefined %}{% if execute.kind == 'PreDefined' %}active{% endif %}{% endblock %}
+{% block active_operation_ssh %}{% if execute.kind == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operation_ping %}{% if execute.kind == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operation_custom %}{% if execute.kind == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operation_predefined %}{% if execute.kind == 'PreDefined' %}active{% endif %}{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">{{ operate_title }}</a><span class="divider">/</span></li>
+            <li><a href="#">{{ operation_title }}</a><span class="divider">/</span></li>
             <li><a href="#">{{ execute.kind }}</a> <span class="divider">/</span></li>
             <li class="active">Show</li>
         </ul>
@@ -35,7 +35,7 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ execute.kind }} {{ operate_title }}</a>
+                <a class="brand" href="#">{{ execute.kind }} {{ operation_title }}</a>
             </div>
         </div>
 

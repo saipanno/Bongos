@@ -1,0 +1,70 @@
+{% extends "operation/base.html" %}
+
+{% import "macro.html" as ext %}
+
+{% if kind == 'Ssh' %}
+    {% set operation_title = 'Detect' %}
+    {% set operation_create_url = url_for('operation.create_ssh_detect_ctrl') %}
+{% elif kind == 'Ping' %}
+    {% set operation_title = 'Detect' %}
+    {% set operation_create_url = url_for('operation.create_ping_detect_ctrl') %}
+{% elif kind == 'Custom' %}
+    {% set operation_title = 'Execute' %}
+    {% set operation_create_url = url_for('operation.create_custom_execute_ctrl') %}
+{% elif kind == 'PreDefined' %}
+    {% set operation_title = 'Execute' %}
+    {% set operation_create_url = url_for('operation.create_predefined_execute_ctrl') %}
+{% endif %}
+
+{% block active_operation_ssh %}{% if kind == 'Ssh' %}active{% endif %}{% endblock %}
+{% block active_operation_ping %}{% if kind == 'Ping' %}active{% endif %}{% endblock %}
+{% block active_operation_custom %}{% if kind == 'Custom' %}active{% endif %}{% endblock %}
+{% block active_operation_predefined %}{% if kind == 'PreDefined' %}active{% endif %}{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="#">{{ operation_title }}</a><span class="divider">/</span></li>
+            <li><a href="#">{{ kind }}</a> <span class="divider">/</span></li>
+            <li class="active">List</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">{{ kind }} {{ operation_title }}</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ operation_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add {{ operation_title }}</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>AUTHOR</th>
+                <th>CREATE TIME</th>
+                <th>SERVER LIST</th>
+                <th>STATUS</th>
+                <th>operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for execute in executes %}
+            <tr>
+                <td class="span1">{{ execute.author }}</td>
+                <td class="span1">{{ execute.datetime }}</td>
+                <td class="span5">{{ execute.server_list }}</td>
+                <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
+                <td class="span1"><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}">查看</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}

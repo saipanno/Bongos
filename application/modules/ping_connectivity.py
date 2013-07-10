@@ -78,7 +78,7 @@ def final_ping_checking(COUNT, TIMEOUT):
         return fruit
 
 
-def ping_connectivity_checking(config, operate):
+def ping_connectivity_checking(config, operation):
     """
     :Return:
 
@@ -90,22 +90,22 @@ def ping_connectivity_checking(config, operate):
     """
 
     # 修改任务状态，标记为操作中。
-    operate.status = 5
+    operation.status = 5
     db.session.commit()
 
     with hide('everything'):
 
         do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
-                          hosts=operate.server_list.split())
+                          hosts=operation.server_list.split())
 
-    operate.status = 1
+    operation.status = 1
 
     try:
-        operate.result = json.dumps(do_exec, ensure_ascii=False)
+        operation.result = json.dumps(do_exec, ensure_ascii=False)
     except Exception, e:
-        operate.status = 2
+        operation.status = 2
         message = 'Integrate data error. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.type, operate.status, message))
+                     (operation.id, operation.type, operation.status, message))
 
     db.session.commit()

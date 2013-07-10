@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block active_operation %}active{% endblock %}
+
+{% block sidebar %}
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">STATUS DETECT</li>
+                <li class="{% block active_operation_ssh %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='Ssh') }}">Ssh</a></li>
+                <li class="{% block active_operation_ping %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='Ping') }}">Ping</a></li>
+                <li class="nav-header">REMOTE EXECUTE</li>
+                <li class="{% block active_operation_predefined %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='PreDefined') }}">PreDefined</a></li>
+                <li class="{% block active_operation_custom %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='Custom') }}">User Custom</a></li>
+                <li class="nav-header">IPMI OVER LAN</li>
+                <li class="{% block active_operation_reboot %}{% endblock %}"><a href="#">Power</a></li>
+                <li class="{% block active_operation_shutdown %}{% endblock %}"><a href="#">Boot Device</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

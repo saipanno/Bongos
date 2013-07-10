@@ -42,7 +42,7 @@ user = Blueprint('user', __name__)
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('operate.list_operate_ctrl', kind='Ssh'))
+    return redirect(url_for('operation.list_operation_ctrl', kind='Ssh'))
 
 
 @user.route('/login', methods=['GET', 'POST'])

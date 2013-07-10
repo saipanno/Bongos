@@ -30,7 +30,7 @@ from fabric.api import env
 
 from application.extensions import logger
 
-from web.operate.models import OperateDb
+from web.operation.models import OperationDb
 
 from application.modules.ssh_connectivity import ssh_connectivity_checking
 from application.modules.ping_connectivity import ping_connectivity_checking
@@ -65,27 +65,27 @@ class Scheduler(object):
 
         while True:
 
-            operate = OperateDb.query.filter_by(status=u'0').first()
+            operation = OperationDb.query.filter_by(status=u'0').first()
 
-            if operate is not None:
+            if operation is not None:
 
                 logger.info('Started a new operating unit. ID: %s, TYPE: %s, HOSTS: %s' %
-                            (operate.id, operate.kind, operate.server_list))
+                            (operation.id, operation.kind, operation.server_list))
 
-                if operate.kind == u'Ping':
-                    ping_connectivity_checking(self.config, operate)
+                if operation.kind == u'Ping':
+                    ping_connectivity_checking(self.config, operation)
 
-                elif operate.kind == u'Ssh':
-                    ssh_connectivity_checking(operate)
+                elif operation.kind == u'Ssh':
+                    ssh_connectivity_checking(operation)
 
-                elif operate.kind == u'Custom':
-                    custom_script_execute(operate)
+                elif operation.kind == u'Custom':
+                    custom_script_execute(operation)
 
-                elif operate.kind == u'PreDefined':
-                    predefined_script_execute(operate)
+                elif operation.kind == u'PreDefined':
+                    predefined_script_execute(operation)
 
                 else:
-                    logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operate.id, operate.kind))
+                    logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operation.id, operation.kind))
 
             else:
 

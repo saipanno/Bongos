@@ -45,7 +45,7 @@ DISABLE_KNOWN_HOSTS = True  # default is True
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-OPERATE_LISTS = 'operate_lists'
+OPERATION_LISTS = 'operation_lists'
 USER_LISTS = 'user_lists'
 SSH_CONFIG_LISTS = 'ssh_config_lists'
 PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'

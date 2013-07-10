@@ -133,7 +133,7 @@ def final_ssh_checking(user, port, password, private_key):
         return fruit
 
 
-def ssh_connectivity_checking(operate):
+def ssh_connectivity_checking(operation):
     """
     :Return:
 
@@ -145,20 +145,20 @@ def ssh_connectivity_checking(operate):
     """
 
     # 修改任务状态，标记为操作中。
-    operate.status = 5
+    operation.status = 5
     db.session.commit()
 
     try:
-        ssh_config_id = operate.ssh_config
+        ssh_config_id = operation.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
 
     except Exception, e:
-        operate.status = 2
+        operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operate.id, operate.type, operate.status, message))
+                     (operation.id, operation.type, operation.status, message))
 
-    if operate.status != 2:
+    if operation.status != 2:
 
         with hide('everything'):
 
@@ -167,16 +167,16 @@ def ssh_connectivity_checking(operate):
                               ssh_config.port,
                               ssh_config.password,
                               generate_private_path(ssh_config.private_key),
-                              hosts=operate.server_list.split())
+                              hosts=operation.server_list.split())
 
-        operate.status = 1
+        operation.status = 1
 
         try:
-            operate.result = json.dumps(do_exec, ensure_ascii=False)
+            operation.result = json.dumps(do_exec, ensure_ascii=False)
         except Exception, e:
-            operate.status = 2
+            operation.status = 2
             message = 'Integrate data error. %s' % e
             logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operate.id, operate.type, operate.status, message))
+                         (operation.id, operation.type, operation.status, message))
 
     db.session.commit()
