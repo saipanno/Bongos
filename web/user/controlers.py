@@ -24,10 +24,13 @@
 # SOFTWARE.
 
 
+import re
 from flask import render_template, request, flash, redirect, url_for, Blueprint
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user, login_required, current_user
 
-from web.user.forms import UserLoginForm
+from web import db
+
+from web.user.forms import UserLoginForm, EditUserForm
 
 from web.user.models import User
 
@@ -50,7 +53,7 @@ def user_login_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('login.html', form=form)
+        return render_template('user/login.html', form=form)
 
     elif request.method == 'POST':
 
@@ -76,3 +79,60 @@ def user_logout_ctrl():
     logout_user()
 
     return redirect(url_for('user.index_ctrl'))
+
+
+@user.route('/settings', methods=("GET", "POST"))
+@login_required
+def edit_settings_ctrl():
+
+    user = current_user
+
+    form = EditUserForm(email=user.email, name=user.name)
+
+    if request.method == 'GET':
+
+        return render_template('user/settings.html', form=form, type='edit')
+
+    elif request.method == 'POST':
+
+#        if form.email.data != user.email and form.email.data != u'':
+#            if User.query.filter_by(email=form.email.data).all():
+#                flash(u'The current email is already in use', 'error')
+#                return redirect(url_for('user.edit_profile_ctrl'))
+#            elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
+#                flash(u'Incorrect e-mail address', 'error')
+#                return redirect(url_for('user.edit_profile_ctrl'))
+#            else:
+#                user.email = form.email.data
+
+        if form.name.data != user.name and form.name.data != u'':
+            if User.query.filter_by(name=form.name.data).all():
+                flash(u'The current name is already in use', 'error')
+                return redirect(url_for('user.edit_settings_ctrl'))
+            elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.email.data):
+                flash(u'Incorrect name format', 'error')
+                return redirect(url_for('user.edit_settings_ctrl'))
+            else:
+                user.name = form.name.data
+
+        if len(form.new_password.data) > 0:
+
+            if user.check_password(form.now_password.data):
+
+                if form.new_password.data != form.confirm_password.data:
+                    flash(u'Please enter the same password', 'error')
+                    return redirect(url_for('user.edit_settings_ctrl'))
+                elif not re.match(".{8,20}$", form.new_password.data):
+                    flash(u'Incorrect password format', 'error')
+                    return redirect(url_for('user.edit_settings_ctrl'))
+                else:
+                    user.update_password(form.new_password.data)
+
+            else:
+                flash(u'Current password is incorrect', 'error')
+                return redirect(url_for('user.edit_settings_ctrl'))
+
+        db.session.commit()
+        flash(u'Update user settings successfully', 'success')
+
+        return redirect(url_for('user.edit_settings_ctrl'))

@@ -37,7 +37,7 @@
                     <li class="divider-vertical"></li>
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ current_user.name }}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ url_for("dashboard.edit_user_ctrl", user_id=current_user.id) }}">Setting</a></li>
+                            <li><a href="{{ url_for("user.edit_settings_ctrl") }}">Settings</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ url_for("user.user_logout_ctrl") }}">Quit</a></li>
                         </ul>

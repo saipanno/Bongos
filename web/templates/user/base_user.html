@@ -1,0 +1,14 @@
+{% extends "user/index.html" %}
+
+{% block sidebar %}
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">PROFILE</li>
+                <li class="active"><a href="{{ url_for("user.edit_settings_ctrl") }}">Profile</a></li>
+                <li class="nav-header">OTHER</li>
+                <li class=""><a href="">Hello</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

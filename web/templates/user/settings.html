@@ -1,0 +1,80 @@
+{% extends "user/base_user.html" %}
+
+{% block active_dashboard_user %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">User</a> <span class="divider">/</span></li>
+            <li class="active">Settings</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="tabbable">
+            <form method="post" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Settings
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.email.label }}</label>
+                        <div class="controls">
+                            {{ form.email(class="uneditable-input") }}
+                            {% if form.email.description %}<p class="help-block">{{ form.email.description|safe }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.name.label }}</label>
+                        <div class="controls">
+                            {{ form.name() }}
+                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.now_password.label }}</label>
+                        <div class="controls">
+                            {{ form.now_password() }}
+                            {% if form.now_password.description %}<p class="help-block">{{ form.now_password.description|safe }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.new_password.label }}</label>
+                        <div class="controls">
+                            {{ form.new_password() }}
+                            {% if form.new_password.description %}<p class="help-block">{{ form.new_password.description|safe }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.confirm_password.label }}</label>
+                        <div class="controls">
+                            {{ form.confirm_password() }}
+                            {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+{% endblock %}
