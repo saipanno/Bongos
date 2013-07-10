@@ -150,7 +150,7 @@ def list_user_ctrl():
 
         users = User.query.all()
 
-        return render_template('dashboard/user.html', users=users, type='list')
+        return render_template('dashboard/user_manager.html', users=users, type='list')
 
 
 @dashboard.route('/user/create', methods=("GET", "POST"))
@@ -161,7 +161,7 @@ def create_user_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('dashboard/user.html', form=form, type='create')
+        return render_template('dashboard/user_manager.html', form=form, type='create')
 
     elif request.method == 'POST':
 
@@ -209,7 +209,7 @@ def edit_user_ctrl(user_id):
 
     if request.method == 'GET':
 
-        return render_template('dashboard/user.html', form=form, type='edit')
+        return render_template('dashboard/user_manager.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
