@@ -151,7 +151,7 @@ def list_user_ctrl():
         users = User.query.all()
 
         for user in users:
-            user.group = UserGroup.query.filter_by(id=user.id).first().desc
+            user.group = UserGroup.query.filter_by(id=user.group).first().desc
 
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
