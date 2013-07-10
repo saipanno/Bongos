@@ -64,7 +64,11 @@ def user_login_ctrl():
 
         user = User.query.filter_by(email=form.email.data).first()
 
-        if user is not None and user.check_password(form.password.data):
+        if user is not None and not user.is_active():
+            flash(u'User has been disabled', 'error')
+            return redirect(url_for('user.user_login_ctrl'))
+
+        elif user is not None and user.check_password(form.password.data):
             login_user(user)
             flash(u'Login successful', 'success')
             return redirect(default_next_page)

@@ -186,7 +186,7 @@ def create_user_ctrl():
 
         elif form.group.data.id is None:
             flash(u'Group can\'t be empty', 'error')
-        elif UserGroup.query.filter_by(id=form.group.data.id).all():
+        elif not UserGroup.query.filter_by(id=form.group.data.id).all():
             flash(u'The current group is not exist', 'error')
 
         elif form.password.data == u'' or form.confirm_password.data == u'':
@@ -197,7 +197,7 @@ def create_user_ctrl():
             flash(u'Incorrect password format', 'error')
 
         else:
-            user = User(form.email.data, form.name.data, form.group.data, form.password.data)
+            user = User(form.email.data, form.name.data, form.group.data.id, form.password.data)
             db.session.add(user)
             db.session.commit()
 
@@ -242,7 +242,10 @@ def edit_user_ctrl(user_id):
                 user.name = form.name.data
 
         if form.group.data.id != user.group and form.group.data.id is not None:
-            user.group = form.group.data.id
+            if not UserGroup.query.filter_by(id=form.group.data.id).all():
+                flash(u'The current group is not exist', 'error')
+            else:
+                user.group = form.group.data.id
 
         if len(form.new_password.data) > 0:
 

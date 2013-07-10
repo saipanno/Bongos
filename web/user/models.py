@@ -57,7 +57,12 @@ class User(db.Model):
         return True
 
     def is_active(self):
-        return True
+
+        group = UserGroup.query.filter_by(id=self.group).first()
+        if group.name != 'disable':
+            return True
+        else:
+            return False
 
     def is_anonymous(self):
         return False
