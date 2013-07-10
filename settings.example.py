@@ -48,6 +48,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
 OPERATION_LISTS = 'operation_lists'
 USER_LISTS = 'user_lists'
 SSH_CONFIG_LISTS = 'ssh_config_lists'
+PERMISSION_LISTS = 'permission_lists'
 PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'
 
 # logging config

@@ -37,12 +37,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50), unique=True)
+    group = db.Column(db.Integer)
     password = db.Column(db.String(50))
 
-    def __init__(self, email, name, password):
+    def __init__(self, email, name, group, password):
 
         self.email = email
         self.name = name
+        self.group = group
         self.password = generate_password_hash(password, salt_length=8)
 
     def check_password(self, password):
@@ -62,3 +64,17 @@ class User(db.Model):
 
     def get_id(self):
         return unicode(self.id)
+
+
+class UserGroup(db.Model):
+
+    __tablename__ = app.config['PERMISSION_LISTS']
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(50))
+
+    def __init__(self, name, desc):
+
+        self.name = name
+        self.desc = desc

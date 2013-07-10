@@ -30,6 +30,7 @@
                 <tr>
                     <th>EMAIL</th>
                     <th>USERNAME</th>
+                    <th>GROUP</th>
                     <th>OPERATE</th>
                 </tr>
                 </thead>
@@ -38,6 +39,7 @@
                         <tr>
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
+                            <td>{{ user.group }}</td>
                             <td>
                                 <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
                             </td>
@@ -82,7 +84,14 @@
                                 {{ form.name() }}
                                 {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
                             </div>
+                        </div>
 
+                        <div class="control-group">
+                            <label class="control-label">{{ form.group.label|safe }}</label>
+                            <div class="controls">
+                                {{ form.group() }}
+                                {% if form.group.description %}<p class="help-block">{{ form.group.description|safe }}</p>{% endif %}
+                            </div>
                         </div>
 
                         <div class="control-group">
@@ -149,6 +158,13 @@
                             </div>
                         </div>
 
+                        <div class="control-group">
+                            <label class="control-label">{{ form.group.label|safe }}</label>
+                            <div class="controls">
+                                {{ form.group() }}
+                                {% if form.group.description %}<p class="help-block">{{ form.group.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
 
                         <div class="control-group">
                             <label class="control-label">{{ form.now_password.label }}</label>

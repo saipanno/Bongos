@@ -31,7 +31,7 @@ from flask.ext.login import login_required, current_user
 
 from web import db
 
-from web.user.models import User
+from web.user.models import User, UserGroup
 from web.user.forms import CreateUserForm, EditUserForm
 
 from web.dashboard.models import SshConfig, PreDefinedScript
@@ -150,6 +150,9 @@ def list_user_ctrl():
 
         users = User.query.all()
 
+        for user in users:
+            user.group = UserGroup.query.filter_by(id=user.id).first().desc
+
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
 
@@ -181,6 +184,11 @@ def create_user_ctrl():
         elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.name.data):
             flash(u'Incorrect name format', 'error')
 
+        elif form.group.data.id is None:
+            flash(u'Group can\'t be empty', 'error')
+        elif UserGroup.query.filter_by(id=form.group.data.id).all():
+            flash(u'The current group is not exist', 'error')
+
         elif form.password.data == u'' or form.confirm_password.data == u'':
             flash(u'Password can\'t be empty', 'error')
         elif form.password.data != form.confirm_password.data:
@@ -189,7 +197,7 @@ def create_user_ctrl():
             flash(u'Incorrect password format', 'error')
 
         else:
-            user = User(form.email.data, form.name.data, form.password.data)
+            user = User(form.email.data, form.name.data, form.group.data, form.password.data)
             db.session.add(user)
             db.session.commit()
 
@@ -205,7 +213,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, name=user.name)
+    form = EditUserForm(email=user.email, name=user.name, group=user.group)
 
     if request.method == 'GET':
 
@@ -232,6 +240,9 @@ def edit_user_ctrl(user_id):
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
                 user.name = form.name.data
+
+        if form.group.data.id != user.group and form.group.data.id is not None:
+            user.group = form.group.data.id
 
         if len(form.new_password.data) > 0:
 

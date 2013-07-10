@@ -27,6 +27,7 @@
 #import logging
 from flask import Flask
 from flask.ext.login import LoginManager
+from flask.ext.principal import Principal, Permission, RoleNeed
 from flask.ext.sqlalchemy import SQLAlchemy
 
 
@@ -35,10 +36,13 @@ app.config.from_object('settings')
 
 db = SQLAlchemy(app)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "user.user_login_ctrl"
+login_manager = LoginManager(app)
+login_manager.login_view = 'user.user_login_ctrl'
 
+#principal = Principal(app)
+#admin = Permission(RoleNeed('admin'))
+#member = Permission(RoleNeed('member'))
+#null = Permission(RoleNeed('null'))
 
 from web.user.controlers import user
 from web.operation.controlers import operation
