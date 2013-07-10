@@ -45,6 +45,7 @@ def create_app(config=None):
 
 
 def configure_extensions(app):
+
     db.init_app(app)
     # 因为未知的原因造成db无法初始化，必须再次手动调用。 TODO:解决此问题。
     db.app = app
@@ -54,10 +55,14 @@ def configure_extensions(app):
 
 def configure_blueprints(app):
 
-    from web.controlers.user import user
-    from web.controlers.operation import operation
-    from web.controlers.dashboard import dashboard
+    import web.controlers
 
-    app.register_blueprint(user)
-    app.register_blueprint(operation)
-    app.register_blueprint(dashboard)
+    BLUEPRINTS = (
+        web.controlers.user,
+        web.controlers.operation,
+        web.controlers.dashboard
+    )
+
+    for blueprint in BLUEPRINTS:
+
+        app.register_blueprint(blueprint)
