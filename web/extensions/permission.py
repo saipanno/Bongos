@@ -34,11 +34,11 @@ admin = Permission(RoleNeed('admin'))
 member = Permission(RoleNeed('member'))
 null = Permission(RoleNeed('null'))
 
-login_manager = LoginManager()
-login_manager.login_view = 'user.user_login_ctrl'
+login = LoginManager()
+login.login_view = 'user.user_login_ctrl'
 
 
-@login_manager.user_loader
+@login.user_loader
 def load_user(user_id):
     try:
         user = User.query.get(user_id)

@@ -27,7 +27,7 @@
 from flask import Flask
 
 from web.extensions.database import db
-from web.extensions.permission import login_manager
+from web.extensions.permission import login
 
 
 def create_app(config=None):
@@ -38,10 +38,21 @@ def create_app(config=None):
     if config is not None:
         app.config.from_object(config)
 
+    configure_extensions(app)
+    configure_blueprints(app)
+
+    return app
+
+
+def configure_extensions(app):
     db.init_app(app)
+    # 因为未知的原因造成db无法初始化，必须再次手动调用。 TODO:解决此问题。
     db.app = app
 
-    login_manager.init_app(app)
+    login.init_app(app)
+
+
+def configure_blueprints(app):
 
     from web.user.controlers import user
     from web.operation.controlers import operation
@@ -50,5 +61,3 @@ def create_app(config=None):
     app.register_blueprint(user)
     app.register_blueprint(operation)
     app.register_blueprint(dashboard)
-
-    return app
