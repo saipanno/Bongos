@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/12.
+#                    Created at 2013/07/10.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,3 @@
 # SOFTWARE.
 
 
-from flask import Flask
-from flask.ext.login import LoginManager
-from flask.ext.principal import Principal, Permission, RoleNeed
-from flask.ext.sqlalchemy import SQLAlchemy
-
-
-app = Flask(__name__)
-app.config.from_object('settings')
-
-db = SQLAlchemy(app)
-
-login_manager = LoginManager(app)
-login_manager.login_view = 'user.user_login_ctrl'
-
-principal = Principal(app)
-admin = Permission(RoleNeed('admin'))
-member = Permission(RoleNeed('member'))
-null = Permission(RoleNeed('null'))
-
-from web.user.controlers import user
-from web.operation.controlers import operation
-from web.dashboard.controlers import dashboard
-
-app.register_blueprint(user)
-app.register_blueprint(operation)
-app.register_blueprint(dashboard)
