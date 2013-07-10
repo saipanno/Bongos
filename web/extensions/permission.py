@@ -22,14 +22,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-
-from flask.ext.principal import RoleNeed, Principal, Permission
-
-
-principal = Principal()
-
-admin = Permission(RoleNeed('admin'))
-member = Permission(RoleNeed('member'))
-
-null = Permission(RoleNeed('null'))
