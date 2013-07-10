@@ -24,8 +24,12 @@
 # SOFTWARE.
 
 
-from web import app
+from web.app import create_app
+
+
+app = create_app()
+
 
 if __name__ == '__main__':
 
-    app.run(host=app.config['HOST'], port=int(app.config['PORT']), debug=app.config['DEBUG'])
+    app.run(host='0.0.0.0', port=80, debug=True)

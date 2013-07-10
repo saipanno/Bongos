@@ -22,31 +22,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-
-from flask import Flask
-from flask.ext.login import LoginManager
-from flask.ext.principal import Principal, Permission, RoleNeed
-from flask.ext.sqlalchemy import SQLAlchemy
-
-
-app = Flask(__name__)
-app.config.from_object('settings')
-
-db = SQLAlchemy(app)
-
-login_manager = LoginManager(app)
-login_manager.login_view = 'user.user_login_ctrl'
-
-principal = Principal(app)
-admin = Permission(RoleNeed('admin'))
-member = Permission(RoleNeed('member'))
-null = Permission(RoleNeed('null'))
-
-from web.user.controlers import user
-from web.operation.controlers import operation
-from web.dashboard.controlers import dashboard
-
-app.register_blueprint(user)
-app.register_blueprint(operation)
-app.register_blueprint(dashboard)

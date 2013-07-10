@@ -29,7 +29,7 @@ from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
 
-from web import db
+from web.extensions.database import db
 
 from web.user.models import User, UserGroup
 from web.user.forms import CreateUserForm, EditUserForm

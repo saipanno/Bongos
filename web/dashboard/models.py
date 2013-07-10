@@ -24,13 +24,12 @@
 # SOFTWARE.
 
 
-from web import db
-from web import app
+from web.extensions.database import db
 
 
 class SshConfig(db.Model):
 
-    __tablename__ = app.config['SSH_CONFIG_LISTS']
+    __tablename__ = 'ssh_config_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
@@ -51,7 +50,7 @@ class SshConfig(db.Model):
 
 class PreDefinedScript(db.Model):
 
-    __tablename__ = app.config['PREDEFINED_SCRIPT_LISTS']
+    __tablename__ = 'predefined_script_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)

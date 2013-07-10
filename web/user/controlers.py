@@ -28,7 +28,7 @@ import re
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required, current_user
 
-from web import db
+from web.extensions.database import db
 
 from web.user.forms import UserLoginForm, EditUserForm
 

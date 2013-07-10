@@ -24,8 +24,7 @@
 # SOFTWARE.
 
 
-from web import db
-from web import app
+from web.extensions.database import db
 
 
 class OperationDb(db.Model):
@@ -40,7 +39,7 @@ class OperationDb(db.Model):
 
     """
 
-    __tablename__ = app.config['OPERATION_LISTS']
+    __tablename__ = 'operation_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.String(50))

@@ -26,13 +26,12 @@
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from web import db
-from web import app
+from web.extensions.database import db
 
 
 class User(db.Model):
 
-    __tablename__ = app.config['USER_LISTS']
+    __tablename__ = 'user_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
@@ -73,7 +72,7 @@ class User(db.Model):
 
 class UserGroup(db.Model):
 
-    __tablename__ = app.config['PERMISSION_LISTS']
+    __tablename__ = 'permission_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
