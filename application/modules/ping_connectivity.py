@@ -27,7 +27,7 @@
 import json
 from fabric.api import env, hide, show, local, execute
 
-from web.hello.database import db
+from web.extensions.database import db
 from application.extensions import logger
 
 

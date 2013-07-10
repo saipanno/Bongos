@@ -54,9 +54,9 @@ def configure_extensions(app):
 
 def configure_blueprints(app):
 
-    from web.user.controlers import user
-    from web.operation.controlers import operation
-    from web.dashboard.controlers import dashboard
+    from web.controlers.user import user
+    from web.controlers.operation import operation
+    from web.controlers.dashboard import dashboard
 
     app.register_blueprint(user)
     app.register_blueprint(operation)

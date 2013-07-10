@@ -30,11 +30,11 @@ from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 
-from web.operation.forms import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
+from web.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm
 
-from web.operation.models import OperationDb
-from web.user.models import User
+from web.models.user import User
+from web.models.operation import OperationDb
 
 from web.extensions.database import db
 from web.extensions.validation import format_address_list

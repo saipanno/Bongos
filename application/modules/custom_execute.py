@@ -29,8 +29,9 @@ from jinja2 import Template
 from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from web.hello.database import db
-from web.dashboard.models import SshConfig
+from web.extensions.database import db
+from web.models.dashboard import SshConfig
+
 from application.extensions import logger, generate_private_path, analysis_script_output
 
 

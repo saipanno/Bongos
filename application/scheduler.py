@@ -30,7 +30,7 @@ from fabric.api import env
 
 from application.extensions import logger
 
-from web.operation.models import OperationDb
+from web.models.operation import OperationDb
 
 from application.modules.ssh_connectivity import ssh_connectivity_checking
 from application.modules.ping_connectivity import ping_connectivity_checking

@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField
 
-from web.user.models import UserGroup
+from web.models.user import PermissionGroup
 
 
 class UserLoginForm(Form):
@@ -43,7 +43,7 @@ class CreateUserForm(Form):
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     name = TextField(u'Name  <span class="required">*</span>', id='name', description=u'Unrepeatable')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=UserGroup.query.all, get_label='desc')
+                             query_factory=PermissionGroup.query.all, get_label='desc')
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>', id='confirm_password')
     submit = SubmitField(u'Save', id='submit')
@@ -55,7 +55,7 @@ class EditUserForm(Form):
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     name = TextField(u'Name  <span class="required">*</span>', id='name', description=u'Unrepeatable')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=UserGroup.query.all, get_label='desc')
+                             query_factory=PermissionGroup.query.all, get_label='desc')
     now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
     new_password = PasswordField(u'New Password  <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')

@@ -30,9 +30,9 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 
 from web.extensions.database import db
 
-from web.user.forms import UserLoginForm, EditUserForm
+from web.forms.user import UserLoginForm, EditUserForm
 
-from web.user.models import User
+from web.models.user import User
 
 
 user = Blueprint('user', __name__)

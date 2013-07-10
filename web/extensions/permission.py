@@ -27,7 +27,7 @@
 from flask.ext.login import LoginManager
 from flask.ext.principal import Principal, Permission, RoleNeed
 
-from web.user.models import User
+from web.models.user import User
 
 
 admin = Permission(RoleNeed('admin'))

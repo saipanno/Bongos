@@ -31,11 +31,11 @@ from flask.ext.login import login_required, current_user
 
 from web.extensions.database import db
 
-from web.user.models import User, UserGroup
-from web.user.forms import CreateUserForm, EditUserForm
+from web.models.user import User, PermissionGroup
+from web.models.dashboard import SshConfig, PreDefinedScript
 
-from web.dashboard.models import SshConfig, PreDefinedScript
-from web.dashboard.forms import CreatePreDefinedScriptForm, CreateSshConfigForm
+from web.forms.user import CreateUserForm, EditUserForm
+from web.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -151,7 +151,7 @@ def list_user_ctrl():
         users = User.query.all()
 
         for user in users:
-            user.group = UserGroup.query.filter_by(id=user.group).first().desc
+            user.group = PermissionGroup.query.filter_by(id=user.group).first().desc
 
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -186,7 +186,7 @@ def create_user_ctrl():
 
         elif form.group.data.id is None:
             flash(u'Group can\'t be empty', 'error')
-        elif not UserGroup.query.filter_by(id=form.group.data.id).all():
+        elif not PermissionGroup.query.filter_by(id=form.group.data.id).all():
             flash(u'The current group is not exist', 'error')
 
         elif form.password.data == u'' or form.confirm_password.data == u'':
@@ -242,7 +242,7 @@ def edit_user_ctrl(user_id):
                 user.name = form.name.data
 
         if form.group.data.id != user.group and form.group.data.id is not None:
-            if not UserGroup.query.filter_by(id=form.group.data.id).all():
+            if not PermissionGroup.query.filter_by(id=form.group.data.id).all():
                 flash(u'The current group is not exist', 'error')
             else:
                 user.group = form.group.data.id

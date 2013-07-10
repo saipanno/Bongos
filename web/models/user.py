@@ -57,7 +57,7 @@ class User(db.Model):
 
     def is_active(self):
 
-        group = UserGroup.query.filter_by(id=self.group).first()
+        group = PermissionGroup.query.filter_by(id=self.group).first()
         if group.name != 'disable':
             return True
         else:
@@ -70,7 +70,7 @@ class User(db.Model):
         return unicode(self.id)
 
 
-class UserGroup(db.Model):
+class PermissionGroup(db.Model):
 
     __tablename__ = 'permission_lists'
 
