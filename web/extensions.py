@@ -33,7 +33,12 @@ from web.user.models import User
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    try:
+        user = User.query.get(user_id)
+    except Exception, e:
+        user = None
+
+    return user
 
 
 def verify_address(address):
