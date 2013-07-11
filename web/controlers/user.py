@@ -30,7 +30,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 
 from web.extensions.database import db
 
-from web.forms.user import UserLoginForm, EditUserForm
+from web.forms.user import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
 
 from web.models.user import User
 
@@ -87,27 +87,21 @@ def user_logout_ctrl():
 
 @user.route('/settings', methods=("GET", "POST"))
 @login_required
-def edit_settings_ctrl():
+def user_edit_settings_ctrl():
 
     user = current_user
 
-    form = EditUserForm(email=user.email, name=user.name)
+    form = EditUserSettingsForm(email=user.email, name=user.name)
 
     if request.method == 'GET':
 
-        return render_template('user/settings.html', form=form, type='edit')
+        return render_template('user/change_settings.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
-#        if form.email.data != user.email and form.email.data != u'':
-#            if User.query.filter_by(email=form.email.data).all():
-#                flash(u'The current email is already in use', 'error')
-#                return redirect(url_for('user.edit_profile_ctrl'))
-#            elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
-#                flash(u'Incorrect e-mail address', 'error')
-#                return redirect(url_for('user.edit_profile_ctrl'))
-#            else:
-#                user.email = form.email.data
+        if form.email.data != user.email:
+            flash(u'The email can\'t be modified', 'error')
+            return redirect(url_for('user.edit_settings_ctrl'))
 
         if form.name.data != user.name and form.name.data != u'':
             if User.query.filter_by(name=form.name.data).all():
@@ -119,24 +113,48 @@ def edit_settings_ctrl():
             else:
                 user.name = form.name.data
 
+        db.session.commit()
+        flash(u'Update user settings successfully', 'success')
+
+        return redirect(url_for('user.edit_settings_ctrl'))
+
+
+@user.route('/password', methods=("GET", "POST"))
+@login_required
+def user_edit_password_ctrl():
+
+    user = current_user
+
+    form = EditUserPasswordForm(email=user.email)
+
+    if request.method == 'GET':
+
+        return render_template('user/change_password.html', form=form)
+
+    elif request.method == 'POST':
+
+        if form.email.data != user.email:
+            flash(u'The email can\'t be modified', 'error')
+            return redirect(url_for('user.user_edit_password_ctrl'))
+
         if len(form.new_password.data) > 0:
 
             if user.check_password(form.now_password.data):
 
                 if form.new_password.data != form.confirm_password.data:
                     flash(u'Please enter the same password', 'error')
-                    return redirect(url_for('user.edit_settings_ctrl'))
+                    return redirect(url_for('user.user_edit_password_ctrl'))
                 elif not re.match(".{8,20}$", form.new_password.data):
                     flash(u'Incorrect password format', 'error')
-                    return redirect(url_for('user.edit_settings_ctrl'))
+                    return redirect(url_for('user.user_edit_password_ctrl'))
                 else:
                     user.update_password(form.new_password.data)
 
             else:
                 flash(u'Current password is incorrect', 'error')
-                return redirect(url_for('user.edit_settings_ctrl'))
+                return redirect(url_for('user.user_edit_password_ctrl'))
 
         db.session.commit()
-        flash(u'Update user settings successfully', 'success')
+        flash(u'Update user password successfully', 'success')
 
-        return redirect(url_for('user.edit_settings_ctrl'))
+        return redirect(url_for('user.user_edit_password_ctrl'))

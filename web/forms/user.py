@@ -45,19 +45,42 @@ class CreateUserForm(Form):
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
-    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>', id='confirm_password')
+    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
+                                     id='confirm_password', description=u'Re-enter the password')
     submit = SubmitField(u'Save', id='submit')
 
 
 class EditUserForm(Form):
 
     next_page = HiddenField()
+    email = TextField(u'Email <span class="required">*</span>', id='email', description=u'Unrepeatable')
+    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable')
+    group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
+                             query_factory=PermissionGroup.query.all, get_label='desc')
+    new_password = PasswordField(u'New Password <span class="required">*</span>',
+                                 id='new_password', description=u'At least eight')
+    confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
+                                     id='confirm_password', description=u'Re-enter the new password')
+    submit = SubmitField(u'Update', id='submit')
+
+
+class EditUserSettingsForm(Form):
+
+    next_page = HiddenField()
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     name = TextField(u'Name  <span class="required">*</span>', id='name', description=u'Unrepeatable')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
+    submit = SubmitField(u'Update', id='submit')
+
+
+class EditUserPasswordForm(Form):
+
+    next_page = HiddenField()
+    email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
     new_password = PasswordField(u'New Password  <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')
-    confirm_password = PasswordField(u'Confirm New Password  <span class="required">*</span>', id='confirm_password')
+    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
+                                     id='confirm_password', description=u'Re-enter the new password')
     submit = SubmitField(u'Update', id='submit')

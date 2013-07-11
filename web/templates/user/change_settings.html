@@ -1,13 +1,13 @@
 {% extends "user/base.html" %}
 
-{% block active_dashboard_user %}active{% endblock %}
+{% block active_user_edit_settings %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">User</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">Profile</a> <span class="divider">/</span></li>
             <li class="active">Settings</li>
         </ul>
 
@@ -37,31 +37,6 @@
                         <div class="controls">
                             {{ form.name() }}
                             {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
-
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.now_password.label }}</label>
-                        <div class="controls">
-                            {{ form.now_password() }}
-                            {% if form.now_password.description %}<p class="help-block">{{ form.now_password.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.new_password.label }}</label>
-                        <div class="controls">
-                            {{ form.new_password() }}
-                            {% if form.new_password.description %}<p class="help-block">{{ form.new_password.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{{ form.confirm_password.label }}</label>
-                        <div class="controls">
-                            {{ form.confirm_password() }}
-                            {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
                         </div>
                     </div>
 
