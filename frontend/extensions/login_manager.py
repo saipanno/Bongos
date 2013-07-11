@@ -30,7 +30,7 @@ from frontend.models.user import User
 
 
 login = LoginManager()
-login.login_view = 'user.user_login_ctrl'
+login.login_view = 'member.user_login_ctrl'
 
 
 @login.user_loader

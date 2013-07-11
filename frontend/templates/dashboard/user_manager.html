@@ -31,6 +31,7 @@
                     <th>EMAIL</th>
                     <th>USERNAME</th>
                     <th>GROUP</th>
+                    <th>DISABLE</th>
                     <th>OPERATE</th>
                 </tr>
                 </thead>
@@ -40,6 +41,7 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.group }}</td>
+                            <td>{{ '禁用' if user.disable else '启用' }}</td>
                             <td>
                                 <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
                             </td>
@@ -107,6 +109,14 @@
                             <div class="controls">
                                 {{ form.confirm_password() }}
                                 {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.disable.label|safe }}</label>
+                            <div class="controls">
+                                {{ form.disable() }}
+                                {% if form.disable.description %}<p class="help-block">{{ form.disable.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
@@ -179,6 +189,14 @@
                             <div class="controls">
                                 {{ form.confirm_password() }}
                                 {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">{{ form.disable.label }}</label>
+                            <div class="controls">
+                                {{ form.disable() }}
+                                {% if form.disable.description %}<p class="help-block">{{ form.disable.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 

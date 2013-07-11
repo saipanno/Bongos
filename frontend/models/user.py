@@ -38,13 +38,15 @@ class User(db.Model):
     name = db.Column(db.String(50), unique=True)
     group = db.Column(db.Integer)
     password = db.Column(db.String(50))
+    disable = db.Column(db.Integer)
 
-    def __init__(self, email, name, group, password):
+    def __init__(self, email, name, group, password, disable):
 
         self.email = email
         self.name = name
         self.group = group
         self.password = generate_password_hash(password, salt_length=8)
+        self.disable = disable
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -56,12 +58,7 @@ class User(db.Model):
         return True
 
     def is_active(self):
-
-        group = PermissionGroup.query.filter_by(id=self.group).first()
-        if group.name != 'disable':
-            return True
-        else:
-            return False
+        return False if self.disable else True
 
     def is_anonymous(self):
         return False
