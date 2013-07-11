@@ -31,7 +31,7 @@ import logging
 import settings
 
 
-logging.basicConfig(filename=settings.APP_LOG_FILENAME,
+logging.basicConfig(filename=settings.LOGGING_FILENAME,
                     level=logging.INFO,
                     filemode='a',
                     format='%(asctime)s - %(levelname)s: %(message)s')

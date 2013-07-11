@@ -28,12 +28,13 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 # web config
-DEBUG = True
 PORT = 80
 HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
 PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
-SECRET_KEY = '4bt!\t\x97\xde\xa5R\xfbu\xc0\xe5\x8f\xe0Fz\x00\xa2P\x8d\x85\x97\x08'
+SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
+
+DEBUG = True
 
 # fabric config
 POOL_SIZE = 250           # default is 250
@@ -45,13 +46,7 @@ DISABLE_KNOWN_HOSTS = True  # default is True
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-OPERATION_LISTS = 'operation_lists'
-USER_LISTS = 'user_lists'
-SSH_CONFIG_LISTS = 'ssh_config_lists'
-PERMISSION_LISTS = 'permission_lists'
-PREDEFINED_SCRIPT_LISTS = 'predefined_script_lists'
 
 # logging config
 LOGGING_LEVEL = 'INFO'
-WEB_LOG_FILENAME = os.path.join(_basedir, 'web.log')
-APP_LOG_FILENAME = os.path.join(_basedir, 'application.log')
+LOGGING_FILENAME = os.path.join(_basedir, 'bongos.log')
