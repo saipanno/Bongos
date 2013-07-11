@@ -37,8 +37,8 @@ from frontend.models.user import User
 from frontend.models.operation import OperationDb
 
 from frontend.extensions.database import db
-from frontend.extensions.validation import format_address_list
-from frontend.extensions.validation import format_template_vars
+from frontend.extensions.utility import format_address_list
+from frontend.extensions.utility import format_template_vars
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')

@@ -27,8 +27,8 @@
 from flask import Flask
 
 from frontend.extensions.database import db
-from frontend.extensions.authentication import login
-from frontend.extensions.authorization import principal
+from frontend.extensions.login_manager import login
+from frontend.extensions.principal import principal
 
 
 def create_app(config=None):
