@@ -50,6 +50,10 @@ def list_predefined_script_ctrl():
 
         scripts = PreDefinedScript.query.all()
 
+        for script in scripts:
+            user = User.query.filter_by(id=int(script.author)).first()
+            script.author = user.name
+
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 

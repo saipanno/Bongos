@@ -36,20 +36,20 @@ class CreatePreDefinedScriptForm(Form):
 <br /><code>echo "BD:"$HOSTNAME":EOF"</code>'''
 
     name = TextField(u'Name  <span class="required">*</span>', id='text',
-                     description=u'Unrepeatable. Contain only letters, numbers, and underscores (5-25 characters)')
+                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     desc = TextField(u'Description  <span class="required">*</span>', id='text')
     script = TextAreaField(u'Script  <span class="required">*</span>', id='textarea', description=script_desc)
-    submit = SubmitField(u'Save', id='submit')
+    submit = SubmitField(u'Submit', id='submit')
 
 
 class CreateSshConfigForm(Form):
 
     name = TextField(u'Name  <span class="required">*</span>', id='text',
-                     description=u'Unrepeatable. Contain only letters, numbers, and underscores (5-25 characters)')
+                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     desc = TextField(u'Description  <span class="required">*</span>', id='text')
     port = IntegerField(u'Port  <span class="required">*</span>', id='port', default=22)
     username = TextField(u'Username  <span class="required">*</span>', id='text', default=u'root')
     password = PasswordField(u'Password  <span class="required">*</span>', id='text')
     private_key = TextField(u'Private Key:', id='text',
                             description=u'Private key filename, not required.')
-    submit = SubmitField(u'Save', id='submit')
+    submit = SubmitField(u'Submit', id='submit')

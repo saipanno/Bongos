@@ -47,31 +47,33 @@ class CreateUserForm(Form):
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the password')
-    submit = SubmitField(u'Save', id='submit')
+    submit = SubmitField(u'Submit', id='submit')
 
 
 class EditUserForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable')
+    name = TextField(u'Name <span class="required">*</span>', id='name',
+                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
     new_password = PasswordField(u'New Password <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the new password')
-    submit = SubmitField(u'Update', id='submit')
+    submit = SubmitField(u'Submit', id='submit')
 
 
 class EditUserSettingsForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    name = TextField(u'Name  <span class="required">*</span>', id='name', description=u'Unrepeatable')
+    name = TextField(u'Name  <span class="required">*</span>', id='name',
+                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
-    submit = SubmitField(u'Update', id='submit')
+    submit = SubmitField(u'Submit', id='submit')
 
 
 class EditUserPasswordForm(Form):
@@ -83,4 +85,4 @@ class EditUserPasswordForm(Form):
                                  id='new_password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the new password')
-    submit = SubmitField(u'Update', id='submit')
+    submit = SubmitField(u'Submit', id='submit')

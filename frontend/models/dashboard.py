@@ -56,7 +56,7 @@ class PreDefinedScript(db.Model):
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(255))
     script = db.Column(db.Text)
-    author = db.Column(db.String(50))
+    author = db.Column(db.Integer)
 
     def __init__(self, name, desc, script, author):
         self.name = name
