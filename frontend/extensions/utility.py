@@ -27,8 +27,15 @@
 import re
 
 
-USERNAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
+NAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
 DOMAIN_REGEX = u'^[a-zA-Z0-9\_\-]{1,20}$'
+PASSWORD_REGEX = u'^.{8,20}$'
+USERNAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
+
+
+def validate_name(name):
+
+    return name and re.match(NAME_REGEX, name)
 
 
 def validate_email(email):
@@ -40,15 +47,14 @@ def validate_email(email):
             username = fields[0]
             domain = fields[1]
 
-            if username and re.match(USERNAME_REGEX, username) and domain and '\.' in domain:
+            if username and domain and re.match(USERNAME_REGEX, username):
                 fields = domain.split('.')
 
-                for field in fields:
-                    if not field or not re.match(DOMAIN_REGEX, field):
-                        return False
-                    else:
-                        return True
+                if len(fields) >= 2:
 
+                    for field in fields:
+                        if field and re.match(DOMAIN_REGEX, field):
+                            return True
     return False
 
 
@@ -62,16 +68,7 @@ def validate_integer(value):
 
 
 def validate_address(address):
-    """
-    Returns True if `address` is a valid IPv4 address.
 
-    >>> verify_address('192.168.1.1')
-    True
-    >>> verify_address('192.168.1.800')
-    False
-    >>> verify_address('192.168.1')
-    False
-    """
     try:
         octets = address.split('.')
         if len(octets) != 4:
@@ -84,9 +81,14 @@ def validate_address(address):
     return True
 
 
+def validate_password(password):
+
+    return password and re.match(PASSWORD_REGEX, password)
+
+
 def validate_username(username):
 
-    return username and re.match(USERNAME_REGEX, username)
+    return username and re.match(NAME_REGEX, username)
 
 
 def format_address_list(address_list):

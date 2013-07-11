@@ -42,7 +42,7 @@ class OperationDb(db.Model):
     __tablename__ = 'operation_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(50))
+    author = db.Column(db.Integer)
     datetime = db.Column(db.String(50))
     kind = db.Column(db.String(25))
     server_list = db.Column(db.Text)

@@ -24,7 +24,6 @@
 # SOFTWARE.
 
 
-import re
 from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
@@ -36,6 +35,8 @@ from frontend.models.dashboard import SshConfig, PreDefinedScript
 
 from frontend.forms.user import CreateUserForm, EditUserForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
+
+from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -62,11 +63,11 @@ def show_predefined_script_ctrl(script_id):
         script = PreDefinedScript.query.filter_by(id=script_id).first()
 
     except exc.SQLAlchemyError:
-        flash(u'获取预定义脚本信息错误.', 'error')
+        flash(u'Internal database error', 'error')
         return redirect(default_next_page)
 
     if script is None:
-        flash(u'不存在的预定义脚本.', 'error')
+        flash(u'This predefined script does not exist', 'error')
         return redirect(default_next_page)
 
     return render_template('dashboard/predefined_script.html', script=script, type='show')
@@ -84,12 +85,12 @@ def create_predefined_script_ctrl():
 
     elif request.method == 'POST':
 
-        author = current_user.name
+        author = current_user.id
         redirect_url = url_for('dashboard.create_predefined_script_ctrl')
 
         if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+        elif not validate_name(form.name.data):
             flash(u'Incorrect name format', 'error')
         elif PreDefinedScript.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
@@ -126,7 +127,7 @@ def edit_predefined_script_ctrl(script_id):
     elif request.method == 'POST':
 
         if form.name.data != script.name and form.name.data != u'':
-            if not re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+            if not validate_name(form.name.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
@@ -174,14 +175,14 @@ def create_user_ctrl():
             flash(u'Email can\'t be empty', 'error')
         elif User.query.filter_by(email=form.email.data).all():
             flash(u'The current email is already in use', 'error')
-        elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
+        elif not validate_email(form.email.data):
             flash(u'Incorrect e-mail address', 'error')
 
         elif form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
         elif User.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
-        elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.name.data):
+        elif not validate_name(form.name.data):
             flash(u'Incorrect name format', 'error')
 
         elif form.group.data.id is None:
@@ -193,7 +194,7 @@ def create_user_ctrl():
             flash(u'Password can\'t be empty', 'error')
         elif form.password.data != form.confirm_password.data:
             flash(u'Please enter the same password', 'error')
-        elif not re.match(".{8,20}$", form.password.data):
+        elif not validate_password(form.password.data):
             flash(u'Incorrect password format', 'error')
 
         else:
@@ -225,7 +226,7 @@ def edit_user_ctrl(user_id):
             if User.query.filter_by(email=form.email.data).all():
                 flash(u'The current email is already in use', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not re.match("^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", form.email.data):
+            elif not validate_email(form.email.data):
                 flash(u'Incorrect e-mail address', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
@@ -235,7 +236,7 @@ def edit_user_ctrl(user_id):
             if User.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.email.data):
+            elif not validate_name(form.name.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
@@ -252,7 +253,7 @@ def edit_user_ctrl(user_id):
             if form.new_password.data != form.confirm_password.data:
                 flash(u'Please enter the same password', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not re.match(".{8,20}$", form.new_password.data):
+            elif not validate_password(form.new_password.data):
                 flash(u'Incorrect password format', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
@@ -291,7 +292,7 @@ def create_ssh_config_ctrl():
 
         if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+        elif not validate_name(form.name.data):
             flash(u'Incorrect name format', 'error')
         elif SshConfig.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
@@ -306,13 +307,13 @@ def create_ssh_config_ctrl():
 
         elif form.username.data == u'':
             flash(u'Username can\'t be empty', 'error')
-        elif not re.match("^[a-zA-Z0-9]{1,20}$", form.username.data):
+        elif not validate_username(form.username.data):
             flash(u'Incorrect username format', 'error')
 
         elif form.password.data == u'':
             flash(u'Password can\'t be empty', 'error')
 
-        elif form.private_key.data != u'' and not re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
+        elif form.private_key.data != u'' and not validate_name(form.private_key.data):
             flash(u'Incorrect key filename format', 'error')
 
         else:
@@ -347,7 +348,7 @@ def edit_ssh_config_ctrl(config_id):
             if SshConfig.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
-            elif not re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
+            elif not validate_name(form.name.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', script_id=config_id))
             else:
@@ -364,7 +365,7 @@ def edit_ssh_config_ctrl(config_id):
             return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
         if form.username.data != config.username and form.username.data != u'':
-            if re.match("^[a-zA-Z0-9]{1,20}$", form.username.data):
+            if validate_username(form.username.data):
                 config.username = form.username.data
             else:
                 flash(u'Incorrect username format', 'error')
@@ -374,7 +375,7 @@ def edit_ssh_config_ctrl(config_id):
                 config.password = form.password.data
 
         if form.private_key.data != config.private_key and form.private_key.data != u'':
-            if re.match("^[a-z0-9\-\.]{1,20}$", form.private_key.data):
+            if validate_name(form.private_key.data):
                 config.private_key = form.private_key.data
             else:
                 flash(u'Incorrect key filename format', 'error')
