@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/10.
+#                    Created at 2013/07/11.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,27 @@
 # SOFTWARE.
 
 
-from flask.ext.login import LoginManager
-from flask.ext.principal import Principal, Permission, RoleNeed
-
-from web.models.user import User
-
-
-admin = Permission(RoleNeed('admin'))
-member = Permission(RoleNeed('member'))
-null = Permission(RoleNeed('null'))
-
-login = LoginManager()
-login.login_view = 'user.user_login_ctrl'
+from flask import current_app
+from flask.ext.login import current_user
+from flask.ext.principal import Principal, Permission, RoleNeed, UserNeed, identity_loaded
 
 
-@login.user_loader
-def load_user(user_id):
-    try:
-        user = User.query.get(user_id)
-    except Exception, e:
-        user = None
+principal = Principal(skip_static=True)
 
-    return user
+admin_permission = Permission(RoleNeed('admin'))
+member_permission = Permission(RoleNeed('member'))
+guest_permission = Permission(RoleNeed('guest'))
+disable_permission = Permission(RoleNeed('disable'))
 
+#signin = Permission(ActionNeed('signin'))
 
+@identity_loaded.connect_via(current_app)
+def on_identity_loaded(sender, identity):
+    identity.user = current_user
 
+    if hasattr(current_user, 'id'):
+        identity.providers.add(UserNeed(current_user.id))
+
+    if hasattr(current_user, 'roles'):
+        for role in current_user.roles:
+            identity.provides.add(RoleNeed(role.name))

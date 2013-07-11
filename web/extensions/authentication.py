@@ -24,50 +24,23 @@
 # SOFTWARE.
 
 
-from flask import Flask
+from flask.ext.login import LoginManager
 
-from web.extensions.database import db
-from web.extensions.authentication import login
-from web.extensions.authorization import principal
+from web.models.user import User
 
 
-def create_app(config=None):
-
-    app = Flask(__name__)
-
-    app.config.from_object('settings')
-    if config is not None:
-        app.config.from_object(config)
-
-    configure_extensions(app)
-    configure_blueprints(app)
-
-    return app
+login = LoginManager()
+login.login_view = 'user.user_login_ctrl'
 
 
-def configure_extensions(app):
+@login.user_loader
+def load_user(user_id):
+    try:
+        user = User.query.get(user_id)
+    except Exception, e:
+        user = None
 
-    # config Flask-SQLAlchemy
-    db.app = app
-    db.init_app(app)
-
-    # config Flask-Login
-    login.init_app(app)
-
-    # config Flask-Principal
-    principal.init_app(app)
+    return user
 
 
-def configure_blueprints(app):
 
-    import web.controlers
-
-    BLUEPRINTS = (
-        web.controlers.user,
-        web.controlers.operation,
-        web.controlers.dashboard
-    )
-
-    for blueprint in BLUEPRINTS:
-
-        app.register_blueprint(blueprint)

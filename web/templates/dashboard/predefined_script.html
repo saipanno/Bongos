@@ -20,7 +20,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">Script Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.create_script_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Script</a>
+                    <a href="{{ url_for('dashboard.create_predefined_script_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Script</a>
                 </div>
             </div>
         </div>
@@ -41,8 +41,8 @@
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author }}</td>
                         <td>
-                            <a href="{{ url_for('dashboard.show_script_ctrl', script_id=script.id)}}">查看</a>
-                            <a href="{{ url_for('dashboard.edit_script_ctrl', script_id=script.id)}}">编辑</a>
+                            <a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}">查看</a>
+                            <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}">编辑</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -64,7 +64,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ script.name }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.edit_script_ctrl', script_id=script.id)}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
+                    <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
                 </div>
             </div>
 

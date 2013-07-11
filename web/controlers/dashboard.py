@@ -41,9 +41,9 @@ from web.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 
-@dashboard.route('/script/list')
+@dashboard.route('/predefined_script/list')
 @login_required
-def list_script_ctrl():
+def list_predefined_script_ctrl():
 
     if request.method == 'GET':
 
@@ -52,9 +52,9 @@ def list_script_ctrl():
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 
-@dashboard.route('/script/<int:script_id>/show')
+@dashboard.route('/predefined_script/<int:script_id>/show')
 @login_required
-def show_script_ctrl(script_id):
+def show_predefined_script_ctrl(script_id):
 
     default_next_page = request.values.get('next', url_for('user.index_ctrl'))
 
@@ -72,9 +72,9 @@ def show_script_ctrl(script_id):
     return render_template('dashboard/predefined_script.html', script=script, type='show')
 
 
-@dashboard.route('/script/create', methods=("GET", "POST"))
+@dashboard.route('/predefined_script/create', methods=("GET", "POST"))
 @login_required
-def create_script_ctrl():
+def create_predefined_script_ctrl():
 
     form = CreatePreDefinedScriptForm()
 
@@ -85,7 +85,7 @@ def create_script_ctrl():
     elif request.method == 'POST':
 
         author = current_user.name
-        redirect_url = url_for('dashboard.create_script_ctrl')
+        redirect_url = url_for('dashboard.create_predefined_script_ctrl')
 
         if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
@@ -111,9 +111,9 @@ def create_script_ctrl():
         return redirect(redirect_url)
 
 
-@dashboard.route('/script/<int:script_id>/edit', methods=("GET", "POST"))
+@dashboard.route('/predefined_script/<int:script_id>/edit', methods=("GET", "POST"))
 @login_required
-def edit_script_ctrl(script_id):
+def edit_predefined_script_ctrl(script_id):
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
 
@@ -128,7 +128,7 @@ def edit_script_ctrl(script_id):
         if form.name.data != script.name and form.name.data != u'':
             if not re.match("^[a-zA-Z0-9_]{5,25}$", form.name.data):
                 flash(u'Incorrect name format', 'error')
-                return redirect(url_for('dashboard.edit_script_ctrl', script_id=script_id))
+                return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
         if form.desc.data != script.desc and form.desc.data != u'':
             script.desc = form.desc.data
@@ -139,7 +139,7 @@ def edit_script_ctrl(script_id):
         db.session.commit()
 
         flash(u'Update predefined script successfully.', 'success')
-        return redirect(url_for('dashboard.list_script_ctrl'))
+        return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
 
 @dashboard.route('/user/list')
@@ -249,20 +249,14 @@ def edit_user_ctrl(user_id):
 
         if len(form.new_password.data) > 0:
 
-            if user.check_password(form.now_password.data):
-
-                if form.new_password.data != form.confirm_password.data:
-                    flash(u'Please enter the same password', 'error')
-                    return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-                elif not re.match(".{8,20}$", form.new_password.data):
-                    flash(u'Incorrect password format', 'error')
-                    return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-                else:
-                    user.update_password(form.new_password.data)
-
-            else:
-                flash(u'Current password is incorrect', 'error')
+            if form.new_password.data != form.confirm_password.data:
+                flash(u'Please enter the same password', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            elif not re.match(".{8,20}$", form.new_password.data):
+                flash(u'Incorrect password format', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            else:
+                user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')

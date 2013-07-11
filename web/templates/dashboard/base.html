@@ -6,13 +6,13 @@
     <div class="span2">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">MANAGER UNIT</li>
+                <li class="nav-header">MANAGER</li>
                 <li class="{% block active_dashboard_user %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">User</a></li>
                 <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}">Ssh Config</a></li>
-                <li class="{% block active_dashboard_script %}{% endblock %}"><a href="{{ url_for("dashboard.list_script_ctrl") }}">PreDefined Script</a></li>
-                <li class="nav-header">ACCESS LOG</li>
+                <li class="{% block active_dashboard_script %}{% endblock %}"><a href="{{ url_for("dashboard.list_predefined_script_ctrl") }}">PreDefined Script</a></li>
+                <li class="nav-header">JOURNAL</li>
                 <li class=""><a href="#">User</a></li>
-                <li class=""><a href="#">Task</a></li>
+                <li class=""><a href="#">Operation</a></li>
             </ul>
         </div>
     </div>
