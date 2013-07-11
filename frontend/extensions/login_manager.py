@@ -26,7 +26,7 @@
 
 from flask.ext.login import LoginManager
 
-from frontend.models.user import User
+from frontend.models.member import User
 
 
 login = LoginManager()

@@ -33,7 +33,7 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm
 
-from frontend.models.user import User
+from frontend.models.member import User
 from frontend.models.operation import OperationDb
 
 from frontend.extensions.database import db

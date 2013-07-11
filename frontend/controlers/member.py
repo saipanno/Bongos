@@ -24,17 +24,17 @@
 # SOFTWARE.
 
 
-import re
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
 from frontend.extensions.database import db
+from frontend.extensions.utility import validate_name, validate_password
 from frontend.extensions.principal import admin_permission, member_permission, disable_permission
 
-from frontend.forms.user import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
+from frontend.forms.member import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
 
-from frontend.models.user import User
+from frontend.models.member import User
 
 
 member = Blueprint('member', __name__)
@@ -55,7 +55,7 @@ def user_login_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('user/login.html', form=form)
+        return render_template('member/login.html', form=form)
 
     elif request.method == 'POST':
 
@@ -97,7 +97,7 @@ def user_edit_settings_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('user/change_settings.html', form=form, type='edit')
+        return render_template('member/change_settings.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
@@ -109,7 +109,7 @@ def user_edit_settings_ctrl():
             if User.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('member.edit_settings_ctrl'))
-            elif not re.match("^[a-zA-Z0-9\-\.]{3,20}$", form.email.data):
+            elif not validate_name(form.name.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('member.edit_settings_ctrl'))
             else:
@@ -131,7 +131,7 @@ def user_edit_password_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('user/change_password.html', form=form)
+        return render_template('member/change_password.html', form=form)
 
     elif request.method == 'POST':
 
@@ -146,7 +146,7 @@ def user_edit_password_ctrl():
                 if form.new_password.data != form.confirm_password.data:
                     flash(u'Please enter the same password', 'error')
                     return redirect(url_for('member.user_edit_password_ctrl'))
-                elif not re.match(".{8,20}$", form.new_password.data):
+                elif not validate_password(form.new_password.data):
                     flash(u'Incorrect password format', 'error')
                     return redirect(url_for('member.user_edit_password_ctrl'))
                 else:

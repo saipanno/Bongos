@@ -30,10 +30,10 @@ from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
 
-from frontend.models.user import User, PermissionGroup
+from frontend.models.member import User, PermissionGroup
 from frontend.models.dashboard import SshConfig, PreDefinedScript
 
-from frontend.forms.user import CreateUserForm, EditUserForm
+from frontend.forms.member import CreateUserForm, EditUserForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password

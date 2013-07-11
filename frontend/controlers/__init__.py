@@ -24,6 +24,6 @@
 # SOFTWARE.
 
 
-from frontend.controlers.user import member
+from frontend.controlers.member import member
 from frontend.controlers.operation import operation
 from frontend.controlers.dashboard import dashboard

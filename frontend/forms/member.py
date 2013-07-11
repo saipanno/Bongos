@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, BooleanField
 
-from frontend.models.user import PermissionGroup
+from frontend.models.member import PermissionGroup
 
 
 class UserLoginForm(Form):
