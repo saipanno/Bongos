@@ -27,7 +27,41 @@
 import re
 
 
-def verify_address(address):
+USERNAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
+DOMAIN_REGEX = u'^[a-zA-Z0-9\_\-]{1,20}$'
+
+
+def validate_email(email):
+
+    if email and '@' in email:
+        fields = email.split('@')
+
+        if len(fields) == 2:
+            username = fields[0]
+            domain = fields[1]
+
+            if username and re.match(USERNAME_REGEX, username) and domain and '\.' in domain:
+                fields = domain.split('.')
+
+                for field in fields:
+                    if not field or not re.match(DOMAIN_REGEX, field):
+                        return False
+                    else:
+                        return True
+
+    return False
+
+
+def validate_integer(value):
+    try:
+        int(value)
+    except (ValueError, TypeError):
+        return False
+
+    return True
+
+
+def validate_address(address):
     """
     Returns True if `address` is a valid IPv4 address.
 
@@ -48,6 +82,11 @@ def verify_address(address):
     except ValueError:
         return False
     return True
+
+
+def validate_username(username):
+
+    return username and re.match(USERNAME_REGEX, username)
 
 
 def format_address_list(address_list):
@@ -71,7 +110,7 @@ def format_address_list(address_list):
         for server in re.split(';|,| |\n', address_list):
             if server == u'':
                 continue
-            address_status = verify_address(server.strip())
+            address_status = validate_address(server.strip())
             if address_status is not True:
                 return {'status': False, 'desc': u'Incorrect IP address: %s' % server}
             new_address_list = '%s %s' % (new_address_list, server.strip())
