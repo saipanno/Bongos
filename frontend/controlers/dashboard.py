@@ -29,13 +29,13 @@ from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required, current_user
 
-from web.extensions.database import db
+from frontend.extensions.database import db
 
-from web.models.user import User, PermissionGroup
-from web.models.dashboard import SshConfig, PreDefinedScript
+from frontend.models.user import User, PermissionGroup
+from frontend.models.dashboard import SshConfig, PreDefinedScript
 
-from web.forms.user import CreateUserForm, EditUserForm
-from web.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
+from frontend.forms.user import CreateUserForm, EditUserForm
+from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')

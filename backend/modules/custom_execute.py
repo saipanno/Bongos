@@ -29,18 +29,17 @@ from jinja2 import Template
 from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from web.extensions.database import db
+from frontend.extensions.database import db
+from frontend.models.dashboard import SshConfig
 
-from web.models.dashboard import SshConfig, PreDefinedScript
-
-from application.extensions import logger, generate_private_path, analysis_script_output
+from backend.extensions import logger, generate_private_path, analysis_script_output
 
 
-def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
+def final_custom_execute(user, port, password, private_key, script_template, template_vars):
     """
     :Return:
 
-        default return: dict(code=100, msg='')
+        default return: dict(code=100, error='', msg='')
 
         0: PING SUCCESS(可联通)
         1: PING FAIL(超时)
@@ -49,7 +48,7 @@ def final_predefined_execute(user, port, password, private_key, script_template,
         1: SSH FAIL(超时, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+        4: COMMAND EXECUTE FAIL(脚本中途失败)
 
         10: NETWORK ERROR(IP无法解析)
 
@@ -97,7 +96,7 @@ def final_predefined_execute(user, port, password, private_key, script_template,
     except NetworkError, e:
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
             fruit['code'] = 1
-            fruit['error'] = 'Connect timeout'
+            fruit['error'] = 'Ssh connect timeout'
 
         elif 'Name lookup failed for' in e.__str__():
             fruit['code'] = 10
@@ -137,7 +136,7 @@ def final_predefined_execute(user, port, password, private_key, script_template,
         return fruit
 
 
-def predefined_script_execute(operation):
+def custom_script_execute(operation):
     """
     :Return:
 
@@ -162,15 +161,6 @@ def predefined_script_execute(operation):
                      (operation.id, operation.type, operation.status, message))
 
     try:
-        predefined_script_id = operation.script_template
-        script_template = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to get the script template. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
-
-    try:
         template_vars = json.loads(operation.template_vars)
     except Exception, e:
         operation.status = 2
@@ -182,12 +172,12 @@ def predefined_script_execute(operation):
 
         with hide('everything'):
 
-            do_exec = execute(final_predefined_execute,
+            do_exec = execute(final_custom_execute,
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
                               generate_private_path(ssh_config.private_key),
-                              script_template,
+                              operation.script_template,
                               template_vars,
                               hosts=operation.server_list.split())
 

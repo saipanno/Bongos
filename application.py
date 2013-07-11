@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-from application import app
-from application.extensions import logger
+from backend import app
+from backend.extensions import logger
 
 if __name__ == '__main__':
 

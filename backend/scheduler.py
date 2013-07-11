@@ -28,14 +28,14 @@ import time
 from werkzeug.utils import import_string
 from fabric.api import env
 
-from application.extensions import logger
+from backend.extensions import logger
 
-from web.models.operation import OperationDb
+from frontend.models.operation import OperationDb
 
-from application.modules.ssh_connectivity import ssh_connectivity_checking
-from application.modules.ping_connectivity import ping_connectivity_checking
-from application.modules.custom_execute import custom_script_execute
-from application.modules.predefined_execute import predefined_script_execute
+from backend.modules.ssh_connectivity import ssh_connectivity_checking
+from backend.modules.ping_connectivity import ping_connectivity_checking
+from backend.modules.custom_execute import custom_script_execute
+from backend.modules.predefined_execute import predefined_script_execute
 
 
 class Scheduler(object):

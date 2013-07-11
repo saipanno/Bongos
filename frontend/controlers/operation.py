@@ -30,15 +30,15 @@ from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 
-from web.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
+from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm
 
-from web.models.user import User
-from web.models.operation import OperationDb
+from frontend.models.user import User
+from frontend.models.operation import OperationDb
 
-from web.extensions.database import db
-from web.extensions.validation import format_address_list
-from web.extensions.validation import format_template_vars
+from frontend.extensions.database import db
+from frontend.extensions.validation import format_address_list
+from frontend.extensions.validation import format_template_vars
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')

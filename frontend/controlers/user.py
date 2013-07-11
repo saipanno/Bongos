@@ -28,11 +28,11 @@ import re
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required, current_user
 
-from web.extensions.database import db
+from frontend.extensions.database import db
 
-from web.forms.user import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
+from frontend.forms.user import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
 
-from web.models.user import User
+from frontend.models.user import User
 
 
 user = Blueprint('user', __name__)

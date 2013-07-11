@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/10.
+#                    Created at 2013/02/22.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,50 +24,7 @@
 # SOFTWARE.
 
 
-from flask import Flask
+from backend.scheduler import Scheduler
 
-from web.extensions.database import db
-from web.extensions.authentication import login
-from web.extensions.authorization import principal
-
-
-def create_app(config=None):
-
-    app = Flask(__name__)
-
-    app.config.from_object('settings')
-    if config is not None:
-        app.config.from_object(config)
-
-    configure_extensions(app)
-    configure_blueprints(app)
-
-    return app
-
-
-def configure_extensions(app):
-
-    # config Flask-SQLAlchemy
-    db.app = app
-    db.init_app(app)
-
-    # config Flask-Login
-    login.init_app(app)
-
-    # config Flask-Principal
-    principal.init_app(app)
-
-
-def configure_blueprints(app):
-
-    import web.controlers
-
-    BLUEPRINTS = (
-        web.controlers.user,
-        web.controlers.operation,
-        web.controlers.dashboard
-    )
-
-    for blueprint in BLUEPRINTS:
-
-        app.register_blueprint(blueprint)
+app = Scheduler()
+app.config_from_object('settings')

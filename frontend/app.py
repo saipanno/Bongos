@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/11.
+#                    Created at 2013/07/10.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,50 @@
 # SOFTWARE.
 
 
-from web.controlers.user import user
-from web.controlers.operation import operation
-from web.controlers.dashboard import dashboard
+from flask import Flask
+
+from frontend.extensions.database import db
+from frontend.extensions.authentication import login
+from frontend.extensions.authorization import principal
+
+
+def create_app(config=None):
+
+    app = Flask(__name__)
+
+    app.config.from_object('settings')
+    if config is not None:
+        app.config.from_object(config)
+
+    configure_extensions(app)
+    configure_blueprints(app)
+
+    return app
+
+
+def configure_extensions(app):
+
+    # config Flask-SQLAlchemy
+    db.app = app
+    db.init_app(app)
+
+    # config Flask-Login
+    login.init_app(app)
+
+    # config Flask-Principal
+    principal.init_app(app)
+
+
+def configure_blueprints(app):
+
+    import frontend.controlers
+
+    BLUEPRINTS = (
+        frontend.controlers.user,
+        frontend.controlers.operation,
+        frontend.controlers.dashboard
+    )
+
+    for blueprint in BLUEPRINTS:
+
+        app.register_blueprint(blueprint)

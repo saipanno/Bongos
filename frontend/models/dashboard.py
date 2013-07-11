@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/01/23.
+#                    Created at 2013/01/21.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,61 +24,42 @@
 # SOFTWARE.
 
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
-from web.extensions.database import db
+from frontend.extensions.database import db
 
 
-class User(db.Model):
+class SshConfig(db.Model):
 
-    __tablename__ = 'user_lists'
+    __tablename__ = 'ssh_config_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50), unique=True)
-    group = db.Column(db.Integer)
+    desc = db.Column(db.String(255))
+    port = db.Column(db.Integer)
+    username = db.Column(db.String(50))
     password = db.Column(db.String(50))
+    private_key = db.Column(db.String(50))
 
-    def __init__(self, email, name, group, password):
-
-        self.email = email
-        self.name = name
-        self.group = group
-        self.password = generate_password_hash(password, salt_length=8)
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-
-    def update_password(self, new_password):
-        self.password = generate_password_hash(new_password, salt_length=8)
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-
-        group = PermissionGroup.query.filter_by(id=self.group).first()
-        if group.name != 'disable':
-            return True
-        else:
-            return False
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return unicode(self.id)
-
-
-class PermissionGroup(db.Model):
-
-    __tablename__ = 'permission_lists'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-    desc = db.Column(db.String(50))
-
-    def __init__(self, name, desc):
-
+    def __init__(self, name, desc, port, username, password, private_key=None):
         self.name = name
         self.desc = desc
+        self.port = port
+        self.username = username
+        self.password = password
+        self.private_key = private_key
+
+
+class PreDefinedScript(db.Model):
+
+    __tablename__ = 'predefined_script_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(255))
+    script = db.Column(db.Text)
+    author = db.Column(db.String(50))
+
+    def __init__(self, name, desc, script, author):
+        self.name = name
+        self.desc = desc
+        self.script = script
+        self.author = author

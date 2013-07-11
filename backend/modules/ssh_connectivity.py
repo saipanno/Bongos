@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/17.
+#                    Created at 2013/04/16.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +25,19 @@
 
 
 import json
-from jinja2 import Template
 from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from web.extensions.database import db
-from web.models.dashboard import SshConfig
+from frontend.extensions.database import db
+from frontend.models.dashboard import SshConfig
+from backend.extensions import logger, generate_private_path, analysis_script_output
 
-from application.extensions import logger, generate_private_path, analysis_script_output
 
-
-def final_custom_execute(user, port, password, private_key, script_template, template_vars):
+def final_ssh_checking(user, port, password, private_key):
     """
     :Return:
 
-        default return: dict(code=100, error='', msg='')
+        default return: dict(code=100, msg='')
 
         0: PING SUCCESS(可联通)
         1: PING FAIL(超时)
@@ -48,7 +46,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
         1: SSH FAIL(超时, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND EXECUTE FAIL(脚本中途失败)
+        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
 
         10: NETWORK ERROR(IP无法解析)
 
@@ -68,19 +66,18 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
     if private_key is not None:
         env.key_filename = private_key
 
-    fruit = dict(code=100, error='', msg='')
-
-    template = Template(script_template)
-    script = template.render(template_vars.get(env.host, dict()))
+    fruit = dict(code=100, msg='')
 
     try:
-        output = run(script, shell=True, quiet=True)
+        output = run('uptime', shell=True, quiet=True)
+
         if output.return_code == 0:
             fruit['code'] = 0
             fruit['msg'] = analysis_script_output(output.stdout)
         else:
-            fruit['code'] = 4
-            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['code'] = 20
+            # SSH联通性测试，不再保存命令输出。
+            #fruit['msg'] = analysis_script_output(output.stdout)
             fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
@@ -96,7 +93,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
     except NetworkError, e:
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
             fruit['code'] = 1
-            fruit['error'] = 'Ssh connect timeout'
+            fruit['error'] = 'Connect timeout'
 
         elif 'Name lookup failed for' in e.__str__():
             fruit['code'] = 10
@@ -136,7 +133,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
         return fruit
 
 
-def custom_script_execute(operation):
+def ssh_connectivity_checking(operation):
     """
     :Return:
 
@@ -154,17 +151,10 @@ def custom_script_execute(operation):
     try:
         ssh_config_id = operation.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
+
     except Exception, e:
         operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
-
-    try:
-        template_vars = json.loads(operation.template_vars)
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to load template vars. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operation.id, operation.type, operation.status, message))
 
@@ -172,16 +162,15 @@ def custom_script_execute(operation):
 
         with hide('everything'):
 
-            do_exec = execute(final_custom_execute,
+            do_exec = execute(final_ssh_checking,
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
                               generate_private_path(ssh_config.private_key),
-                              operation.script_template,
-                              template_vars,
                               hosts=operation.server_list.split())
 
         operation.status = 1
+
         try:
             operation.result = json.dumps(do_exec, ensure_ascii=False)
         except Exception, e:

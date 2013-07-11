@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/16.
+#                    Created at 2013/04/17.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,18 @@
 
 
 import json
+from jinja2 import Template
 from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from web.extensions.database import db
-from web.models.dashboard import SshConfig
-from application.extensions import logger, generate_private_path, analysis_script_output
+from frontend.extensions.database import db
+
+from frontend.models.dashboard import SshConfig, PreDefinedScript
+
+from backend.extensions import logger, generate_private_path, analysis_script_output
 
 
-def final_ssh_checking(user, port, password, private_key):
+def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
     """
     :Return:
 
@@ -66,18 +69,19 @@ def final_ssh_checking(user, port, password, private_key):
     if private_key is not None:
         env.key_filename = private_key
 
-    fruit = dict(code=100, msg='')
+    fruit = dict(code=100, error='', msg='')
+
+    template = Template(script_template)
+    script = template.render(template_vars.get(env.host, dict()))
 
     try:
-        output = run('uptime', shell=True, quiet=True)
-
+        output = run(script, shell=True, quiet=True)
         if output.return_code == 0:
             fruit['code'] = 0
             fruit['msg'] = analysis_script_output(output.stdout)
         else:
-            fruit['code'] = 20
-            # SSH联通性测试，不再保存命令输出。
-            #fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['code'] = 4
+            fruit['msg'] = analysis_script_output(output.stdout)
             fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
@@ -133,7 +137,7 @@ def final_ssh_checking(user, port, password, private_key):
         return fruit
 
 
-def ssh_connectivity_checking(operation):
+def predefined_script_execute(operation):
     """
     :Return:
 
@@ -151,10 +155,26 @@ def ssh_connectivity_checking(operation):
     try:
         ssh_config_id = operation.ssh_config
         ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
-
     except Exception, e:
         operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operation.id, operation.type, operation.status, message))
+
+    try:
+        predefined_script_id = operation.script_template
+        script_template = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
+    except Exception, e:
+        operation.status = 2
+        message = 'Failed to get the script template. %s' % e
+        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+                     (operation.id, operation.type, operation.status, message))
+
+    try:
+        template_vars = json.loads(operation.template_vars)
+    except Exception, e:
+        operation.status = 2
+        message = 'Failed to load template vars. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operation.id, operation.type, operation.status, message))
 
@@ -162,15 +182,16 @@ def ssh_connectivity_checking(operation):
 
         with hide('everything'):
 
-            do_exec = execute(final_ssh_checking,
+            do_exec = execute(final_predefined_execute,
                               ssh_config.username,
                               ssh_config.port,
                               ssh_config.password,
                               generate_private_path(ssh_config.private_key),
+                              script_template,
+                              template_vars,
                               hosts=operation.server_list.split())
 
         operation.status = 1
-
         try:
             operation.result = json.dumps(do_exec, ensure_ascii=False)
         except Exception, e:

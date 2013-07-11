@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/10.
+#                    Created at 2013/07/11.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,6 @@
 # SOFTWARE.
 
 
-from flask.ext.login import LoginManager
-
-from web.models.user import User
-
-
-login = LoginManager()
-login.login_view = 'user.user_login_ctrl'
-
-
-@login.user_loader
-def load_user(user_id):
-    try:
-        user = User.query.get(user_id)
-    except Exception, e:
-        user = None
-
-    return user
-
-
-
+from frontend.controlers.user import user
+from frontend.controlers.operation import operation
+from frontend.controlers.dashboard import dashboard

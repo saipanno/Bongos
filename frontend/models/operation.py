@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from web.extensions.database import db
+from frontend.extensions.database import db
 
 
 class OperationDb(db.Model):
