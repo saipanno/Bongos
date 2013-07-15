@@ -52,7 +52,7 @@
 
                 <ul class="nav">
                     <li class="{% block active_deploy %}{% endblock %}"><a href="#">Deploy</a></li>
-                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for("operation.list_operation_ctrl", kind='ssh') }}">Operation</a></li>
+                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for("operation.list_operation_ctrl", kind='ssh_detect') }}">Operation</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 
@@ -61,11 +61,9 @@
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ current_user.name }}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ url_for("member.user_edit_settings_ctrl") }}">Change Settings</a></li>
-                            <li><a href="{{ url_for("member.user_edit_password_ctrl") }}">Change Password</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{{ url_for("member.user_logout_ctrl") }}">Log out</a></li>
                         </ul>
                     </li>
+                    <li><a href="{{ url_for("member.user_logout_ctrl") }}">Log out</a></li>
                 </ul>
 
                 <form class="navbar-search pull-right" action="">

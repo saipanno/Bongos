@@ -44,7 +44,7 @@ member = Blueprint('member', __name__)
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('operation.list_operation_ctrl', kind='Ssh'))
+    return redirect(url_for('operation.list_operation_ctrl', kind='ssh'))
 
 
 @member.route('/login', methods=['GET', 'POST'])
@@ -114,6 +114,20 @@ def user_edit_settings_ctrl():
                 return redirect(url_for('member.edit_settings_ctrl'))
             else:
                 user.name = form.name.data
+
+        if len(form.new_password.data) > 0:
+
+            if user.check_password(form.password.data):
+                flash(u'Please enter current password', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            elif form.new_password.data != form.confirm_password.data:
+                flash(u'Please enter the same password', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            elif not validate_password(form.new_password.data):
+                flash(u'Incorrect password format', 'error')
+                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+            else:
+                user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')

@@ -82,11 +82,11 @@ def show_operation_ctrl(operation_id):
     return render_template('operation/show_operation.html', execute=execute, fruits=fruits, kind=execute.kind)
 
 
-@operation.route('/ssh/create', methods=("GET", "POST"))
+@operation.route('/ssh_detect/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
-    kind = u'ssh'
+    kind = u'ssh_detect'
 
     form = CreateSshDetectForm()
 
@@ -116,11 +116,11 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/ping/create', methods=("GET", "POST"))
+@operation.route('/ping_detect/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
-    kind = u'ping'
+    kind = u'ping_detect'
 
     form = CreatePingDetectForm()
 
@@ -146,11 +146,11 @@ def create_ping_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/custom/create', methods=("GET", "POST"))
+@operation.route('/custom_execute/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
-    kind = u'custom'
+    kind = u'custom_execute'
 
     form = CreateCustomExecuteForm()
 
@@ -191,11 +191,11 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/predefined/create', methods=("GET", "POST"))
+@operation.route('/predefined_execute/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
-    kind = u'predefined'
+    kind = u'predefined_execute'
 
     form = CreatePreDefinedExecuteForm()
 
@@ -236,11 +236,11 @@ def create_predefined_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/power/create', methods=("GET", "POST"))
+@operation.route('/power_control/create', methods=("GET", "POST"))
 @login_required
 def create_power_control_ctrl():
 
-    kind = u'power'
+    kind = u'power_control'
 
     form = CreatePowerCtrlForm()
 

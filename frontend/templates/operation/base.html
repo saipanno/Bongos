@@ -7,13 +7,13 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">STATUS DETECT</li>
-                <li class="{% if kind == 'ssh' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='ssh') }}">Ssh</a></li>
-                <li class="{% if kind == 'ping' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='ping') }}">Ping</a></li>
+                <li class="{% if kind == 'ssh_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='ssh_detect') }}">Ssh</a></li>
+                <li class="{% if kind == 'ping_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='ping_detect') }}">Ping</a></li>
                 <li class="nav-header">REMOTE EXECUTE</li>
-                <li class="{% if kind == 'predefined' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='predefined') }}">PreDefined</a></li>
-                <li class="{% if kind == 'custom' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='custom') }}">User Custom</a></li>
+                <li class="{% if kind == 'predefined_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='predefined_execute') }}">PreDefined</a></li>
+                <li class="{% if kind == 'custom_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='custom_execute') }}">User Custom</a></li>
                 <li class="nav-header">IPMI OVER LAN</li>
-                <li class="{% if kind == 'power' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='power') }}">Power Control</a></li>
+                <li class="{% if kind == 'power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', kind='power_control') }}">Power Control</a></li>
             </ul>
         </div>
     </div>
