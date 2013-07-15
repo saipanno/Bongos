@@ -202,8 +202,7 @@ def create_user_ctrl():
             flash(u'Incorrect password format', 'error')
 
         else:
-            user = User(form.email.data, form.name.data, form.group.data.id, form.password.data,
-                        1 if form.disable.data else 0)
+            user = User(form.email.data, form.name.data, form.group.data.id, form.password.data, form.status.data)
             db.session.add(user)
             db.session.commit()
 
@@ -264,8 +263,8 @@ def edit_user_ctrl(user_id):
             else:
                 user.update_password(form.new_password.data)
 
-        if 1 if form.disable.data else 0 != user.disable:
-            user.disable = 1 if form.disable.data else 0
+        if form.status.data != user.status:
+            user.status = form.status.data
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')

@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, BooleanField
+from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, SelectField
 
 from frontend.models.member import PermissionGroup
 
@@ -47,8 +47,7 @@ class CreateUserForm(Form):
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the password')
-    disable = BooleanField(u'Disable  <span class="required">*</span>', id='disable', default=False,
-                           description=u'Disable user when checked')
+    status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
     submit = SubmitField(u'Submit', id='submit')
 
 
@@ -64,8 +63,7 @@ class EditUserForm(Form):
                                  id='new_password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the new password')
-    disable = BooleanField(u'Disable  <span class="required">*</span>', id='disable', default=False,
-                           description=u'Disable user when checked')
+    status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
     submit = SubmitField(u'Submit', id='submit')
 
 

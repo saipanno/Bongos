@@ -38,15 +38,15 @@ class User(db.Model):
     name = db.Column(db.String(50), unique=True)
     group = db.Column(db.Integer)
     password = db.Column(db.String(50))
-    disable = db.Column(db.Integer)
+    status = db.Column(db.Integer)
 
-    def __init__(self, email, name, group, password, disable):
+    def __init__(self, email, name, group, password, status):
 
         self.email = email
         self.name = name
         self.group = group
         self.password = generate_password_hash(password, salt_length=8)
-        self.disable = disable
+        self.status = status
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -58,7 +58,7 @@ class User(db.Model):
         return True
 
     def is_active(self):
-        return False if self.disable else True
+        return self.status
 
     def is_anonymous(self):
         return False

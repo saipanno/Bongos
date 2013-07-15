@@ -41,7 +41,7 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.group }}</td>
-                            <td>{{ '禁用' if user.disable else '启用' }}</td>
+                            <td>{{ '启用' if user.status else '禁用' }}</td>
                             <td>
                                 <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}">编辑</a>
                             </td>
@@ -115,8 +115,8 @@
                         <div class="control-group">
                             <label class="control-label">{{ form.disable.label|safe }}</label>
                             <div class="controls">
-                                {{ form.disable() }}
-                                {% if form.disable.description %}<p class="help-block">{{ form.disable.description|safe }}</p>{% endif %}
+                                {{ form.status() }}
+                                {% if form.status.description %}<p class="help-block">{{ form.status.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
@@ -193,10 +193,10 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">{{ form.disable.label }}</label>
+                            <label class="control-label">{{ form.status.label }}</label>
                             <div class="controls">
-                                {{ form.disable() }}
-                                {% if form.disable.description %}<p class="help-block">{{ form.disable.description|safe }}</p>{% endif %}
+                                {{ form.status() }}
+                                {% if form.status.description %}<p class="help-block">{{ form.status.description|safe }}</p>{% endif %}
                             </div>
                         </div>
 
