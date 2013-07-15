@@ -70,53 +70,17 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.name.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.name() }}
-                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.name) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.desc.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.desc() }}
-                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.desc, class="span6") }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.port.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.port() }}
-                            {% if form.port.description %}<p class="help-block">{{ form.port.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.port) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.username.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.username() }}
-                            {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.username) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.password.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.password() }}
-                            {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.password) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.private_key.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.private_key() }}
-                            {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.private_key) }}
 
                 </div>
 
@@ -148,53 +112,17 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.name.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.name() }}
-                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.name) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.desc.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.desc() }}
-                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.desc, class="span6") }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.port.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.port() }}
-                            {% if form.port.description %}<p class="help-block">{{ form.port.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.port) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.username.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.username() }}
-                            {% if form.username.description %}<p class="help-block">{{ form.username.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.username) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.password.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.password() }}
-                            {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.password) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.private_key.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.private_key() }}
-                            {% if form.private_key.description %}<p class="help-block">{{ form.private_key.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.private_key) }}
 
                 </div>
 

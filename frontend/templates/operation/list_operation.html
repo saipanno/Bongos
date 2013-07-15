@@ -2,35 +2,12 @@
 
 {% import "macro.html" as ext %}
 
-{% if kind == 'ssh' %}
-    {% set operation_title = 'Ssh Detect' %}
-    {% set operation_create_url = url_for('operation.create_ssh_detect_ctrl') %}
-{% elif kind == 'ping' %}
-    {% set operation_title = 'Ping Detect' %}
-    {% set operation_create_url = url_for('operation.create_ping_detect_ctrl') %}
-{% elif kind == 'custom' %}
-    {% set operation_title = 'Custom Execute' %}
-    {% set operation_create_url = url_for('operation.create_custom_execute_ctrl') %}
-{% elif kind == 'predefined' %}
-    {% set operation_title = 'PreDefined Execute' %}
-    {% set operation_create_url = url_for('operation.create_predefined_execute_ctrl') %}
-{% elif kind == 'power' %}
-    {% set operation_title = 'Power Control Execute' %}
-    {% set operation_create_url = url_for('operation.create_power_control_ctrl') %}
-{% endif %}
-
-{% block active_operation_ssh %}{% if kind == 'ssh' %}active{% endif %}{% endblock %}
-{% block active_operation_ping %}{% if kind == 'ping' %}active{% endif %}{% endblock %}
-{% block active_operation_custom %}{% if kind == 'custom' %}active{% endif %}{% endblock %}
-{% block active_operation_predefined %}{% if kind == 'predefined' %}active{% endif %}{% endblock %}
-{% block active_operation_power %}{% if kind == 'power' %}active{% endif %}{% endblock %}
-
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">{{ operation_title }}</a><span class="divider">/</span></li>
+            <li><a href="#">{{ ext.get_operation_title(kind) }}</a><span class="divider">/</span></li>
             <li class="active">List</li>
         </ul>
 
@@ -38,9 +15,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ operation_title }}</a>
+                <a class="brand" href="#">{{ ext.get_operation_title(kind) }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ operation_create_url }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add {{ operation_title }}</a>
+                    <a href="{{ ext.get_operation_link(kind) }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Operation</a>
                 </div>
             </div>
         </div>

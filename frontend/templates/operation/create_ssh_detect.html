@@ -23,21 +23,9 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.server_list.label }}</label>
-                        <div class="controls">
-                            {{ form.server_list(class="span6", rows="10") }}
-                            <p class="help-block">{{ form.server_list.description }}</p>
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.server_list, class="span6", rows="10") }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.ssh_config.label }}</label>
-                        <div class="controls">
-                            {{ form.ssh_config(class="span6") }}
-                            <p class="help-block">{{ form.ssh_config.description }}</p>
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.ssh_config) }}
 
                 </div>
 

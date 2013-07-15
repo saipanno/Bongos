@@ -74,19 +74,19 @@ def show_operation_ctrl(operation_id):
         flash(u'The operating does not exist.', 'error')
         return redirect(default_next_page)
 
-    elif execute.result == u'':
-        flash(u'Operation has not completed', 'info')
-        return redirect(url_for('operation.list_operation_ctrl', kind=execute.kind))
+    try:
+        fruits = json.loads(execute.result)
+    except ValueError:
+        fruits = dict()
 
-    fruits = json.loads(execute.result)
-    return render_template('operation/show_operation.html', execute=execute, fruits=fruits)
+    return render_template('operation/show_operation.html', execute=execute, fruits=fruits, kind=execute.kind)
 
 
 @operation.route('/ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
-    kind = u'Ssh'
+    kind = u'ssh'
 
     form = CreateSshDetectForm()
 
@@ -120,7 +120,7 @@ def create_ssh_detect_ctrl():
 @login_required
 def create_ping_detect_ctrl():
 
-    kind = u'Ping'
+    kind = u'ping'
 
     form = CreatePingDetectForm()
 
@@ -150,7 +150,7 @@ def create_ping_detect_ctrl():
 @login_required
 def create_custom_execute_ctrl():
 
-    kind = u'Custom'
+    kind = u'custom'
 
     form = CreateCustomExecuteForm()
 
@@ -195,7 +195,7 @@ def create_custom_execute_ctrl():
 @login_required
 def create_predefined_execute_ctrl():
 
-    kind = u'PreDefined'
+    kind = u'predefined'
 
     form = CreatePreDefinedExecuteForm()
 
@@ -240,7 +240,7 @@ def create_predefined_execute_ctrl():
 @login_required
 def create_power_control_ctrl():
 
-    kind = u'Power'
+    kind = u'power'
 
     form = CreatePowerCtrlForm()
 

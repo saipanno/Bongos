@@ -91,29 +91,11 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.name.label }}</label>
-                        <div class="controls">
-                            {{ form.name() }}
-                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.name) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.desc.label }}</label>
-                        <div class="controls">
-                            {{ form.desc(class="span6") }}
-                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.desc, class="span6") }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.script.label }}</label>
-                        <div class="controls">
-                            {{ form.script(class="span10", rows="10") }}
-                            {% if form.script.description %}<p class="help-block">{{ form.script.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.script, class="span6", rows="10") }}
 
                 </div>
 
@@ -143,29 +125,11 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.name.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.name() }}
-                            {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.name) }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.desc.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.desc(class="span6") }}
-                            {% if form.desc.description %}<p class="help-block">{{ form.desc.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.desc, class="span6") }}
 
-                    <div class="control-group">
-                        <label class="control-label">{{ form.script.label|safe }}</label>
-                        <div class="controls">
-                            {{ form.script(class="span10", rows="10") }}
-                            {% if form.script.description %}<p class="help-block">{{ form.script.description|safe }}</p>{% endif %}
-                        </div>
-                    </div>
+                    {{ ext.create_standard_form(form.script, class="span6", rows="10") }}
 
                 </div>
 

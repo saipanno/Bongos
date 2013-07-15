@@ -70,53 +70,17 @@
 
                     <div class="box form-container row-fluid form-horizontal">
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.email.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.email() }}
-                                {% if form.email.description %}<p class="help-block">{{ form.email.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.email) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.name.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.name() }}
-                                {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.name) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.group.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.group() }}
-                                {% if form.group.description %}<p class="help-block">{{ form.group.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.group) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.password.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.password() }}
-                                {% if form.password.description %}<p class="help-block">{{ form.password.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.password) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.confirm_password.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.confirm_password() }}
-                                {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.confirm_password) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.disable.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.status() }}
-                                {% if form.status.description %}<p class="help-block">{{ form.status.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.status) }}
 
                     </div>
 
@@ -149,53 +113,17 @@
 
                     <div class="box form-container row-fluid form-horizontal">
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.email.label }}</label>
-                            <div class="controls">
-                                {{ form.email(class="uneditable-input") }}
-                                {% if form.email.description %}<p class="help-block">{{ form.email.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.email) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.name.label }}</label>
-                            <div class="controls">
-                                {{ form.name() }}
-                                {% if form.name.description %}<p class="help-block">{{ form.name.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.name) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.group.label|safe }}</label>
-                            <div class="controls">
-                                {{ form.group() }}
-                                {% if form.group.description %}<p class="help-block">{{ form.group.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.group) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.new_password.label }}</label>
-                            <div class="controls">
-                                {{ form.new_password() }}
-                                {% if form.new_password.description %}<p class="help-block">{{ form.new_password.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.password) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.confirm_password.label }}</label>
-                            <div class="controls">
-                                {{ form.confirm_password() }}
-                                {% if form.confirm_password.description %}<p class="help-block">{{ form.confirm_password.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.confirm_password) }}
 
-                        <div class="control-group">
-                            <label class="control-label">{{ form.status.label }}</label>
-                            <div class="controls">
-                                {{ form.status() }}
-                                {% if form.status.description %}<p class="help-block">{{ form.status.description|safe }}</p>{% endif %}
-                            </div>
-                        </div>
+                        {{ ext.create_standard_form(form.status) }}
 
                     </div>
 

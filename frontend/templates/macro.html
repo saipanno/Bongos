@@ -11,6 +11,36 @@
 {% endwith %}
 {%- endmacro %}
 
+{% macro get_operation_title(kind)  -%}
+    {% if kind == 'ssh' %}
+        Ssh Detect
+    {% elif kind == 'ping' %}
+        Ping Detect
+    {% elif kind == 'custom' %}
+        Custom Execute
+    {% elif kind == 'predefined' %}
+        PreDefined Execute
+    {% elif kind == 'power' %}
+        Power Control
+    {% else %}
+        Error Operation Type
+    {% endif %}
+{%- endmacro %}
+
+{% macro get_operation_link(kind)  -%}
+    {% if kind == 'ssh' %}
+        {{ url_for('operation.create_ssh_detect_ctrl') }}
+    {% elif kind == 'ping' %}
+        {{ url_for('operation.create_ping_detect_ctrl') }}
+    {% elif kind == 'custom' %}
+        {{ url_for('operation.create_custom_execute_ctrl') }}
+    {% elif kind == 'predefined' %}
+        {{ url_for('operation.create_predefined_execute_ctrl') }}
+    {% elif kind == 'power' %}
+        {{ url_for('operation.create_power_control_ctrl') }}
+    {% endif %}
+{%- endmacro %}
+
 {% macro get_operation_status(status)  -%}
     {% if status == '0' %}
         <span class="label label-info">队列中</span>
@@ -23,4 +53,14 @@
     {% else %}
         <span class="label label-warning">异常结果</span>
     {% endif %}
+{%- endmacro %}
+
+{% macro create_standard_form(obj)  -%}
+    <div class="control-group">
+        <label class="control-label">{{ obj.label }}</label>
+        <div class="controls">
+            {{ obj(**kwargs) }}
+            <p class="help-block">{{ obj.description|safe }}</p>
+        </div>
+    </div>
 {%- endmacro %}
