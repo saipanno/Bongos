@@ -31,7 +31,7 @@ from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
-    CreateCustomExecuteForm
+    CreateCustomExecuteForm, CreatePowerCtrlForm
 
 from frontend.models.member import User
 from frontend.models.operation import OperationDb
@@ -61,7 +61,7 @@ def list_operation_ctrl(kind):
 @login_required
 def show_operation_ctrl(operation_id):
 
-    default_next_page = request.values.get('next', url_for('user.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('member.index_ctrl'))
 
     try:
         execute = OperationDb.query.filter_by(id=operation_id).first()
@@ -82,7 +82,7 @@ def show_operation_ctrl(operation_id):
     return render_template('operation/show_operation.html', execute=execute, fruits=fruits)
 
 
-@operation.route('/Ssh/create', methods=("GET", "POST"))
+@operation.route('/ssh/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -116,7 +116,7 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/Ping/create', methods=("GET", "POST"))
+@operation.route('/ping/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -146,7 +146,7 @@ def create_ping_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/Custom/create', methods=("GET", "POST"))
+@operation.route('/custom/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
 
@@ -191,7 +191,7 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', kind=kind))
 
 
-@operation.route('/PreDefined/create', methods=("GET", "POST"))
+@operation.route('/predefined/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_execute_ctrl():
 
@@ -229,6 +229,40 @@ def create_predefined_execute_ctrl():
 
         operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data.id,
                                 template_vars, form.ssh_config.data.id, 0, u'')
+        db.session.add(operation)
+        db.session.commit()
+
+        flash(u'Creating an operation successful', 'success')
+        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+
+
+@operation.route('/power/create', methods=("GET", "POST"))
+@login_required
+def create_power_control_ctrl():
+
+    kind = u'Power'
+
+    form = CreatePowerCtrlForm()
+
+    if request.method == 'GET':
+
+        return  render_template('operation/create_power_control.html', form=form)
+
+    elif request.method == 'POST':
+
+        author = current_user.id
+        datetime = time.strftime('%Y-%m-%d %H:%M')
+
+        fruit = format_address_list(form.server_list.data)
+        if fruit['status'] is not True:
+            flash(fruit['desc'], 'error')
+            return redirect(url_for('operation.create_power_control_ctrl'))
+
+        if form.script_template.data is None:
+            flash(u'Type of operation is not selected', 'error')
+            return redirect(url_for('operation.create_power_control_ctrl'))
+
+        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', form.script_template.data, 0, u'')
         db.session.add(operation)
         db.session.commit()
 

@@ -1,0 +1,51 @@
+{% extends "operation/base.html" %}
+
+{% block active_operation_power %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="active"><a href="#">Execute</a><span class="divider">/</span></li>
+            <li class="active"><a href="#">Power Control</a> <span class="divider">/</span></li>
+            <li class="active">Create</li>
+        </ul>
+
+        <div class="tabbable">
+            <form method="post" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Create Power Control
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.server_list.label }}</label>
+                        <div class="controls">
+                            {{ form.server_list(class="span6", rows="10") }}
+                            <p class="help-block">{{ form.server_list.description|safe }}</p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">{{ form.script_template.label }}</label>
+                        <div class="controls">
+                            {{ form.script_template() }}
+                            <p class="help-block">{{ form.script_template.description|safe }}</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

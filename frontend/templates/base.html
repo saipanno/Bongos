@@ -52,7 +52,7 @@
 
                 <ul class="nav">
                     <li class="{% block active_deploy %}{% endblock %}"><a href="#">Deploy</a></li>
-                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for("operation.list_operation_ctrl", kind='Ssh') }}">Operation</a></li>
+                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for("operation.list_operation_ctrl", kind='ssh') }}">Operation</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 

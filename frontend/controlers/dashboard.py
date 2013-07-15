@@ -61,7 +61,7 @@ def list_predefined_script_ctrl():
 @login_required
 def show_predefined_script_ctrl(script_id):
 
-    default_next_page = request.values.get('next', url_for('user.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('member.index_ctrl'))
 
     try:
         script = PreDefinedScript.query.filter_by(id=script_id).first()
