@@ -32,7 +32,7 @@ from frontend.extensions.database import db
 from frontend.extensions.utility import validate_name, validate_password
 from frontend.extensions.principal import admin_permission, member_permission, disable_permission
 
-from frontend.forms.member import UserLoginForm, EditUserSettingsForm, EditUserPasswordForm
+from frontend.forms.member import UserLoginForm, EditUserSettingsForm
 
 from frontend.models.member import User
 
