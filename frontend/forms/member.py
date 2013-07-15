@@ -75,13 +75,6 @@ class EditUserSettingsForm(Form):
                      description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
-    submit = SubmitField(u'Submit', id='submit')
-
-
-class EditUserPasswordForm(Form):
-
-    next_page = HiddenField()
-    email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
     new_password = PasswordField(u'New Password  <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')
