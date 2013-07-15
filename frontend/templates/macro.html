@@ -27,7 +27,7 @@
     {% endif %}
 {%- endmacro %}
 
-{% macro get_operation_link(kind)  -%}
+{% macro get_add_operation_link(kind)  -%}
     {% if kind == 'ssh' %}
         {{ url_for('operation.create_ssh_detect_ctrl') }}
     {% elif kind == 'ping' %}
@@ -60,7 +60,7 @@
         <label class="control-label">{{ obj.label }}</label>
         <div class="controls">
             {{ obj(**kwargs) }}
-            <p class="help-block">{{ obj.description|safe }}</p>
+            {% if obj.description %}<p class="help-block">{{ obj.description|safe }}</p>{% endif %}
         </div>
     </div>
 {%- endmacro %}
