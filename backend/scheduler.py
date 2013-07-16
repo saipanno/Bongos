@@ -36,6 +36,7 @@ from backend.modules.ssh_connectivity import ssh_connectivity_checking
 from backend.modules.ping_connectivity import ping_connectivity_checking
 from backend.modules.custom_execute import custom_script_execute
 from backend.modules.predefined_execute import predefined_script_execute
+from backend.modules.remote_power_control import exec_power_management
 
 
 class Scheduler(object):
@@ -83,6 +84,9 @@ class Scheduler(object):
 
                 elif operation.kind == u'predefined_execute':
                     predefined_script_execute(operation)
+
+                elif operation.kind == u'power_control':
+                    exec_power_management(self.config, operation)
 
                 else:
                     logger.error('Wrong type of operation. ID: %s, TYPE: %s' % (operation.id, operation.kind))

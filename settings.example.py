@@ -33,8 +33,10 @@ HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
 PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
 SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
-
 DEBUG = True
+
+# application config
+IPMI_NETWORK = '192.168'
 
 # fabric config
 POOL_SIZE = 250           # default is 250

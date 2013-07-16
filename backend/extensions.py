@@ -57,3 +57,10 @@ def analysis_script_output(output):
 
     # 字符串掐头去尾操作，删除BD:和:EOF
     return ' '.join(fruit[3:][:-4])
+
+
+def generate_ipmi_address(address):
+
+    fruit = address.split('.')
+
+    return '%s.%s.%s' % (settings.IPMI_NETWORK, fruit[2], fruit[3])
