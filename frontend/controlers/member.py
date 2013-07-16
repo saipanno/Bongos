@@ -44,7 +44,7 @@ member = Blueprint('member', __name__)
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('operation.list_operation_ctrl', kind='ssh'))
+    return redirect(url_for('operation.list_operation_ctrl', kind='ssh_detect'))
 
 
 @member.route('/login', methods=['GET', 'POST'])

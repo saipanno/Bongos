@@ -72,16 +72,16 @@ class Scheduler(object):
                 logger.info('Started a new operating unit. ID: %s, TYPE: %s, HOSTS: %s' %
                             (operation.id, operation.kind, operation.server_list))
 
-                if operation.kind == u'Ping':
+                if operation.kind == u'ping_detect':
                     ping_connectivity_checking(self.config, operation)
 
-                elif operation.kind == u'Ssh':
+                elif operation.kind == u'ssh_detect':
                     ssh_connectivity_checking(operation)
 
-                elif operation.kind == u'Custom':
+                elif operation.kind == u'custom_execute':
                     custom_script_execute(operation)
 
-                elif operation.kind == u'PreDefined':
+                elif operation.kind == u'predefined_execute':
                     predefined_script_execute(operation)
 
                 else:
