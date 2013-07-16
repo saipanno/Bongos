@@ -96,5 +96,5 @@ class CreatePowerCtrlForm(Form):
                                 description=u'Only support ip address. Separated by \
                                 <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
     script_template = SelectField(u'Type of operation  <span class="required">*</span>', id='script_template',
-                                  choices=[(0, u'重启'), (1, u'关机'), (1, u'开机')])
+                                  choices=[(0, u'重启'), (1, u'关机'), (2, u'开机'), (3, u'状态')])
     submit = SubmitField(u'Submit', id='submit')

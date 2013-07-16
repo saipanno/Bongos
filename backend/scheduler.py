@@ -28,15 +28,15 @@ import time
 from werkzeug.utils import import_string
 from fabric.api import env
 
-from backend.extensions import logger
+from backend.extensions import db, logger
 
-from frontend.models.operation import OperationDb
+from backend.models import OperationDb
 
-from backend.modules.ssh_connectivity import ssh_connectivity_checking
-from backend.modules.ping_connectivity import ping_connectivity_checking
-from backend.modules.custom_execute import custom_script_execute
-from backend.modules.predefined_execute import predefined_script_execute
-from backend.modules.remote_power_control import exec_power_management
+from backend.plugins.ssh_connectivity import ssh_connectivity_checking
+from backend.plugins.ping_connectivity import ping_connectivity_checking
+from backend.plugins.custom_execute import custom_script_execute
+from backend.plugins.predefined_execute import predefined_script_execute
+from backend.plugins.remote_power_control import exec_power_management
 
 
 class Scheduler(object):
@@ -66,7 +66,7 @@ class Scheduler(object):
 
         while True:
 
-            operation = OperationDb.query.filter_by(status=u'0').first()
+            operation = db.query(OperationDb).filter_by(status=u'0').first()
 
             if operation is not None:
 

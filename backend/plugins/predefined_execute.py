@@ -29,11 +29,10 @@ from jinja2 import Template
 from fabric.api import env, run, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from frontend.extensions.database import db
+from backend.models import SshConfig, PreDefinedScript
 
-from frontend.models.dashboard import SshConfig, PreDefinedScript
-
-from backend.extensions import logger, generate_private_path, analysis_script_output
+from backend.extensions.database import db
+from backend.extensions.utility import logger, generate_private_path, analysis_script_output
 
 
 def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
@@ -150,25 +149,25 @@ def predefined_script_execute(operation):
 
     # 修改任务状态，标记为操作中。
     operation.status = 5
-    db.session.commit()
+    db.commit()
 
     try:
         ssh_config_id = operation.ssh_config
-        ssh_config = SshConfig.query.filter_by(id=int(ssh_config_id)).first()
+        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
     except Exception, e:
         operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
+                     (operation.id, operation.kind, operation.status, message))
 
     try:
         predefined_script_id = operation.script_template
-        script_template = PreDefinedScript.query.filter_by(id=int(predefined_script_id)).first().script
+        script_template = db.query(PreDefinedScript).filter_by(id=int(predefined_script_id)).first().script
     except Exception, e:
         operation.status = 2
         message = 'Failed to get the script template. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
+                     (operation.id, operation.kind, operation.status, message))
 
     try:
         template_vars = json.loads(operation.template_vars)
@@ -176,7 +175,7 @@ def predefined_script_execute(operation):
         operation.status = 2
         message = 'Failed to load template vars. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
+                     (operation.id, operation.kind, operation.status, message))
 
     if operation.status != 2:
 
@@ -198,6 +197,6 @@ def predefined_script_execute(operation):
             operation.status = 2
             message = 'Integrate data error. %s' % e
             logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operation.id, operation.type, operation.status, message))
+                         (operation.id, operation.kind, operation.status, message))
 
-    db.session.commit()
+    db.commit()

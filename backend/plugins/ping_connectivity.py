@@ -24,15 +24,14 @@
 # SOFTWARE.
 
 
-import re
 import json
 from fabric.api import env, hide, show, local, execute
 
-from frontend.extensions.database import db
-from backend.extensions import logger, generate_ipmi_address
+from backend.extensions.database import db
+from backend.extensions.utility import logger
 
 
-def final_power_management(address, ipmi_user, ipmi_password, operate, spec=None):
+def final_ping_checking(COUNT, TIMEOUT):
     """
     :Return:
 
@@ -56,41 +55,30 @@ def final_power_management(address, ipmi_user, ipmi_password, operate, spec=None
 
     fruit = dict(code=100, msg='')
 
-    ipmi_address = generate_ipmi_address(address)
-
-    specifies = '-I lanplus' if spec else ''
-    command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address, ipmi_user,
-                                                                  ipmi_password, operate)
+    command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
 
     try:
         output = local(command, capture=True)
         if output.return_code == 0:
             fruit['code'] = 0
-            fruit['msg'] = output.stdout
         elif output.return_code == 1:
             fruit['code'] = 1
-            if re.match(u'Activate Session command failed', output.stderr):
-                fruit['error'] = 'IPMI user authentication failed'
-            elif re.match(u'Invalid chassis power command', output.stderr):
-                fruit['error'] = 'The wrong type of ipmi power operation'
-            else:
-                fruit['error'] = output.stderr
-        else:
-            fruit['code'] = 20
-            fruit['error'] = output.stderr
+        elif output.return_code == 2 and 'unknown host' in output.stderr:
+            fruit['code'] = 10
+            fruit['msg'] = 'Network address error'
 
     except Exception, e:
         fruit['code'] = 20
         fruit['msg'] = '%s' % e
 
-        logger.warning(u'UNKNOWN FAILS. MESSAGE: IPMI exec %s fails, except status is %s, except message is %s' %
+        logger.warning(u'UNKNOWN FAILS. MESSAGE: Ping %s fails, except status is %s, except message is %s' %
                        (env.host, fruit['code'], fruit['msg']))
 
     finally:
         return fruit
 
 
-def exec_power_management(config, operation):
+def ping_connectivity_checking(config, operation):
     """
     :Return:
 
@@ -103,11 +91,11 @@ def exec_power_management(config, operation):
 
     # 修改任务状态，标记为操作中。
     operation.status = 5
-    db.session.commit()
+    db.commit()
 
     with hide('everything'):
 
-        do_exec = execute(final_power_management, config.get('IPMI_USER', 'root'), config.get('IPMI_PASSWORD', 'calvin'),
+        do_exec = execute(final_ping_checking, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
                           hosts=operation.server_list.split())
 
     operation.status = 1
@@ -118,6 +106,6 @@ def exec_power_management(config, operation):
         operation.status = 2
         message = 'Integrate data error. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.type, operation.status, message))
+                     (operation.id, operation.kind, operation.status, message))
 
-    db.session.commit()
+    db.commit()
