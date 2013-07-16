@@ -28,7 +28,8 @@ import time
 from werkzeug.utils import import_string
 from fabric.api import env
 
-from backend.extensions import db, logger
+from backend.extensions.database import db
+from backend.extensions.utility import logger
 
 from backend.models import OperationDb
 
