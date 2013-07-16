@@ -29,7 +29,7 @@
 {%- endmacro %}
 
 
-{% macro get_add_operation_link(kind)  -%}
+{% macro generation_create_operation_link(kind)  -%}
     {% if kind == 'ssh_detect' %}
         {{ url_for('operation.create_ssh_detect_ctrl') }}
     {% elif kind == 'ping_detect' %}
