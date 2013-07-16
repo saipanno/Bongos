@@ -52,7 +52,7 @@ def list_operation_ctrl(kind):
 
     for execute in executes:
         user = User.query.filter_by(id=int(execute.author)).first()
-        execute.author = user.name
+        execute.author = user.username
 
     return render_template('operation/list_operation.html', executes=executes, kind=kind)
 

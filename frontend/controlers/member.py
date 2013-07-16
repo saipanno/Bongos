@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+from sqlalchemy import or_
 from flask import render_template, request, flash, redirect, url_for, Blueprint
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
@@ -32,7 +33,7 @@ from frontend.extensions.database import db
 from frontend.extensions.utility import validate_name, validate_password
 from frontend.extensions.principal import admin_permission, member_permission, disable_permission
 
-from frontend.forms.member import UserLoginForm, EditUserSettingsForm
+from frontend.forms.member import UserLoginForm, EditUserForm
 
 from frontend.models.member import User
 
@@ -59,12 +60,12 @@ def user_login_ctrl():
 
     elif request.method == 'POST':
 
-        if form.email.data == u'' or form.password.data == u'':
+        if form.name.data == u'' or form.password.data == u'':
 
             flash(u'Email and password can\'t be empty', 'error')
             return redirect(url_for('member.user_login_ctrl'))
 
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter(or_(User.email == form.name.data, User.username == form.name.data)).first()
 
         if user is not None and not user.is_active():
             flash(u'User has been disabled', 'error')
@@ -93,7 +94,7 @@ def user_edit_settings_ctrl():
 
     user = current_user
 
-    form = EditUserSettingsForm(email=user.email, name=user.name)
+    form = EditUserForm(email=user.email, username=user.username)
 
     if request.method == 'GET':
 
@@ -103,33 +104,33 @@ def user_edit_settings_ctrl():
 
         if form.email.data != user.email:
             flash(u'The email can\'t be modified', 'error')
-            return redirect(url_for('member.edit_settings_ctrl'))
+            return redirect(url_for('member.user_edit_settings_ctrl'))
 
-        if form.name.data != user.name and form.name.data != u'':
-            if User.query.filter_by(name=form.name.data).all():
+        if form.username.data != user.username and form.username.data != u'':
+            if User.query.filter_by(username=form.username.data).all():
                 flash(u'The current name is already in use', 'error')
-                return redirect(url_for('member.edit_settings_ctrl'))
-            elif not validate_name(form.name.data):
+                return redirect(url_for('member.user_edit_settings_ctrl'))
+            elif not validate_name(form.username.data):
                 flash(u'Incorrect name format', 'error')
-                return redirect(url_for('member.edit_settings_ctrl'))
+                return redirect(url_for('member.user_edit_settings_ctrl'))
             else:
-                user.name = form.name.data
+                user.username = form.username.data
 
         if len(form.new_password.data) > 0:
 
-            if user.check_password(form.password.data):
+            if user.check_password(form.now_password.data):
                 flash(u'Please enter current password', 'error')
-                return redirect(url_for('member.edit_settings_ctrl'))
+                return redirect(url_for('member.user_edit_settings_ctrl'))
             elif form.new_password.data != form.confirm_password.data:
                 flash(u'Please enter the same password', 'error')
-                return redirect(url_for('member.edit_settings_ctrl'))
+                return redirect(url_for('member.user_edit_settings_ctrl'))
             elif not validate_password(form.new_password.data):
                 flash(u'Incorrect password format', 'error')
-                return redirect(url_for('member.edit_settings_ctrl'))
+                return redirect(url_for('member.user_edit_settings_ctrl'))
             else:
                 user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
-        return redirect(url_for('member.edit_settings_ctrl'))
+        return redirect(url_for('member.user_edit_settings_ctrl'))

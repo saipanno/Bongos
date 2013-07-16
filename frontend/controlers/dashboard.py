@@ -52,7 +52,7 @@ def list_predefined_script_ctrl():
 
         for script in scripts:
             user = User.query.filter_by(id=int(script.author)).first()
-            script.author = user.name
+            script.author = user.username
 
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
@@ -92,11 +92,11 @@ def create_predefined_script_ctrl():
         author = current_user.id
         redirect_url = url_for('dashboard.create_predefined_script_ctrl')
 
-        if form.name.data == u'':
+        if form.username.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif not validate_name(form.name.data):
+        elif not validate_name(form.username.data):
             flash(u'Incorrect name format', 'error')
-        elif PreDefinedScript.query.filter_by(name=form.name.data).all():
+        elif PreDefinedScript.query.filter_by(name=form.username.data).all():
             flash(u'The current name is already in use', 'error')
 
         elif form.desc.data == u'':
@@ -107,7 +107,7 @@ def create_predefined_script_ctrl():
 
         else:
 
-            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
+            script = PreDefinedScript(form.username.data, form.desc.data, form.script.data, author)
             db.session.add(script)
             db.session.commit()
 
@@ -130,8 +130,8 @@ def edit_predefined_script_ctrl(script_id):
 
     elif request.method == 'POST':
 
-        if form.name.data != script.name and form.name.data != u'':
-            if not validate_name(form.name.data):
+        if form.username.data != script.name and form.username.data != u'':
+            if not validate_name(form.username.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
@@ -182,11 +182,11 @@ def create_user_ctrl():
         elif not validate_email(form.email.data):
             flash(u'Incorrect e-mail address', 'error')
 
-        elif form.name.data == u'':
+        elif form.username.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif User.query.filter_by(name=form.name.data).all():
+        elif User.query.filter_by(username=form.username.data).all():
             flash(u'The current name is already in use', 'error')
-        elif not validate_name(form.name.data):
+        elif not validate_name(form.username.data):
             flash(u'Incorrect name format', 'error')
 
         elif form.group.data.id is None:
@@ -202,7 +202,7 @@ def create_user_ctrl():
             flash(u'Incorrect password format', 'error')
 
         else:
-            user = User(form.email.data, form.name.data, form.group.data.id, form.password.data, form.status.data)
+            user = User(form.email.data, form.username.data, form.group.data.id, form.password.data, form.status.data)
             db.session.add(user)
             db.session.commit()
 
@@ -218,7 +218,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, name=user.name, group=user.group)
+    form = EditUserForm(email=user.email, username=user.username, group=user.group)
 
     if request.method == 'GET':
 
@@ -236,15 +236,15 @@ def edit_user_ctrl(user_id):
             else:
                 user.email = form.email.data
 
-        if form.name.data != user.name and form.name.data != u'':
-            if User.query.filter_by(name=form.name.data).all():
+        if form.username.data != user.username and form.username.data != u'':
+            if User.query.filter_by(username=form.username.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not validate_name(form.name.data):
+            elif not validate_name(form.username.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
-                user.name = form.name.data
+                user.username = form.username.data
 
         if form.group.data.id != user.group and form.group.data.id is not None:
             if not PermissionGroup.query.filter_by(id=form.group.data.id).all():
@@ -297,11 +297,11 @@ def create_ssh_config_ctrl():
 
         redirect_url = url_for('dashboard.create_ssh_config_ctrl')
 
-        if form.name.data == u'':
+        if form.username.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif not validate_name(form.name.data):
+        elif not validate_name(form.username.data):
             flash(u'Incorrect name format', 'error')
-        elif SshConfig.query.filter_by(name=form.name.data).all():
+        elif SshConfig.query.filter_by(name=form.username.data).all():
             flash(u'The current name is already in use', 'error')
 
         elif form.desc.data == u'':
@@ -325,7 +325,7 @@ def create_ssh_config_ctrl():
 
         else:
 
-            ssh_config = SshConfig(form.name.data, form.desc.data, form.port.data,
+            ssh_config = SshConfig(form.username.data, form.desc.data, form.port.data,
                                    form.username.data, form.password.data, form.private_key.data)
             db.session.add(ssh_config)
             db.session.commit()
@@ -351,15 +351,15 @@ def edit_ssh_config_ctrl(config_id):
 
     elif request.method == 'POST':
 
-        if form.name.data != config.name and form.name.data != u'':
-            if SshConfig.query.filter_by(name=form.name.data).all():
+        if form.username.data != config.name and form.username.data != u'':
+            if SshConfig.query.filter_by(name=form.username.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
-            elif not validate_name(form.name.data):
+            elif not validate_name(form.username.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_ssh_config_ctrl', script_id=config_id))
             else:
-                config.name = form.name.data
+                config.name = form.username.data
 
         if form.desc.data != config.desc and form.desc.data != u'':
             config.desc = form.desc.data

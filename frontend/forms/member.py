@@ -32,8 +32,8 @@ from frontend.models.member import PermissionGroup
 class UserLoginForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email:', id='email')
-    password = PasswordField(u'Password:', id='password')
+    name = TextField()
+    password = PasswordField()
     submit = SubmitField(u'Login', id='submit')
 
 
@@ -41,7 +41,8 @@ class CreateUserForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    name = TextField(u'Name  <span class="required">*</span>', id='name', description=u'Unrepeatable')
+    username = TextField(u'Username <span class="required">*</span>', id='name',
+                         description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
@@ -55,29 +56,14 @@ class EditUserForm(Form):
 
     next_page = HiddenField()
     email = TextField(u'Email <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    name = TextField(u'Name <span class="required">*</span>', id='name',
-                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    username = TextField(u'Username <span class="required">*</span>', id='name',
+                         description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
                              query_factory=PermissionGroup.query.all, get_label='desc')
+    now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
     new_password = PasswordField(u'New Password <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the new password')
     status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
-    submit = SubmitField(u'Submit', id='submit')
-
-
-class EditUserSettingsForm(Form):
-
-    next_page = HiddenField()
-    email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    name = TextField(u'Name  <span class="required">*</span>', id='name',
-                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=PermissionGroup.query.all, get_label='desc')
-    now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
-    new_password = PasswordField(u'New Password  <span class="required">*</span>',
-                                 id='new_password', description=u'At least eight')
-    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
-                                     id='confirm_password', description=u'Re-enter the new password')
     submit = SubmitField(u'Submit', id='submit')
