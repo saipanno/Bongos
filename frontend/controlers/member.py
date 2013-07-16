@@ -97,7 +97,7 @@ def user_edit_settings_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('member/change_settings.html', form=form, type='edit')
+        return render_template('member/settings.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
@@ -119,13 +119,13 @@ def user_edit_settings_ctrl():
 
             if user.check_password(form.password.data):
                 flash(u'Please enter current password', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+                return redirect(url_for('member.edit_settings_ctrl'))
             elif form.new_password.data != form.confirm_password.data:
                 flash(u'Please enter the same password', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+                return redirect(url_for('member.edit_settings_ctrl'))
             elif not validate_password(form.new_password.data):
                 flash(u'Incorrect password format', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+                return redirect(url_for('member.edit_settings_ctrl'))
             else:
                 user.update_password(form.new_password.data)
 
@@ -133,44 +133,3 @@ def user_edit_settings_ctrl():
         flash(u'Update user settings successfully', 'success')
 
         return redirect(url_for('member.edit_settings_ctrl'))
-
-
-@member.route('/password', methods=("GET", "POST"))
-@login_required
-def user_edit_password_ctrl():
-
-    user = current_user
-
-    form = EditUserPasswordForm(email=user.email)
-
-    if request.method == 'GET':
-
-        return render_template('member/change_password.html', form=form)
-
-    elif request.method == 'POST':
-
-        if form.email.data != user.email:
-            flash(u'The email can\'t be modified', 'error')
-            return redirect(url_for('member.user_edit_password_ctrl'))
-
-        if len(form.new_password.data) > 0:
-
-            if user.check_password(form.now_password.data):
-
-                if form.new_password.data != form.confirm_password.data:
-                    flash(u'Please enter the same password', 'error')
-                    return redirect(url_for('member.user_edit_password_ctrl'))
-                elif not validate_password(form.new_password.data):
-                    flash(u'Incorrect password format', 'error')
-                    return redirect(url_for('member.user_edit_password_ctrl'))
-                else:
-                    user.update_password(form.new_password.data)
-
-            else:
-                flash(u'Current password is incorrect', 'error')
-                return redirect(url_for('member.user_edit_password_ctrl'))
-
-        db.session.commit()
-        flash(u'Update user password successfully', 'success')
-
-        return redirect(url_for('member.user_edit_password_ctrl'))
