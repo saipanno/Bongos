@@ -36,7 +36,9 @@ SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
 DEBUG = True
 
 # application config
-IPMI_NETWORK = '192.168'
+IPMI_NETWORK = '10.10'
+IPMI_USER = 'root'
+IPMI_PASSWORD = 'calvin'
 
 # fabric config
 POOL_SIZE = 250           # default is 250
