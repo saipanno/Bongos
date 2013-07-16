@@ -61,7 +61,7 @@
 
 {% macro create_standard_form(obj)  -%}
     <div class="control-group">
-        <label class="control-label">{{ obj.label }}{% if obj.flags.required %}<span class="required">*</span>{% endif %}</label>
+        <label class="control-label">{{ obj.label }}</label>
         <div class="controls">
             {{ obj(**kwargs) }}
             {% if obj.description %}<p class="help-block">{{ obj.description|safe }}</p>{% endif %}
