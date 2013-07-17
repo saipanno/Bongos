@@ -67,7 +67,7 @@ class User(db.Model):
         return unicode(self.id)
 
 
-class PermissionGroup(db.Model):
+class Group(db.Model):
 
     __tablename__ = 'permission_lists'
 

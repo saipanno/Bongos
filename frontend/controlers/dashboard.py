@@ -30,10 +30,10 @@ from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
 
-from frontend.models.member import User, PermissionGroup
+from frontend.models.member import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript
 
-from frontend.forms.member import CreateUserForm, EditUserForm
+from frontend.forms.member import CreateUserForm, EditUserForm, CreateGroupForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password
@@ -156,7 +156,7 @@ def list_user_ctrl():
         users = User.query.all()
 
         for user in users:
-            user.group = PermissionGroup.query.filter_by(id=user.group).first().desc
+            user.group = Group.query.filter_by(id=user.group).first().desc
 
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -392,3 +392,23 @@ def edit_ssh_config_ctrl(config_id):
 
         flash(u'Update ssh configuration successfully', 'success')
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+
+
+@dashboard.route('/group/list')
+@login_required
+def list_group_ctrl():
+
+    if request.method == 'GET':
+
+        users = User.query.all()
+        groups = Group.query.all()
+
+        members = dict()
+        for user in users:
+
+            try:
+                members[int(user.group)] = '%s</ br>%s' % (members[user.group], user.username)
+            except:
+                members[int(user.group)] = user.username
+
+        return render_template('dashboard/group_manager.html', groups=groups, members=members, type='list')

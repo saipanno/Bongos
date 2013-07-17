@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, SelectField
 
-from frontend.models.member import PermissionGroup
+from frontend.models.member import Group
 
 
 class UserLoginForm(Form):
@@ -44,7 +44,7 @@ class CreateUserForm(Form):
     username = TextField(u'Username <span class="required">*</span>', id='name',
                          description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=PermissionGroup.query.all, get_label='desc')
+                             query_factory=Group.query.all, get_label='desc')
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the password')
@@ -59,11 +59,20 @@ class EditUserForm(Form):
     username = TextField(u'Username <span class="required">*</span>', id='name',
                          description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
     group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
-                             query_factory=PermissionGroup.query.all, get_label='desc')
+                             query_factory=Group.query.all, get_label='desc')
     now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
     new_password = PasswordField(u'New Password <span class="required">*</span>',
                                  id='new_password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the new password')
     status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class CreateGroupForm(Form):
+
+    next_page = HiddenField()
+    name = TextField(u'Name <span class="required">*</span>', id='name',
+                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    desc = TextField(u'Description <span class="required">*</span>', id='desc')
     submit = SubmitField(u'Submit', id='submit')
