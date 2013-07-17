@@ -26,15 +26,15 @@
     background-color: white;
 }
 .form-horizontal .controls {
-    padding: 15px 0px 15px 20px;
+    padding: 15px 0 15px 20px;
 }
 
 
 .form-actions.fixed{
-    position:fixed;
-    _position:absolute;
-    bottom:0px;
-    z-index:295;
+    position: fixed;
+    _position: absolute;
+    bottom: 0;
+    z-index: 295;
     margin-left: -10px;
     -webkit-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);

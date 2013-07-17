@@ -98,7 +98,7 @@ def user_edit_settings_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('member/settings.html', form=form, type='edit')
+        return render_template('member/change_settings.html', form=form, type='edit')
 
     elif request.method == 'POST':
 
