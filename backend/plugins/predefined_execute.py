@@ -32,7 +32,8 @@ from fabric.exceptions import NetworkError, CommandTimeout
 from backend.models import SshConfig, PreDefinedScript
 
 from backend.extensions.database import db
-from backend.extensions.utility import logger, generate_private_path, analysis_script_output
+from backend.extensions.logger import logger
+from backend.extensions.utility import generate_private_path, analysis_script_output
 
 
 def final_predefined_execute(user, port, password, private_key, script_template, template_vars):

@@ -29,7 +29,8 @@ import json
 from fabric.api import env, hide, show, local, execute
 
 from backend.extensions.database import db
-from backend.extensions.utility import logger, generate_ipmi_address
+from backend.extensions.logger import logger
+from backend.extensions.utility import generate_ipmi_address
 
 
 def final_power_management(ipmi_user, ipmi_password, operate, spec=None):

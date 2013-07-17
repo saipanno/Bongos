@@ -28,7 +28,7 @@ import json
 from fabric.api import env, hide, show, local, execute
 
 from backend.extensions.database import db
-from backend.extensions.utility import logger
+from backend.extensions.logger import logger
 
 
 def final_ping_checking(COUNT, TIMEOUT):

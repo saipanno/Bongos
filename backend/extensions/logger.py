@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/24.
+#                    Created at 2013/07/17.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,34 +24,14 @@
 # SOFTWARE.
 
 
-import re
-import os
+import logging
 
 import settings
 
 
-def generate_private_path(filename):
+logging.basicConfig(filename=settings.LOGGING_FILENAME,
+                    level=logging.INFO,
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s: %(message)s')
 
-    if filename is not u'':
-        return os.path.join(settings.PRIVATE_KEY_PATH, filename)
-    else:
-        return None
-
-
-def analysis_script_output(output):
-
-    # \S 匹配所有非空字符
-    # +? 匹配前面正则一次或多次，非贪婪模式
-    regexp = u'BD:\S+?:EOF'
-
-    fruit = re.findall(regexp, output)
-
-    # 字符串掐头去尾操作，删除BD:和:EOF
-    return ' '.join(fruit[3:][:-4])
-
-
-def generate_ipmi_address(address):
-
-    fruit = address.split('.')
-
-    return '%s.%s.%s' % (settings.IPMI_NETWORK, fruit[2], fruit[3])
+logger = logging.getLogger('bongos.app')
