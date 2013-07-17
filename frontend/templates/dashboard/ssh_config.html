@@ -32,7 +32,7 @@
                 <th>PORT</th>
                 <th>USERNAME</th>
                 <th>PRIVATE KEY</th>
-                <th>OPERATE</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -43,7 +43,14 @@
                     <td>{{ ssh_config.port }}</td>
                     <td>{{ ssh_config.username }}</td>
                     <td>{{ ssh_config.private_key }}</td>
-                    <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}"><i class="icon-edit"></i> 编辑</a></td>
+                    <td>
+                        <div class="dropdown pull-left">
+                            <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                            <ul class="dropdown-menu pull-right nav-stacked" role="menu">
+                                <li><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}"><i class="icon-edit"></i> 编辑</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

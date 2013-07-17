@@ -31,7 +31,7 @@
                     <th>USERNAME</th>
                     <th>GROUP</th>
                     <th>STATUS</th>
-                    <th>OPERATE</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,7 +41,14 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.group }}</td>
                             <td>{{ '启用' if user.status else '禁用' }}</td>
-                            <td><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a></td>
+                            <td>
+                                <div class="dropdown pull-left">
+                                    <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                    <ul class="dropdown-menu pull-right nav-stacked" role="menu">
+                                        <li><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
