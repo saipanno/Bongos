@@ -33,13 +33,11 @@ principal = Principal(skip_static=True)
 
 admin_permission = Permission(RoleNeed('admin'))
 member_permission = Permission(RoleNeed('member'))
-guest_permission = Permission(RoleNeed('guest'))
-disable_permission = Permission(RoleNeed('disable'))
 
-#signin = Permission(ActionNeed('signin'))
 
 @identity_loaded.connect_via(current_app)
 def on_identity_loaded(sender, identity):
+
     identity.user = current_user
 
     if hasattr(current_user, 'id'):

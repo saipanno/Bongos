@@ -37,7 +37,7 @@ from frontend.forms.member import CreateUserForm, EditUserForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password
-
+from frontend.extensions.principal import admin_permission, member_permission
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 

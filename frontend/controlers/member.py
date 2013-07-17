@@ -25,13 +25,13 @@
 
 
 from sqlalchemy import or_
-from flask import render_template, request, flash, redirect, url_for, Blueprint
+from flask import render_template, request, flash, redirect, url_for, Blueprint, current_app, session
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
 from frontend.extensions.database import db
 from frontend.extensions.utility import validate_name, validate_password
-from frontend.extensions.principal import admin_permission, member_permission, disable_permission
+from frontend.extensions.principal import admin_permission, member_permission
 
 from frontend.forms.member import UserLoginForm, EditUserForm
 
@@ -72,9 +72,14 @@ def user_login_ctrl():
             return redirect(url_for('member.user_login_ctrl'))
 
         elif user is not None and user.check_password(form.password.data):
+
             login_user(user)
+
+            #identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
+
             flash(u'Login successful', 'success')
             return redirect(default_next_page)
+
         else:
             flash(u'Incorrect email or password', 'error')
             return redirect(url_for('member.user_login_ctrl'))
@@ -84,6 +89,11 @@ def user_login_ctrl():
 def user_logout_ctrl():
 
     logout_user()
+
+    #for key in ('identity.name', 'identity.auth_type'):
+    #    session.pop(key, None)
+    #
+    #identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
 
     return redirect(url_for('member.index_ctrl'))
 
