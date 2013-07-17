@@ -70,9 +70,10 @@ class CreatePreDefinedExecuteForm(Form):
 
 class CreateCustomExecuteForm(Form):
 
-    script_desc = u'''用 <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
-    同时模板依然支持shell中的 <code>$</code> 变量。 如：
-<code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
+    script_desc = u'''作为shell中的 <code>$</code> 内部变量的扩展，模板还支持外部变量。\
+    <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的同名赋值定义进行替换, 如：
+<code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>
+同时标准错误输出以及标准输出中匹配到<code>BD:\w+?:EOF</code>的字符串可以作为返回结果保存。'''
 
     vars_desc = u'''用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
     用 <code>=</code> 作为单变量的赋值符。 如:
@@ -82,7 +83,8 @@ class CreateCustomExecuteForm(Form):
     server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
                                 description=u'Only support ip address. Separated by \
                                 <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    script_template = TextAreaField(u'Script Template  <span class="required">*</span>', id='textarea', description=script_desc)
+    script_template = TextAreaField(u'Script Template  <span class="required">*</span>', id='textarea',
+                                    description=script_desc)
     template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
                                   query_factory=SshConfig.query.all,  get_label='desc')

@@ -29,11 +29,10 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 
 class CreatePreDefinedScriptForm(Form):
 
-    script_desc = u'''用 <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的定义进行替换, \
-    同时模板依然支持shell中的 <code>$</code> 变量。同时标准输出中匹配到<code>BD:\w+?:EOF</code>的字符串可以作为返回结果保存。 如：
-<br /><code>device=eth1</code>
-<br /><code>echo "IPADDR={{address}}" >> ~/ifcfg-$device</code>
-<br /><code>echo "BD:"$HOSTNAME":EOF"</code>'''
+    script_desc = u'''作为shell中的 <code>$</code> 内部变量的扩展，模板还支持外部变量。\
+    <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的同名赋值定义进行替换, 如：
+<code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>
+同时标准错误输出以及标准输出中匹配到<code>BD:\w+?:EOF</code>的字符串可以作为返回结果保存。'''
 
     name = TextField(u'Name  <span class="required">*</span>', id='text',
                      description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
