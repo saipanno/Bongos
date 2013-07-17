@@ -92,7 +92,7 @@ def create_ssh_detect_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_ssh_detect.html', form=form)
+        return  render_template('operation/create_ssh_detect.html', form=form, kind=kind)
 
     elif request.method == 'POST':
 
@@ -126,7 +126,7 @@ def create_ping_detect_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('operation/create_ping_detect.html', form=form)
+        return render_template('operation/create_ping_detect.html', form=form, kind=kind)
 
     elif request.method == 'POST':
 
@@ -156,7 +156,7 @@ def create_custom_execute_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_custom_execute.html', form=form)
+        return  render_template('operation/create_custom_execute.html', form=form, kind=kind)
 
     elif request.method == 'POST':
 
@@ -201,7 +201,7 @@ def create_predefined_execute_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_predefined_execute.html', form=form)
+        return  render_template('operation/create_predefined_execute.html', form=form, kind=kind)
 
     elif request.method == 'POST':
 
@@ -246,7 +246,7 @@ def create_power_control_ctrl():
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_power_control.html', form=form)
+        return  render_template('operation/create_power_control.html', form=form, kind=kind)
 
     elif request.method == 'POST':
 

@@ -19,7 +19,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">Ssh Config Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.create_ssh_config_ctrl') }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Ssh Config</a>
+                    <a href="{{ url_for('dashboard.create_ssh_config_ctrl') }}" class="btn btn-primary"><i class="icon-plus"></i> Add Ssh Config</a>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <td>{{ ssh_config.port }}</td>
                     <td>{{ ssh_config.username }}</td>
                     <td>{{ ssh_config.private_key }}</td>
-                    <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}">编辑</a></td>
+                    <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" class="btn btn-mini btn-primary">编辑</a></td>
                 </tr>
             {% endfor %}
             </tbody>

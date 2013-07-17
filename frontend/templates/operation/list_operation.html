@@ -17,7 +17,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ ext.get_operation_title(kind) }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ ext.generation_create_operation_link(kind) }}" class="btn btn-primary"><i class="icon-plus-sign-alt"></i> Add Operation</a>
+                    <a href="{{ ext.generation_create_operation_link(kind) }}" class="btn btn-primary"><i class="icon-plus"></i> Add Operation</a>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                 <td class="span1">{{ execute.datetime }}</td>
                 <td class="span5">{{ execute.server_list }}</td>
                 <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
-                <td class="span1"><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}">查看</a></td>
+                <td class="span1"><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}" class="btn btn-mini btn-primary">查看</a></td>
             </tr>
             {% endfor %}
             </tbody>
