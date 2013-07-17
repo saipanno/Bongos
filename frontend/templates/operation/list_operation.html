@@ -39,7 +39,7 @@
                 <td class="span1">{{ execute.datetime }}</td>
                 <td class="span5">{{ execute.server_list }}</td>
                 <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
-                <td class="span1"><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}" class="btn btn-mini btn-primary">查看</a></td>
+                <td class="span1"><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}"><i class="icon-info-sign"></i> 查看</a></td>
             </tr>
             {% endfor %}
             </tbody>

@@ -40,8 +40,8 @@
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author }}</td>
                         <td>
-                            <a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}" class="btn btn-mini btn-primary">查看</a>
-                            <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" class="btn btn-mini btn-primary">编辑</a>
+                            <a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-info-sign"></i> 查看</a>
+                            <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> 编辑</a>
                         </td>
                     </tr>
                 {% endfor %}

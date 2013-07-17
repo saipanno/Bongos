@@ -43,7 +43,7 @@
                     <td>{{ ssh_config.port }}</td>
                     <td>{{ ssh_config.username }}</td>
                     <td>{{ ssh_config.private_key }}</td>
-                    <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" class="btn btn-mini btn-primary">编辑</a></td>
+                    <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}"><i class="icon-edit"></i> 编辑</a></td>
                 </tr>
             {% endfor %}
             </tbody>

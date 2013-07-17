@@ -41,9 +41,7 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.group }}</td>
                             <td>{{ '启用' if user.status else '禁用' }}</td>
-                            <td>
-                                <a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"  class="btn btn-mini btn-primary">编辑</a>
-                            </td>
+                            <td><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
