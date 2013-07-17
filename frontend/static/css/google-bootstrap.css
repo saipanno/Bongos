@@ -364,6 +364,7 @@ select:focus:required:invalid:focus {
 }
 /* Override ßsome of the values in Bootstrap
 /* White icons with optional class, or on hover/active states of certain elements */
+/* 下列代码和Google Bootstrap冲突，禁用掉
 .nav-list > .active > a > [class^="icon-"],
 .nav-list > .active > a > [class*=" icon-"],
 .dropdown-menu > li > a:hover > [class^="icon-"],
@@ -374,6 +375,7 @@ select:focus:required:invalid:focus {
 .dropdown-submenu:hover > a > [class*=" icon-"] {
   background-image: url("../img/glyphicons-halflings.png");
 }
+*/
 .dropdown-menu {
   position: absolute;
   top: 100%;
