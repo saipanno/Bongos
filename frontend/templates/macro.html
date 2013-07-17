@@ -59,12 +59,12 @@
 {%- endmacro %}
 
 
-{% macro create_standard_form(obj)  -%}
+{% macro create_standard_form(field)  -%}
     <div class="control-group">
-        <label class="control-label">{{ obj.label }}</label>
+        <label class="control-label">{{ field.label }}{% if field.flags.required %}<span class="required">*</span>{% endif %}</label>
         <div class="controls">
-            {{ obj(**kwargs) }}
-            {% if obj.description %}<p class="help-block">{{ obj.description|safe }}</p>{% endif %}
+            {{ field(**kwargs) }}
+            {% if field.description %}<p class="help-block">{{ field.description|safe }}</p>{% endif %}
         </div>
     </div>
 {%- endmacro %}
