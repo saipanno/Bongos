@@ -73,7 +73,9 @@ def final_power_management(ipmi_user, ipmi_password, operate, spec=None):
         elif output.return_code == 1:
             fruit['code'] = 1
             if re.match(u'Activate Session command failed', output.stderr):
-                fruit['error'] = 'IPMI user authentication failed'
+                fruit['error'] = 'IPMI connection failed'
+                logger.warning(u'IPMI Connection Failed. ADDRESS: %s USER: %s, PASSWORD: %s' %
+                               (ipmi_address, ipmi_user, ipmi_password))
             elif re.match(u'Invalid chassis power command', output.stderr):
                 fruit['error'] = 'Wrong type of power operate'
             else:
@@ -84,10 +86,10 @@ def final_power_management(ipmi_user, ipmi_password, operate, spec=None):
 
     except Exception, e:
         fruit['code'] = 20
-        fruit['msg'] = '%s' % e
+        fruit['error'] = '%s' % e
 
         logger.warning(u'UNKNOWN FAILS. MESSAGE: IPMI exec %s fails, except status is %s, except message is %s' %
-                       (env.host, fruit['code'], fruit['msg']))
+                       (env.host, fruit['code'], fruit['error']))
 
     finally:
         return fruit
