@@ -92,11 +92,11 @@ def create_predefined_script_ctrl():
         author = current_user.id
         redirect_url = url_for('dashboard.create_predefined_script_ctrl')
 
-        if form.username.data == u'':
+        if form.name.data == u'':
             flash(u'Name can\'t be empty', 'error')
-        elif not validate_name(form.username.data):
+        elif not validate_name(form.name.data):
             flash(u'Incorrect name format', 'error')
-        elif PreDefinedScript.query.filter_by(name=form.username.data).all():
+        elif PreDefinedScript.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
 
         elif form.desc.data == u'':
