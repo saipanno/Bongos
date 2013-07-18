@@ -107,7 +107,7 @@ def create_predefined_script_ctrl():
 
         else:
 
-            script = PreDefinedScript(form.username.data, form.desc.data, form.script.data, author)
+            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
             db.session.add(script)
             db.session.commit()
 
@@ -419,7 +419,7 @@ def list_group_ctrl():
 
             try:
                 members[int(user.group)] = '%s</ br>%s' % (members[user.group], user.username)
-            except:
+            except Exception, e:
                 members[int(user.group)] = user.username
 
         return render_template('dashboard/group_manager.html', groups=groups, members=members, type='list')
