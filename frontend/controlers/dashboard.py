@@ -33,7 +33,7 @@ from frontend.extensions.database import db
 from frontend.models.member import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript
 
-from frontend.forms.member import CreateUserForm, EditUserForm, CreateGroupForm
+from frontend.forms.member import CreateUserForm, EditUserForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
 
 from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password
@@ -191,7 +191,7 @@ def create_user_ctrl():
 
         elif form.group.data.id is None:
             flash(u'Group can\'t be empty', 'error')
-        elif not PermissionGroup.query.filter_by(id=form.group.data.id).all():
+        elif not Group.query.filter_by(id=form.group.data.id).all():
             flash(u'The current group is not exist', 'error')
 
         elif form.password.data == u'' or form.confirm_password.data == u'':
@@ -247,7 +247,7 @@ def edit_user_ctrl(user_id):
                 user.username = form.username.data
 
         if form.group.data.id != user.group and form.group.data.id is not None:
-            if not PermissionGroup.query.filter_by(id=form.group.data.id).all():
+            if not Group.query.filter_by(id=form.group.data.id).all():
                 flash(u'The current group is not exist', 'error')
             else:
                 user.group = form.group.data.id
