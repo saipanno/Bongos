@@ -25,7 +25,7 @@
 
 
 from sqlalchemy import exc
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
@@ -392,6 +392,17 @@ def edit_ssh_config_ctrl(config_id):
 
         flash(u'Update ssh configuration successfully', 'success')
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+
+
+@dashboard.route('/logging_reader')
+@login_required
+def logging_reader_ctrl():
+
+    MAX_LEN = -200
+
+    with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
+        logging_buffer = f.readlines()
+        return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])
 
 
 @dashboard.route('/group/list')
