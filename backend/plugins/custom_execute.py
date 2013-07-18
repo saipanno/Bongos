@@ -26,7 +26,7 @@
 
 import json
 from jinja2 import Template
-from fabric.api import env, run, hide, show, execute
+from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.models import SshConfig
@@ -119,7 +119,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
         else:
             fruit['code'] = 20
             fruit['error'] = '%s' % e
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
                            (env.host, fruit['code'], fruit['error']))
 
     except Exception, e:
@@ -130,7 +130,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
             fruit['code'] = 20
             fruit['error'] = '%s' % e
 
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
                            (env.host, fruit['code'], fruit['error']))
 
     finally:
@@ -158,16 +158,16 @@ def custom_script_execute(operation):
     except Exception, e:
         operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.kind, operation.status, message))
+        logger.error(u'DATABASE FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, message))
 
     try:
         template_vars = json.loads(operation.template_vars)
     except Exception, e:
         operation.status = 2
         message = 'Failed to load template vars. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.kind, operation.status, message))
+        logger.error(u'USER DATA FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, message))
 
     if operation.status != 2:
 
@@ -187,8 +187,7 @@ def custom_script_execute(operation):
             operation.result = json.dumps(do_exec, ensure_ascii=False)
         except Exception, e:
             operation.status = 2
-            message = 'Integrate data error. %s' % e
-            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operation.id, operation.kind, operation.status, message))
+            logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                         (operation.id, operation.status, e))
 
     db.commit()

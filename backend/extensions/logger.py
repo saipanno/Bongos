@@ -29,9 +29,20 @@ import logging
 import settings
 
 
-logging.basicConfig(filename=settings.LOGGING_FILENAME,
-                    level=logging.INFO,
-                    filemode='a',
-                    format='%(asctime)s - %(levelname)s: %(message)s')
+levels = {
+    'DEBUG':    logging.DEBUG,
+    'INFO':     logging.INFO,
+    'WARNING':  logging.WARNING,
+    'ERROR':    logging.ERROR,
+    'CRITICAL': logging.CRITICAL
+}
 
-logger = logging.getLogger('bongos.app')
+
+logging.basicConfig(
+    filemode='a',
+    filename=settings.LOGGING_FILENAME,
+    level=levels.get(settings.LOGGING_LEVEL, 'INFO'),
+    format='%(asctime)s - BACKEND - %(levelname)s: %(message)s'
+)
+
+logger = logging.getLogger()

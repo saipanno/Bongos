@@ -25,7 +25,7 @@
 
 
 import json
-from fabric.api import env, hide, show, local, execute
+from fabric.api import env, hide, local, execute
 
 from backend.extensions.database import db
 from backend.extensions.logger import logger
@@ -71,7 +71,7 @@ def final_ping_checking(COUNT, TIMEOUT):
         fruit['code'] = 20
         fruit['msg'] = '%s' % e
 
-        logger.warning(u'UNKNOWN FAILS. MESSAGE: Ping %s fails, except status is %s, except message is %s' %
+        logger.warning(u'UNKNOWN FAILS| Ping %s fails, Status is %s, Message is %s' %
                        (env.host, fruit['code'], fruit['msg']))
 
     finally:
@@ -104,8 +104,7 @@ def ping_connectivity_checking(config, operation):
         operation.result = json.dumps(do_exec, ensure_ascii=False)
     except Exception, e:
         operation.status = 2
-        message = 'Integrate data error. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.kind, operation.status, message))
+        logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, e))
 
     db.commit()
