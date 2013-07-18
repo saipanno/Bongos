@@ -130,8 +130,8 @@ def edit_predefined_script_ctrl(script_id):
 
     elif request.method == 'POST':
 
-        if form.username.data != script.name and form.username.data != u'':
-            if not validate_name(form.username.data):
+        if form.name.data != script.name and form.name.data != u'':
+            if not validate_name(form.name.data):
                 flash(u'Incorrect name format', 'error')
                 return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
