@@ -59,9 +59,11 @@ def final_power_management(ipmi_user, ipmi_password, operate, spec=None):
 
     ipmi_address = generate_ipmi_address(env.host)
 
+    ipmitool_power_parameters = {0: 'reset', 1: 'off', 2: 'on', 3: 'status'}
+
     specifies = '-I lanplus' if spec else ''
-    command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address, ipmi_user,
-                                                                  ipmi_password, operate)
+    command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address, ipmi_user, ipmi_password,
+                                                                  ipmitool_power_parameters.get(operate, 'status'))
 
     try:
         output = local(command, capture=True)

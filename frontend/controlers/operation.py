@@ -262,7 +262,7 @@ def create_power_control_ctrl():
             flash(u'Type of operation is not selected', 'error')
             return redirect(url_for('operation.create_power_control_ctrl'))
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', form.script_template.data, 0, u'')
+        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data, u'', 0,  0, u'')
         db.session.add(operation)
         db.session.commit()
 
