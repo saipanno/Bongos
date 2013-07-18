@@ -25,7 +25,7 @@
 
 
 from backend import app
-from backend.extensions import logger
+from backend.extensions.logger import logger
 
 if __name__ == '__main__':
 
