@@ -29,9 +29,10 @@ from flask.ext.login import current_user
 from flask.ext.principal import Principal, Permission, RoleNeed, UserNeed, identity_loaded
 
 
-principal = Principal(skip_static=True)
+principal = Principal()
 
-admin_permission = Permission(RoleNeed('admin'))
+be_admin = RoleNeed('admin')
+admin = Permission(be_admin)
 member_permission = Permission(RoleNeed('member'))
 
 

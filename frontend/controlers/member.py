@@ -31,7 +31,6 @@ from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
 from frontend.extensions.database import db
 from frontend.extensions.utility import validate_name, validate_password
-from frontend.extensions.principal import admin_permission, member_permission
 
 from frontend.forms.member import UserLoginForm, EditUserForm
 
