@@ -490,3 +490,97 @@ def create_server_ctrl():
             redirect_url = url_for('dashboard.list_server_ctrl')
 
         return redirect(redirect_url)
+
+
+@dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_server_ctrl(server_id):
+
+    server = Server.query.filter_by(id=server_id).first()
+
+    form = ServerForm(server)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/server_manager.html', form=form, type='create')
+
+    elif request.method == 'POST':
+
+        redirect_url = url_for('dashboard.edit_server_ctrl', server_id=server_id)
+
+        if form.group.data is not None and form.group.data.id != server.group:
+            if not Group.query.filter_by(id=form.group.data.id).all():
+                flash(u'The current group is not exist', 'error')
+                return  redirect(redirect_url)
+            else:
+                server.group = form.group.data.id
+
+        if form.desc.data != u'' and form.desc.data != server.desc:
+            server.desc = form.desc.data
+
+        if form.ext_address.data != u'' and form.ext_address.data != server.ext_address:
+            if Server.query.filter_by(ext_address=form.ext_address.data).all():
+                flash(u'The current ext_address is exist', 'error')
+                return  redirect(redirect_url)
+            elif not validate_address(form.ext_address.data):
+                flash(u'Incorrect ext_address', 'error')
+                return  redirect(redirect_url)
+            else:
+                server.ext_address = form.ext_address.data
+
+        if form.int_address.data != u'' and form.int_address.data != server.int_address:
+            if Server.query.filter_by(int_address=form.int_address.data).all():
+                flash(u'The current int_address is exist', 'error')
+                return  redirect(redirect_url)
+            elif not validate_address(form.int_address.data):
+                flash(u'Incorrect int_address', 'error')
+                return  redirect(redirect_url)
+            else:
+                server.int_address = form.int_address.data
+
+        if form.ipmi_address.data != u'' and form.ipmi_address.data != server.ipmi_address:
+            if Server.query.filter_by(ipmi_address=form.ipmi_address.data).all():
+                flash(u'The current ipmi_address is exist', 'error')
+                return  redirect(redirect_url)
+            elif not validate_address(form.ipmi_address.data):
+                flash(u'Incorrect ipmi_address', 'error')
+                return  redirect(redirect_url)
+            else:
+                server.ipmi_address = form.ipmi_address.data
+
+        if form.other_address.data != u'' and form.other_address.data != server.other_address:
+            server.other_address = form.other_address.data
+
+        if form.idc.data != u'' and form.idc.data != server.idc:
+            server.idc = form.idc.data
+
+        if form.rack.data != u'' and form.rack.data != server.rack:
+            server.rack = form.rack.data
+
+        if form.manufacturer.data != u'' and form.manufacturer.data != server.manufacturer:
+            server.manufacturer = form.manufacturer.data
+
+        if form.model.data != u'' and form.model.data != server.model:
+            server.model = form.model.data
+
+        if form.cpu_info.data != u'' and form.cpu_info.data != server.cpu_info:
+            server.cpu_info = form.cpu_info.data
+
+        if form.disk_info.data != u'' and form.disk_info.data != server.disk_info:
+            server.disk_info = form.disk_info.data
+
+        if form.memory_info.data != u'' and form.memory_info.data != server.memory_info:
+            server.memory_info = form.memory_info.data
+
+        else:
+            server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
+                            form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
+                            form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
+                            form.memory_info.data)
+            db.session.add(server)
+            db.session.commit()
+
+            flash(u'Edit server successfully', 'success')
+            redirect_url = url_for('dashboard.list_server_ctrl')
+
+        return redirect(redirect_url)

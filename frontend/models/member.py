@@ -69,7 +69,7 @@ class User(db.Model):
 
 class Group(db.Model):
 
-    __tablename__ = 'permission_lists'
+    __tablename__ = 'group_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
