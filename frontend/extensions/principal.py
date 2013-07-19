@@ -24,26 +24,15 @@
 # SOFTWARE.
 
 
-from flask import current_app
-from flask.ext.login import current_user
-from flask.ext.principal import Principal, Permission, RoleNeed, UserNeed, identity_loaded
+from functools import partial
+from flask.ext.principal import Need, Permission
 
 
-principal = Principal()
-
-be_admin = RoleNeed('admin')
-admin = Permission(be_admin)
-member_permission = Permission(RoleNeed('member'))
+UserAccessNeed = partial(Need, 'functions')
 
 
-@identity_loaded.connect_via(current_app)
-def on_identity_loaded(sender, identity):
+class UserAccessPermission(Permission):
 
-    identity.user = current_user
-
-    if hasattr(current_user, 'id'):
-        identity.providers.add(UserNeed(current_user.id))
-
-    if hasattr(current_user, 'roles'):
-        for role in current_user.roles:
-            identity.provides.add(RoleNeed(role.name))
+    def __init__(self, name):
+        need = UserAccessNeed(name)
+        super(UserAccessPermission, self).__init__(need)

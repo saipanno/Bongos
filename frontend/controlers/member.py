@@ -74,7 +74,7 @@ def user_login_ctrl():
 
             login_user(user)
 
-            #identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
+            identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
             flash(u'Login successful', 'success')
             return redirect(default_next_page)
@@ -89,10 +89,7 @@ def user_logout_ctrl():
 
     logout_user()
 
-    #for key in ('identity.name', 'identity.auth_type'):
-    #    session.pop(key, None)
-    #
-    #identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
 
     return redirect(url_for('member.index_ctrl'))
 

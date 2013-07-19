@@ -53,7 +53,7 @@ def list_predefined_script_ctrl():
 
         for script in scripts:
             user = User.query.filter_by(id=int(script.author)).first()
-            script.author = user.username
+            script.author_name = user.username
 
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
@@ -157,7 +157,7 @@ def list_user_ctrl():
         users = User.query.all()
 
         for user in users:
-            user.group = Group.query.filter_by(id=user.group).first().desc
+            user.group_name = Group.query.filter_by(id=user.group).first().desc
 
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -412,18 +412,20 @@ def list_group_ctrl():
 
     if request.method == 'GET':
 
-        users = User.query.all()
         groups = Group.query.all()
+        for group in groups:
 
-        members = dict()
-        for user in users:
-
+            group.members = ''
             try:
-                members[int(user.group)] = '%s</ br>%s' % (members[user.group], user.username)
+                users = User.query.filter_by(id=group.id).all()
             except Exception, e:
-                members[int(user.group)] = user.username
+                users = None
+            finally:
+                if users is not None:
+                    for user in users:
+                        group.members = '%s, %s' % (group.members, user.username)
 
-        return render_template('dashboard/group_manager.html', groups=groups, members=members, type='list')
+        return render_template('dashboard/group_manager.html', groups=groups, type='list')
 
 
 @dashboard.route('/server/list')
@@ -437,9 +439,9 @@ def list_server_ctrl():
         for server in servers:
 
             try:
-                server.group = Group.query.filter_by(id=server.group).first()
+                server.group_name = Group.query.filter_by(id=server.group).first()
             except Exception, e:
-                server.group = u'None Group'
+                server.group_name = u'None'
 
         return render_template('dashboard/server_manager.html', servers=servers, type='list')
 

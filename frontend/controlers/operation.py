@@ -28,7 +28,7 @@ import time
 import json
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
@@ -39,6 +39,7 @@ from frontend.models.operation import OperationDb
 from frontend.extensions.database import db
 from frontend.extensions.utility import format_address_list
 from frontend.extensions.utility import format_template_vars
+from frontend.extensions.principal import UserAccessPermission
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
@@ -48,13 +49,21 @@ operation = Blueprint('operation', __name__, url_prefix='/operation')
 @login_required
 def list_operation_ctrl(kind):
 
-    executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
+    user_access = UserAccessPermission('operation.list_operation_ctrl')
 
-    for execute in executes:
-        user = User.query.filter_by(id=int(execute.author)).first()
-        execute.author = user.username
+    #if user_access.can():
+    if True:
 
-    return render_template('operation/list_operation.html', executes=executes, kind=kind)
+        executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
+
+        for execute in executes:
+            user = User.query.filter_by(id=int(execute.author)).first()
+            execute.author_name = user.username
+
+        return render_template('operation/list_operation.html', executes=executes, kind=kind)
+
+    else:
+        abort(403)
 
 
 @operation.route('/<int:operation_id>/show')

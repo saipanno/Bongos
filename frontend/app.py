@@ -25,10 +25,13 @@
 
 
 from flask import Flask
+from flask.ext.login import current_user
+from flask.ext.principal import identity_loaded, Principal
 
+from frontend.models.member import Group
 from frontend.extensions.database import db
 from frontend.extensions.login_manager import login
-from frontend.extensions.principal import principal
+from frontend.extensions.principal import UserAccessNeed
 
 
 def create_app(config=None):
@@ -55,7 +58,21 @@ def configure_extensions(app):
     login.init_app(app)
 
     # config Flask-Principal
-    principal.init_app(app)
+    principal = Principal(app)
+
+    @identity_loaded.connect_via(app)
+    def on_identity_loaded(sender, identity):
+
+        current_groups = Group.query.filter_by(id=current_user.group).all()
+
+        for group in current_groups:
+            if hasattr(group, 'roles'):
+                for role in group.roles.split(','):
+                    identity.provides.add(UserAccessNeed(role))
+
+        if hasattr(current_user, 'roles'):
+            for role in current_user.roles.split(','):
+                identity.provides.add(UserAccessNeed(role))
 
 
 def configure_blueprints(app):
@@ -71,3 +88,8 @@ def configure_blueprints(app):
     for blueprint in BLUEPRINTS:
 
         app.register_blueprint(blueprint)
+
+
+def configure_error_handler(app):
+
+    pass

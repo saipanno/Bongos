@@ -67,7 +67,7 @@ class PreDefinedScript(db.Model):
 
 class Server(db.Model):
 
-    __tablename__ = 'server_lists'
+    __tablename__ = 'server_assets_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     group = db.Column(db.Integer)
@@ -99,3 +99,19 @@ class Server(db.Model):
         self.cpu_info = cpu_info
         self.disk_info = disk_info
         self.memory_info = memory_info
+
+
+class UserAccessControl(db.Model):
+
+    __tablename__ = 'access_control_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    function_name = db.Column(db.String(250), unique=True)
+    access_groups = db.Column(db.Text)
+    access_users = db.Column(db.Text)
+
+    def __init__(self, function_name, access_groups, access_users):
+
+        self.function_name = function_name
+        self.access_groups = access_groups
+        self.access_users = access_users

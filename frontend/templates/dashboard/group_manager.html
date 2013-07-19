@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ group.name }}</td>
                             <td>{{ group.desc }}</td>
-                            <td>{{ members.get(group.id, '') }}</td>
+                            <td>{{ group.members[2:] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

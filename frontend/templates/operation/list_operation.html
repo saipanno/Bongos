@@ -35,7 +35,7 @@
             <tbody>
             {% for execute in executes %}
             <tr>
-                <td class="span1">{{ execute.author }}</td>
+                <td class="span1">{{ execute.author_name }}</td>
                 <td class="span1">{{ execute.datetime }}</td>
                 <td class="span5">{{ execute.server_list }}</td>
                 <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
