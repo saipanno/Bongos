@@ -31,12 +31,13 @@ from flask.ext.login import login_required, current_user
 from frontend.extensions.database import db
 
 from frontend.models.member import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript
+from frontend.models.dashboard import SshConfig, PreDefinedScript, Server
 
 from frontend.forms.member import CreateUserForm, EditUserForm
-from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm
+from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
 
-from frontend.extensions.utility import validate_name, validate_email, validate_username, validate_password
+from frontend.extensions.utility import validate_name, validate_email, validate_username, \
+    validate_password, validate_address
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -423,3 +424,69 @@ def list_group_ctrl():
                 members[int(user.group)] = user.username
 
         return render_template('dashboard/group_manager.html', groups=groups, members=members, type='list')
+
+
+@dashboard.route('/server/list')
+@login_required
+def list_server_ctrl():
+
+    if request.method == 'GET':
+
+        servers = Server.query.all()
+
+        for server in servers:
+
+            try:
+                server.group = Group.query.filter_by(id=server.group).first()
+            except Exception, e:
+                server.group = u'None Group'
+
+        return render_template('dashboard/server_manager.html', servers=servers, type='list')
+
+
+@dashboard.route('/server/create', methods=("GET", "POST"))
+@login_required
+def create_server_ctrl():
+
+    form = ServerForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/server_manager.html', form=form, type='create')
+
+    elif request.method == 'POST':
+
+        redirect_url = url_for('dashboard.create_server_ctrl')
+
+        if form.group.data.id is None:
+            flash(u'Group can\'t be empty', 'error')
+        elif not Group.query.filter_by(id=form.group.data.id).all():
+            flash(u'The current group is not exist', 'error')
+
+        elif form.ext_address.data != u'' and Server.query.filter_by(ext_address=form.ext_address.data).all():
+            flash(u'The current ext_address is already in use', 'error')
+        elif form.ext_address.data != u'' and not validate_address(form.ext_address.data):
+            flash(u'Incorrect ext_address', 'error')
+
+        elif form.int_address.data != u'' and Server.query.filter_by(int_address=form.int_address.data).all():
+            flash(u'The current int_address is already in use', 'error')
+        elif form.int_address.data != u'' and not validate_address(form.int_address.data):
+            flash(u'Incorrect int_address', 'error')
+
+        elif form.ipmi_address.data != u'' and Server.query.filter_by(ipmi_address=form.ipmi_address.data).all():
+            flash(u'The current ipmi_address is already in use', 'error')
+        elif form.ipmi_address.data != u'' and not validate_address(form.ipmi_address.data):
+            flash(u'Incorrect ipmi_address', 'error')
+
+        else:
+            server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
+                            form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
+                            form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
+                            form.memory_info.data)
+            db.session.add(server)
+            db.session.commit()
+
+            flash(u'Create server successfully', 'success')
+            redirect_url = url_for('dashboard.list_server_ctrl')
+
+        return redirect(redirect_url)

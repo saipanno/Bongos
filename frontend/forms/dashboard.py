@@ -24,7 +24,9 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, PasswordField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, PasswordField, QuerySelectField
+
+from frontend.models.member import Group
 
 
 class CreatePreDefinedScriptForm(Form):
@@ -51,4 +53,24 @@ class CreateSshConfigForm(Form):
     password = PasswordField(u'Password  <span class="required">*</span>', id='text')
     private_key = TextField(u'Private Key:', id='text',
                             description=u'Private key filename, not required.')
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class ServerForm(Form):
+
+    group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
+                             query_factory=Group.query.all, get_label='desc')
+    desc = TextField(u'Server Desc', id='text')
+    ext_address = TextField(u'Ext Address', id='text')
+    int_address = TextField(u'Int Address', id='text')
+    ipmi_address = TextField(u'IPMI Address', id='text')
+    other_address = TextField(u'Other Address', id='text')
+    idc = TextField(u'IDC', id='text')
+    rack = TextField(u'Rack', id='text')
+    manufacturer = TextField(u'Manufacturer', id='text')
+    model = TextField(u'Model', id='text')
+    cpu_info = TextField(u'Cpu Model', id='text')
+    disk_info = TextField(u'Disk Information', id='text')
+    memory_info = TextField(u'Memory Information', id='text')
+
     submit = SubmitField(u'Submit', id='submit')

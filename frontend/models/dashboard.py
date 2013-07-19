@@ -63,3 +63,39 @@ class PreDefinedScript(db.Model):
         self.desc = desc
         self.script = script
         self.author = author
+
+
+class Server(db.Model):
+
+    __tablename__ = 'server_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    group = db.Column(db.Integer)
+    desc = db.Column(db.Text)
+    ext_address = db.Column(db.String(250), unique=True)
+    int_address = db.Column(db.String(250), unique=True)
+    ipmi_address = db.Column(db.String(250), unique=True)
+    other_address = db.Column(db.String(250))
+    idc = db.Column(db.Integer)
+    rack = db.Column(db.String(250))
+    manufacturer = db.Column(db.String(250))
+    model = db.Column(db.String(250))
+    cpu_info = db.Column(db.Text)
+    disk_info = db.Column(db.Text)
+    memory_info = db.Column(db.Text)
+
+    def __init__(self, group, desc, ext_address, int_address, ipmi_address, other_address, idc, rack,
+                 manufacturer, model, cpu_info, disk_info, memory_info):
+        self.group = group
+        self.desc = desc
+        self.ext_address = ext_address
+        self.int_address = int_address
+        self.ipmi_address = ipmi_address
+        self.other_address = other_address
+        self.idc = idc
+        self.rack = rack
+        self.manufacturer = manufacturer
+        self.model = model
+        self.cpu_info = cpu_info
+        self.disk_info = disk_info
+        self.memory_info = memory_info
