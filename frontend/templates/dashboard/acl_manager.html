@@ -5,8 +5,6 @@
 {% block main %}
     <div class="span10">
 
-    {% if type == 'list' %}
-
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
             <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
@@ -18,9 +16,6 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <a class="brand" href="#">ACL Manager</a>
-                <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.edit_acl_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit ACL</a>
-                </div>
             </div>
         </div>
 
@@ -41,13 +36,20 @@
                             <tr>
                                 <th>FUNCTION</th>
                                 <th>PERMISSION</th>
+                                <th>OPERATION</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for function in access_control_dicts[group_id] %}
+                                {% set status = access_control_dicts[group_id][function] %}
                                 <tr>
                                     <td>{{ function }}</td>
-                                    <td>{{ ext.get_acl_status(access_control_dicts[group_id][function]) }}</td>
+                                    <td>{{ ext.get_acl_status(status) }}</td>
+                                    <td>
+                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', function=function, group=group_id, status=0 if status else 1) }}">
+                                            {{ ext.get_adverse_acl_desc(status) }}
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -58,42 +60,6 @@
 
             {% endfor %}
         </div>
-
-        {% elif type == 'edit' %}
-
-        <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
-            <li class="active">Edit</li>
-        </ul>
-
-        <div class="tabbable">
-            <form method="post" action="">
-
-                {{ form.hidden_tag() }}
-
-                <legend>
-                    Edit ACL
-                </legend>
-
-                <div class="box form-container row-fluid form-horizontal">
-
-                    {{ ext.create_standard_form(form.group) }}
-
-                    {{ ext.create_standard_form(form.name, class="span6") }}
-
-                    {{ ext.create_standard_form(form.permission) }}
-
-                </div>
-
-                <div class="form-actions">
-                    {{ form.submit(class="btn btn-danger") }}
-                </div>
-
-            </form>
-        </div>
-
-    {% endif %}
 
     </div>
 {% endblock %}

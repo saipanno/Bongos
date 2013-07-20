@@ -689,43 +689,32 @@ def list_acl_ctrl():
                                access_control_dicts=access_control_dicts, type='list')
 
 
-@dashboard.route('/acl/edit', methods=("GET", "POST"))
+@dashboard.route('/acl/update/<function>/<group>/<status>')
 @login_required
-def edit_acl_ctrl():
+def update_acl_status_ctrl(function, group, status):
 
-    user_access = UserAccessPermission('dashboard.edit_acl_ctrl')
+    user_access = UserAccessPermission('dashboard.update_acl_status_ctrl')
     if not user_access.can():
         abort(403)
 
-    form = AccessControlForm()
+    default_redirect_url = url_for('dashboard.list_acl_ctrl')
+    acl = AccessControl.query.filter_by(function=function).first()
 
-    if request.method == 'GET':
+    try:
+        groups_access = json.loads(acl.groups_access)
+    except Exception, e:
+        groups_access = dict()
 
-        return render_template('dashboard/acl_manager.html', form=form, type='edit')
+    if status == '0':
+        groups_access[group] = 0
+    elif status == '1':
+        groups_access[group] = 1
+    else:
+        flash(u'Error ACL status', 'error')
+        return redirect(default_redirect_url)
 
-    elif request.method == 'POST':
+    acl.groups_access = json.dumps(groups_access)
+    db.session.commit()
 
-        redirect_url = url_for('dashboard.list_acl_ctrl')
-
-        if not Group.query.filter_by(id=form.group.data.id).all():
-            flash(u'The current group is not exist', 'error')
-            return redirect(redirect_url)
-        elif not AccessControl.query.filter_by(id=form.name.data.id).all():
-            flash(u'The current function is not exist', 'error')
-            return redirect(redirect_url)
-
-        acl = AccessControl.query.filter_by(id=form.name.data.id).first()
-
-        try:
-            groups_access = json.loads(acl.groups_access)
-        except Exception, e:
-            groups_access = dict()
-
-        groups_access[unicode(form.group.data.id)] = 1 if form.permission.data else 0
-
-        acl.groups_access = json.dumps(groups_access)
-
-        db.session.commit()
-
-        flash(u'Edit ACL successfully', 'success')
-        return redirect(redirect_url)
+    flash(u'Update ACL successfully', 'success')
+    return redirect(default_redirect_url)

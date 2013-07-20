@@ -70,6 +70,15 @@
 {%- endmacro %}
 
 
+{% macro get_adverse_acl_desc(status)  -%}
+    {% if status == 0 %}
+        启用
+    {% elif status == 1 %}
+        禁用
+    {% endif %}
+{%- endmacro %}
+
+
 {% macro create_standard_form(field)  -%}
     <div class="control-group">
         <label class="control-label">{{ field.label }}{% if field.flags.required %}<span class="required">*</span>{% endif %}</label>
