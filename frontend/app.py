@@ -66,14 +66,15 @@ def configure_extensions(app):
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
 
-        access_control_list = AccessControl.query.all()
-        for access_control in access_control_list:
+        if hasattr(current_user, 'group'):
+            access_control_list = AccessControl.query.all()
+            for access_control in access_control_list:
 
-            groups_access = json.loads(access_control.groups_access)
-            for group_id in groups_access:
+                groups_access = json.loads(access_control.groups_access)
+                for group_id in groups_access:
 
-                if group_id == current_user.group:
-                    identity.provides.add(UserAccessNeed(access_control.function))
+                    if current_user.group == group_id:
+                        identity.provides.add(UserAccessNeed(access_control.function))
 
 
 def configure_blueprints(app):
