@@ -34,7 +34,7 @@ from frontend.models.member import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
 
 from frontend.forms.member import CreateUserForm, EditUserForm
-from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm, AccessControlForm
+from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
 
 from frontend.extensions.principal import UserAccessPermission
 from frontend.extensions.utility import validate_name, validate_email, validate_username, \
@@ -665,12 +665,14 @@ def list_acl_ctrl():
         for group in groups:
             group_information[unicode(group.id)] = group.desc
 
+        function_lists = list()
         access_control_dicts = dict()
         access_control_list = AccessControl.query.all()
 
         for access_control in access_control_list:
 
             function = access_control.function
+            function_lists.append(function)
 
             try:
                 groups_access = json.loads(access_control.groups_access)
@@ -685,8 +687,8 @@ def list_acl_ctrl():
                     access_control_dicts[group_id] = dict()
                     access_control_dicts[group_id][function] = groups_access[group_id]
 
-        return render_template('dashboard/acl_manager.html', group_information=group_information,
-                               access_control_dicts=access_control_dicts, type='list')
+        return render_template('dashboard/acl_manager.html', function_lists=function_lists, type='list',
+                               group_information=group_information, access_control_dicts=access_control_dicts)
 
 
 @dashboard.route('/acl/update/<function>/<group>/<status>')
