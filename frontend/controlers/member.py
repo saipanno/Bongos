@@ -66,22 +66,21 @@ def user_login_ctrl():
 
         user = User.query.filter(or_(User.email == form.name.data, User.username == form.name.data)).first()
 
-        if user is not None and not user.is_active():
+        if user is None:
+            flash(u'Incorrect email or password', 'error')
+            return redirect(url_for('member.user_login_ctrl'))
+
+        elif not user.is_active():
             flash(u'User has been disabled', 'error')
             return redirect(url_for('member.user_login_ctrl'))
 
-        elif user is not None and user.check_password(form.password.data):
+        elif user.check_password(form.password.data):
 
             login_user(user)
-
             identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
             flash(u'Login successful', 'success')
             return redirect(default_next_page)
-
-        else:
-            flash(u'Incorrect email or password', 'error')
-            return redirect(url_for('member.user_login_ctrl'))
 
 
 @member.route('/logout', methods=['GET'])
