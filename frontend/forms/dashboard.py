@@ -24,9 +24,11 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, PasswordField, QuerySelectField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, \
+    PasswordField, QuerySelectField, BooleanField
 
 from frontend.models.member import Group
+from frontend.models.dashboard import AccessControl
 
 
 class CreatePreDefinedScriptForm(Form):
@@ -72,5 +74,18 @@ class ServerForm(Form):
     cpu_info = TextField(u'Cpu Model', id='text')
     disk_info = TextField(u'Disk Information', id='text')
     memory_info = TextField(u'Memory Information', id='text')
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class AccessControlForm(Form):
+
+    name = QuerySelectField(u'Function  <span class="required">*</span>',
+                            query_factory=AccessControl.query.all, get_label='function')
+
+    group = QuerySelectField(u'Group  <span class="required">*</span>',
+                             query_factory=Group.query.all, get_label='desc')
+
+    permission = BooleanField(u'Permission  <span class="required">*</span>', default=False)
 
     submit = SubmitField(u'Submit', id='submit')

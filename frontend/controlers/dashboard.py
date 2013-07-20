@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import json
 from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app
 from flask.ext.login import login_required, current_user
@@ -31,10 +32,10 @@ from flask.ext.login import login_required, current_user
 from frontend.extensions.database import db
 
 from frontend.models.member import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript, Server
+from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
 
 from frontend.forms.member import CreateUserForm, EditUserForm
-from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
+from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm, AccessControlForm
 
 from frontend.extensions.utility import validate_name, validate_email, validate_username, \
     validate_password, validate_address
@@ -219,7 +220,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, username=user.username, group=user.group)
+    form = EditUserForm(email=user.email, username=user.username)
 
     if request.method == 'GET':
 
@@ -585,4 +586,78 @@ def edit_server_ctrl(server_id):
             flash(u'Edit server successfully', 'success')
             redirect_url = url_for('dashboard.list_server_ctrl')
 
+        return redirect(redirect_url)
+
+
+@dashboard.route('/acl/list')
+@login_required
+def list_acl_ctrl():
+
+    if request.method == 'GET':
+
+        groups = Group.query.all()
+
+        group_information = dict()
+        for group in groups:
+            group_information[unicode(group.id)] = group.desc
+
+        access_control_dicts = dict()
+        access_control_list = AccessControl.query.all()
+
+        for access_control in access_control_list:
+
+            function = access_control.function
+
+            try:
+                groups_access = json.loads(access_control.groups_access)
+            except Exception, e:
+                groups_access = dict()
+
+            for group_id in groups_access:
+
+                try:
+                    access_control_dicts[group_id][function] = groups_access[group_id]
+                except Exception:
+                    access_control_dicts[group_id] = dict()
+                    access_control_dicts[group_id][function] = groups_access[group_id]
+
+        return render_template('dashboard/acl_manager.html', group_information=group_information,
+                               access_control_dicts=access_control_dicts, type='list')
+
+
+@dashboard.route('/acl/edit', methods=("GET", "POST"))
+@login_required
+def edit_acl_ctrl():
+
+    form = AccessControlForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/acl_manager.html', form=form, type='edit')
+
+    elif request.method == 'POST':
+
+        redirect_url = url_for('dashboard.list_acl_ctrl')
+
+        if not Group.query.filter_by(id=form.group.data.id).all():
+            flash(u'The current group is not exist', 'error')
+            return redirect(redirect_url)
+        elif not AccessControl.query.filter_by(id=form.name.data.id).all():
+            flash(u'The current function is not exist', 'error')
+            return redirect(redirect_url)
+
+        acl = AccessControl.query.filter_by(id=form.name.data.id).first()
+
+        try:
+            groups_access = json.loads(acl.groups_access)
+        except Exception, e:
+            groups_access = dict()
+
+        groups_access[unicode(form.group.data.id)] = 1 if form.permission.data else 0
+
+        acl.groups_access = json.dumps(groups_access)
+
+        db.session.commit()
+
+        flash(u'Edit ACL successfully', 'success')
         return redirect(redirect_url)

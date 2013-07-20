@@ -1,0 +1,99 @@
+{% extends "dashboard/base.html" %}
+
+{% block active_dashboard_acl %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+    {% if type == 'list' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
+            <li class="active">List</li>
+        </ul>
+
+        {{ ext.feedback_message() }}
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">ACL Manager</a>
+                <div class="btn-group pull-right">
+                    <a href="{{ url_for('dashboard.edit_acl_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit ACL</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion" id="accordion2">
+
+            {% for group_id in access_control_dicts %}
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ group_id }}">
+                        {{ group_information.get(group_id) }}
+                    </a>
+                </div>
+
+                <div id="{{ group_id }}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                            <tr>
+                                <th>FUNCTION</th>
+                                <th>PERMISSION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for function in access_control_dicts[group_id] %}
+                                <tr>
+                                    <td>{{ function }}</td>
+                                    <td>{{ ext.get_acl_status(access_control_dicts[group_id][function]) }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        {% elif type == 'edit' %}
+
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
+            <li class="active">Edit</li>
+        </ul>
+
+        <div class="tabbable">
+            <form method="post" action="">
+
+                {{ form.hidden_tag() }}
+
+                <legend>
+                    Edit ACL
+                </legend>
+
+                <div class="box form-container row-fluid form-horizontal">
+
+                    {{ ext.create_standard_form(form.group) }}
+
+                    {{ ext.create_standard_form(form.name, class="span6") }}
+
+                    {{ ext.create_standard_form(form.permission) }}
+
+                </div>
+
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
+                </div>
+
+            </form>
+        </div>
+
+    {% endif %}
+
+    </div>
+{% endblock %}

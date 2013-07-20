@@ -59,6 +59,17 @@
 {%- endmacro %}
 
 
+{% macro get_acl_status(status)  -%}
+    {% if status == 0 %}
+        <span class="label label-info">禁用</span>
+    {% elif status == 1 %}
+        <span class="label label-success">启用</span>
+    {% else %}
+        <span class="label label-warning">异常</span>
+    {% endif %}
+{%- endmacro %}
+
+
 {% macro create_standard_form(field)  -%}
     <div class="control-group">
         <label class="control-label">{{ field.label }}{% if field.flags.required %}<span class="required">*</span>{% endif %}</label>

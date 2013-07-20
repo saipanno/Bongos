@@ -101,17 +101,15 @@ class Server(db.Model):
         self.memory_info = memory_info
 
 
-class UserAccessControl(db.Model):
+class AccessControl(db.Model):
 
     __tablename__ = 'access_control_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    function_name = db.Column(db.String(250), unique=True)
-    access_groups = db.Column(db.Text)
-    access_users = db.Column(db.Text)
+    function = db.Column(db.String(250), unique=True)
+    groups_access = db.Column(db.Text)
 
-    def __init__(self, function_name, access_groups, access_users):
+    def __init__(self, function, groups_access):
 
-        self.function_name = function_name
-        self.access_groups = access_groups
-        self.access_users = access_users
+        self.function = function
+        self.groups_access = groups_access
