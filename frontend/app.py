@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask import Flask
+from flask import Flask, render_template, request, jsonify
 from flask.ext.login import current_user
 from flask.ext.principal import identity_loaded, Principal
 
@@ -44,6 +44,7 @@ def create_app(config=None):
 
     configure_extensions(app)
     configure_blueprints(app)
+    configure_error_handler(app)
 
     return app
 
@@ -92,4 +93,20 @@ def configure_blueprints(app):
 
 def configure_error_handler(app):
 
-    pass
+    @app.errorhandler(403)
+    def error_handler(error):
+        if request.is_xhr:
+            return jsonify(error=u'Sorry, page not allowed')
+        return render_template("error.html", error=error)
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        if request.is_xhr:
+            return jsonify(error=u'Sorry, page not found')
+        return render_template("error.html", error=error)
+
+    @app.errorhandler(500)
+    def server_error(error):
+        if request.is_xhr:
+            return jsonify(error=u'Sorry, an error has occurred')
+        return render_template("error.html", error=error)

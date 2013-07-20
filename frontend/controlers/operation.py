@@ -25,10 +25,9 @@
 
 
 import time
-import json
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
-from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
+from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, json
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
@@ -51,8 +50,7 @@ def list_operation_ctrl(kind):
 
     user_access = UserAccessPermission('operation.list_operation_ctrl')
 
-    #if user_access.can():
-    if True:
+    if user_access.can():
 
         executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
 

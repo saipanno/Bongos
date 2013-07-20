@@ -24,9 +24,8 @@
 # SOFTWARE.
 
 
-import json
 from sqlalchemy import exc
-from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app
+from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
