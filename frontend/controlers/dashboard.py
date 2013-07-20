@@ -25,7 +25,7 @@
 
 
 from sqlalchemy import exc
-from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
+from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json, abort
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
@@ -36,6 +36,7 @@ from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Acces
 from frontend.forms.member import CreateUserForm, EditUserForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm, AccessControlForm
 
+from frontend.extensions.principal import UserAccessPermission
 from frontend.extensions.utility import validate_name, validate_email, validate_username, \
     validate_password, validate_address
 
@@ -46,6 +47,10 @@ dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @dashboard.route('/predefined_script/list')
 @login_required
 def list_predefined_script_ctrl():
+
+    user_access = UserAccessPermission('dashboard.list_predefined_script_ctrl')
+    if not user_access.can():
+        abort(403)
 
     if request.method == 'GET':
 
@@ -61,6 +66,10 @@ def list_predefined_script_ctrl():
 @dashboard.route('/predefined_script/<int:script_id>/show')
 @login_required
 def show_predefined_script_ctrl(script_id):
+
+    user_access = UserAccessPermission('dashboard.show_predefined_script_ctrl')
+    if not user_access.can():
+        abort(403)
 
     default_next_page = request.values.get('next', url_for('member.index_ctrl'))
 
@@ -81,6 +90,10 @@ def show_predefined_script_ctrl(script_id):
 @dashboard.route('/predefined_script/create', methods=("GET", "POST"))
 @login_required
 def create_predefined_script_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_predefined_script_ctrl')
+    if not user_access.can():
+        abort(403)
 
     form = CreatePreDefinedScriptForm()
 
@@ -117,9 +130,14 @@ def create_predefined_script_ctrl():
         return redirect(redirect_url)
 
 
+
 @dashboard.route('/predefined_script/<int:script_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_predefined_script_ctrl(script_id):
+
+    user_access = UserAccessPermission('dashboard.edit_predefined_script_ctrl')
+    if not user_access.can():
+        abort(403)
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
 
@@ -152,6 +170,10 @@ def edit_predefined_script_ctrl(script_id):
 @login_required
 def list_user_ctrl():
 
+    user_access = UserAccessPermission('dashboard.list_user_ctrl')
+    if not user_access.can():
+        abort(403)
+
     if request.method == 'GET':
 
         users = User.query.all()
@@ -165,6 +187,10 @@ def list_user_ctrl():
 @dashboard.route('/user/create', methods=("GET", "POST"))
 @login_required
 def create_user_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_user_ctrl')
+    if not user_access.can():
+        abort(403)
 
     form = CreateUserForm()
 
@@ -216,6 +242,10 @@ def create_user_ctrl():
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_user_ctrl(user_id):
+
+    user_access = UserAccessPermission('dashboard.edit_user_ctrl')
+    if not user_access.can():
+        abort(403)
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -277,6 +307,10 @@ def edit_user_ctrl(user_id):
 @login_required
 def list_ssh_config_ctrl():
 
+    user_access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
+    if not user_access.can():
+        abort(403)
+
     if request.method == 'GET':
 
         ssh_configs = SshConfig.query.all()
@@ -287,6 +321,10 @@ def list_ssh_config_ctrl():
 @dashboard.route('/ssh_config/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_config_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
+    if not user_access.can():
+        abort(403)
 
     form = CreateSshConfigForm()
 
@@ -340,6 +378,10 @@ def create_ssh_config_ctrl():
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_ssh_config_ctrl(config_id):
+
+    user_access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
+    if not user_access.can():
+        abort(403)
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -399,8 +441,11 @@ def edit_ssh_config_ctrl(config_id):
 @login_required
 def logging_reader_ctrl():
 
-    MAX_LEN = -200
+    user_access = UserAccessPermission('dashboard.logging_reader_ctrl')
+    if not user_access.can():
+        abort(403)
 
+    MAX_LEN = -200
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
         logging_buffer = f.readlines()
         return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])
@@ -409,6 +454,10 @@ def logging_reader_ctrl():
 @dashboard.route('/group/list')
 @login_required
 def list_group_ctrl():
+
+    user_access = UserAccessPermission('dashboard.list_group_ctrl')
+    if not user_access.can():
+        abort(403)
 
     if request.method == 'GET':
 
@@ -432,6 +481,10 @@ def list_group_ctrl():
 @login_required
 def list_server_ctrl():
 
+    user_access = UserAccessPermission('dashboard.list_server_ctrl')
+    if not user_access.can():
+        abort(403)
+
     if request.method == 'GET':
 
         servers = Server.query.all()
@@ -449,6 +502,10 @@ def list_server_ctrl():
 @dashboard.route('/server/create', methods=("GET", "POST"))
 @login_required
 def create_server_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_server_ctrl')
+    if not user_access.can():
+        abort(403)
 
     form = ServerForm()
 
@@ -497,6 +554,10 @@ def create_server_ctrl():
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_server_ctrl(server_id):
+
+    user_access = UserAccessPermission('dashboard.edit_server_ctrl')
+    if not user_access.can():
+        abort(403)
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -592,6 +653,10 @@ def edit_server_ctrl(server_id):
 @login_required
 def list_acl_ctrl():
 
+    user_access = UserAccessPermission('dashboard.list_acl_ctrl')
+    if not user_access.can():
+        abort(403)
+
     if request.method == 'GET':
 
         groups = Group.query.all()
@@ -627,6 +692,10 @@ def list_acl_ctrl():
 @dashboard.route('/acl/edit', methods=("GET", "POST"))
 @login_required
 def edit_acl_ctrl():
+
+    user_access = UserAccessPermission('dashboard.edit_acl_ctrl')
+    if not user_access.can():
+        abort(403)
 
     form = AccessControlForm()
 

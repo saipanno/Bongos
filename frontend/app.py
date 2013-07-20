@@ -24,11 +24,13 @@
 # SOFTWARE.
 
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, json
 from flask.ext.login import current_user
 from flask.ext.principal import identity_loaded, Principal
 
 from frontend.models.member import Group
+from frontend.models.dashboard import AccessControl
+
 from frontend.extensions.database import db
 from frontend.extensions.login_manager import login
 from frontend.extensions.principal import UserAccessNeed
@@ -64,16 +66,14 @@ def configure_extensions(app):
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
 
-        current_groups = Group.query.filter_by(id=current_user.group).all()
+        access_control_list = AccessControl.query.all()
+        for access_control in access_control_list:
 
-        for group in current_groups:
-            if hasattr(group, 'roles'):
-                for role in group.roles.split(','):
-                    identity.provides.add(UserAccessNeed(role))
+            groups_access = json.loads(access_control.groups_access)
+            for group_id in groups_access:
 
-        if hasattr(current_user, 'roles'):
-            for role in current_user.roles.split(','):
-                identity.provides.add(UserAccessNeed(role))
+                if group_id == current_user.group:
+                    identity.provides.add(UserAccessNeed(access_control.function))
 
 
 def configure_blueprints(app):

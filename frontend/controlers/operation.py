@@ -49,24 +49,25 @@ operation = Blueprint('operation', __name__, url_prefix='/operation')
 def list_operation_ctrl(kind):
 
     user_access = UserAccessPermission('operation.list_operation_ctrl')
-
-    if user_access.can():
-
-        executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
-
-        for execute in executes:
-            user = User.query.filter_by(id=int(execute.author)).first()
-            execute.author_name = user.username
-
-        return render_template('operation/list_operation.html', executes=executes, kind=kind)
-
-    else:
+    if not user_access.can():
         abort(403)
+
+    executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
+
+    for execute in executes:
+        user = User.query.filter_by(id=int(execute.author)).first()
+        execute.author_name = user.username
+
+    return render_template('operation/list_operation.html', executes=executes, kind=kind)
 
 
 @operation.route('/<int:operation_id>/show')
 @login_required
 def show_operation_ctrl(operation_id):
+
+    user_access = UserAccessPermission('operation.show_operation_ctrl')
+    if not user_access.can():
+        abort(403)
 
     default_next_page = request.values.get('next', url_for('member.index_ctrl'))
 
@@ -92,6 +93,10 @@ def show_operation_ctrl(operation_id):
 @operation.route('/ssh_detect/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
+
+    user_access = UserAccessPermission('operation.create_ssh_detect_ctrl')
+    if not user_access.can():
+        abort(403)
 
     kind = u'ssh_detect'
 
@@ -127,6 +132,10 @@ def create_ssh_detect_ctrl():
 @login_required
 def create_ping_detect_ctrl():
 
+    user_access = UserAccessPermission('operation.create_ping_detect_ctrl')
+    if not user_access.can():
+        abort(403)
+
     kind = u'ping_detect'
 
     form = CreatePingDetectForm()
@@ -156,6 +165,10 @@ def create_ping_detect_ctrl():
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
 @login_required
 def create_custom_execute_ctrl():
+
+    user_access = UserAccessPermission('operation.create_custom_execute_ctrl')
+    if not user_access.can():
+        abort(403)
 
     kind = u'custom_execute'
 
@@ -202,6 +215,10 @@ def create_custom_execute_ctrl():
 @login_required
 def create_predefined_execute_ctrl():
 
+    user_access = UserAccessPermission('operation.create_predefined_execute_ctrl')
+    if not user_access.can():
+        abort(403)
+
     kind = u'predefined_execute'
 
     form = CreatePreDefinedExecuteForm()
@@ -246,6 +263,10 @@ def create_predefined_execute_ctrl():
 @operation.route('/power_control/create', methods=("GET", "POST"))
 @login_required
 def create_power_control_ctrl():
+
+    user_access = UserAccessPermission('operation.create_power_control_ctrl')
+    if not user_access.can():
+        abort(403)
 
     kind = u'power_control'
 
