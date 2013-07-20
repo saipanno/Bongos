@@ -21,3 +21,5 @@ http://bongos.saipanno.com
 ### 默认权限
 
 admin/admin
+member/member
+guest/guest
