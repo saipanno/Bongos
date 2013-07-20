@@ -24,11 +24,10 @@
 # SOFTWARE.
 
 
-from flask import Flask, render_template, request, json
+from flask import Flask, render_template, request, json, jsonify
 from flask.ext.login import current_user
 from flask.ext.principal import identity_loaded, Principal
 
-from frontend.models.member import Group
 from frontend.models.dashboard import AccessControl
 
 from frontend.extensions.database import db
@@ -73,7 +72,7 @@ def configure_extensions(app):
                 groups_access = json.loads(access_control.groups_access)
                 for group_id in groups_access:
 
-                    if current_user.group == group_id:
+                    if current_user.group == group_id and groups_access[group_id] == 1:
                         identity.provides.add(UserAccessNeed(access_control.function))
 
 
