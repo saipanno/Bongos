@@ -40,14 +40,8 @@
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author_name }}</td>
                         <td>
-                            <div class="dropdown pull-left">
-                                <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                <ul class="dropdown-menu pull-right nav-stacked" role="menu">
-                                    <li><a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-info-sign"></i> 查看</a>
-                                    <li><a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> 编辑</a>
-                                </ul>
-                            </div>
-
+                            <a class="btn btn-mini" href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-info-sign"></i> 查看</a>
+                            <a class="btn btn-mini" href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> 编辑</a>
                         </td>
                     </tr>
                 {% endfor %}

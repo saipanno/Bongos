@@ -48,7 +48,6 @@ class CreateUserForm(Form):
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
     confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
                                      id='confirm_password', description=u'Re-enter the password')
-    status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
     submit = SubmitField(u'Submit', id='submit')
 
 
@@ -69,7 +68,7 @@ class EditUserForm(Form):
     submit = SubmitField(u'Submit', id='submit')
 
 
-class CreateGroupForm(Form):
+class GroupForm(Form):
 
     next_page = HiddenField()
     name = TextField(u'Name <span class="required">*</span>', id='name',

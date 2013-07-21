@@ -39,14 +39,7 @@
                 <td class="span1">{{ execute.datetime }}</td>
                 <td class="span5">{{ execute.server_list }}</td>
                 <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
-                <td class="span1">
-                    <div class="dropdown pull-left">
-                        <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                        <ul class="dropdown-menu pull-right nav-stacked" role="menu">
-                            <li><a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}"><i class="icon-info-sign"></i> 查看</a></li>
-                        </ul>
-                    </div>
-                </td>
+                <td class="span1"><a class="btn btn-mini" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}"><i class="icon-list"></i> 查看</a></td>
             </tr>
             {% endfor %}
             </tbody>

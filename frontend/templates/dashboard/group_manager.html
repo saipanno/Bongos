@@ -19,7 +19,7 @@
                 <div class="navbar-inner">
                     <a class="brand" href="#">Group Manager</a>
                     <div class="btn-group pull-right">
-                        <a href="#" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Group</a>
+                        <a href="{{ url_for('dashboard.create_group_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Group</a>
                     </div>
                 </div>
             </div>
@@ -30,6 +30,7 @@
                         <th>NAME</th>
                         <th>DESC</th>
                         <th>MEMBER</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,10 +39,83 @@
                             <td>{{ group.name }}</td>
                             <td>{{ group.desc }}</td>
                             <td>{{ group.members[2:] }}</td>
+                            <td>
+                                <a class="btn btn-mini" href="{{ url_for('dashboard.edit_group_ctrl', group_id=group.id) }}"><i class="icon-edit"></i> 编辑</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+        {% elif type == 'create' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
+                <li class="active">Create</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="tabbable">
+                <form method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Create Group
+                    </legend>
+
+                    <div class="box form-container row-fluid form-horizontal">
+
+                        {{ ext.create_standard_form(form.name) }}
+
+                        {{ ext.create_standard_form(form.desc) }}
+
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
+
+        {% elif type == 'edit' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
+                <li class="active">Create</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="tabbable">
+                <form method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Edit Group
+                    </legend>
+
+                    <div class="box form-container row-fluid form-horizontal">
+
+                        {{ ext.create_standard_form(form.name) }}
+
+                        {{ ext.create_standard_form(form.desc) }}
+
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
 
         {% endif %}
 

@@ -33,7 +33,7 @@ from frontend.extensions.database import db
 from frontend.models.member import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
 
-from frontend.forms.member import CreateUserForm, EditUserForm
+from frontend.forms.member import CreateUserForm, EditUserForm, GroupForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
 
 from frontend.extensions.principal import UserAccessPermission
@@ -229,7 +229,7 @@ def create_user_ctrl():
             flash(u'Incorrect password format', 'error')
 
         else:
-            user = User(form.email.data, form.username.data, form.group.data.id, form.password.data, form.status.data)
+            user = User(form.email.data, form.username.data, form.group.data.id, form.password.data, 0)
             db.session.add(user)
             db.session.commit()
 
@@ -294,13 +294,44 @@ def edit_user_ctrl(user_id):
             else:
                 user.update_password(form.new_password.data)
 
-        if form.status.data != user.status:
-            user.status = form.status.data
-
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
         return redirect(url_for('dashboard.list_user_ctrl'))
+
+
+@dashboard.route('/user/<int:user_id>/update/<status>')
+@login_required
+def update_user_status_ctrl(user_id, status):
+
+    user_access = UserAccessPermission('dashboard.update_user_status_ctrl')
+    if not user_access.can():
+        abort(403)
+
+    default_redirect_url = url_for('dashboard.list_user_ctrl')
+    user = User.query.filter_by(id=user_id).first()
+
+    if status == '0':
+        user.status = 0
+        db.session.commit()
+
+        flash(u'Disable user successfully', 'success')
+    elif status == '1':
+        user.status = 1
+        db.session.commit()
+
+        flash(u'Enable user successfully', 'success')
+    elif status == 'delete':
+
+        db.session.delete(user)
+        db.session.commit()
+
+        flash(u'Delete user successfully', 'success')
+
+    else:
+        flash(u'Error user status', 'error')
+
+    return redirect(default_redirect_url)
 
 
 @dashboard.route('/ssh_config/list')
@@ -475,6 +506,86 @@ def list_group_ctrl():
                         group.members = '%s, %s' % (group.members, user.username)
 
         return render_template('dashboard/group_manager.html', groups=groups, type='list')
+
+
+@dashboard.route('/group/create', methods=("GET", "POST"))
+@login_required
+def create_group_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_group_ctrl')
+    if not user_access.can():
+        abort(403)
+
+    form = GroupForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/group_manager.html', form=form, type='create')
+
+    elif request.method == 'POST':
+
+        redirect_url = url_for('dashboard.create_group_ctrl')
+
+        if form.name.data == u'':
+            flash(u'Name can\'t be empty', 'error')
+        elif Group.query.filter_by(name=form.name.data).all():
+            flash(u'Current name is already in use', 'error')
+        elif not validate_name(form.name.data):
+            flash(u'Incorrect name format', 'error')
+
+        elif form.desc.data == u'':
+            flash(u'Desc can\'t be empty', 'error')
+
+        else:
+            group = Group(form.name.data, form.desc.data)
+            db.session.add(group)
+            db.session.commit()
+
+            flash(u'Create group successfully', 'success')
+            redirect_url = url_for('dashboard.list_group_ctrl')
+
+        return redirect(redirect_url)
+
+
+@dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_group_ctrl(group_id):
+
+    user_access = UserAccessPermission('dashboard.edit_group_ctrl')
+    if not user_access.can():
+        abort(403)
+
+    group = Group.query.filter_by(id=group_id).first()
+
+    form = GroupForm(name=group.name, desc=group.desc)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/group_manager.html', form=form, type='edit')
+
+    elif request.method == 'POST':
+
+        if form.name.data != group.name and form.name.data != u'':
+            if Group.query.filter_by(name=form.name.data).all():
+                flash(u'The current name is already in use', 'error')
+                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
+            elif not validate_name(form.name.data):
+                flash(u'Incorrect name format', 'error')
+                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
+            else:
+                group.name = form.name.data
+
+        if form.desc.data != group.name and form.desc.data != u'':
+            if Group.query.filter_by(desc=form.desc.data).all():
+                flash(u'The current desc is already in use', 'error')
+                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
+            else:
+                group.desc = form.desc.data
+
+        db.session.commit()
+
+        flash(u'Edit group successfully', 'success')
+        return redirect(url_for('dashboard.list_group_ctrl'))
 
 
 @dashboard.route('/server/list')
@@ -691,9 +802,9 @@ def list_acl_ctrl():
                                group_information=group_information, access_control_dicts=access_control_dicts)
 
 
-@dashboard.route('/acl/update/<function>/<group>/<status>')
+@dashboard.route('/acl/<function>/<group_id>/update/<status>')
 @login_required
-def update_acl_status_ctrl(function, group, status):
+def update_acl_status_ctrl(function, group_id, status):
 
     user_access = UserAccessPermission('dashboard.update_acl_status_ctrl')
     if not user_access.can():
@@ -708,9 +819,9 @@ def update_acl_status_ctrl(function, group, status):
         groups_access = dict()
 
     if status == '0':
-        groups_access[group] = 0
+        groups_access[group_id] = 0
     elif status == '1':
-        groups_access[group] = 1
+        groups_access[group_id] = 1
     else:
         flash(u'Error ACL status', 'error')
         return redirect(default_redirect_url)

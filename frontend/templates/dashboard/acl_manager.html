@@ -44,10 +44,10 @@
                                 {% set status = access_control_dicts.get(group_id, dict()).get(function, 0) %}
                                 <tr>
                                     <td>{{ function }}</td>
-                                    <td>{{ ext.get_acl_status(status) }}</td>
+                                    <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', function=function, group=group_id, status=0 if status else 1) }}">
-                                            {{ ext.get_adverse_acl_desc(status) }}
+                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', function=function, group_id=group_id, status=0 if status else 1) }}">
+                                            {{ ext.get_adverse_desc(status) }}
                                         </a>
                                     </td>
                                 </tr>

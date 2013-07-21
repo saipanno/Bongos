@@ -19,7 +19,7 @@
                 <div class="navbar-inner">
                     <a class="brand" href="#">User Manager</a>
                     <div class="btn-group pull-right">
-                        <a href="{{ url_for('dashboard.create_user_ctrl')}}" class="btn btn-primary"><i class="icon-plus"></i> Add User</a>
+                        <a href="{{ url_for('dashboard.create_user_ctrl') }}" class="btn btn-primary"><i class="icon-plus"></i> Add User</a>
                     </div>
                 </div>
             </div>
@@ -40,14 +40,11 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.username }}</td>
                             <td>{{ user.group_name }}</td>
-                            <td>{{ '启用' if user.status else '禁用' }}</td>
+                            <td>{{ ext.get_status(user.status) }}</td>
                             <td>
-                                <div class="dropdown pull-left">
-                                    <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                    <ul class="dropdown-menu pull-right nav-stacked" role="menu">
-                                        <li><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a></li>
-                                    </ul>
-                                </div>
+                                <a class="btn btn-mini" href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a>
+                                <a class="btn btn-mini" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status=0 if user.status else 1) }}">{{ ext.get_adverse_desc(user.status) }}</a>
+                                <a class="btn btn-mini" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status="delete") }}"><i class="icon-remove"></i> 删除</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -84,8 +81,6 @@
                         {{ ext.create_standard_form(form.password) }}
 
                         {{ ext.create_standard_form(form.confirm_password) }}
-
-                        {{ ext.create_standard_form(form.status) }}
 
                     </div>
 
@@ -127,8 +122,6 @@
                         {{ ext.create_standard_form(form.new_password) }}
 
                         {{ ext.create_standard_form(form.confirm_password) }}
-
-                        {{ ext.create_standard_form(form.status) }}
 
                     </div>
 
