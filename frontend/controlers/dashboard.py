@@ -58,7 +58,7 @@ def list_predefined_script_ctrl():
 
         for script in scripts:
             user = User.query.filter_by(id=int(script.author)).first()
-            script.author_name = user.username
+            script.author_name = user.name
 
         return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
@@ -505,10 +505,10 @@ def list_group_ctrl():
                 users = User.query.filter_by(id=group.id).all()
             except Exception, e:
                 users = None
-            finally:
-                if users is not None:
-                    for user in users:
-                        group.members = '%s, %s' % (group.members, user.username)
+
+            if users is not None:
+                for user in users:
+                    group.members = '%s, %s' % (group.members, user.name)
 
         return render_template('dashboard/group_manager.html', groups=groups, type='list')
 
