@@ -24,13 +24,13 @@
                 </div>
             </div>
 
-            <table class="table table-hover table-bordered table-striped">
+            <table class="table table-hover table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th>EMAIL</th>
-                        <th>USERNAME</th>
-                        <th>GROUP</th>
-                        <th>STATUS</th>
+                        <th>email</th>
+                        <th>username</th>
+                        <th>group</th>
+                        <th>user status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -42,9 +42,14 @@
                             <td>{{ user.group_name }}</td>
                             <td>{{ ext.get_status(user.status) }}</td>
                             <td>
-                                <a class="btn btn-mini" href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> 编辑</a>
-                                <a class="btn btn-mini" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status=0 if user.status else 1) }}">{{ ext.get_adverse_desc(user.status) }}</a>
-                                <a class="btn btn-mini" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status="delete") }}"><i class="icon-remove"></i> 删除</a>
+                                <div class="dropdown related_menu">
+                                    <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> Edit</a></li>
+                                        <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status=0 if user.status else 1) }}">{{ ext.get_adverse_desc(user.status) }}</a></li>
+                                        <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status="delete") }}"><i class="icon-remove"></i> Delete</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}

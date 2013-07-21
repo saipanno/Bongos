@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <table class="table table-hover table-bordered table-striped">
+        <table class="table table-hover table-bordered table-striped table-condensed">
             <thead>
                 <tr>
                     <th>NAME</th>
@@ -36,12 +36,20 @@
             <tbody>
                 {% for script in scripts %}
                     <tr>
-                        <td>{{ script.name }}</td>
+                        <td>
+                            <a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id) }}" title="view">
+                                {{ script.name }}
+                            </a>
+                        </td>
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author_name }}</td>
                         <td>
-                            <a class="btn btn-mini" href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-info-sign"></i> 查看</a>
-                            <a class="btn btn-mini" href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> 编辑</a>
+                            <div class="dropdown related_menu">
+                                <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    <li><a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> Edit</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 {% endfor %}

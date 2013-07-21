@@ -22,24 +22,35 @@
             </div>
         </div>
 
-        <table class="table table-hover table-bordered table-striped">
+        <table class="table table-hover table-bordered table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>AUTHOR</th>
-                    <th>CREATE TIME</th>
-                    <th>SERVER LIST</th>
-                    <th>STATUS</th>
+                    <th>create time</th>
+                    <th>server list</th>
+                    <th>author</th>
+                    <th>status</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
             {% for execute in executes %}
             <tr>
-                <td class="span1">{{ execute.author_name }}</td>
-                <td class="span1">{{ execute.datetime }}</td>
-                <td class="span5">{{ execute.server_list }}</td>
-                <td class="span1">{{ ext.get_operation_status(execute.status) }}</td>
-                <td class="span1"><a class="btn btn-mini" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id)}}"><i class="icon-list"></i> 查看</a></td>
+                <td style="width: 120px">
+                    <a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}" title="view">
+                        {{ execute.datetime }}
+                    </a>
+                </td>
+                <td>{{ execute.server_list }}</td>
+                <td>{{ execute.author_name }}</td>
+                <td>{{ ext.get_operation_status(execute.status) }}</td>
+                <td>
+                    <div class="dropdown related_menu">
+                        <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="{{ url_for('operation.disable_operation_ctrl', operation_id=execute.id) }}" title=""><i class="icon icon-ban-circle"></i> Disable</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
             </tbody>

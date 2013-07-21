@@ -603,7 +603,8 @@ def list_server_ctrl():
         for server in servers:
 
             try:
-                server.group_name = Group.query.filter_by(id=server.group).first()
+                group = Group.query.filter_by(id=server.group).first()
+                server.group_name = group.name
             except Exception, e:
                 server.group_name = u'None'
 

@@ -24,12 +24,16 @@
             </div>
         </div>
 
-        <table class="table table-hover table-bordered table-striped">
+        <table class="table table-hover table-bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
                     <th>EXT ADDRESS</th>
+                    <th>INT ADDRESS</th>
                     <th>GROUP</th>
-                    <th>DESC</th>
+                    <th>IDC</th>
+                    <th>RACK</th>
+                    <th>MANUFACTURER</th>
+                    <th>MODEL</th>
                     <th></th>
                 </tr>
             </thead>
@@ -37,17 +41,20 @@
                 {% for server in servers %}
                     <tr>
                         <td>{{ server.ext_address }}</td>
+                        <td>{{ server.int_address }}</td>
                         <td>{{ server.group_name }}</td>
-                        <td>{{ server.desc }}</td>
+                        <td>{{ server.idc }}</td>
+                        <td>{{ server.rack }}</td>
+                        <td>{{ server.manufacturer }}</td>
+                        <td>{{ server.model }}</td>
                         <td>
-                            <div class="dropdown pull-left">
-                                <a title="Operate" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                <ul class="dropdown-menu pull-right nav-stacked" role="menu">
-                                    <li><a href="#"><i class="icon-info-sign"></i> 查看</a>
-                                    <li><a href="#"><i class="icon-edit"></i> 编辑</a>
+                            <div class="dropdown related_menu">
+                                <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    <li><a href="#"><i class="icon-info-sign"></i> Show</a></li>
+                                    <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
                                 </ul>
                             </div>
-
                         </td>
                     </tr>
                 {% endfor %}

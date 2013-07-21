@@ -90,6 +90,39 @@ def show_operation_ctrl(operation_id):
     return render_template('operation/show_operation.html', execute=execute, fruits=fruits, kind=execute.kind)
 
 
+@operation.route('/<int:operation_id>/disable')
+@login_required
+def disable_operation_ctrl(operation_id):
+
+    user_access = UserAccessPermission('operation.disable_operation_ctrl')
+    if not user_access.can():
+        abort(403)
+
+    default_next_page = request.values.get('next')
+
+    try:
+        execute = OperationDb.query.filter_by(id=operation_id).first()
+
+    except exc.SQLAlchemyError:
+        flash(u'Internal database error', 'error')
+        return redirect(default_next_page)
+
+    if execute is None:
+        flash(u'The operating does not exist.', 'error')
+        return redirect(default_next_page)
+
+    if execute.status == '0':
+        execute.status = 10
+        db.session.commit()
+
+        flash(u'Disable operation successful', 'success')
+    else:
+
+        flash(u'This operation can\'t be disabled', 'error')
+
+    return redirect(url_for('operation.list_operation_ctrl', kind=execute.kind))
+
+
 @operation.route('/ssh_detect/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
