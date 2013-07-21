@@ -50,7 +50,8 @@ def list_predefined_script_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_predefined_script_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -69,7 +70,8 @@ def show_predefined_script_ctrl(script_id):
 
     user_access = UserAccessPermission('dashboard.show_predefined_script_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
@@ -93,7 +95,8 @@ def create_predefined_script_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_predefined_script_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     form = CreatePreDefinedScriptForm()
 
@@ -137,7 +140,8 @@ def edit_predefined_script_ctrl(script_id):
 
     user_access = UserAccessPermission('dashboard.edit_predefined_script_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
 
@@ -172,7 +176,8 @@ def list_user_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_user_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -195,7 +200,8 @@ def create_user_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_user_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     form = CreateUserForm()
 
@@ -255,7 +261,8 @@ def edit_user_ctrl(user_id):
 
     user_access = UserAccessPermission('dashboard.edit_user_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -311,7 +318,8 @@ def update_user_status_ctrl(user_id, status):
 
     user_access = UserAccessPermission('dashboard.update_user_status_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     default_redirect_url = url_for('dashboard.list_user_ctrl')
     user = User.query.filter_by(id=user_id).first()
@@ -345,7 +353,8 @@ def list_ssh_config_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -360,7 +369,8 @@ def create_ssh_config_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     form = CreateSshConfigForm()
 
@@ -417,7 +427,8 @@ def edit_ssh_config_ctrl(config_id):
 
     user_access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -479,7 +490,8 @@ def logging_reader_ctrl():
 
     user_access = UserAccessPermission('dashboard.logging_reader_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     MAX_LEN = -200
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
@@ -493,7 +505,8 @@ def list_group_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_group_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -519,7 +532,8 @@ def create_group_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_group_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     form = GroupForm()
 
@@ -558,7 +572,8 @@ def edit_group_ctrl(group_id):
 
     user_access = UserAccessPermission('dashboard.edit_group_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.filter_by(id=group_id).first()
 
@@ -599,7 +614,8 @@ def list_server_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_server_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -622,7 +638,8 @@ def create_server_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_server_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     form = ServerForm()
 
@@ -674,7 +691,8 @@ def edit_server_ctrl(server_id):
 
     user_access = UserAccessPermission('dashboard.edit_server_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -772,7 +790,8 @@ def list_acl_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_acl_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     if request.method == 'GET':
 
@@ -814,7 +833,8 @@ def update_acl_status_ctrl(function, group_id, status):
 
     user_access = UserAccessPermission('dashboard.update_acl_status_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     default_redirect_url = url_for('dashboard.list_acl_ctrl')
     acl = AccessControl.query.filter_by(function=function).first()

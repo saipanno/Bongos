@@ -50,7 +50,8 @@ def list_operation_ctrl(kind):
 
     user_access = UserAccessPermission('operation.list_operation_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
 
@@ -67,7 +68,8 @@ def show_operation_ctrl(operation_id):
 
     user_access = UserAccessPermission('operation.show_operation_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
@@ -96,7 +98,8 @@ def disable_operation_ctrl(operation_id):
 
     user_access = UserAccessPermission('operation.disable_operation_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next')
 
@@ -129,7 +132,8 @@ def create_ssh_detect_ctrl():
 
     user_access = UserAccessPermission('operation.create_ssh_detect_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     kind = u'ssh_detect'
 
@@ -167,7 +171,8 @@ def create_ping_detect_ctrl():
 
     user_access = UserAccessPermission('operation.create_ping_detect_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     kind = u'ping_detect'
 
@@ -201,7 +206,8 @@ def create_custom_execute_ctrl():
 
     user_access = UserAccessPermission('operation.create_custom_execute_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     kind = u'custom_execute'
 
@@ -250,7 +256,8 @@ def create_predefined_execute_ctrl():
 
     user_access = UserAccessPermission('operation.create_predefined_execute_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     kind = u'predefined_execute'
 
@@ -299,7 +306,8 @@ def create_power_control_ctrl():
 
     user_access = UserAccessPermission('operation.create_power_control_ctrl')
     if not user_access.can():
-        abort(403)
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
 
     kind = u'power_control'
 

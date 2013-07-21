@@ -45,7 +45,6 @@ def create_app(config=None):
 
     configure_extensions(app)
     configure_blueprints(app)
-    configure_error_handler(app)
 
     return app
 
@@ -89,11 +88,3 @@ def configure_blueprints(app):
     for blueprint in BLUEPRINTS:
 
         app.register_blueprint(blueprint)
-
-
-def configure_error_handler(app):
-
-    @app.errorhandler(403)
-    def error_handler(error):
-
-        return render_template('403.html')
