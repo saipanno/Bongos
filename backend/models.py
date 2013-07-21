@@ -46,7 +46,7 @@ class OperationDb(Base):
     id = Column(Integer, primary_key=True)
     author = Column(Integer)
     datetime = Column(String(50))
-    kind = Column(String(25))
+    operation_type = Column(String(25))
     server_list = Column(Text)
     script_template = Column(Text)
     template_vars = Column(Text)
@@ -54,11 +54,11 @@ class OperationDb(Base):
     status = Column(Integer)
     result = Column(Text)
 
-    def __init__(self, author, datetime, kind, server_list, script_template, template_vars, ssh_config, status, result):
+    def __init__(self, author, datetime, operation_type, server_list, script_template, template_vars, ssh_config, status, result):
 
         self.author = author
         self.datetime = datetime
-        self.kind = kind
+        self.operation_type = operation_type
         self.server_list = server_list
         self.script_template = script_template
         self.ssh_config = ssh_config

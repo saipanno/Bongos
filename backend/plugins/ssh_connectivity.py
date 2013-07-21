@@ -156,7 +156,7 @@ def ssh_connectivity_checking(operation):
         operation.status = 2
         message = 'Failed to get the ssh configuration. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.kind, operation.status, message))
+                     (operation.id, operation.operation_type, operation.status, message))
 
     if operation.status != 2:
 
@@ -177,6 +177,6 @@ def ssh_connectivity_checking(operation):
             operation.status = 2
             message = 'Integrate data error. %s' % e
             logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operation.id, operation.kind, operation.status, message))
+                         (operation.id, operation.operation_type, operation.status, message))
 
     db.commit()

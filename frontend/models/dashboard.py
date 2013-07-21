@@ -107,9 +107,9 @@ class AccessControl(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     function = db.Column(db.String(250), unique=True)
-    groups_access = db.Column(db.Text)
+    access_rules = db.Column(db.Text)
 
-    def __init__(self, function, groups_access):
+    def __init__(self, function, access_rules):
 
         self.function = function
-        self.groups_access = groups_access
+        self.access_rules = access_rules

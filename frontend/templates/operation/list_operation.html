@@ -7,7 +7,7 @@
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">{{ ext.get_operation_title(kind) }}</a><span class="divider">/</span></li>
+            <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a><span class="divider">/</span></li>
             <li class="active">List</li>
         </ul>
 
@@ -15,9 +15,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ ext.get_operation_title(kind) }}</a>
+                <a class="brand" href="#">{{ ext.get_operation_title(operation_type) }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ ext.generation_create_operation_link(kind) }}" class="btn btn-primary"><i class="icon-plus"></i> Add Operation</a>
+                    <a href="{{ ext.generation_create_operation_link(operation_type) }}" class="btn btn-primary"><i class="icon-plus"></i> Add Operation</a>
                 </div>
             </div>
         </div>

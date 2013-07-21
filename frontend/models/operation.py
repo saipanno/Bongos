@@ -44,7 +44,7 @@ class OperationDb(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.Integer)
     datetime = db.Column(db.String(50))
-    kind = db.Column(db.String(25))
+    operation_type = db.Column(db.String(25))
     server_list = db.Column(db.Text)
     script_template = db.Column(db.Text)
     template_vars = db.Column(db.Text)
@@ -52,11 +52,11 @@ class OperationDb(db.Model):
     status = db.Column(db.Integer)
     result = db.Column(db.Text)
 
-    def __init__(self, author, datetime, kind, server_list, script_template, template_vars, ssh_config, status, result):
+    def __init__(self, author, datetime, operation_type, server_list, script_template, template_vars, ssh_config, status, result):
 
         self.author = author
         self.datetime = datetime
-        self.kind = kind
+        self.operation_type = operation_type
         self.server_list = server_list
         self.script_template = script_template
         self.ssh_config = ssh_config

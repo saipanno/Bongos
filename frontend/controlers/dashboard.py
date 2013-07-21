@@ -811,23 +811,23 @@ def list_acl_ctrl():
             function_lists.append(function)
 
             try:
-                groups_access = json.loads(access_control.groups_access)
+                access_rules = json.loads(access_control.access_rules)
             except Exception, e:
-                groups_access = dict()
+                access_rules = dict()
 
-            for group_id in groups_access:
+            for (group_id, status) in access_rules.items():
 
                 try:
-                    access_control_dicts[group_id][function] = groups_access[group_id]
+                    access_control_dicts[group_id][function] = status
                 except Exception:
                     access_control_dicts[group_id] = dict()
-                    access_control_dicts[group_id][function] = groups_access[group_id]
+                    access_control_dicts[group_id][function] = status
 
         return render_template('dashboard/acl_manager.html', function_lists=function_lists, type='list',
                                group_information=group_information, access_control_dicts=access_control_dicts)
 
 
-@dashboard.route('/acl/<function>/<group_id>/update/<status>')
+@dashboard.route('/acl/<function>/<group_id>/update/<int:status>')
 @login_required
 def update_acl_status_ctrl(function, group_id, status):
 
@@ -837,22 +837,20 @@ def update_acl_status_ctrl(function, group_id, status):
         return redirect(url_for('account.index_ctrl'))
 
     default_redirect_url = url_for('dashboard.list_acl_ctrl')
-    acl = AccessControl.query.filter_by(function=function).first()
+    access_control = AccessControl.query.filter_by(function=function).first()
 
     try:
-        groups_access = json.loads(acl.groups_access)
+        access_rules = json.loads(access_control.access_rules)
     except Exception, e:
-        groups_access = dict()
+        access_rules = dict()
 
-    if status == '0':
-        groups_access[group_id] = 0
-    elif status == '1':
-        groups_access[group_id] = 1
+    if status == 0 or status == 1:
+        access_rules[group_id] = status
     else:
         flash(u'Error ACL status', 'error')
         return redirect(default_redirect_url)
 
-    acl.groups_access = json.dumps(groups_access)
+    access_control.access_rules = json.dumps(access_rules)
     db.session.commit()
 
     flash(u'Update ACL successfully', 'success')

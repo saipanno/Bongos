@@ -44,22 +44,22 @@ from frontend.extensions.principal import UserAccessPermission
 operation = Blueprint('operation', __name__, url_prefix='/operation')
 
 
-@operation.route('/<kind>/list')
+@operation.route('/<operation_type>/list')
 @login_required
-def list_operation_ctrl(kind):
+def list_operation_ctrl(operation_type):
 
     user_access = UserAccessPermission('operation.list_operation_ctrl')
     if not user_access.can():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    executes = OperationDb.query.filter_by(kind=kind).order_by(desc(OperationDb.id)).all()
+    executes = OperationDb.query.filter_by(operation_type=operation_type).order_by(desc(OperationDb.id)).all()
 
     for execute in executes:
         user = User.query.filter_by(id=int(execute.author)).first()
         execute.author_name = user.name
 
-    return render_template('operation/list_operation.html', executes=executes, kind=kind)
+    return render_template('operation/list_operation.html', executes=executes, operation_type=operation_type)
 
 
 @operation.route('/<int:operation_id>/show')
@@ -89,7 +89,7 @@ def show_operation_ctrl(operation_id):
     except ValueError:
         fruits = dict()
 
-    return render_template('operation/show_operation.html', execute=execute, fruits=fruits, kind=execute.kind)
+    return render_template('operation/show_operation.html', execute=execute, fruits=fruits, operation_type=execute.operation_type)
 
 
 @operation.route('/<int:operation_id>/disable')
@@ -123,7 +123,7 @@ def disable_operation_ctrl(operation_id):
 
         flash(u'This operation can\'t be disabled', 'error')
 
-    return redirect(url_for('operation.list_operation_ctrl', kind=execute.kind))
+    return redirect(url_for('operation.list_operation_ctrl', operation_type=execute.operation_type))
 
 
 @operation.route('/ssh_detect/create', methods=("GET", "POST"))
@@ -135,13 +135,13 @@ def create_ssh_detect_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    kind = u'ssh_detect'
+    operation_type = u'ssh_detect'
 
     form = CreateSshDetectForm()
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_ssh_detect.html', form=form, kind=kind)
+        return  render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
 
     elif request.method == 'POST':
 
@@ -157,12 +157,12 @@ def create_ssh_detect_ctrl():
             flash(u'Ssh configuration is not selected', 'error')
             return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
 
 @operation.route('/ping_detect/create', methods=("GET", "POST"))
@@ -174,13 +174,13 @@ def create_ping_detect_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    kind = u'ping_detect'
+    operation_type = u'ping_detect'
 
     form = CreatePingDetectForm()
 
     if request.method == 'GET':
 
-        return render_template('operation/create_ping_detect.html', form=form, kind=kind)
+        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
 
     elif request.method == 'POST':
 
@@ -192,12 +192,12 @@ def create_ping_detect_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_ping_detect_ctrl'))
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], u'', u'', 0, 0, u'')
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'], u'', u'', 0, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
 
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
@@ -209,13 +209,13 @@ def create_custom_execute_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    kind = u'custom_execute'
+    operation_type = u'custom_execute'
 
     form = CreateCustomExecuteForm()
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_custom_execute.html', form=form, kind=kind)
+        return  render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
 
     elif request.method == 'POST':
 
@@ -241,13 +241,13 @@ def create_custom_execute_ctrl():
             return redirect(url_for('operation.create_custom_execute_ctrl'))
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data,
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data,
                                 template_vars, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
 
 @operation.route('/predefined_execute/create', methods=("GET", "POST"))
@@ -259,13 +259,13 @@ def create_predefined_execute_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    kind = u'predefined_execute'
+    operation_type = u'predefined_execute'
 
     form = CreatePreDefinedExecuteForm()
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_predefined_execute.html', form=form, kind=kind)
+        return  render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
 
     elif request.method == 'POST':
 
@@ -291,13 +291,13 @@ def create_predefined_execute_ctrl():
             return redirect(url_for('operation.create_predefined_execute_ctrl'))
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data.id,
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data.id,
                                 template_vars, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
 
 @operation.route('/power_control/create', methods=("GET", "POST"))
@@ -309,13 +309,13 @@ def create_power_control_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    kind = u'power_control'
+    operation_type = u'power_control'
 
     form = CreatePowerCtrlForm()
 
     if request.method == 'GET':
 
-        return  render_template('operation/create_power_control.html', form=form, kind=kind)
+        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
 
     elif request.method == 'POST':
 
@@ -331,9 +331,9 @@ def create_power_control_ctrl():
             flash(u'Type of operation is not selected', 'error')
             return redirect(url_for('operation.create_power_control_ctrl'))
 
-        operation = OperationDb(author, datetime, kind, fruit['servers'], form.script_template.data, u'', 0,  0, u'')
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data, u'', 0,  0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', kind=kind))
+        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
