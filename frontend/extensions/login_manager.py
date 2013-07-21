@@ -26,11 +26,11 @@
 
 from flask.ext.login import LoginManager
 
-from frontend.models.member import User
+from frontend.models.account import User
 
 
 login = LoginManager()
-login.login_view = 'member.user_login_ctrl'
+login.login_view = 'account.user_login_ctrl'
 
 
 @login.user_loader

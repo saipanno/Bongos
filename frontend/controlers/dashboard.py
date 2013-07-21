@@ -30,10 +30,10 @@ from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
 
-from frontend.models.member import User, Group
+from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
 
-from frontend.forms.member import CreateUserForm, EditUserForm, GroupForm
+from frontend.forms.account import CreateUserForm, EditUserForm, GroupForm
 from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
 
 from frontend.extensions.principal import UserAccessPermission
@@ -71,7 +71,7 @@ def show_predefined_script_ctrl(script_id):
     if not user_access.can():
         abort(403)
 
-    default_next_page = request.values.get('next', url_for('member.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
     try:
         script = PreDefinedScript.query.filter_by(id=script_id).first()
@@ -179,7 +179,12 @@ def list_user_ctrl():
         users = User.query.all()
 
         for user in users:
-            user.group_name = Group.query.filter_by(id=user.group).first().desc
+
+            group = Group.query.filter_by(id=user.group).first()
+            if group is not None:
+                user.group_name = group.desc
+            else:
+                user.group_name = u'None'
 
         return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -210,11 +215,16 @@ def create_user_ctrl():
             flash(u'Incorrect e-mail address', 'error')
 
         elif form.username.data == u'':
-            flash(u'Name can\'t be empty', 'error')
+            flash(u'Username can\'t be empty', 'error')
         elif User.query.filter_by(username=form.username.data).all():
+            flash(u'The current username is already in use', 'error')
+        elif not validate_username(form.username.data):
+            flash(u'Incorrect username format', 'error')
+
+        elif form.name.data == u'':
+            flash(u'Name can\'t be empty', 'error')
+        elif User.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
-        elif not validate_name(form.username.data):
-            flash(u'Incorrect name format', 'error')
 
         elif form.group.data.id is None:
             flash(u'Group can\'t be empty', 'error')
@@ -257,25 +267,20 @@ def edit_user_ctrl(user_id):
 
     elif request.method == 'POST':
 
-        if form.email.data != user.email and form.email.data != u'':
-            if User.query.filter_by(email=form.email.data).all():
-                flash(u'The current email is already in use', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not validate_email(form.email.data):
-                flash(u'Incorrect e-mail address', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            else:
-                user.email = form.email.data
+        if form.email.data != user.email:
+            flash(u'E-mail can not be modified', 'error')
+            return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
 
-        if form.username.data != user.username and form.username.data != u'':
-            if User.query.filter_by(username=form.username.data).all():
+        if form.username.data != user.username:
+            flash(u'Username can not be modified', 'error')
+            return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+
+        if form.name.data != user.name and form.name.data != u'':
+            if User.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not validate_name(form.username.data):
-                flash(u'Incorrect name format', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
-                user.username = form.username.data
+                user.name = form.name.data
 
         if form.group.data.id != user.group and form.group.data.id is not None:
             if not Group.query.filter_by(id=form.group.data.id).all():

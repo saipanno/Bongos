@@ -27,18 +27,20 @@
             <table class="table table-hover table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th>email</th>
                         <th>username</th>
+                        <th>email</th>
+                        <th>name</th>
                         <th>group</th>
-                        <th>user status</th>
+                        <th>status</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                         <tr>
-                            <td>{{ user.email }}</td>
                             <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.name }}</td>
                             <td>{{ user.group_name }}</td>
                             <td>{{ ext.get_status(user.status) }}</td>
                             <td>
@@ -81,6 +83,8 @@
 
                         {{ ext.create_standard_form(form.username) }}
 
+                        {{ ext.create_standard_form(form.name) }}
+
                         {{ ext.create_standard_form(form.group) }}
 
                         {{ ext.create_standard_form(form.password) }}
@@ -120,7 +124,9 @@
 
                         {{ ext.create_standard_form(form.email, class="uneditable-input") }}
 
-                        {{ ext.create_standard_form(form.username) }}
+                        {{ ext.create_standard_form(form.username, class="uneditable-input") }}
+
+                        {{ ext.create_standard_form(form.name) }}
 
                         {{ ext.create_standard_form(form.group) }}
 

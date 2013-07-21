@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                 </a>
 
-                <a class="brand" href="{{ url_for('member.index_ctrl') }}">BONGOS</a>
+                <a class="brand" href="{{ url_for('account.index_ctrl') }}">BONGOS</a>
 
                 <ul class="nav">
                     <li class="{% block active_deploy %}{% endblock %}"><a href="#">Deploy</a></li>
@@ -61,12 +61,12 @@
 
                 <ul class="nav pull-right">
                     <li class="divider-vertical"></li>
-                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.username }}<b class="caret"></b></a>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.name }}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ url_for("member.user_edit_settings_ctrl") }}"><i class="icon-cogs"></i> Change Settings</a></li>
+                            <li><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-cogs"></i> Change Settings</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ url_for("member.user_logout_ctrl") }}">Log out</a></li>
+                    <li><a href="{{ url_for("account.user_logout_ctrl") }}">Log out</a></li>
                 </ul>
 
             </div>

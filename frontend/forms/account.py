@@ -26,13 +26,13 @@
 
 from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, SelectField
 
-from frontend.models.member import Group
+from frontend.models.account import Group
 
 
 class UserLoginForm(Form):
 
     next_page = HiddenField()
-    name = TextField()
+    key_name = TextField()
     password = PasswordField()
     submit = SubmitField(u'Login', id='submit')
 
@@ -43,6 +43,7 @@ class CreateUserForm(Form):
     email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
     username = TextField(u'Username <span class="required">*</span>', id='name',
                          description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable.')
     group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
                              query_factory=Group.query.all, get_label='desc')
     password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
@@ -54,9 +55,9 @@ class CreateUserForm(Form):
 class EditUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    username = TextField(u'Username <span class="required">*</span>', id='name',
-                         description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    email = TextField(u'Email', id='email', description=u'Can\'t be modified')
+    username = TextField(u'Username', id='username', description=u'Can\'t be modified')
+    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable.')
     group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
                              query_factory=Group.query.all, get_label='desc')
     now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')

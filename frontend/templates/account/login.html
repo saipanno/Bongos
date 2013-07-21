@@ -50,11 +50,11 @@
 
         {{ ext.feedback_message() }}
 
-        {{ form.name(class="input-block-level", placeholder="Username or Email") }}
+        {{ form.key_name(class="input-block-level", placeholder="Username or Email") }}
         {{ form.password(class="input-block-level", placeholder="Password") }}
         {{ form.submit(class="btn btn-primary pull-right") }}
 
-        <a href="{{ url_for("member.index_ctrl") }}">← Back to Home.</a>
+        <a href="{{ url_for("account.index_ctrl") }}">← Back to Home.</a>
     </form>
 
 </div>

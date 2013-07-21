@@ -27,7 +27,7 @@
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, \
     PasswordField, QuerySelectField, BooleanField
 
-from frontend.models.member import Group
+from frontend.models.account import Group
 from frontend.models.dashboard import AccessControl
 
 

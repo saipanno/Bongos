@@ -32,7 +32,7 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint,
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
 
-from frontend.models.member import User
+from frontend.models.account import User
 from frontend.models.operation import OperationDb
 
 from frontend.extensions.database import db
@@ -69,7 +69,7 @@ def show_operation_ctrl(operation_id):
     if not user_access.can():
         abort(403)
 
-    default_next_page = request.values.get('next', url_for('member.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
     try:
         execute = OperationDb.query.filter_by(id=operation_id).first()
