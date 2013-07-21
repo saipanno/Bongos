@@ -94,6 +94,6 @@ def configure_blueprints(app):
 def configure_error_handler(app):
 
     @app.errorhandler(403)
-    def error_handler():
+    def error_handler(error):
 
         return render_template('403.html')
