@@ -24,14 +24,16 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField,\
-    PasswordField, QuerySelectField, BooleanField, Required, Regexp
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
+    PasswordField, QuerySelectField, Required, Regexp, IPAddress
 
 from frontend.models.account import Group
-from frontend.models.dashboard import AccessControl
+from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
+
+from frontend.extensions.utility import Unique
 
 
-class CreatePreDefinedScriptForm(Form):
+class PreDefinedScriptForm(Form):
 
     script_desc = u'''作为shell中的 <code>$</code> 内部变量的扩展，模板还支持外部变量。\
     <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的同名赋值定义进行替换, \
@@ -39,10 +41,13 @@ class CreatePreDefinedScriptForm(Form):
 <code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
     next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', description=u'Script display name. Unrepeatable.',
+    name = TextField(u'Name', description=u'PreDefined Script name. Unrepeatable.',
                      validators=[Required(message=u'Name is required'),
-                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format')])
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
+                                 Unique(PreDefinedScript, PreDefinedScript.name,
+                                        message=u'The current name is already in use')])
     desc = TextField(u'Description',
                      validators=[Required(message=u'Script description is required')])
     script = TextAreaField(u'Script', description=script_desc)
@@ -50,47 +55,64 @@ class CreatePreDefinedScriptForm(Form):
     submit = SubmitField(u'Submit', id='submit')
 
 
-class CreateSshConfigForm(Form):
+class SshConfigForm(Form):
 
-    name = TextField(u'Name  <span class="required">*</span>', id='text',
-                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    desc = TextField(u'Description  <span class="required">*</span>', id='text')
-    port = IntegerField(u'Port  <span class="required">*</span>', id='port', default=22)
-    username = TextField(u'Username  <span class="required">*</span>', id='text', default=u'root')
-    password = PasswordField(u'Password  <span class="required">*</span>', id='text')
-    private_key = TextField(u'Private Key:', id='text',
-                            description=u'Private key filename, not required.')
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
+
+    name = TextField(u'Name', description=u'Ssh config name. Unrepeatable.',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
+                                 Unique(SshConfig, SshConfig.name,
+                                        message=u'The current name is already in use')])
+    desc = TextField(u'Description')
+    port = IntegerField(u'Port', default=22,
+                        validators=[Required(message=u'Port is required'),])
+    username = TextField(u'Username', default=u'root',
+                         validators=[Required(message=u'Username is required')])
+    password = PasswordField(u'Password',
+                             validators=[Required(message=u'Password is required')])
+    private_key = TextField(u'Private Key:',
+                            description=u'Private file path.')
+
     submit = SubmitField(u'Submit', id='submit')
 
 
 class ServerForm(Form):
 
-    group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=Group.query.all, get_label='desc')
-    desc = TextField(u'Server Desc', id='text')
-    ext_address = TextField(u'Ext Address', id='text')
-    int_address = TextField(u'Int Address', id='text')
-    ipmi_address = TextField(u'IPMI Address', id='text')
-    other_address = TextField(u'Other Address', id='text')
-    idc = TextField(u'IDC', id='text')
-    rack = TextField(u'Rack', id='text')
-    manufacturer = TextField(u'Manufacturer', id='text')
-    model = TextField(u'Model', id='text')
-    cpu_info = TextField(u'Cpu Model', id='text')
-    disk_info = TextField(u'Disk Information', id='text')
-    memory_info = TextField(u'Memory Information', id='text')
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
 
-    submit = SubmitField(u'Submit', id='submit')
-
-
-class AccessControlForm(Form):
-
-    name = QuerySelectField(u'Function  <span class="required">*</span>',
-                            query_factory=AccessControl.query.all, get_label='function')
-
-    group = QuerySelectField(u'Group  <span class="required">*</span>',
-                             query_factory=Group.query.all, get_label='desc')
-
-    permission = BooleanField(u'Permission  <span class="required">*</span>', default=False)
+    group = QuerySelectField(u'Group', query_factory=Group.query.all, get_label='desc',
+                             validators=[Required(message=u'Group is required')])
+    desc = TextField(u'Server Description',)
+    ext_address = TextField(u'Ext Address',
+                            validators=[IPAddress(),
+                                        Unique(Server, Server.ext_address,
+                                               message=u'The current ext address is already in use')])
+    int_address = TextField(u'Int Address',
+                            validators=[IPAddress(),
+                                        Unique(Server, Server.int_address,
+                                               message=u'The current int address is already in use')])
+    ipmi_address = TextField(u'IPMI Address',
+                             validators=[IPAddress(),
+                                         Unique(Server, Server.ipmi_address,
+                                                message=u'The current ipmi address is already in use')])
+    other_address = TextField(u'Other Address',
+                              description=u'Other Address, split by <code>,</code>')
+    idc = TextField(u'IDC',
+                    validators=[Required(message=u'IDC is required')])
+    rack = TextField(u'Rack',
+                     validators=[Required(message=u'Rack is required')])
+    manufacturer = TextField(u'Manufacturer',
+                             validators=[Required(message=u'Manufacturer is required')])
+    model = TextField(u'Model',
+                      validators=[Required(message=u'Model is required')])
+    cpu_info = TextField(u'Cpu Model',
+                         validators=[Required(message=u'CPU model is required')])
+    disk_info = TextField(u'Disk Information',
+                          validators=[Required(message=u'Disk information is required')])
+    memory_info = TextField(u'Memory Information',
+                            validators=[Required(message=u'Memory information is required')])
 
     submit = SubmitField(u'Submit', id='submit')

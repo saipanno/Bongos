@@ -95,28 +95,14 @@ def user_edit_settings_ctrl():
 
     if form.validate_on_submit():
 
-        if form.email.data != user.email:
-            flash(u'The email can\'t be modified', 'error')
-            return redirect(url_for('account.user_edit_settings_ctrl'))
-
-        if form.username.data != user.username:
-            flash(u'The username can\'t be modified', 'error')
-            return redirect(url_for('account.user_edit_settings_ctrl'))
-
         if form.name.data != user.name:
-            if User.query.filter_by(name=form.name.data).all():
-                flash(u'The current name is already in use', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            else:
-                user.name = form.name.data
+            user.name = form.name.data
 
-        if len(form.new_password.data) > 0:
-
-            if not user.check_password(form.now_password.data):
-                flash(u'Current password is incorrect', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            else:
-                user.update_password(form.new_password.data)
+        if len(form.new_password.data) > 0 and not user.check_password(form.now_password.data):
+            flash(u'Current password is incorrect', 'error')
+            return redirect(url_for('account.user_edit_settings_ctrl'))
+        else:
+            user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')

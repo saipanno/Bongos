@@ -103,6 +103,7 @@ class Server(db.Model):
 
 class AccessControl(db.Model):
 
+    # TODO:修改类名称为Permission
     __tablename__ = 'access_control_lists'
 
     id = db.Column(db.Integer, primary_key=True)

@@ -34,7 +34,7 @@ from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
 
 from frontend.forms.account import CreateUserForm, EditUserForm, GroupForm
-from frontend.forms.dashboard import CreatePreDefinedScriptForm, CreateSshConfigForm, ServerForm
+from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm
 
 from frontend.extensions.principal import UserAccessPermission
 from frontend.extensions.utility import validate_name, validate_email, validate_username, \
@@ -97,26 +97,23 @@ def create_predefined_script_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    form = CreatePreDefinedScriptForm()
+    form = PreDefinedScriptForm()
+    if request.method == 'GET':
+        return render_template('dashboard/predefined_script.html', form=form, type='create')
 
-    if form.validate_on_submit():
+    elif form.validate_on_submit():
 
         author = current_user.id
-        default_redirect_url = url_for('dashboard.create_predefined_script_ctrl')
-
-        if PreDefinedScript.query.filter_by(name=form.name.data).all():
-            flash(u'The current script name is already in use', 'error')
-            return redirect(default_redirect_url)
 
         script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
         db.session.add(script)
         db.session.commit()
 
         flash(u'Create predefined script successfully', 'success')
-        return redirect(default_redirect_url)
+        return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
     else:
-        return render_template('dashboard/predefined_script.html', form=form, type='create')
+        return redirect(url_for('dashboard.create_predefined_script_ctrl'))
 
 
 @dashboard.route('/predefined_script/<int:script_id>/edit', methods=("GET", "POST"))
@@ -130,14 +127,15 @@ def edit_predefined_script_ctrl(script_id):
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-    form = CreatePreDefinedScriptForm(name=script.name, desc=script.desc, script=script.script)
+    form = PreDefinedScriptForm(name=script.name, desc=script.desc, script=script.script)
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
+
+    elif form.validate_on_submit():
 
         if form.name.data != script.name:
-            if PreDefinedScript.query.filter_by(name=form.name.data).all():
-                flash(u'The current script name is already in use', 'error')
-                return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
+            script.name = form.name.data
 
         if form.desc.data != script.desc:
             script.desc = form.desc.data
@@ -151,7 +149,7 @@ def edit_predefined_script_ctrl(script_id):
         return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
     else:
-        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
+        return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
 
 @dashboard.route('/user/list')
@@ -185,30 +183,17 @@ def create_user_ctrl():
 
     if form.validate_on_submit():
 
-        redirect_url = url_for('dashboard.create_user_ctrl')
+        user = User(form.email.data, form.username.data, form.name.data, form.group.data.id,
+                    form.password.data, 1 if form.status.data else 0)
+        db.session.add(user)
+        db.session.commit()
 
-        if User.query.filter_by(email=form.email.data).all():
-            flash(u'The current email is already in use', 'error')
+        flash(u'Creating user successfully', 'success')
 
-        elif User.query.filter_by(username=form.username.data).all():
-            flash(u'The current username is already in use', 'error')
-
-        elif User.query.filter_by(name=form.name.data).all():
-            flash(u'The current name is already in use', 'error')
-
-        else:
-            user = User(form.email.data, form.username.data, form.name.data, form.group.data.id,
-                        form.password.data, form.status.data)
-            db.session.add(user)
-            db.session.commit()
-
-            flash(u'Creating user successfully', 'success')
-            redirect_url = url_for('dashboard.list_user_ctrl')
-
-        return redirect(redirect_url)
+        return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        return render_template('dashboard/user_manager.html', form=form, type='create')
+        return redirect(url_for('dashboard.create_user_ctrl'))
 
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
@@ -222,30 +207,18 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, username=user.username, name=user.name)
+    form = EditUserForm(email=user.email, username=user.username, name=user.name, id=user.id)
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('dashboard/user_manager.html', form=form, type='edit')
 
-        if form.email.data != user.email:
-            flash(u'E-mail can not be modified', 'error')
-            return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-
-        if form.username.data != user.username:
-            flash(u'Username can not be modified', 'error')
-            return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+    elif form.validate_on_submit():
 
         if form.name.data != user.name:
-            if User.query.filter_by(name=form.name.data).all():
-                flash(u'The current name is already in use', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            else:
-                user.name = form.name.data
+            user.name = form.name.data
 
         if form.group.data.id != user.group:
-            if not Group.query.filter_by(id=form.group.data.id).all():
-                flash(u'The current group is not exist', 'error')
-            else:
-                user.group = form.group.data.id
+            user.group = form.group.data.id
 
         if len(form.new_password.data) > 0:
             user.update_password(form.new_password.data)
@@ -256,7 +229,8 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        return render_template('dashboard/user_manager.html', form=form, type='edit')
+        return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+
 
 @dashboard.route('/user/<int:user_id>/update/<status>')
 @login_required
@@ -267,7 +241,6 @@ def update_user_status_ctrl(user_id, status):
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    default_redirect_url = url_for('dashboard.list_user_ctrl')
     user = User.query.filter_by(id=user_id).first()
 
     if status == '0':
@@ -290,7 +263,7 @@ def update_user_status_ctrl(user_id, status):
     else:
         flash(u'Incorrect user status format', 'error')
 
-    return redirect(default_redirect_url)
+    return redirect(url_for('dashboard.list_user_ctrl'))
 
 
 @dashboard.route('/ssh_config/list')
@@ -316,53 +289,24 @@ def create_ssh_config_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    form = CreateSshConfigForm()
+    form = SshConfigForm()
 
     if request.method == 'GET':
-
         return render_template('dashboard/ssh_config.html', form=form, type='create')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        redirect_url = url_for('dashboard.create_ssh_config_ctrl')
+        ssh_config = SshConfig(form.username.data, form.desc.data, form.port.data,
+                               form.username.data, form.password.data, form.private_key.data)
+        db.session.add(ssh_config)
+        db.session.commit()
 
-        if form.username.data == u'':
-            flash(u'Name can\'t be empty', 'error')
-        elif not validate_name(form.username.data):
-            flash(u'Incorrect name format', 'error')
-        elif SshConfig.query.filter_by(name=form.username.data).all():
-            flash(u'The current name is already in use', 'error')
+        flash(u'Creating ssh configuration successfully', 'success')
 
-        elif form.desc.data == u'':
-            flash(u'Description can\'t be empty', 'error')
+        return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
-        elif form.port.data == u'':
-            flash(u'Port can\'t be empty', 'error')
-        elif form.port.data is None:
-            flash(u'Port can only be an integer', 'error')
-
-        elif form.username.data == u'':
-            flash(u'Username can\'t be empty', 'error')
-        elif not validate_username(form.username.data):
-            flash(u'Incorrect username format', 'error')
-
-        elif form.password.data == u'':
-            flash(u'Password can\'t be empty', 'error')
-
-        elif form.private_key.data != u'' and not validate_name(form.private_key.data):
-            flash(u'Incorrect key filename format', 'error')
-
-        else:
-
-            ssh_config = SshConfig(form.username.data, form.desc.data, form.port.data,
-                                   form.username.data, form.password.data, form.private_key.data)
-            db.session.add(ssh_config)
-            db.session.commit()
-
-            flash(u'Create ssh configuration successfully', 'success')
-            redirect_url = url_for('dashboard.list_ssh_config_ctrl')
-
-        return redirect(redirect_url)
+    else:
+        return redirect(url_for('dashboard.create_ssh_config_ctrl'))
 
 
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -376,56 +320,44 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
-    form = CreateSshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
-                               private_key=config.private_key)
+    form = SshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
+                         private_key=config.private_key)
 
     if request.method == 'GET':
-
         return render_template('dashboard/ssh_config.html', form=form, type='edit')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        if form.username.data != config.name and form.username.data != u'':
-            if SshConfig.query.filter_by(name=form.username.data).all():
-                flash(u'The current name is already in use', 'error')
-                return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
-            elif not validate_name(form.username.data):
-                flash(u'Incorrect name format', 'error')
-                return redirect(url_for('dashboard.edit_ssh_config_ctrl', script_id=config_id))
-            else:
-                config.name = form.username.data
+        if form.username.data != config.name:
+            config.name = form.username.data
 
         if form.desc.data != config.desc and form.desc.data != u'':
             config.desc = form.desc.data
 
+        # TODO:增加整数传参检查
         try:
-            if form.port.data != config.port and form.port.data != u'':
+            if form.port.data != config.port:
                 config.port = int(form.port.data)
         except TypeError:
             flash(u'Port can only be an integer', 'error')
             return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
-        if form.username.data != config.username and form.username.data != u'':
-            if validate_username(form.username.data):
-                config.username = form.username.data
-            else:
-                flash(u'Incorrect username format', 'error')
-                return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
+        if form.username.data != config.username:
+            config.username = form.username.data
 
-        if form.password.data != config.password and form.password.data != u'':
-                config.password = form.password.data
+        if form.password.data != config.password:
+            config.password = form.password.data
 
-        if form.private_key.data != config.private_key and form.private_key.data != u'':
-            if validate_name(form.private_key.data):
-                config.private_key = form.private_key.data
-            else:
-                flash(u'Incorrect key filename format', 'error')
-                return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
+        if form.private_key.data != config.private_key:
+            config.private_key = form.private_key.data
 
         db.session.commit()
 
-        flash(u'Update ssh configuration successfully', 'success')
+        flash(u'Edit ssh configuration successfully', 'success')
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+
+    else:
+        return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
 
 @dashboard.route('/logging_reader')

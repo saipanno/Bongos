@@ -25,6 +25,7 @@
 
 
 import re
+from flask.ext.wtf import ValidationError
 
 
 NAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
@@ -147,3 +148,33 @@ def format_template_vars(template_vars):
             return {'status': False, 'desc': u'Incorrect external variables: %s' % oneline}
 
     return {'status': True, 'vars': address_vars_group}
+
+
+class Unique(object):
+    """ validator that checks field uniqueness """
+    def __init__(self, model, field, message=None):
+        self.model = model
+        self.field = field
+        self.message = message if message else u'The current element value is already in use'
+
+    def __call__(self, form, field):
+
+        check = self.model.query.filter(self.field == field.data).first()
+        id = form.id.data if 'id' in form else None
+        if check and (id is None or id != check.id):
+            raise ValidationError(self.message)
+
+
+class UnChange(object):
+    """ validator that checks field unchange """
+    def __init__(self, model, field, message=None):
+        self.model = model
+        self.field = field
+        self.message = message if message else u'The current element can not be modified'
+
+    def __call__(self, form, field):
+
+        check = self.model.query.filter_by(id=form.id.data).first()
+
+        if check is not None and field.data != getattr(check, self.field):
+            raise ValidationError(self.message)
