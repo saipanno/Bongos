@@ -53,15 +53,13 @@ def list_predefined_script_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    scripts = PreDefinedScript.query.all()
 
-        scripts = PreDefinedScript.query.all()
+    for script in scripts:
+        user = User.query.filter_by(id=int(script.author)).first()
+        script.author_name = user.name
 
-        for script in scripts:
-            user = User.query.filter_by(id=int(script.author)).first()
-            script.author_name = user.name
-
-        return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
+    return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
 
 
 @dashboard.route('/predefined_script/<int:script_id>/show')
@@ -81,9 +79,10 @@ def show_predefined_script_ctrl(script_id):
     except exc.SQLAlchemyError:
         flash(u'Internal database error', 'error')
         return redirect(default_next_page)
+        # TODO: 增加异常日志记录
 
     if script is None:
-        flash(u'This predefined script does not exist', 'error')
+        flash(u'PreDefined Script does not exist', 'error')
         return redirect(default_next_page)
 
     return render_template('dashboard/predefined_script.html', script=script, type='show')
@@ -100,38 +99,24 @@ def create_predefined_script_ctrl():
 
     form = CreatePreDefinedScriptForm()
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/predefined_script.html', form=form, type='create')
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
-        redirect_url = url_for('dashboard.create_predefined_script_ctrl')
+        default_redirect_url = url_for('dashboard.create_predefined_script_ctrl')
 
-        if form.name.data == u'':
-            flash(u'Name can\'t be empty', 'error')
-        elif not validate_name(form.name.data):
-            flash(u'Incorrect name format', 'error')
-        elif PreDefinedScript.query.filter_by(name=form.name.data).all():
-            flash(u'The current name is already in use', 'error')
+        if PreDefinedScript.query.filter_by(name=form.name.data).all():
+            flash(u'The current script name is already in use', 'error')
+            return redirect(default_redirect_url)
 
-        elif form.desc.data == u'':
-            flash(u'Script description can\'t be empty', 'error')
+        script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
+        db.session.add(script)
+        db.session.commit()
 
-        elif form.script.data == u'':
-            flash(u'Script can\'t be empty', 'error')
+        flash(u'Create predefined script successfully', 'success')
+        return redirect(default_redirect_url)
 
-        else:
-
-            script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
-            db.session.add(script)
-            db.session.commit()
-
-            flash(u'Create predefined script successfully', 'success')
-
-        return redirect(redirect_url)
-
+    else:
+        return render_template('dashboard/predefined_script.html', form=form, type='create')
 
 
 @dashboard.route('/predefined_script/<int:script_id>/edit', methods=("GET", "POST"))
@@ -147,27 +132,26 @@ def edit_predefined_script_ctrl(script_id):
 
     form = CreatePreDefinedScriptForm(name=script.name, desc=script.desc, script=script.script)
 
-    if request.method == 'GET':
+    if form.validate_on_submit():
 
-        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
-
-    elif request.method == 'POST':
-
-        if form.name.data != script.name and form.name.data != u'':
-            if not validate_name(form.name.data):
-                flash(u'Incorrect name format', 'error')
+        if form.name.data != script.name:
+            if PreDefinedScript.query.filter_by(name=form.name.data).all():
+                flash(u'The current script name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
-        if form.desc.data != script.desc and form.desc.data != u'':
+        if form.desc.data != script.desc:
             script.desc = form.desc.data
 
-        if form.script.data != script.desc and form.script.data != u'':
+        if form.script.data != script.desc:
             script.script = form.script.data
 
         db.session.commit()
 
         flash(u'Update predefined script successfully.', 'success')
         return redirect(url_for('dashboard.list_predefined_script_ctrl'))
+
+    else:
+        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
 
 
 @dashboard.route('/user/list')
@@ -179,19 +163,13 @@ def list_user_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    users = User.query.all()
 
-        users = User.query.all()
+    for user in users:
+        group = Group.query.filter_by(id=user.group).first()
+        user.group_name = group.desc if group else u'None'
 
-        for user in users:
-
-            group = Group.query.filter_by(id=user.group).first()
-            if group is not None:
-                user.group_name = group.desc
-            else:
-                user.group_name = u'None'
-
-        return render_template('dashboard/user_manager.html', users=users, type='list')
+    return render_template('dashboard/user_manager.html', users=users, type='list')
 
 
 @dashboard.route('/user/create', methods=("GET", "POST"))
@@ -205,54 +183,32 @@ def create_user_ctrl():
 
     form = CreateUserForm()
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/user_manager.html', form=form, type='create')
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         redirect_url = url_for('dashboard.create_user_ctrl')
 
-        if form.email.data == u'':
-            flash(u'Email can\'t be empty', 'error')
-        elif User.query.filter_by(email=form.email.data).all():
+        if User.query.filter_by(email=form.email.data).all():
             flash(u'The current email is already in use', 'error')
-        elif not validate_email(form.email.data):
-            flash(u'Incorrect e-mail address', 'error')
 
-        elif form.username.data == u'':
-            flash(u'Username can\'t be empty', 'error')
         elif User.query.filter_by(username=form.username.data).all():
             flash(u'The current username is already in use', 'error')
-        elif not validate_username(form.username.data):
-            flash(u'Incorrect username format', 'error')
 
-        elif form.name.data == u'':
-            flash(u'Name can\'t be empty', 'error')
         elif User.query.filter_by(name=form.name.data).all():
             flash(u'The current name is already in use', 'error')
 
-        elif form.group.data.id is None:
-            flash(u'Group can\'t be empty', 'error')
-        elif not Group.query.filter_by(id=form.group.data.id).all():
-            flash(u'The current group is not exist', 'error')
-
-        elif form.password.data == u'' or form.confirm_password.data == u'':
-            flash(u'Password can\'t be empty', 'error')
-        elif form.password.data != form.confirm_password.data:
-            flash(u'Please enter the same password', 'error')
-        elif not validate_password(form.password.data):
-            flash(u'Incorrect password format', 'error')
-
         else:
-            user = User(form.email.data, form.username.data, form.group.data.id, form.password.data, 0)
+            user = User(form.email.data, form.username.data, form.name.data, form.group.data.id,
+                        form.password.data, form.status.data)
             db.session.add(user)
             db.session.commit()
 
-            flash(u'Create user successfully', 'success')
+            flash(u'Creating user successfully', 'success')
             redirect_url = url_for('dashboard.list_user_ctrl')
 
         return redirect(redirect_url)
+
+    else:
+        return render_template('dashboard/user_manager.html', form=form, type='create')
 
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
@@ -266,13 +222,9 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, username=user.username)
+    form = EditUserForm(email=user.email, username=user.username, name=user.name)
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/user_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         if form.email.data != user.email:
             flash(u'E-mail can not be modified', 'error')
@@ -282,35 +234,29 @@ def edit_user_ctrl(user_id):
             flash(u'Username can not be modified', 'error')
             return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
 
-        if form.name.data != user.name and form.name.data != u'':
+        if form.name.data != user.name:
             if User.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
             else:
                 user.name = form.name.data
 
-        if form.group.data.id != user.group and form.group.data.id is not None:
+        if form.group.data.id != user.group:
             if not Group.query.filter_by(id=form.group.data.id).all():
                 flash(u'The current group is not exist', 'error')
             else:
                 user.group = form.group.data.id
 
         if len(form.new_password.data) > 0:
-
-            if form.new_password.data != form.confirm_password.data:
-                flash(u'Please enter the same password', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            elif not validate_password(form.new_password.data):
-                flash(u'Incorrect password format', 'error')
-                return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
-            else:
-                user.update_password(form.new_password.data)
+            user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
         return redirect(url_for('dashboard.list_user_ctrl'))
 
+    else:
+        return render_template('dashboard/user_manager.html', form=form, type='edit')
 
 @dashboard.route('/user/<int:user_id>/update/<status>')
 @login_required
@@ -342,7 +288,7 @@ def update_user_status_ctrl(user_id, status):
         flash(u'Delete user successfully', 'success')
 
     else:
-        flash(u'Error user status', 'error')
+        flash(u'Incorrect user status format', 'error')
 
     return redirect(default_redirect_url)
 
@@ -356,11 +302,9 @@ def list_ssh_config_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    ssh_configs = SshConfig.query.all()
 
-        ssh_configs = SshConfig.query.all()
-
-        return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
+    return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
 
 @dashboard.route('/ssh_config/create', methods=("GET", "POST"))

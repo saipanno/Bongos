@@ -66,7 +66,7 @@
                 <li class="active">Create</li>
             </ul>
 
-            {{ ext.feedback_message() }}
+            {{ ext.feedback_message(form) }}
 
             <div class="tabbable">
                 <form method="post" action="">
@@ -91,6 +91,8 @@
 
                         {{ ext.create_standard_form(form.confirm_password) }}
 
+                        {{ ext.create_standard_form(form.status) }}
+
                     </div>
 
                     <div class="form-actions">
@@ -109,7 +111,7 @@
                 <li class="active">Edit</li>
             </ul>
 
-            {{ ext.feedback_message() }}
+            {{ ext.feedback_message(form) }}
 
             <div class="tabbable">
                 <form method="post" action="">
@@ -133,6 +135,8 @@
                         {{ ext.create_standard_form(form.new_password) }}
 
                         {{ ext.create_standard_form(form.confirm_password) }}
+
+                        {{ ext.create_standard_form(form.status) }}
 
                     </div>
 

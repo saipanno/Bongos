@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, \
-    PasswordField, QuerySelectField, BooleanField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField,\
+    PasswordField, QuerySelectField, BooleanField, Required, Regexp
 
 from frontend.models.account import Group
 from frontend.models.dashboard import AccessControl
@@ -38,10 +38,15 @@ class CreatePreDefinedScriptForm(Form):
     同时标准错误输出以及标准输出中匹配到<code>BD:\w+?:EOF</code>的字符串可以作为返回结果保存。如：
 <code>device=eth1; echo "IPADDR={{address}}"  >> ~/ifcfg-$device</code>'''
 
-    name = TextField(u'Name  <span class="required">*</span>', id='text',
-                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    desc = TextField(u'Description  <span class="required">*</span>', id='text')
-    script = TextAreaField(u'Script  <span class="required">*</span>', id='textarea', description=script_desc)
+    next_page = HiddenField()
+
+    name = TextField(u'Name', description=u'Script display name. Unrepeatable.',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format')])
+    desc = TextField(u'Description',
+                     validators=[Required(message=u'Script description is required')])
+    script = TextAreaField(u'Script', description=script_desc)
+
     submit = SubmitField(u'Submit', id='submit')
 
 
