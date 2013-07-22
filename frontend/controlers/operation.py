@@ -27,7 +27,7 @@
 import time
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
-from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, json
+from flask import render_template, request, redirect, url_for, flash, Blueprint, json
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
@@ -139,11 +139,7 @@ def create_ssh_detect_ctrl():
 
     form = CreateSshDetectForm()
 
-    if request.method == 'GET':
-
-        return  render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -153,16 +149,16 @@ def create_ssh_detect_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
-        if form.ssh_config.data.id is None:
-            flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operation.create_ssh_detect_ctrl'))
-
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'],
+                                u'', u'', form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating an operation successful', 'success')
+        flash(u'Creating operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+
+    else:
+        return render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/ping_detect/create', methods=("GET", "POST"))
@@ -178,11 +174,7 @@ def create_ping_detect_ctrl():
 
     form = CreatePingDetectForm()
 
-    if request.method == 'GET':
-
-        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -196,8 +188,12 @@ def create_ping_detect_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating an operation successful', 'success')
+        flash(u'Creating operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+
+    else:
+
+        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
@@ -213,11 +209,7 @@ def create_custom_execute_ctrl():
 
     form = CreateCustomExecuteForm()
 
-    if request.method == 'GET':
-
-        return  render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -227,18 +219,11 @@ def create_custom_execute_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_custom_execute_ctrl'))
 
-        if form.script_template == u'':
-            flash(u'Script template can\'t be empty', 'error')
-            return redirect(url_for('operation.create_custom_execute_ctrl'))
-
-        if form.ssh_config.data.id is None:
-            flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operation.create_custom_execute_ctrl'))
-
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('operation.create_custom_execute_ctrl'))
+        # TODO: 调研json.dumps()函数中ensure_ascii参数的含义
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data,
@@ -246,8 +231,12 @@ def create_custom_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating an operation successful', 'success')
+        flash(u'Creating operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+
+    else:
+
+        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/predefined_execute/create', methods=("GET", "POST"))
@@ -263,11 +252,7 @@ def create_predefined_execute_ctrl():
 
     form = CreatePreDefinedExecuteForm()
 
-    if request.method == 'GET':
-
-        return  render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -277,18 +262,11 @@ def create_predefined_execute_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_predefined_execute_ctrl'))
 
-        if form.script_template.data.id is None:
-            flash(u'PreDefined script is not selected', 'error')
-            return redirect(url_for('operation.create_predefined_execute_ctrl'))
-
-        if form.ssh_config.data.id is None:
-            flash(u'Ssh configuration is not selected', 'error')
-            return redirect(url_for('operation.create_predefined_execute_ctrl'))
-
         template_vars_dict = format_template_vars(form.template_vars.data)
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('operation.create_predefined_execute_ctrl'))
+        # TODO: 调研json.dumps()函数中ensure_ascii参数的含义
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data.id,
@@ -296,8 +274,12 @@ def create_predefined_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating an operation successful', 'success')
+        flash(u'Creating operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+
+    else:
+
+        return render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/power_control/create', methods=("GET", "POST"))
@@ -313,11 +295,7 @@ def create_power_control_ctrl():
 
     form = CreatePowerCtrlForm()
 
-    if request.method == 'GET':
-
-        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -327,13 +305,14 @@ def create_power_control_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_power_control_ctrl'))
 
-        if form.script_template.data is None:
-            flash(u'Type of operation is not selected', 'error')
-            return redirect(url_for('operation.create_power_control_ctrl'))
-
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data, u'', 0,  0, u'')
+        operation = OperationDb(author, datetime, operation_type, fruit['servers'],
+                                form.script_template.data, u'', 0, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         flash(u'Creating an operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+
+    else:
+
+        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)

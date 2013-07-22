@@ -34,7 +34,6 @@ from frontend.forms.account import UserLoginForm, EditUserForm
 from frontend.models.account import User
 
 from frontend.extensions.database import db
-from frontend.extensions.utility import validate_name, validate_password
 
 
 account = Blueprint('account', __name__)
@@ -53,21 +52,12 @@ def user_login_ctrl():
     form = UserLoginForm()
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
-
-        return render_template('account/login.html', form=form)
-
-    elif request.method == 'POST':
-
-        if form.key_name.data == u'' or form.password.data == u'':
-
-            flash(u'Email and password can\'t be empty', 'error')
-            return redirect(url_for('account.user_login_ctrl'))
+    if form.validate_on_submit():
 
         user = User.query.filter(or_(User.email == form.key_name.data, User.username == form.key_name.data)).first()
 
         if user is None:
-            flash(u'Incorrect email or password', 'error')
+            flash(u'User does not exist', 'error')
             return redirect(url_for('account.user_login_ctrl'))
 
         elif not user.is_active():
@@ -81,6 +71,9 @@ def user_login_ctrl():
 
             flash(u'Login successful', 'success')
             return redirect(default_next_page)
+
+    else:
+        return render_template('account/login.html', form=form)
 
 
 @account.route('/logout', methods=['GET'])
@@ -98,30 +91,19 @@ def user_logout_ctrl():
 def user_edit_settings_ctrl():
 
     user = current_user
+    form = EditUserForm(email=user.email, username=user.username, name=user.name)
 
-    form = EditUserForm(email=user.email, username=user.username)
-
-    if request.method == 'GET':
-
-        return render_template('account/change_settings.html', form=form, type='edit')
-
-    elif request.method == 'POST':
+    if form.validate_on_submit():
 
         if form.email.data != user.email:
             flash(u'The email can\'t be modified', 'error')
             return redirect(url_for('account.user_edit_settings_ctrl'))
 
-        if form.username.data != user.username and form.username.data != u'':
-            if User.query.filter_by(username=form.username.data).all():
-                flash(u'The current username is already in use', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            elif not validate_name(form.username.data):
-                flash(u'Incorrect username format', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            else:
-                user.username = form.username.data
+        if form.username.data != user.username:
+            flash(u'The username can\'t be modified', 'error')
+            return redirect(url_for('account.user_edit_settings_ctrl'))
 
-        if form.name.data != user.name and form.name.data != u'':
+        if form.name.data != user.name:
             if User.query.filter_by(name=form.name.data).all():
                 flash(u'The current name is already in use', 'error')
                 return redirect(url_for('account.user_edit_settings_ctrl'))
@@ -130,14 +112,8 @@ def user_edit_settings_ctrl():
 
         if len(form.new_password.data) > 0:
 
-            if user.check_password(form.now_password.data):
-                flash(u'Please enter current password', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            elif form.new_password.data != form.confirm_password.data:
-                flash(u'Please enter the same password', 'error')
-                return redirect(url_for('account.user_edit_settings_ctrl'))
-            elif not validate_password(form.new_password.data):
-                flash(u'Incorrect password format', 'error')
+            if not user.check_password(form.now_password.data):
+                flash(u'Current password is incorrect', 'error')
                 return redirect(url_for('account.user_edit_settings_ctrl'))
             else:
                 user.update_password(form.new_password.data)
@@ -146,3 +122,6 @@ def user_edit_settings_ctrl():
         flash(u'Update user settings successfully', 'success')
 
         return redirect(url_for('account.user_edit_settings_ctrl'))
+
+    else:
+        return render_template('account/change_settings.html', form=form, type='edit')

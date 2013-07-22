@@ -104,8 +104,6 @@ def format_address_list(address_list):
     Result sep:
         String with blank sep.
     """
-    if address_list == u'':
-        return {'status': False, 'desc': u'Server list can\'t be empty'}
 
     try:
         new_address_list = str()

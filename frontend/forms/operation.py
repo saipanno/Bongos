@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField, SelectField
+from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField, SelectField, Required
 
 from frontend.models.dashboard import SshConfig, PreDefinedScript
 
@@ -32,39 +32,24 @@ from frontend.models.dashboard import SshConfig, PreDefinedScript
 class CreateSshDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
-                                description=u'Only support ip address. Separated by \
-                                <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
-                                  query_factory=SshConfig.query.all,  get_label='desc')
-    submit = SubmitField(u'Save', id='submit')
+
+    server_list = TextAreaField(u'Server List', description=u'Only support ip address. \
+    Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
+                                validators=[Required(message=u'Server list is required')])
+    ssh_config = QuerySelectField(u'Ssh Config', query_factory=SshConfig.query.all, get_label='desc',
+                                  validators=[Required(message=u'Ssh config is required')])
+
+    submit = SubmitField(u'Submit', id='submit')
 
 
 class CreatePingDetectForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
-                                description=u'Only support ip address. Separated by \
-                                <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    submit = SubmitField(u'Submit', id='submit')
 
+    server_list = TextAreaField(u'Server List', description=u'Only support ip address. \
+    Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
+                                validators=[Required(message=u'Server list is required')])
 
-class CreatePreDefinedExecuteForm(Form):
-
-    vars_desc = u'''<p>用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
-    用 <code>=</code> 作为单变量的赋值符。 如:</p>
-<code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
-
-    next_page = HiddenField()
-    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
-                                description=u'Only support ip address. Separated by \
-                                <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    script_template = QuerySelectField(u'PreDefined Script  <span class="required">*</span>', id='select',
-                                       description=u'Select PreDefined Script.',
-                                       query_factory=PreDefinedScript.query.all, get_label='desc')
-    template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
-    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
-                                  query_factory=SshConfig.query.all,  get_label='desc')
     submit = SubmitField(u'Submit', id='submit')
 
 
@@ -80,23 +65,48 @@ class CreateCustomExecuteForm(Form):
 <code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
-                                description=u'Only support ip address. Separated by \
-                                <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    script_template = TextAreaField(u'Script Template  <span class="required">*</span>', id='textarea',
-                                    description=script_desc)
+
+    server_list = TextAreaField(u'Server List', description=u'Only support ip address. \
+    Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
+                                validators=[Required(message=u'Server list is required')])
+    script_template = TextAreaField(u'Script Template', description=script_desc,
+                                    validators=[Required(message=u'Script Template is required')])
+    template_vars = TextAreaField(u'External Variables', description=vars_desc)
+    ssh_config = QuerySelectField(u'Ssh Config', query_factory=SshConfig.query.all, get_label='desc',
+                                  validators=[Required(message=u'Ssh config is required')])
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class CreatePreDefinedExecuteForm(Form):
+
+    vars_desc = u'''<p>用 <code>|</code> 作为key(IP地址)和value的分隔符, 用 <code>,</code> 作为value(多个变量赋值)的分隔符, \
+    用 <code>=</code> 作为单变量的赋值符。 如:</p>
+<code>60.175.193.194|address=61.132.226.195,gateway=61.132.226.254</code>'''
+
+    next_page = HiddenField()
+
+    server_list = TextAreaField(u'Server List', description=u'Only support ip address. \
+    Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
+                                validators=[Required(message=u'Server list is required')])
+    script_template = QuerySelectField(u'PreDefined Script', description=u'PreDefined Script.',
+                                       query_factory=PreDefinedScript.query.all, get_label='desc',
+                                       validators=[Required(message=u'Script Template is required')])
     template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
-    ssh_config = QuerySelectField(u'Ssh Config  <span class="required">*</span>', id='select',
-                                  query_factory=SshConfig.query.all,  get_label='desc')
+    ssh_config = QuerySelectField(u'Ssh Config', query_factory=SshConfig.query.all, get_label='desc',
+                                  validators=[Required(message=u'Ssh config is required')])
+
     submit = SubmitField(u'Submit', id='submit')
 
 
 class CreatePowerCtrlForm(Form):
 
     next_page = HiddenField()
-    server_list = TextAreaField(u'Server List  <span class="required">*</span>', id='textarea',
-                                description=u'Only support ip address. Separated by \
-                                <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>')
-    script_template = SelectField(u'Type of operation  <span class="required">*</span>', id='script_template',
-                                  choices=[(0, u'重启'), (1, u'关机'), (2, u'开机'), (3, u'状态')])
+
+    server_list = TextAreaField(u'Server List', description=u'Only support ip address. \
+    Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
+                                validators=[Required(message=u'Server list is required')])
+    script_template = SelectField(u'Operate Type', description=u'Power operate type, support by `ipmitool`',
+                                  choices=[(u'reset', u'重启'), (u'off', u'关机'), (u'on', u'开机'), (u'status', u'状态')])
+
     submit = SubmitField(u'Submit', id='submit')

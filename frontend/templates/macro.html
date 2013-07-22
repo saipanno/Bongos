@@ -1,10 +1,19 @@
-{% macro feedback_message()  -%}
+{% macro feedback_message(form=None)  -%}
 {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+    {% if form and form.errors %}
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            {% for (name, errors) in form.errors.items() %}
+                {% for error in errors %}
+                    <i class="icon-exclamation-sign"></i> {{ error }}<br>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% elif messages %}
         {% for category, message in messages %}
             <div class="alert alert-{{ category }}">
                 <a class="close" data-dismiss="alert" href="#">×</a>
-                <i class="icon-info-sign"></i>   {{ message }}
+                <i class="icon-info-sign"></i> {{ message }}
             </div>
         {% endfor %}
     {% endif %}
@@ -83,10 +92,12 @@
 
 {% macro create_standard_form(field)  -%}
     <div class="control-group">
-        <label class="control-label">{{ field.label }}{% if field.flags.required %}<span class="required">*</span>{% endif %}</label>
+        <label class="control-label inline">{{ field.label.text }}{% if field.flags.required %} <span class="required">*</span>{% endif %}</label>
         <div class="controls">
             {{ field(**kwargs) }}
-            {% if field.description %}<p class="help-block">{{ field.description|safe }}</p>{% endif %}
+            {%- if field.description -%}
+                <p class="help-block">{{ field.description|safe }}</p>
+            {%- endif %}
         </div>
     </div>
 {%- endmacro %}

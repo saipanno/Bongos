@@ -24,7 +24,8 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, SelectField
+from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, QuerySelectField, SelectField, \
+    Required, EqualTo, Regexp
 
 from frontend.models.account import Group
 
@@ -32,47 +33,56 @@ from frontend.models.account import Group
 class UserLoginForm(Form):
 
     next_page = HiddenField()
-    key_name = TextField()
-    password = PasswordField()
+    key_name = TextField(u'Username or Email',
+                         validators=[Required(message=u'Username or Email is required')])
+    password = PasswordField(u'Password',
+                             validators=[Required(message=u'Password is required')])
     submit = SubmitField(u'Login', id='submit')
 
 
 class CreateUserForm(Form):
 
     next_page = HiddenField()
-    email = TextField(u'Email  <span class="required">*</span>', id='email', description=u'Unrepeatable')
-    username = TextField(u'Username <span class="required">*</span>', id='name',
-                         description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable.')
-    group = QuerySelectField(u'Group  <span class="required">*</span>', id='group',
-                             query_factory=Group.query.all, get_label='desc')
-    password = PasswordField(u'Password  <span class="required">*</span>', id='password', description=u'At least eight')
-    confirm_password = PasswordField(u'Confirm Password  <span class="required">*</span>',
+    email = TextField(u'Email', description=u'Unrepeatable')
+    username = TextField(u'Username', description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    name = TextField(u'Name', description=u'Unrepeatable.')
+    group = QuerySelectField(u'Group', query_factory=Group.query.all, get_label='desc')
+    password = PasswordField(u'Password', description=u'At least eight')
+    confirm_password = PasswordField(u'Confirm Password',
+                                     validators=[EqualTo('password', message=u'error confirm password')],
                                      id='confirm_password', description=u'Re-enter the password')
     submit = SubmitField(u'Submit', id='submit')
 
 
 class EditUserForm(Form):
 
+    # TODO: NAME字段格式检查的中文支持
+
     next_page = HiddenField()
-    email = TextField(u'Email', id='email', description=u'Can\'t be modified')
-    username = TextField(u'Username', id='username', description=u'Can\'t be modified')
-    name = TextField(u'Name <span class="required">*</span>', id='name', description=u'Unrepeatable.')
-    group = QuerySelectField(u'Group <span class="required">*</span>', id='group',
-                             query_factory=Group.query.all, get_label='desc')
-    now_password = PasswordField(u'Password  <span class="required">*</span>', id='password')
-    new_password = PasswordField(u'New Password <span class="required">*</span>',
-                                 id='new_password', description=u'At least eight')
-    confirm_password = PasswordField(u'Confirm Password <span class="required">*</span>',
-                                     id='confirm_password', description=u'Re-enter the new password')
-    status = SelectField(u'Status  <span class="required">*</span>', id='status', choices=[(0, u'禁用'), (1, u'启用')])
-    submit = SubmitField(u'Submit', id='submit')
+    email = TextField(u'Email', description=u'Can not be modified',
+                      validators=[Required(message=u'Username or Email is required')])
+    username = TextField(u'Username', description=u'Can not be modified',
+                         validators=[Required(message=u'Password is required')])
+    name = TextField(u'Name', description=u'Unrepeatable.',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format')])
+    group = QuerySelectField(u'Group', description=u'',
+                             query_factory=Group.query.all, get_label='desc',
+                             validators=[Required(message=u'Group is required')])
+    now_password = PasswordField(u'Password')
+    new_password = PasswordField(u'New Password', description=u'At least eight characters',
+                                 validators=[Regexp(u'^.{8,20}$', message=u'Password are at least eight characters')])
+    confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the new password',
+                                     validators=[EqualTo('new_password', message=u'New passwords must be the same')])
+    status = SelectField(u'Status', description=u'Enable or Disable User',
+                         choices=[(0, u'Disable'), (1, u'Enable')],
+                         validators=[Required(message=u'User status is required')])
+    submit = SubmitField(u'Save', id='submit')
 
 
 class GroupForm(Form):
 
     next_page = HiddenField()
-    name = TextField(u'Name <span class="required">*</span>', id='name',
-                     description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    desc = TextField(u'Description <span class="required">*</span>', id='desc')
-    submit = SubmitField(u'Submit', id='submit')
+    name = TextField(u'Name', description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
+    desc = TextField(u'Description')
+    submit = SubmitField(u'Save', id='submit')
