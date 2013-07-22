@@ -59,17 +59,15 @@ def final_power_management(ipmi_user, ipmi_password, operate, spec=None):
 
     ipmi_address = generate_ipmi_address(env.host)
 
-    ipmitool_power_parameters = {0: 'reset', 1: 'off', 2: 'on', 3: 'status'}
-
     specifies = '-I lanplus' if spec else ''
     command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address, ipmi_user, ipmi_password,
-                                                                  ipmitool_power_parameters.get(operate, 'status'))
+                                                                  operate)
 
     try:
         output = local(command, capture=True)
         if output.return_code == 0:
             fruit['code'] = 0
-            fruit['msg'] = 'Successful! %s' % output.stdout
+            fruit['msg'] = output.stdout
         elif output.return_code == 1:
             fruit['code'] = 1
             if re.match(u'Activate Session command failed', output.stderr):
@@ -110,19 +108,10 @@ def exec_power_management(config, operation):
     operation.status = 5
     db.commit()
 
-    if operation.script_template == u'0':
-        operate = u'reset'
-    elif operation.script_template == u'1':
-        operate = u'off'
-    elif operation.script_template == u'2':
-        operate = u'on'
-    else:
-        operate = u'status'
-
     with hide('everything'):
 
         do_exec = execute(final_power_management, config.get('IPMI_USER', 'root'),
-                          config.get('IPMI_PASSWORD', 'calvin'), operate,
+                          config.get('IPMI_PASSWORD', 'calvin'), operation.script_template,
                           hosts=operation.server_list.split())
 
     operation.status = 1
