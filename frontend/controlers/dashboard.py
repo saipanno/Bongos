@@ -29,6 +29,7 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint,
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
+from frontend.extensions.utility import catch_errors
 
 from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission
@@ -37,8 +38,6 @@ from frontend.forms.account import CreateUserForm, EditUserForm, GroupForm
 from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm
 
 from frontend.extensions.principal import UserAccessPermission
-from frontend.extensions.utility import validate_name, validate_email, validate_username, \
-    validate_password, validate_address
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
@@ -113,6 +112,9 @@ def create_predefined_script_ctrl():
         return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.create_predefined_script_ctrl'))
 
 
@@ -134,21 +136,16 @@ def edit_predefined_script_ctrl(script_id):
 
     elif form.validate_on_submit():
 
-        if form.name.data != script.name:
-            script.name = form.name.data
-
-        if form.desc.data != script.desc:
-            script.desc = form.desc.data
-
-        if form.script.data != script.desc:
-            script.script = form.script.data
-
+        form.populate_obj(script)
         db.session.commit()
 
         flash(u'Update predefined script successfully.', 'success')
         return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
 
@@ -181,7 +178,10 @@ def create_user_ctrl():
 
     form = CreateUserForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('dashboard/user_manager.html', form=form, type='create')
+
+    elif form.validate_on_submit():
 
         user = User(form.email.data, form.username.data, form.name.data, form.group.data.id,
                     form.password.data, 1 if form.status.data else 0)
@@ -193,6 +193,9 @@ def create_user_ctrl():
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.create_user_ctrl'))
 
 
@@ -229,6 +232,9 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
 
 
@@ -306,6 +312,9 @@ def create_ssh_config_ctrl():
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.create_ssh_config_ctrl'))
 
 
@@ -320,35 +329,24 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
-    form = SshConfigForm(name=config.name, desc=config.desc, port=config.port, username=config.username,
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, port=config.port, username=config.username,
                          private_key=config.private_key)
 
     if request.method == 'GET':
         return render_template('dashboard/ssh_config.html', form=form, type='edit')
 
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
-        if form.username.data != config.name:
-            config.name = form.username.data
-
-        if form.desc.data != config.desc:
-            config.desc = form.desc.data
-
-        if form.username.data != config.username:
-            config.username = form.username.data
-
-        if form.password.data != config.password:
-            config.password = form.password.data
-
-        if form.private_key.data != config.private_key:
-            config.private_key = form.private_key.data
-
+        form.populate_obj(config)
         db.session.commit()
 
         flash(u'Edit ssh configuration successfully', 'success')
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
 
@@ -381,7 +379,7 @@ def list_group_ctrl():
 
         group.members = ''
         try:
-            users = User.query.filter_by(id=group.id).all()
+            users = User.query.filter_by(group=group.id).all()
         except Exception, e:
             users = None
 
@@ -417,6 +415,9 @@ def create_group_ctrl():
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.create_group_ctrl'))
 
 
@@ -439,18 +440,16 @@ def edit_group_ctrl(group_id):
 
     elif form.validate_on_submit():
 
-        if form.name.data != group.name:
-            group.name = form.name.data
-
-        if form.desc.data != group.name:
-            group.desc = form.desc.data
-
+        form.populate_obj(group)
         db.session.commit()
 
         flash(u'Edit group successfully', 'success')
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
 
 
@@ -504,6 +503,9 @@ def create_server_ctrl():
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.create_server_ctrl'))
 
 
@@ -526,56 +528,16 @@ def edit_server_ctrl(server_id):
 
     elif form.validate_on_submit():
 
-        if form.group.data is not None:
-            server.group = form.group.data.id
-
-        if form.desc.data != server.desc:
-            server.desc = form.desc.data
-
-        if form.ext_address.data != server.ext_address:
-            server.ext_address = form.ext_address.data
-
-        if form.int_address.data != server.int_address:
-            server.int_address = form.int_address.data
-
-        if form.ipmi_address.data != server.ipmi_address:
-            server.ipmi_address = form.ipmi_address.data
-
-        if form.other_address.data != server.other_address:
-            server.other_address = form.other_address.data
-
-        if form.idc.data != server.idc:
-            server.idc = form.idc.data
-
-        if form.rack.data != server.rack:
-            server.rack = form.rack.data
-
-        if form.manufacturer.data != server.manufacturer:
-            server.manufacturer = form.manufacturer.data
-
-        if form.model.data != server.model:
-            server.model = form.model.data
-
-        if form.cpu_info.data != server.cpu_info:
-            server.cpu_info = form.cpu_info.data
-
-        if form.disk_info.data != server.disk_info:
-            server.disk_info = form.disk_info.data
-
-        if form.memory_info.data != server.memory_info:
-            server.memory_info = form.memory_info.data
-
-        server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
-                        form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
-                        form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
-                        form.memory_info.data)
-        db.session.add(server)
+        form.populate_obj(server)
         db.session.commit()
 
         flash(u'Edit server successfully', 'success')
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
         return redirect(url_for('dashboard.edit_server_ctrl', server_id=server_id))
 
 
@@ -642,7 +604,7 @@ def update_acl_status_ctrl(function, group_id, status):
         flash(u'Error ACL status', 'error')
         return redirect(url_for('dashboard.list_acl_ctrl'))
 
-    access_control.access_rules = json.dumps(access_rules)
+    access_control.access_rules = json.dumps(access_rules, ensure_ascii=False)
     db.session.commit()
 
     flash(u'Update ACL successfully', 'success')

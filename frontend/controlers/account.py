@@ -25,7 +25,7 @@
 
 
 from sqlalchemy import or_
-from flask import render_template, request, flash, redirect, url_for, Blueprint, current_app, session
+from flask import render_template, request, flash, redirect, url_for, Blueprint, current_app
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
@@ -34,6 +34,7 @@ from frontend.forms.account import UserLoginForm, EditUserForm
 from frontend.models.account import User
 
 from frontend.extensions.database import db
+from frontend.extensions.utility import catch_errors
 
 
 account = Blueprint('account', __name__)
@@ -52,7 +53,10 @@ def user_login_ctrl():
     form = UserLoginForm()
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('account/login.html', form=form)
+
+    elif form.validate_on_submit():
 
         user = User.query.filter(or_(User.email == form.key_name.data, User.username == form.key_name.data)).first()
 
@@ -73,7 +77,10 @@ def user_login_ctrl():
             return redirect(default_next_page)
 
     else:
-        return render_template('account/login.html', form=form)
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('account.user_login_ctrl'))
 
 
 @account.route('/logout', methods=['GET'])
@@ -93,7 +100,10 @@ def user_edit_settings_ctrl():
     user = current_user
     form = EditUserForm(email=user.email, username=user.username, name=user.name)
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('account/change_settings.html', form=form, type='edit')
+
+    elif form.validate_on_submit():
 
         if form.name.data != user.name:
             user.name = form.name.data
@@ -110,4 +120,7 @@ def user_edit_settings_ctrl():
         return redirect(url_for('account.user_edit_settings_ctrl'))
 
     else:
-        return render_template('account/change_settings.html', form=form, type='edit')
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('account.user_edit_settings_ctrl'))

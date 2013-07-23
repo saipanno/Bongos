@@ -25,71 +25,7 @@
 
 
 import re
-from flask.ext.wtf import StopValidation
-
-
-NAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
-DOMAIN_REGEX = u'^[a-zA-Z0-9\_\-]{1,20}$'
-PASSWORD_REGEX = u'^.{8,20}$'
-USERNAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
-
-
-def validate_name(name):
-
-    return name and re.match(NAME_REGEX, name)
-
-
-def validate_email(email):
-
-    if email and '@' in email:
-        fields = email.split('@')
-
-        if len(fields) == 2:
-            username = fields[0]
-            domain = fields[1]
-
-            if username and domain and re.match(USERNAME_REGEX, username):
-                fields = domain.split('.')
-
-                if len(fields) >= 2:
-
-                    for field in fields:
-                        if field and re.match(DOMAIN_REGEX, field):
-                            return True
-    return False
-
-
-def validate_integer(value):
-    try:
-        int(value)
-    except (ValueError, TypeError):
-        return False
-
-    return True
-
-
-def validate_address(address):
-
-    try:
-        octets = address.split('.')
-        if len(octets) != 4:
-            return False
-        for x in octets:
-            if not (0 <= int(x) <= 255):
-                return False
-    except ValueError:
-        return False
-    return True
-
-
-def validate_password(password):
-
-    return password and re.match(PASSWORD_REGEX, password)
-
-
-def validate_username(username):
-
-    return username and re.match(NAME_REGEX, username)
+from flask.ext.wtf import ValidationError
 
 
 def format_address_list(address_list):
@@ -150,6 +86,18 @@ def format_template_vars(template_vars):
     return {'status': True, 'vars': address_vars_group}
 
 
+def catch_errors(errors):
+
+    messages = ''
+
+    if errors:
+        for (field, errors) in errors.items():
+            for error in errors:
+                messages = '%s,%s' % (messages, error)
+
+    return messages[1:] if messages else None
+
+
 class Unique(object):
     """ validator that checks field uniqueness """
     def __init__(self, model, field, message=None):
@@ -162,7 +110,7 @@ class Unique(object):
         check = self.model.query.filter(self.field == field.data).first()
         id = form.id.data if 'id' in form else None
         if check and (id is None or id != check.id):
-            raise StopValidation(self.message)
+            raise ValidationError(self.message)
 
 
 class UnChange(object):
@@ -177,17 +125,4 @@ class UnChange(object):
         check = self.model.query.filter_by(id=form.id.data).first()
 
         if check is not None and field.data != getattr(check, self.field):
-            raise StopValidation(self.message)
-
-
-class BeInt(object):
-    """ validator that checks field uniqueness """
-    def __init__(self, message=None):
-        self.message = message if message else u'The current element is not an integer'
-
-    def __call__(self, field):
-
-        try:
-            int(field)
-        except (ValueError, TypeError):
-            raise StopValidation(self.message)
+            raise ValidationError(self.message)

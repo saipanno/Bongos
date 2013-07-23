@@ -92,7 +92,7 @@ class CreatePreDefinedExecuteForm(Form):
     script_template = QuerySelectField(u'PreDefined Script', description=u'PreDefined Script.',
                                        query_factory=PreDefinedScript.query.all, get_label='desc',
                                        validators=[Required(message=u'Script Template is required')])
-    template_vars = TextAreaField(u'External Variables', id='textarea', description=vars_desc)
+    template_vars = TextAreaField(u'External Variables', description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config', query_factory=SshConfig.query.all, get_label='desc',
                                   validators=[Required(message=u'Ssh config is required')])
 

@@ -36,9 +36,8 @@ from frontend.models.account import User
 from frontend.models.operation import OperationDb
 
 from frontend.extensions.database import db
-from frontend.extensions.utility import format_address_list
-from frontend.extensions.utility import format_template_vars
 from frontend.extensions.principal import UserAccessPermission
+from frontend.extensions.utility import format_address_list, format_template_vars, catch_errors
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
@@ -139,7 +138,10 @@ def create_ssh_detect_ctrl():
 
     form = CreateSshDetectForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
+
+    elif form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -158,7 +160,11 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        return render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('operation.create_ssh_detect_ctrl'))
+
 
 
 @operation.route('/ping_detect/create', methods=("GET", "POST"))
@@ -174,7 +180,10 @@ def create_ping_detect_ctrl():
 
     form = CreatePingDetectForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
+
+    elif form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -192,8 +201,11 @@ def create_ping_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
+        messages = catch_errors(form.errors)
 
-        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
+        flash(messages, 'error')
+        return redirect(url_for('operation.create_ping_detect_ctrl'))
+
 
 
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
@@ -209,7 +221,10 @@ def create_custom_execute_ctrl():
 
     form = CreateCustomExecuteForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
+
+    elif form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -223,7 +238,6 @@ def create_custom_execute_ctrl():
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('operation.create_custom_execute_ctrl'))
-        # TODO: 调研json.dumps()函数中ensure_ascii参数的含义
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data,
@@ -235,8 +249,10 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
+        messages = catch_errors(form.errors)
 
-        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
+        flash(messages, 'error')
+        return redirect(url_for('operation.create_custom_execute_ctrl'))
 
 
 @operation.route('/predefined_execute/create', methods=("GET", "POST"))
@@ -252,7 +268,10 @@ def create_predefined_execute_ctrl():
 
     form = CreatePreDefinedExecuteForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
+
+    elif form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -266,7 +285,6 @@ def create_predefined_execute_ctrl():
         if template_vars_dict['status'] is not True:
             flash(template_vars_dict['desc'], 'error')
             return redirect(url_for('operation.create_predefined_execute_ctrl'))
-        # TODO: 调研json.dumps()函数中ensure_ascii参数的含义
         template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data.id,
@@ -278,8 +296,11 @@ def create_predefined_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
+        messages = catch_errors(form.errors)
 
-        return render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
+        flash(messages, 'error')
+        return redirect(url_for('operation.create_custom_execute_ctrl'))
+
 
 
 @operation.route('/power_control/create', methods=("GET", "POST"))
@@ -295,7 +316,10 @@ def create_power_control_ctrl():
 
     form = CreatePowerCtrlForm()
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
+
+    elif form.validate_on_submit():
 
         author = current_user.id
         datetime = time.strftime('%Y-%m-%d %H:%M')
@@ -310,9 +334,11 @@ def create_power_control_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating an operation successful', 'success')
+        flash(u'Creating operation successful', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
+        messages = catch_errors(form.errors)
 
-        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
+        flash(messages, 'error')
+        return redirect(url_for('operation.create_power_control_ctrl'))

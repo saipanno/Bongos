@@ -1,23 +1,16 @@
-{% macro feedback_message(form=None)  -%}
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if form and form.errors %}
-        <div class="alert alert-error">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            {% for (name, errors) in form.errors.items() %}
-                {% for error in errors %}
-                    <i class="icon-exclamation-sign"></i> {{ error }}<br>
-                {% endfor %}
+{% macro feedback_message()  -%}
+    {% with flash_messages = get_flashed_messages(with_categories=true) %}
+        {% if flash_messages %}
+            {% for category, message in flash_messages %}
+                <div class="alert alert-{{ category }}">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {% for msg in message.split(',') %}
+                    <i class="icon-info-sign"></i> {{ msg }}<br>
+                    {% endfor %}
+                </div>
             {% endfor %}
-        </div>
-    {% elif messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-                <a class="close" data-dismiss="alert" href="#">×</a>
-                <i class="icon-info-sign"></i> {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+        {% endif %}
+    {% endwith %}
 {%- endmacro %}
 
 

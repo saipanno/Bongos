@@ -88,6 +88,7 @@ class EditUserForm(Form):
                                   UnChange(User, 'email', message=u'The current email can not be modified')])
     username = TextField(u'Username', description=u'Can not be modified',
                          validators=[Required(message=u'Password is required'),
+                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
                                      UnChange(User, 'username', message=u'The current username can not be modified')])
     name = TextField(u'Name', description=u'Unrepeatable.',
                      validators=[Required(message=u'Name is required'),

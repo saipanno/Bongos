@@ -30,7 +30,7 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from frontend.models.account import Group
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
 
-from frontend.extensions.utility import Unique, BeInt
+from frontend.extensions.utility import Unique
 
 
 class PreDefinedScriptForm(Form):
@@ -59,21 +59,20 @@ class SshConfigForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', description=u'Ssh config name. Unrepeatable.',
+    name = TextField(u'Name', description=u'Ssh Config name. Unrepeatable.',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(SshConfig, SshConfig.name,
                                         message=u'The current name is already in use')])
     desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
     port = IntegerField(u'Port', default=22,
-                        validators=[Required(message=u'Port is required'),
-                                    BeInt(message=u'Port must be an integer')])
+                        validators=[Required(message=u'Port is required')])
     username = TextField(u'Username', default=u'root',
                          validators=[Required(message=u'Username is required')])
     password = PasswordField(u'Password',
                              validators=[Required(message=u'Password is required')])
     private_key = TextField(u'Private Key:',
-                            description=u'Private file path.')
+                            description=u'Private filename in <code>PRIVATE_KEY_PATH</code>')
 
     submit = SubmitField(u'Submit', id='submit')
 
@@ -87,15 +86,15 @@ class ServerForm(Form):
                              validators=[Required(message=u'Group is required')])
     desc = TextField(u'Server Description')
     ext_address = TextField(u'Ext Address',
-                            validators=[IPAddress(),
+                            validators=[IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.ext_address,
                                                message=u'The current ext address is already in use')])
     int_address = TextField(u'Int Address',
-                            validators=[IPAddress(),
+                            validators=[IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.int_address,
                                                message=u'The current int address is already in use')])
     ipmi_address = TextField(u'IPMI Address',
-                             validators=[IPAddress(),
+                             validators=[IPAddress(message=u'Incorrect ip address format'),
                                          Unique(Server, Server.ipmi_address,
                                                 message=u'The current ipmi address is already in use')])
     other_address = TextField(u'Other Address',
