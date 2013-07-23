@@ -25,7 +25,7 @@
 
 
 from flask.ext.wtf import Form, TextField, HiddenField, BooleanField, PasswordField, SubmitField, QuerySelectField, \
-    IntegerField, HiddenInput, Required, EqualTo, Regexp, Email
+    IntegerField, QuerySelectMultipleField, HiddenInput, Required, EqualTo, Regexp, Email
 
 from frontend.models.account import User, Group
 
@@ -62,13 +62,14 @@ class CreateUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    group = QuerySelectField(u'Group', description=u'',
-                             query_factory=Group.query.all, get_label='desc',
-                             validators=[Required(message=u'Group is required')])
+    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group List is required')])
     password = PasswordField(u'Password', description=u'At least eight characters',
-                             validators=[Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
+                             validators=[Required(message=u'Password is required'),
+                                         Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the password',
-                                     validators=[EqualTo('password', message=u'Passwords must be the same')])
+                                     validators=[Required(message=u'Confirm Password is required'),
+                                                 EqualTo('password', message=u'Passwords must be the same')])
     status = BooleanField(u'Status', description=u'Enable this user')
 
     submit = SubmitField(u'Submit', id='submit')
@@ -92,9 +93,8 @@ class EditUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    group = QuerySelectField(u'Group', description=u'',
-                             query_factory=Group.query.all, get_label='desc',
-                             validators=[Required(message=u'Group is required')])
+    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
     now_password = PasswordField(u'Password')
     new_password = PasswordField(u'New Password', description=u'At least eight characters',
                                  validators=[Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars')])

@@ -161,8 +161,14 @@ def list_user_ctrl():
     users = User.query.all()
 
     for user in users:
-        group = Group.query.filter_by(id=user.group).first()
-        user.group_name = group.desc if group else u'None'
+
+        group_name = ''
+        groups = json.loads(user.groups)
+        for group_id in groups.keys():
+
+            group = Group.query.filter_by(id=group_id).first()
+            group_name = '%s, %s' % (group_name, group.desc)
+        user.group_name = group_name[2:]
 
     return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -183,7 +189,11 @@ def create_user_ctrl():
 
     elif form.validate_on_submit():
 
-        user = User(form.email.data, form.username.data, form.name.data, form.group.data.id,
+        groups = dict()
+        for group in form.groups.data:
+            groups[group.id] = 1
+
+        user = User(form.email.data, form.username.data, form.name.data, json.dumps(groups, ensure_ascii=False),
                     form.password.data, 1 if form.status.data else 0)
         db.session.add(user)
         db.session.commit()
@@ -220,11 +230,13 @@ def edit_user_ctrl(user_id):
         if form.name.data != user.name:
             user.name = form.name.data
 
-        if form.group.data.id != user.group:
-            user.group = form.group.data.id
-
         if len(form.new_password.data) > 0:
             user.update_password(form.new_password.data)
+
+        groups = dict()
+        for group in form.groups.data:
+            groups[group.id] = 1
+        user.groups = json.dumps(groups, ensure_ascii=False)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
@@ -374,18 +386,19 @@ def list_group_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
+    group_members = dict()
+    users = User.query.all()
+    for user in users:
+        groups = json.loads(user.groups)
+        for group in groups:
+            try:
+                group_members[group] = '%s, %s' % (group_members[group], user.name)
+            except:
+                group_members[group] = user.name
+
     groups = Group.query.all()
     for group in groups:
-
-        group.members = ''
-        try:
-            users = User.query.filter_by(group=group.id).all()
-        except Exception, e:
-            users = None
-
-        if users is not None:
-            for user in users:
-                group.members = '%s, %s' % (group.members, user.name)
+        group.members = group_members.get(unicode(group.id), u'')
 
     return render_template('dashboard/group_manager.html', groups=groups, type='list')
 

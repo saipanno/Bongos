@@ -39,16 +39,16 @@ class User(db.Model):
     email = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50))
-    group = db.Column(db.Integer)
+    groups = db.Column(db.String(50))
     password = db.Column(db.String(50))
     status = db.Column(db.Integer)
 
-    def __init__(self, email, username, name, group, password, status):
+    def __init__(self, email, username, name, groups, password, status):
 
         self.email = email
         self.username = username
         self.name = name
-        self.group = group
+        self.groups = groups
         self.password = generate_password_hash(password, salt_length=8)
         self.status = status
 

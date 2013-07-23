@@ -64,15 +64,16 @@ def configure_extensions(app):
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
 
-        if hasattr(current_user, 'group'):
+        if hasattr(current_user, 'groups'):
             access_control_list = Permission.query.all()
             for access_control in access_control_list:
 
                 access_rules = json.loads(access_control.access_rules)
                 for group_id in access_rules:
+                    for group_id_key in current_user.groups:
 
-                    if current_user.group == group_id and access_rules[group_id] == 1:
-                        identity.provides.add(UserAccessNeed(access_control.function))
+                        if group_id_key == group_id and access_rules[group_id] == 1:
+                            identity.provides.add(UserAccessNeed(access_control.function))
 
 
 def configure_blueprints(app):
