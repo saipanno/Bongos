@@ -52,11 +52,11 @@ class CreateUserForm(Form):
     next_page = HiddenField()
 
     email = TextField(u'Email', description=u'Unrepeatable.',
-                      validators=[Required(message=u'Username or Email is required'),
+                      validators=[Required(message=u'Email is required'),
                                   Email(message=u'Incorrect email format'),
                                   Unique(User, User.email, message=u'The current email is already in use')])
     username = TextField(u'Username', description=u'Unrepeatable.',
-                         validators=[Required(message=u'Password is required'),
+                         validators=[Required(message=u'Username is required'),
                                      Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
                                      Unique(User, User.username, message=u'The current name is already in use')])
     name = TextField(u'Name', description=u'Unrepeatable.',
@@ -84,10 +84,10 @@ class EditUserForm(Form):
     id = IntegerField(widget=HiddenInput())
 
     email = TextField(u'Email', description=u'Can not be modified',
-                      validators=[Required(message=u'Username or Email is required'),
+                      validators=[Required(message=u'Email is required'),
                                   UnChange(User, 'email', message=u'The current email can not be modified')])
     username = TextField(u'Username', description=u'Can not be modified',
-                         validators=[Required(message=u'Password is required'),
+                         validators=[Required(message=u'Username is required'),
                                      Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
                                      UnChange(User, 'username', message=u'The current username can not be modified')])
     name = TextField(u'Name', description=u'Unrepeatable.',
