@@ -66,7 +66,7 @@ class CreateUserForm(Form):
                              query_factory=Group.query.all, get_label='desc',
                              validators=[Required(message=u'Group is required')])
     password = PasswordField(u'Password', description=u'At least eight characters',
-                             validators=[Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars')])
+                             validators=[Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the password',
                                      validators=[EqualTo('password', message=u'Passwords must be the same')])
     status = BooleanField(u'Status', description=u'Enable this user')
