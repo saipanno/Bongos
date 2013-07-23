@@ -7,12 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="Ruoyan Wong">
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap/css/bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/font-awesome.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/select2.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/select2-bootstrap.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bongos.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/font-awesome/font-awesome.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2-bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bongos/bongos.css') }}">
 
     {% block style %}
         <style type="text/css">
@@ -26,7 +26,7 @@
         </style>
     {% endblock %}
 
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='bongos/favicon.ico') }}">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -96,12 +96,12 @@
             <p>Create by <a href="https://github.com/saipanno">@Ruoyan Wong</a>(saipanno),  Theme by <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a>.</p>
         </div>
 
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery.dataTables.ColReorderWithResize.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bongos.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/jquery/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.ColReorderWithResize.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/select2/js/select2.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bongos/bongos.js') }}"></script>
 
         <script type="text/javascript" charset="utf-8">
             /* Table initialisation */
