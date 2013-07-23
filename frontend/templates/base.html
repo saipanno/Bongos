@@ -10,6 +10,8 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/font-awesome.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/select2.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/select2-bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bongos.css') }}">
 
     {% block style %}
@@ -98,6 +100,7 @@
         <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/jquery.dataTables.ColReorderWithResize.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bongos.js') }}"></script>
 
         <script type="text/javascript" charset="utf-8">
@@ -110,6 +113,12 @@
                     "sSortable": "header",
                     "sDom": "Rlfrtip"
                 } );
+            } );
+        </script>
+
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                $(".select2").select2();
             } );
         </script>
 
