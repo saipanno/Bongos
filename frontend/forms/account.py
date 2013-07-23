@@ -47,7 +47,6 @@ class UserLoginForm(Form):
 class CreateUserForm(Form):
 
     # TODO: NAME字段格式检查的中文支持
-    # TODO: 增加Regexp验证器后，密码字段不能为空的问题
 
     next_page = HiddenField()
 
@@ -67,7 +66,7 @@ class CreateUserForm(Form):
                              query_factory=Group.query.all, get_label='desc',
                              validators=[Required(message=u'Group is required')])
     password = PasswordField(u'Password', description=u'At least eight characters',
-                             validators=[Regexp(u'^.{8,20}$', message=u'Password are at least eight characters')])
+                             validators=[Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the password',
                                      validators=[EqualTo('password', message=u'Passwords must be the same')])
     status = BooleanField(u'Status', description=u'Enable this user')
@@ -78,7 +77,6 @@ class CreateUserForm(Form):
 class EditUserForm(Form):
 
     # TODO: NAME字段格式检查的中文支持
-    # TODO: 增加Regexp验证器后，密码字段不能为空的问题
 
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
@@ -99,7 +97,7 @@ class EditUserForm(Form):
                              validators=[Required(message=u'Group is required')])
     now_password = PasswordField(u'Password')
     new_password = PasswordField(u'New Password', description=u'At least eight characters',
-                                 validators=[Regexp(u'^.{8,20}$', message=u'Password are at least eight characters')])
+                                 validators=[Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the new password',
                                      validators=[EqualTo('new_password', message=u'New passwords must be the same')])
 
