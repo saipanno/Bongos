@@ -101,9 +101,8 @@ class Server(db.Model):
         self.memory_info = memory_info
 
 
-class AccessControl(db.Model):
+class Permission(db.Model):
 
-    # TODO:修改类名称为Permission
     __tablename__ = 'access_control_lists'
 
     id = db.Column(db.Integer, primary_key=True)

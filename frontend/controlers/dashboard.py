@@ -31,7 +31,7 @@ from flask.ext.login import login_required, current_user
 from frontend.extensions.database import db
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, AccessControl
+from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission
 
 from frontend.forms.account import CreateUserForm, EditUserForm, GroupForm
 from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm
@@ -331,16 +331,8 @@ def edit_ssh_config_ctrl(config_id):
         if form.username.data != config.name:
             config.name = form.username.data
 
-        if form.desc.data != config.desc and form.desc.data != u'':
+        if form.desc.data != config.desc:
             config.desc = form.desc.data
-
-        # TODO:增加整数传参检查
-        try:
-            if form.port.data != config.port:
-                config.port = int(form.port.data)
-        except TypeError:
-            flash(u'Port can only be an integer', 'error')
-            return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
         if form.username.data != config.username:
             config.username = form.username.data
@@ -384,22 +376,20 @@ def list_group_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    groups = Group.query.all()
+    for group in groups:
 
-        groups = Group.query.all()
-        for group in groups:
+        group.members = ''
+        try:
+            users = User.query.filter_by(id=group.id).all()
+        except Exception, e:
+            users = None
 
-            group.members = ''
-            try:
-                users = User.query.filter_by(id=group.id).all()
-            except Exception, e:
-                users = None
+        if users is not None:
+            for user in users:
+                group.members = '%s, %s' % (group.members, user.name)
 
-            if users is not None:
-                for user in users:
-                    group.members = '%s, %s' % (group.members, user.name)
-
-        return render_template('dashboard/group_manager.html', groups=groups, type='list')
+    return render_template('dashboard/group_manager.html', groups=groups, type='list')
 
 
 @dashboard.route('/group/create', methods=("GET", "POST"))
@@ -417,29 +407,17 @@ def create_group_ctrl():
 
         return render_template('dashboard/group_manager.html', form=form, type='create')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        redirect_url = url_for('dashboard.create_group_ctrl')
+        group = Group(form.name.data, form.desc.data)
+        db.session.add(group)
+        db.session.commit()
 
-        if form.name.data == u'':
-            flash(u'Name can\'t be empty', 'error')
-        elif Group.query.filter_by(name=form.name.data).all():
-            flash(u'Current name is already in use', 'error')
-        elif not validate_name(form.name.data):
-            flash(u'Incorrect name format', 'error')
+        flash(u'Create group successfully', 'success')
+        return redirect(url_for('dashboard.list_group_ctrl'))
 
-        elif form.desc.data == u'':
-            flash(u'Desc can\'t be empty', 'error')
-
-        else:
-            group = Group(form.name.data, form.desc.data)
-            db.session.add(group)
-            db.session.commit()
-
-            flash(u'Create group successfully', 'success')
-            redirect_url = url_for('dashboard.list_group_ctrl')
-
-        return redirect(redirect_url)
+    else:
+        return redirect(url_for('dashboard.create_group_ctrl'))
 
 
 @dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
@@ -453,35 +431,27 @@ def edit_group_ctrl(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
-    form = GroupForm(name=group.name, desc=group.desc)
+    form = GroupForm(name=group.name, desc=group.desc, id=group.id)
 
     if request.method == 'GET':
 
         return render_template('dashboard/group_manager.html', form=form, type='edit')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        if form.name.data != group.name and form.name.data != u'':
-            if Group.query.filter_by(name=form.name.data).all():
-                flash(u'The current name is already in use', 'error')
-                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
-            elif not validate_name(form.name.data):
-                flash(u'Incorrect name format', 'error')
-                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
-            else:
-                group.name = form.name.data
+        if form.name.data != group.name:
+            group.name = form.name.data
 
-        if form.desc.data != group.name and form.desc.data != u'':
-            if Group.query.filter_by(desc=form.desc.data).all():
-                flash(u'The current desc is already in use', 'error')
-                return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
-            else:
-                group.desc = form.desc.data
+        if form.desc.data != group.name:
+            group.desc = form.desc.data
 
         db.session.commit()
 
         flash(u'Edit group successfully', 'success')
         return redirect(url_for('dashboard.list_group_ctrl'))
+
+    else:
+        return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
 
 
 @dashboard.route('/server/list')
@@ -493,19 +463,17 @@ def list_server_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    servers = Server.query.all()
 
-        servers = Server.query.all()
+    for server in servers:
 
-        for server in servers:
+        try:
+            group = Group.query.filter_by(id=server.group).first()
+            server.group_name = group.name
+        except Exception, e:
+            server.group_name = u'None'
 
-            try:
-                group = Group.query.filter_by(id=server.group).first()
-                server.group_name = group.name
-            except Exception, e:
-                server.group_name = u'None'
-
-        return render_template('dashboard/server_manager.html', servers=servers, type='list')
+    return render_template('dashboard/server_manager.html', servers=servers, type='list')
 
 
 @dashboard.route('/server/create', methods=("GET", "POST"))
@@ -523,42 +491,20 @@ def create_server_ctrl():
 
         return render_template('dashboard/server_manager.html', form=form, type='create')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        redirect_url = url_for('dashboard.create_server_ctrl')
+        server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
+                        form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
+                        form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
+                        form.memory_info.data)
+        db.session.add(server)
+        db.session.commit()
 
-        if form.group.data.id is None:
-            flash(u'Group can\'t be empty', 'error')
-        elif not Group.query.filter_by(id=form.group.data.id).all():
-            flash(u'The current group is not exist', 'error')
+        flash(u'Create server successfully', 'success')
+        return redirect(url_for('dashboard.list_server_ctrl'))
 
-        elif form.ext_address.data != u'' and Server.query.filter_by(ext_address=form.ext_address.data).all():
-            flash(u'The current ext_address is already in use', 'error')
-        elif form.ext_address.data != u'' and not validate_address(form.ext_address.data):
-            flash(u'Incorrect ext_address', 'error')
-
-        elif form.int_address.data != u'' and Server.query.filter_by(int_address=form.int_address.data).all():
-            flash(u'The current int_address is already in use', 'error')
-        elif form.int_address.data != u'' and not validate_address(form.int_address.data):
-            flash(u'Incorrect int_address', 'error')
-
-        elif form.ipmi_address.data != u'' and Server.query.filter_by(ipmi_address=form.ipmi_address.data).all():
-            flash(u'The current ipmi_address is already in use', 'error')
-        elif form.ipmi_address.data != u'' and not validate_address(form.ipmi_address.data):
-            flash(u'Incorrect ipmi_address', 'error')
-
-        else:
-            server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
-                            form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
-                            form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
-                            form.memory_info.data)
-            db.session.add(server)
-            db.session.commit()
-
-            flash(u'Create server successfully', 'success')
-            redirect_url = url_for('dashboard.list_server_ctrl')
-
-        return redirect(redirect_url)
+    else:
+        return redirect(url_for('dashboard.create_server_ctrl'))
 
 
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
@@ -576,88 +522,61 @@ def edit_server_ctrl(server_id):
 
     if request.method == 'GET':
 
-        return render_template('dashboard/server_manager.html', form=form, type='create')
+        return render_template('dashboard/server_manager.html', form=form, type='edit')
 
-    elif request.method == 'POST':
+    elif form.validate_on_submit():
 
-        redirect_url = url_for('dashboard.edit_server_ctrl', server_id=server_id)
+        if form.group.data is not None:
+            server.group = form.group.data.id
 
-        if form.group.data is not None and form.group.data.id != server.group:
-            if not Group.query.filter_by(id=form.group.data.id).all():
-                flash(u'The current group is not exist', 'error')
-                return  redirect(redirect_url)
-            else:
-                server.group = form.group.data.id
-
-        if form.desc.data != u'' and form.desc.data != server.desc:
+        if form.desc.data != server.desc:
             server.desc = form.desc.data
 
-        if form.ext_address.data != u'' and form.ext_address.data != server.ext_address:
-            if Server.query.filter_by(ext_address=form.ext_address.data).all():
-                flash(u'The current ext_address is exist', 'error')
-                return  redirect(redirect_url)
-            elif not validate_address(form.ext_address.data):
-                flash(u'Incorrect ext_address', 'error')
-                return  redirect(redirect_url)
-            else:
-                server.ext_address = form.ext_address.data
+        if form.ext_address.data != server.ext_address:
+            server.ext_address = form.ext_address.data
 
-        if form.int_address.data != u'' and form.int_address.data != server.int_address:
-            if Server.query.filter_by(int_address=form.int_address.data).all():
-                flash(u'The current int_address is exist', 'error')
-                return  redirect(redirect_url)
-            elif not validate_address(form.int_address.data):
-                flash(u'Incorrect int_address', 'error')
-                return  redirect(redirect_url)
-            else:
-                server.int_address = form.int_address.data
+        if form.int_address.data != server.int_address:
+            server.int_address = form.int_address.data
 
-        if form.ipmi_address.data != u'' and form.ipmi_address.data != server.ipmi_address:
-            if Server.query.filter_by(ipmi_address=form.ipmi_address.data).all():
-                flash(u'The current ipmi_address is exist', 'error')
-                return  redirect(redirect_url)
-            elif not validate_address(form.ipmi_address.data):
-                flash(u'Incorrect ipmi_address', 'error')
-                return  redirect(redirect_url)
-            else:
-                server.ipmi_address = form.ipmi_address.data
+        if form.ipmi_address.data != server.ipmi_address:
+            server.ipmi_address = form.ipmi_address.data
 
-        if form.other_address.data != u'' and form.other_address.data != server.other_address:
+        if form.other_address.data != server.other_address:
             server.other_address = form.other_address.data
 
-        if form.idc.data != u'' and form.idc.data != server.idc:
+        if form.idc.data != server.idc:
             server.idc = form.idc.data
 
-        if form.rack.data != u'' and form.rack.data != server.rack:
+        if form.rack.data != server.rack:
             server.rack = form.rack.data
 
-        if form.manufacturer.data != u'' and form.manufacturer.data != server.manufacturer:
+        if form.manufacturer.data != server.manufacturer:
             server.manufacturer = form.manufacturer.data
 
-        if form.model.data != u'' and form.model.data != server.model:
+        if form.model.data != server.model:
             server.model = form.model.data
 
-        if form.cpu_info.data != u'' and form.cpu_info.data != server.cpu_info:
+        if form.cpu_info.data != server.cpu_info:
             server.cpu_info = form.cpu_info.data
 
-        if form.disk_info.data != u'' and form.disk_info.data != server.disk_info:
+        if form.disk_info.data != server.disk_info:
             server.disk_info = form.disk_info.data
 
-        if form.memory_info.data != u'' and form.memory_info.data != server.memory_info:
+        if form.memory_info.data != server.memory_info:
             server.memory_info = form.memory_info.data
 
-        else:
-            server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
-                            form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
-                            form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
-                            form.memory_info.data)
-            db.session.add(server)
-            db.session.commit()
+        server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
+                        form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
+                        form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
+                        form.memory_info.data)
+        db.session.add(server)
+        db.session.commit()
 
-            flash(u'Edit server successfully', 'success')
-            redirect_url = url_for('dashboard.list_server_ctrl')
+        flash(u'Edit server successfully', 'success')
+        return redirect(url_for('dashboard.list_server_ctrl'))
 
-        return redirect(redirect_url)
+    else:
+        return redirect(url_for('dashboard.edit_server_ctrl', server_id=server_id))
 
 
 @dashboard.route('/acl/list')
@@ -669,38 +588,36 @@ def list_acl_ctrl():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
+    groups = Group.query.all()
 
-        groups = Group.query.all()
+    group_information = dict()
+    for group in groups:
+        group_information[unicode(group.id)] = group.desc
 
-        group_information = dict()
-        for group in groups:
-            group_information[unicode(group.id)] = group.desc
+    function_lists = list()
+    access_control_dicts = dict()
+    access_control_list = Permission.query.all()
 
-        function_lists = list()
-        access_control_dicts = dict()
-        access_control_list = AccessControl.query.all()
+    for access_control in access_control_list:
 
-        for access_control in access_control_list:
+        function = access_control.function
+        function_lists.append(function)
 
-            function = access_control.function
-            function_lists.append(function)
+        try:
+            access_rules = json.loads(access_control.access_rules)
+        except Exception, e:
+            access_rules = dict()
+
+        for (group_id, status) in access_rules.items():
 
             try:
-                access_rules = json.loads(access_control.access_rules)
-            except Exception, e:
-                access_rules = dict()
+                access_control_dicts[group_id][function] = status
+            except Exception:
+                access_control_dicts[group_id] = dict()
+                access_control_dicts[group_id][function] = status
 
-            for (group_id, status) in access_rules.items():
-
-                try:
-                    access_control_dicts[group_id][function] = status
-                except Exception:
-                    access_control_dicts[group_id] = dict()
-                    access_control_dicts[group_id][function] = status
-
-        return render_template('dashboard/acl_manager.html', function_lists=function_lists, type='list',
-                               group_information=group_information, access_control_dicts=access_control_dicts)
+    return render_template('dashboard/acl_manager.html', function_lists=function_lists, type='list',
+                           group_information=group_information, access_control_dicts=access_control_dicts)
 
 
 @dashboard.route('/acl/<function>/<group_id>/update/<int:status>')
@@ -712,8 +629,7 @@ def update_acl_status_ctrl(function, group_id, status):
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    default_redirect_url = url_for('dashboard.list_acl_ctrl')
-    access_control = AccessControl.query.filter_by(function=function).first()
+    access_control = Permission.query.filter_by(function=function).first()
 
     try:
         access_rules = json.loads(access_control.access_rules)
@@ -724,10 +640,10 @@ def update_acl_status_ctrl(function, group_id, status):
         access_rules[group_id] = status
     else:
         flash(u'Error ACL status', 'error')
-        return redirect(default_redirect_url)
+        return redirect(url_for('dashboard.list_acl_ctrl'))
 
     access_control.access_rules = json.dumps(access_rules)
     db.session.commit()
 
     flash(u'Update ACL successfully', 'success')
-    return redirect(default_redirect_url)
+    return redirect(url_for('dashboard.list_acl_ctrl'))

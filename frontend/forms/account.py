@@ -108,8 +108,11 @@ class EditUserForm(Form):
 class GroupForm(Form):
 
     next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', description=u'Unrepeatable. REGEX: <code>\'^[a-zA-Z0-9\_\-\.]{1,20}$\'</code>')
-    desc = TextField(u'Description')
+    name = TextField(u'Name', validators=[Required(message=u'Name is required'),
+                                          Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect name format'),
+                                          Unique(Group, Group.name, message=u'The current name is already in use')])
+    desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
 
     submit = SubmitField(u'Submit', id='submit')

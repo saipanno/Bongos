@@ -24,11 +24,11 @@
 # SOFTWARE.
 
 
-from flask import Flask, render_template, json
+from flask import Flask, json
 from flask.ext.login import current_user
 from flask.ext.principal import identity_loaded, Principal
 
-from frontend.models.dashboard import AccessControl
+from frontend.models.dashboard import Permission
 
 from frontend.extensions.database import db
 from frontend.extensions.login_manager import login
@@ -65,7 +65,7 @@ def configure_extensions(app):
     def on_identity_loaded(sender, identity):
 
         if hasattr(current_user, 'group'):
-            access_control_list = AccessControl.query.all()
+            access_control_list = Permission.query.all()
             for access_control in access_control_list:
 
                 access_rules = json.loads(access_control.access_rules)

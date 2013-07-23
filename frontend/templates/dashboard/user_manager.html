@@ -48,6 +48,7 @@
                                     <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
                                     <ul class="dropdown-menu pull-right" role="menu">
                                         <li><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> Edit</a></li>
+                                        <li class="divider"></li>
                                         <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status=0 if user.status else 1) }}">{{ ext.get_adverse_desc(user.status) }}</a></li>
                                         <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status="delete") }}"><i class="icon-remove"></i> Delete</a></li>
                                     </ul>

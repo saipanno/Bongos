@@ -30,7 +30,7 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from frontend.models.account import Group
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
 
-from frontend.extensions.utility import Unique
+from frontend.extensions.utility import Unique, BeInt
 
 
 class PreDefinedScriptForm(Form):
@@ -48,8 +48,7 @@ class PreDefinedScriptForm(Form):
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(PreDefinedScript, PreDefinedScript.name,
                                         message=u'The current name is already in use')])
-    desc = TextField(u'Description',
-                     validators=[Required(message=u'Script description is required')])
+    desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
     script = TextAreaField(u'Script', description=script_desc)
 
     submit = SubmitField(u'Submit', id='submit')
@@ -65,9 +64,10 @@ class SshConfigForm(Form):
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(SshConfig, SshConfig.name,
                                         message=u'The current name is already in use')])
-    desc = TextField(u'Description')
+    desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
     port = IntegerField(u'Port', default=22,
-                        validators=[Required(message=u'Port is required'),])
+                        validators=[Required(message=u'Port is required'),
+                                    BeInt(message=u'Port must be an integer')])
     username = TextField(u'Username', default=u'root',
                          validators=[Required(message=u'Username is required')])
     password = PasswordField(u'Password',
@@ -85,7 +85,7 @@ class ServerForm(Form):
 
     group = QuerySelectField(u'Group', query_factory=Group.query.all, get_label='desc',
                              validators=[Required(message=u'Group is required')])
-    desc = TextField(u'Server Description',)
+    desc = TextField(u'Server Description')
     ext_address = TextField(u'Ext Address',
                             validators=[IPAddress(),
                                         Unique(Server, Server.ext_address,
@@ -103,16 +103,13 @@ class ServerForm(Form):
     idc = TextField(u'IDC',
                     validators=[Required(message=u'IDC is required')])
     rack = TextField(u'Rack',
-                     validators=[Required(message=u'Rack is required')])
-    manufacturer = TextField(u'Manufacturer',
-                             validators=[Required(message=u'Manufacturer is required')])
-    model = TextField(u'Model',
-                      validators=[Required(message=u'Model is required')])
-    cpu_info = TextField(u'Cpu Model',
-                         validators=[Required(message=u'CPU model is required')])
-    disk_info = TextField(u'Disk Information',
-                          validators=[Required(message=u'Disk information is required')])
-    memory_info = TextField(u'Memory Information',
-                            validators=[Required(message=u'Memory information is required')])
+                     validators=[Required(message=u'Rack is required'),
+                                 Unique(Server, Server.rack,
+                                        message=u'The current rack is already in use')])
+    manufacturer = TextField(u'Manufacturer')
+    model = TextField(u'Model')
+    cpu_info = TextField(u'Cpu Model')
+    disk_info = TextField(u'Disk Information')
+    memory_info = TextField(u'Memory Information')
 
     submit = SubmitField(u'Submit', id='submit')

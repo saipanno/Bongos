@@ -25,7 +25,7 @@
 
 
 import re
-from flask.ext.wtf import ValidationError
+from flask.ext.wtf import StopValidation
 
 
 NAME_REGEX = u'^[a-zA-Z0-9\_\-\.]{1,20}$'
@@ -162,7 +162,7 @@ class Unique(object):
         check = self.model.query.filter(self.field == field.data).first()
         id = form.id.data if 'id' in form else None
         if check and (id is None or id != check.id):
-            raise ValidationError(self.message)
+            raise StopValidation(self.message)
 
 
 class UnChange(object):
@@ -177,4 +177,17 @@ class UnChange(object):
         check = self.model.query.filter_by(id=form.id.data).first()
 
         if check is not None and field.data != getattr(check, self.field):
-            raise ValidationError(self.message)
+            raise StopValidation(self.message)
+
+
+class BeInt(object):
+    """ validator that checks field uniqueness """
+    def __init__(self, message=None):
+        self.message = message if message else u'The current element is not an integer'
+
+    def __call__(self, field):
+
+        try:
+            int(field)
+        except (ValueError, TypeError):
+            raise StopValidation(self.message)
