@@ -26,12 +26,12 @@
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
     PasswordField, BooleanField, QuerySelectMultipleField
-from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email, EqualTo
+from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email
 
 from frontend.models.account import Group, User
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
 
-from frontend.extensions.utility import Unique, Depend, UnChange
+from frontend.extensions.utility import Unique, UnChange
 
 
 class PreDefinedScriptForm(Form):

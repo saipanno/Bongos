@@ -100,7 +100,7 @@ def create_predefined_script_ctrl():
     if request.method == 'GET':
         return render_template('dashboard/predefined_script.html', form=form, type='create')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         author = current_user.id
 
@@ -134,9 +134,17 @@ def edit_predefined_script_ctrl(script_id):
     if request.method == 'GET':
         return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
-        form.populate_obj(script)
+        if form.name.data != script.name:
+            script.name = form.name.data
+
+        if form.desc.data != script.desc:
+            script.desc = form.desc.data
+
+        if form.script != script.script:
+            script.script = form.script.data
+
         db.session.commit()
 
         flash(u'Update predefined script successfully.', 'success')
@@ -187,7 +195,7 @@ def create_user_ctrl():
     if request.method == 'GET':
         return render_template('dashboard/user_manager.html', form=form, type='create')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         groups = dict()
         for group in form.groups.data:
@@ -225,7 +233,7 @@ def edit_user_ctrl(user_id):
     if request.method == 'GET':
         return render_template('dashboard/user_manager.html', form=form, type='edit')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
@@ -236,7 +244,9 @@ def edit_user_ctrl(user_id):
         groups = dict()
         for group in form.groups.data:
             groups[group.id] = 1
-        user.groups = json.dumps(groups, ensure_ascii=False)
+        user_groups = json.dumps(groups, ensure_ascii=False)
+        if user_groups != user.groups:
+            user.groups = user_groups
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
@@ -312,7 +322,7 @@ def create_ssh_config_ctrl():
     if request.method == 'GET':
         return render_template('dashboard/ssh_config.html', form=form, type='create')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         ssh_config = SshConfig(form.username.data, form.desc.data, form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
@@ -347,9 +357,26 @@ def edit_ssh_config_ctrl(config_id):
     if request.method == 'GET':
         return render_template('dashboard/ssh_config.html', form=form, type='edit')
 
-    if form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
-        form.populate_obj(config)
+        if form.name.data != config.name:
+            config.name = form.name.data
+
+        if form.desc.data != config.desc:
+            config.desc = form.desc.data
+
+        if form.port.data != config.port:
+            config.port = form.port.data
+
+        if form.username.data != config.username:
+            config.username = form.username.data
+
+        if form.password.data != config.password:
+            config.password = form.password.data
+
+        if form.private_key.data != config.private_key:
+            config.private_key = form.private_key.data
+
         db.session.commit()
 
         flash(u'Edit ssh configuration successfully', 'success')
@@ -418,7 +445,7 @@ def create_group_ctrl():
 
         return render_template('dashboard/group_manager.html', form=form, type='create')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         group = Group(form.name.data, form.desc.data)
         db.session.add(group)
@@ -451,9 +478,14 @@ def edit_group_ctrl(group_id):
 
         return render_template('dashboard/group_manager.html', form=form, type='edit')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
-        form.populate_obj(group)
+        if form.name.data != group.name:
+            group.name = form.name.data
+
+        if form.desc.data != group.desc:
+            group.desc = form.desc.data
+
         db.session.commit()
 
         flash(u'Edit group successfully', 'success')
@@ -506,7 +538,7 @@ def create_server_ctrl():
 
         return render_template('dashboard/server_manager.html', form=form, type='create')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         groups = dict()
         for group in form.groups.data:
@@ -549,25 +581,50 @@ def edit_server_ctrl(server_id):
 
         return render_template('dashboard/server_manager.html', form=form, type='edit')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         groups = dict()
         for group in form.groups.data:
             groups[group.id] = 1
-        server.groups = json.dumps(groups, ensure_ascii=False)
+        server_groups = json.dumps(groups, ensure_ascii=False)
+        if server_groups != server.groups:
+            server.groups = server_groups
 
-        server.desc = form.desc.data
-        server.ext_address = form.ext_address.data
-        server.int_address = form.int_address.data
-        server.ipmi_address = form.ipmi_address.data
-        server.other_address = form.other_address.data
-        server.idc = form.idc.data
-        server.rack = form.rack.data
-        server.manufacturer = form.manufacturer.data
-        server.model = form.model.data
-        server.cpu_info = form.cpu_info.data
-        server.disk_info = form.disk_info.data
-        server.memory_info = form.memory_info.data
+        if form.desc.data != server.desc:
+            server.desc = form.desc.data
+
+        if form.ext_address.data != server.ext_address:
+            server.ext_address = form.ext_address.data
+
+        if form.int_address != server.int_address:
+            server.int_address = form.int_address.data
+
+        if form.ipmi_address != server.ipmi_address:
+            server.ipmi_address = form.ipmi_address.data
+
+        if form.other_address != server.other_address:
+            server.other_address = form.other_address.data
+
+        if form.idc.data != server.idc:
+            server.idc = form.idc.data
+
+        if form.rack.data != server.rack:
+            server.rack = form.rack.data
+
+        if form.manufacturer.data != server.manufacturer:
+            server.manufacturer = form.manufacturer.data
+
+        if form.model.data != server.model:
+            server.model = form.model.data
+
+        if form.cpu_info.data != server.cpu_info:
+            server.cpu_info = form.cpu_info.data
+
+        if form.disk_info.data != server.disk_info:
+            server.disk_info = form.disk_info.data
+
+        if form.memory_info.data != server.memory_info:
+            server.memory_info = form.memory_info.data
 
         db.session.commit()
 
