@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, HiddenField, BooleanField, PasswordField, SubmitField, QuerySelectField, \
+from flask.ext.wtf import Form, TextField, HiddenField, BooleanField, PasswordField, SubmitField, \
     IntegerField, QuerySelectMultipleField, HiddenInput, Required, EqualTo, Regexp, Email
 
 from frontend.models.account import User, Group

@@ -25,7 +25,7 @@
 
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    PasswordField, QuerySelectField, Required, Regexp, IPAddress
+    PasswordField, QuerySelectMultipleField, Required, Regexp, IPAddress
 
 from frontend.models.account import Group
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
@@ -82,8 +82,8 @@ class ServerForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    group = QuerySelectField(u'Group', query_factory=Group.query.all, get_label='desc',
-                             validators=[Required(message=u'Group is required')])
+    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group List is required')])
     desc = TextField(u'Server Description')
     ext_address = TextField(u'Ext Address',
                             validators=[IPAddress(message=u'Incorrect ip address format'),

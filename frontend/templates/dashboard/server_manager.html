@@ -51,8 +51,7 @@
                             <div class="dropdown related_menu">
                                 <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
                                 <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="#"><i class="icon-info-sign"></i> Show</a></li>
-                                    <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
+                                    <li><a href="{{ url_for('dashboard.edit_server_ctrl', server_id=server.id) }}"><i class="icon-edit"></i> Edit</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -102,7 +101,7 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    {{ ext.create_standard_field(form.group, class="select2 span4") }}
+                    {{ ext.create_standard_field(form.groups, class="select2 span4") }}
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
                     {{ ext.create_standard_field(form.other_address, class="span6") }}
@@ -142,7 +141,7 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    {{ ext.create_standard_field(form.group, class="select2 span4") }}
+                    {{ ext.create_standard_field(form.groups, class="select2 span4") }}
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
                     {{ ext.create_standard_field(form.other_address, class="span6") }}

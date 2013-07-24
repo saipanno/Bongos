@@ -70,7 +70,7 @@ class Server(db.Model):
     __tablename__ = 'server_assets_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    group = db.Column(db.Integer)
+    groups = db.Column(db.String(50))
     desc = db.Column(db.Text)
     ext_address = db.Column(db.String(250), unique=True)
     int_address = db.Column(db.String(250), unique=True)

@@ -479,11 +479,14 @@ def list_server_ctrl():
 
     for server in servers:
 
-        try:
-            group = Group.query.filter_by(id=server.group).first()
-            server.group_name = group.name
-        except Exception, e:
-            server.group_name = u'None'
+        group_name = ''
+        groups = json.loads(server.groups)
+        for group_id in groups.keys():
+
+            group = Group.query.filter_by(id=group_id).first()
+            group_name = '%s, %s' % (group_name, group.desc)
+
+        server.group_name = group_name[2:]
 
     return render_template('dashboard/server_manager.html', servers=servers, type='list')
 
@@ -505,10 +508,14 @@ def create_server_ctrl():
 
     elif form.validate_on_submit():
 
-        server = Server(form.group.data.id, form.desc.data, form.ext_address.data, form.int_address.data,
-                        form.ipmi_address.data, form.other_address.data, form.idc.data, form.rack.data,
-                        form.manufacturer.data, form.model.data, form.cpu_info.data, form.disk_info.data,
-                        form.memory_info.data)
+        groups = dict()
+        for group in form.groups.data:
+            groups[group.id] = 1
+
+        server = Server(json.dumps(groups, ensure_ascii=False), form.desc.data, form.ext_address.data,
+                        form.int_address.data, form.ipmi_address.data, form.other_address.data, form.idc.data,
+                        form.rack.data, form.manufacturer.data, form.model.data, form.cpu_info.data,
+                        form.disk_info.data, form.memory_info.data)
         db.session.add(server)
         db.session.commit()
 
@@ -533,7 +540,10 @@ def edit_server_ctrl(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
-    form = ServerForm(server)
+    form = ServerForm(desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
+                      ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
+                      rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
+                      disk_info=server.disk_info, memory_info=server.memory_info)
 
     if request.method == 'GET':
 
@@ -541,7 +551,24 @@ def edit_server_ctrl(server_id):
 
     elif form.validate_on_submit():
 
-        form.populate_obj(server)
+        groups = dict()
+        for group in form.groups.data:
+            groups[group.id] = 1
+        server.groups = json.dumps(groups, ensure_ascii=False)
+
+        server.desc = form.desc.data
+        server.ext_address = form.ext_address.data
+        server.int_address = form.int_address.data
+        server.ipmi_address = form.ipmi_address.data
+        server.other_address = form.other_address.data
+        server.idc = form.idc.data
+        server.rack = form.rack.data
+        server.manufacturer = form.manufacturer.data
+        server.model = form.model.data
+        server.cpu_info = form.cpu_info.data
+        server.disk_info = form.disk_info.data
+        server.memory_info = form.memory_info.data
+
         db.session.commit()
 
         flash(u'Edit server successfully', 'success')
