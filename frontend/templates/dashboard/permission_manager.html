@@ -1,13 +1,13 @@
 {% extends "dashboard/base.html" %}
 
-{% block active_dashboard_acl %}active{% endblock %}
+{% block active_dashboard_permission %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
             <li class="active">List</li>
         </ul>
 
@@ -15,7 +15,7 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">ACL Manager</a>
+                <a class="brand" href="#">Permission Manager</a>
             </div>
         </div>
 
@@ -46,7 +46,7 @@
                                     <td>{{ function }}</td>
                                     <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', group_id=group_id, function=function, status='disable' if status else 'enable') }}">
+                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, function=function, status='disable' if status else 'enable') }}">
                                             {{ ext.get_adverse_desc(status) }}
                                         </a>
                                     </td>

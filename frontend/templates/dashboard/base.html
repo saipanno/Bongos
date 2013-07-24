@@ -11,7 +11,7 @@
                 <li class="{% block active_dashboard_group %}{% endblock %}"><a href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a></li>
                 <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
                 <li class="nav-header">PERMISSION</li>
-                <li class="{% block active_dashboard_acl %}{% endblock %}"><a href="{{ url_for("dashboard.list_acl_ctrl") }}"><i class="icon-lock"></i> ACL</a></li>
+                <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.list_permission_ctrl") }}"><i class="icon-lock"></i> Permission</a></li>
                 <li class="nav-header">NODE</li>
                 <li class="{% block active_dashboard_idc %}{% endblock %}"><a href="#"><i class="icon-building"></i> IDC</a></li>
                 <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>

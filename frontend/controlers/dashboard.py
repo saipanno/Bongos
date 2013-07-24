@@ -640,9 +640,9 @@ def edit_server_ctrl(server_id):
 
 @dashboard.route('/permission/list')
 @login_required
-def list_acl_ctrl():
+def list_permission_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_acl_ctrl')
+    user_access = UserAccessPermission('dashboard.list_permission_ctrl')
     if not user_access.can():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
@@ -675,15 +675,15 @@ def list_acl_ctrl():
                 access_control_dicts[group_id] = dict()
                 access_control_dicts[group_id][function] = status
 
-    return render_template('dashboard/acl_manager.html', function_lists=function_lists, type='list',
+    return render_template('dashboard/permission_manager.html', function_lists=function_lists, type='list',
                            group_information=group_information, access_control_dicts=access_control_dicts)
 
 
 @dashboard.route('/permission/<group_id>/on/<function>/status/<status>')
 @login_required
-def update_acl_status_ctrl(group_id, function, status):
+def update_permission_ctrl(group_id, function, status):
 
-    user_access = UserAccessPermission('dashboard.update_acl_status_ctrl')
+    user_access = UserAccessPermission('dashboard.update_permission_ctrl')
     if not user_access.can():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
@@ -701,10 +701,10 @@ def update_acl_status_ctrl(group_id, function, status):
         access_rules[group_id] = 1
     else:
         flash(u'Error ACL status', 'error')
-        return redirect(url_for('dashboard.list_acl_ctrl'))
+        return redirect(url_for('dashboard.list_permission_ctrl'))
 
     access_control.access_rules = json.dumps(access_rules, ensure_ascii=False)
     db.session.commit()
 
     flash(u'Update ACL successfully', 'success')
-    return redirect(url_for('dashboard.list_acl_ctrl'))
+    return redirect(url_for('dashboard.list_permission_ctrl'))
