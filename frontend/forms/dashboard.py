@@ -25,7 +25,7 @@
 
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    PasswordField, QuerySelectMultipleField, Required, Regexp, IPAddress
+    PasswordField, QuerySelectMultipleField, Required, Optional, Regexp, IPAddress
 
 from frontend.models.account import Group
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
@@ -85,16 +85,19 @@ class ServerForm(Form):
     groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group List is required')])
     desc = TextField(u'Server Description')
-    ext_address = TextField(u'Ext Address',
-                            validators=[IPAddress(message=u'Incorrect ip address format'),
+    ext_address = TextField(u'Ext Address', description=u'',
+                            validators=[Optional(),
+                                        IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.ext_address,
                                                message=u'The current ext address is already in use')])
     int_address = TextField(u'Int Address',
-                            validators=[IPAddress(message=u'Incorrect ip address format'),
+                            validators=[Optional(),
+                                        IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.int_address,
                                                message=u'The current int address is already in use')])
     ipmi_address = TextField(u'IPMI Address',
-                             validators=[IPAddress(message=u'Incorrect ip address format'),
+                             validators=[Optional(),
+                                         IPAddress(message=u'Incorrect ip address format'),
                                          Unique(Server, Server.ipmi_address,
                                                 message=u'The current ipmi address is already in use')])
     other_address = TextField(u'Other Address',

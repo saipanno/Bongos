@@ -98,7 +98,7 @@ def user_logout_ctrl():
 def user_edit_settings_ctrl():
 
     user = current_user
-    form = EditUserForm(email=user.email, username=user.username, name=user.name)
+    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
     if request.method == 'GET':
         return render_template('account/change_settings.html', form=form, type='edit')
@@ -108,7 +108,7 @@ def user_edit_settings_ctrl():
         if form.name.data != user.name:
             user.name = form.name.data
 
-        if len(form.new_password.data) > 0 and not user.check_password(form.now_password.data):
+        if user.check_password(form.now_password.data):
             flash(u'Current password is incorrect', 'error')
             return redirect(url_for('account.user_edit_settings_ctrl'))
         else:

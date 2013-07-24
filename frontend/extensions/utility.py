@@ -28,6 +28,20 @@ import re
 from flask.ext.wtf import ValidationError
 
 
+def validate_address(address):
+
+    try:
+        octets = address.split('.')
+        if len(octets) != 4:
+            return False
+        for x in octets:
+            if not (0 <= int(x) <= 255):
+                return False
+    except ValueError:
+        return False
+    return True
+
+
 def format_address_list(address_list):
 
     """
@@ -100,29 +114,40 @@ def catch_errors(errors):
 
 class Unique(object):
     """ validator that checks field uniqueness """
-    def __init__(self, model, field, message=None):
+    def __init__(self, model, attr, message=None):
         self.model = model
-        self.field = field
+        self.attr = attr
         self.message = message if message else u'The current element value is already in use'
 
     def __call__(self, form, field):
 
-        check = self.model.query.filter(self.field == field.data).first()
+        check = self.model.query.filter(self.attr == field.data).first()
         id = form.id.data if 'id' in form else None
         if check and (id is None or id != check.id):
-            raise ValidationError(self.message)
+            raise ValidationError('%s: %s' % (self.message, field.data))
 
 
 class UnChange(object):
     """ validator that checks field unchange """
-    def __init__(self, model, field, message=None):
+    def __init__(self, model, attr, message=None):
         self.model = model
-        self.field = field
+        self.attr = attr
         self.message = message if message else u'The current element can not be modified'
 
     def __call__(self, form, field):
 
         check = self.model.query.filter_by(id=form.id.data).first()
+        if check is not None and field.data != getattr(check, self.attr):
+            raise ValidationError('%s: %s' % (self.message, field.data))
 
-        if check is not None and field.data != getattr(check, self.field):
+
+class Depend(object):
+    """ validator that checks field unchange """
+    def __init__(self, attr, message=None):
+        self.attr = attr
+        self.message = message if message else u'Dependent setting does not exist'
+
+    def __call__(self, form, field):
+
+        if hasattr(form, field) and not getattr(form, field):
             raise ValidationError(self.message)

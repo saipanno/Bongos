@@ -25,11 +25,11 @@
 
 
 from flask.ext.wtf import Form, TextField, HiddenField, BooleanField, PasswordField, SubmitField, \
-    IntegerField, QuerySelectMultipleField, HiddenInput, Required, EqualTo, Regexp, Email
+    IntegerField, QuerySelectMultipleField, HiddenInput, Required, EqualTo, Regexp, Email, Optional
 
 from frontend.models.account import User, Group
 
-from frontend.extensions.utility import Unique, UnChange
+from frontend.extensions.utility import Unique, UnChange, Depend
 
 
 class UserLoginForm(Form):
@@ -68,9 +68,8 @@ class CreateUserForm(Form):
                              validators=[Required(message=u'Password is required'),
                                          Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the password',
-                                     validators=[Required(message=u'Confirm Password is required'),
-                                                 EqualTo('password', message=u'Passwords must be the same')])
-    status = BooleanField(u'Status', description=u'Enable this user')
+                                     validators=[EqualTo('password', message=u'Passwords must be the same')])
+    status = BooleanField(u'Status', description=u'Check to enable this user')
 
     submit = SubmitField(u'Submit', id='submit')
 
@@ -97,9 +96,13 @@ class EditUserForm(Form):
                                       validators=[Required(message=u'Group is required')])
     now_password = PasswordField(u'Password')
     new_password = PasswordField(u'New Password', description=u'At least eight characters',
-                                 validators=[Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars')])
+                                 validators=[Optional(),
+                                             Regexp(u'(^.{8,20}$)|(^$)', message=u'Password are at least eight chars'),
+                                             Depend('now_password',
+                                                    message=u'Password is required when changing password')])
     confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the new password',
-                                     validators=[EqualTo('new_password', message=u'New passwords must be the same')])
+                                     validators=[Optional(),
+                                                 EqualTo('new_password', message=u'New passwords must be the same')])
 
     submit = SubmitField(u'Submit', id='submit')
 

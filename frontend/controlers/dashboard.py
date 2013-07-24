@@ -129,7 +129,7 @@ def edit_predefined_script_ctrl(script_id):
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
 
-    form = PreDefinedScriptForm(name=script.name, desc=script.desc, script=script.script)
+    form = PreDefinedScriptForm(id=script.id, name=script.name, desc=script.desc, script=script.script)
 
     if request.method == 'GET':
         return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
@@ -220,7 +220,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(email=user.email, username=user.username, name=user.name, id=user.id)
+    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
     if request.method == 'GET':
         return render_template('dashboard/user_manager.html', form=form, type='edit')
@@ -445,7 +445,7 @@ def edit_group_ctrl(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
-    form = GroupForm(name=group.name, desc=group.desc, id=group.id)
+    form = GroupForm(id=group.id, name=group.name, desc=group.desc)
 
     if request.method == 'GET':
 
@@ -540,7 +540,7 @@ def edit_server_ctrl(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
-    form = ServerForm(desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
+    form = ServerForm(id=server.id, desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
                       disk_info=server.disk_info, memory_info=server.memory_info)

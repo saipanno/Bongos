@@ -38,7 +38,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50))
     groups = db.Column(db.String(50))
-    password = db.Column(db.String(50))
+    passwd_hash = db.Column(db.String(50))
     status = db.Column(db.Integer)
 
     def __init__(self, email, username, name, groups, password, status):
@@ -47,14 +47,14 @@ class User(db.Model):
         self.username = username
         self.name = name
         self.groups = groups
-        self.password = generate_password_hash(password, salt_length=8)
+        self.passwd_hash = generate_password_hash(password, salt_length=8)
         self.status = status
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
     def update_password(self, new_password):
-        self.password = generate_password_hash(new_password, salt_length=8)
+        self.passwd_hash = generate_password_hash(new_password, salt_length=8)
 
     def is_authenticated(self):
         return True
