@@ -3,7 +3,7 @@
 {% block active_dashboard_user %}active{% endblock %}
 
 {% block main %}
-    <div class="span10">
+    <div class="span10" xmlns="http://www.w3.org/1999/html">
 
         {% if type == 'list' %}
 
@@ -49,7 +49,7 @@
                                     <ul class="dropdown-menu pull-right" role="menu">
                                         <li><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}"><i class="icon-edit"></i> Edit</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status=0 if user.status else 1) }}">{{ ext.get_adverse_desc(user.status) }}</a></li>
+                                        <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></li>
                                         <li><a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status="delete") }}"><i class="icon-remove"></i> Delete</a></li>
                                     </ul>
                                 </div>

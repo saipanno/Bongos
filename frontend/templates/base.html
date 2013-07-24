@@ -104,21 +104,15 @@
         <script src="{{ url_for('static', filename='bongos/bongos.js') }}"></script>
 
         <script type="text/javascript" charset="utf-8">
-            /* Table initialisation */
             $(document).ready(function() {
-                $('.datatable').dataTable( {
+                $(".select2").select2();
+                $(".datatable").dataTable( {
                     "sPaginationType": "bootstrap",
                     "sSortAsc": "header headerSortDown",
                     "sSortDesc": "header headerSortUp",
                     "sSortable": "header",
                     "sDom": "Rlfrtip"
                 } );
-            } );
-        </script>
-
-        <script type="text/javascript" charset="utf-8">
-            $(document).ready(function() {
-                $(".select2").select2();
             } );
         </script>
 

@@ -56,7 +56,7 @@ def user_login_ctrl():
     if request.method == 'GET':
         return render_template('account/login.html', form=form)
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         user = User.query.filter(or_(User.email == form.key_name.data, User.username == form.key_name.data)).first()
 
@@ -87,7 +87,7 @@ def user_login_ctrl():
         return redirect(url_for('account.user_login_ctrl'))
 
 
-@account.route('/logout', methods=['GET'])
+@account.route('/logout')
 def user_logout_ctrl():
 
     logout_user()
@@ -107,7 +107,7 @@ def user_edit_settings_ctrl():
     if request.method == 'GET':
         return render_template('account/change_settings.html', form=form, type='edit')
 
-    elif form.validate_on_submit():
+    elif request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data

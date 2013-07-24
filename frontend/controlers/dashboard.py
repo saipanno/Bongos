@@ -260,7 +260,7 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
 
 
-@dashboard.route('/user/<int:user_id>/update/<status>')
+@dashboard.route('/user/<int:user_id>/status/<status>')
 @login_required
 def update_user_status_ctrl(user_id, status):
 
@@ -271,12 +271,12 @@ def update_user_status_ctrl(user_id, status):
 
     user = User.query.filter_by(id=user_id).first()
 
-    if status == '0':
+    if status == 'disable':
         user.status = 0
         db.session.commit()
 
         flash(u'Disable user successfully', 'success')
-    elif status == '1':
+    elif status == 'enable':
         user.status = 1
         db.session.commit()
 
@@ -389,7 +389,7 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
 
-@dashboard.route('/logging_reader')
+@dashboard.route('/logging')
 @login_required
 def logging_reader_ctrl():
 
@@ -638,7 +638,7 @@ def edit_server_ctrl(server_id):
         return redirect(url_for('dashboard.edit_server_ctrl', server_id=server_id))
 
 
-@dashboard.route('/acl/list')
+@dashboard.route('/permission/list')
 @login_required
 def list_acl_ctrl():
 
@@ -679,9 +679,9 @@ def list_acl_ctrl():
                            group_information=group_information, access_control_dicts=access_control_dicts)
 
 
-@dashboard.route('/acl/<function>/<group_id>/update/<int:status>')
+@dashboard.route('/permission/<group_id>/on/<function>/status/<status>')
 @login_required
-def update_acl_status_ctrl(function, group_id, status):
+def update_acl_status_ctrl(group_id, function, status):
 
     user_access = UserAccessPermission('dashboard.update_acl_status_ctrl')
     if not user_access.can():
@@ -695,8 +695,10 @@ def update_acl_status_ctrl(function, group_id, status):
     except Exception, e:
         access_rules = dict()
 
-    if status == 0 or status == 1:
-        access_rules[group_id] = status
+    if status == 'disable':
+        access_rules[group_id] = 0
+    elif status == 'enable':
+        access_rules[group_id] = 1
     else:
         flash(u'Error ACL status', 'error')
         return redirect(url_for('dashboard.list_acl_ctrl'))

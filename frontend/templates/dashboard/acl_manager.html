@@ -46,7 +46,7 @@
                                     <td>{{ function }}</td>
                                     <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', function=function, group_id=group_id, status=0 if status else 1) }}">
+                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_acl_status_ctrl', group_id=group_id, function=function, status='disable' if status else 'enable') }}">
                                             {{ ext.get_adverse_desc(status) }}
                                         </a>
                                     </td>
