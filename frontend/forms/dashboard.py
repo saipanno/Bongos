@@ -138,9 +138,9 @@ class CreateUserForm(Form):
                                  Unique(User, User.name, message=u'The current name is already in use')])
     groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group List is required')])
-    password = TextField(u'Password', description=u'At least eight characters',
+    password = TextField(u'Password', description=u'At least five characters',
                          validators=[Required(message=u'Password is required'),
-                                     Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
+                                     Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
     status = BooleanField(u'Status', description=u'Check to enable this user')
 
     submit = SubmitField(u'Submit', id='submit')
@@ -166,8 +166,8 @@ class EditUserForm(Form):
                                  Unique(User, User.name, message=u'The current name is already in use')])
     groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])
-    password = TextField(u'Password', description=u'At least eight characters',
+    password = TextField(u'Password', description=u'At least five characters',
                          validators=[Optional(),
-                                     Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
+                                     Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
 
     submit = SubmitField(u'Submit', id='submit')

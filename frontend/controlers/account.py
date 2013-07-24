@@ -76,6 +76,10 @@ def user_login_ctrl():
             flash(u'Login successful', 'success')
             return redirect(default_next_page)
 
+        else:
+            flash(u'Current password is incorrect', 'error')
+            return redirect(url_for('account.user_login_ctrl'))
+
     else:
         messages = catch_errors(form.errors)
 
