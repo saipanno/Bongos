@@ -29,7 +29,7 @@ from flask import render_template, request, flash, redirect, url_for, Blueprint,
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
-from frontend.forms.account import UserLoginForm, EditUserForm
+from frontend.forms.account import UserLoginForm, EditSettingForm
 
 from frontend.models.account import User
 
@@ -98,7 +98,7 @@ def user_logout_ctrl():
 def user_edit_settings_ctrl():
 
     user = current_user
-    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name)
+    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
     if request.method == 'GET':
         return render_template('account/change_settings.html', form=form, type='edit')
@@ -108,7 +108,7 @@ def user_edit_settings_ctrl():
         if form.name.data != user.name:
             user.name = form.name.data
 
-        if user.check_password(form.now_password.data):
+        if not user.check_password(form.now_password.data):
             flash(u'Current password is incorrect', 'error')
             return redirect(url_for('account.user_edit_settings_ctrl'))
         else:

@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, HiddenField, BooleanField, PasswordField, SubmitField, \
-    IntegerField, QuerySelectMultipleField, HiddenInput, Required, EqualTo, Regexp, Email, Optional
+from flask.ext.wtf import Form, TextField, HiddenField, PasswordField, SubmitField, IntegerField, HiddenInput
+from flask.ext.wtf import Required, EqualTo, Regexp, Optional
 
 from frontend.models.account import User, Group
 
@@ -44,37 +44,7 @@ class UserLoginForm(Form):
     submit = SubmitField(u'Login', id='submit')
 
 
-class CreateUserForm(Form):
-
-    # TODO: NAME字段格式检查的中文支持
-
-    next_page = HiddenField()
-
-    email = TextField(u'Email', description=u'Unrepeatable.',
-                      validators=[Required(message=u'Email is required'),
-                                  Email(message=u'Incorrect email format'),
-                                  Unique(User, User.email, message=u'The current email is already in use')])
-    username = TextField(u'Username', description=u'Unrepeatable.',
-                         validators=[Required(message=u'Username is required'),
-                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
-                                     Unique(User, User.username, message=u'The current name is already in use')])
-    name = TextField(u'Name', description=u'Unrepeatable.',
-                     validators=[Required(message=u'Name is required'),
-                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
-                                 Unique(User, User.name, message=u'The current name is already in use')])
-    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
-                                      validators=[Required(message=u'Group List is required')])
-    password = PasswordField(u'Password', description=u'At least eight characters',
-                             validators=[Required(message=u'Password is required'),
-                                         Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
-    confirm_password = PasswordField(u'Confirm Password', description=u'Re-enter the password',
-                                     validators=[EqualTo('password', message=u'Passwords must be the same')])
-    status = BooleanField(u'Status', description=u'Check to enable this user')
-
-    submit = SubmitField(u'Submit', id='submit')
-
-
-class EditUserForm(Form):
+class EditSettingForm(Form):
 
     # TODO: NAME字段格式检查的中文支持
 
@@ -82,18 +52,14 @@ class EditUserForm(Form):
     id = IntegerField(widget=HiddenInput())
 
     email = TextField(u'Email', description=u'Can not be modified',
-                      validators=[Required(message=u'Email is required'),
-                                  UnChange(User, 'email', message=u'The current email can not be modified')])
+                      validators=[UnChange(User, 'email', message=u'The current email can not be modified')])
     username = TextField(u'Username', description=u'Can not be modified',
-                         validators=[Required(message=u'Username is required'),
-                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
-                                     UnChange(User, 'username', message=u'The current username can not be modified')])
+                         validators=[UnChange(User, 'username', message=u'The current username can not be modified')])
     name = TextField(u'Name', description=u'Unrepeatable.',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
-                                      validators=[Required(message=u'Group is required')])
+
     now_password = PasswordField(u'Password')
     new_password = PasswordField(u'New Password', description=u'At least eight characters',
                                  validators=[Optional(),

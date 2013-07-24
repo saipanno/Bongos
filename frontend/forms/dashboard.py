@@ -25,12 +25,13 @@
 
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    PasswordField, QuerySelectMultipleField, Required, Optional, Regexp, IPAddress
+    PasswordField, BooleanField, QuerySelectMultipleField
+from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email, EqualTo
 
-from frontend.models.account import Group
+from frontend.models.account import Group, User
 from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
 
-from frontend.extensions.utility import Unique
+from frontend.extensions.utility import Unique, Depend, UnChange
 
 
 class PreDefinedScriptForm(Form):
@@ -113,5 +114,60 @@ class ServerForm(Form):
     cpu_info = TextField(u'Cpu Model')
     disk_info = TextField(u'Disk Information')
     memory_info = TextField(u'Memory Information')
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class CreateUserForm(Form):
+
+    # TODO: NAME字段格式检查的中文支持
+
+    next_page = HiddenField()
+
+    email = TextField(u'Email', description=u'Unrepeatable.',
+                      validators=[Required(message=u'Email is required'),
+                                  Email(message=u'Incorrect email format'),
+                                  Unique(User, User.email, message=u'The current email is already in use')])
+    username = TextField(u'Username', description=u'Unrepeatable.',
+                         validators=[Required(message=u'Username is required'),
+                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
+                                     Unique(User, User.username, message=u'The current name is already in use')])
+    name = TextField(u'Name', description=u'Unrepeatable.',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
+                                 Unique(User, User.name, message=u'The current name is already in use')])
+    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group List is required')])
+    password = TextField(u'Password', description=u'At least eight characters',
+                         validators=[Required(message=u'Password is required'),
+                                     Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
+    status = BooleanField(u'Status', description=u'Check to enable this user')
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class EditUserForm(Form):
+
+    # TODO: NAME字段格式检查的中文支持
+
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
+
+    email = TextField(u'Email', description=u'Can not be modified',
+                      validators=[Required(message=u'Email is required'),
+                                  UnChange(User, 'email', message=u'The current email can not be modified')])
+    username = TextField(u'Username', description=u'Can not be modified',
+                         validators=[Required(message=u'Username is required'),
+                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
+                                     UnChange(User, 'username', message=u'The current username can not be modified')])
+    name = TextField(u'Name', description=u'Unrepeatable.',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
+                                 Unique(User, User.name, message=u'The current name is already in use')])
+    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
+    password = TextField(u'Password', description=u'At least eight characters',
+                         validators=[Optional(),
+                                     Regexp(u'^.{8,20}$', message=u'Password are at least eight chars')])
 
     submit = SubmitField(u'Submit', id='submit')

@@ -142,12 +142,12 @@ class UnChange(object):
 
 
 class Depend(object):
-    """ validator that checks field unchange """
+    """ validator that checks field depend on """
     def __init__(self, attr, message=None):
         self.attr = attr
         self.message = message if message else u'Dependent setting does not exist'
 
     def __call__(self, form, field):
 
-        if hasattr(form, field) and not getattr(form, field):
+        if hasattr(form, self.attr) and not getattr(form, self.attr).data:
             raise ValidationError(self.message)

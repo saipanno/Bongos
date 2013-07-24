@@ -34,8 +34,8 @@ from frontend.extensions.utility import catch_errors
 from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission
 
-from frontend.forms.account import CreateUserForm, EditUserForm, GroupForm
-from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm
+from frontend.forms.account import GroupForm
+from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -230,8 +230,8 @@ def edit_user_ctrl(user_id):
         if form.name.data != user.name:
             user.name = form.name.data
 
-        if len(form.new_password.data) > 0:
-            user.update_password(form.new_password.data)
+        if len(form.password.data) > 0:
+            user.update_password(form.password.data)
 
         groups = dict()
         for group in form.groups.data:

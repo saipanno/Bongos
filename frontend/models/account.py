@@ -51,7 +51,7 @@ class User(db.Model):
         self.status = status
 
     def check_password(self, password):
-        return check_password_hash(self.password, password)
+        return check_password_hash(self.passwd_hash, password)
 
     def update_password(self, new_password):
         self.passwd_hash = generate_password_hash(new_password, salt_length=8)
