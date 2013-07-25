@@ -44,7 +44,7 @@ class PreDefinedScriptForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', description=u'PreDefined Script name. Unrepeatable.',
+    name = TextField(u'Name', description=u'PreDefined Script name. Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(PreDefinedScript, PreDefinedScript.name,
@@ -60,7 +60,7 @@ class SshConfigForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', description=u'Ssh Config name. Unrepeatable.',
+    name = TextField(u'Name', description=u'Ssh Config name. Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(SshConfig, SshConfig.name,
@@ -83,28 +83,28 @@ class ServerForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    serial_number = TextField(u'Serial Number',
+    serial_number = TextField(u'Serial Number', description=u'Unique',
                               validators=[Optional(),
                                           Unique(Server, Server.serial_number,
                                                  message=u'The current serial number is already in use')])
-    assets_number = TextField(u'Assets Number',
+    assets_number = TextField(u'Assets Number', description=u'Unique',
                               validators=[Optional(),
                                           Unique(Server, Server.assets_number,
                                                  message=u'The current assets number is already in use')])
     groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group List is required')])
     desc = TextField(u'Server Description')
-    ext_address = TextField(u'Ext Address', description=u'',
+    ext_address = TextField(u'Ext Address', description=u'Unique',
                             validators=[Optional(),
                                         IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.ext_address,
                                                message=u'The current ext address is already in use')])
-    int_address = TextField(u'Int Address',
+    int_address = TextField(u'Int Address', description=u'Unique',
                             validators=[Optional(),
                                         IPAddress(message=u'Incorrect ip address format'),
                                         Unique(Server, Server.int_address,
                                                message=u'The current int address is already in use')])
-    ipmi_address = TextField(u'IPMI Address',
+    ipmi_address = TextField(u'IPMI Address', description=u'Unique',
                              validators=[Optional(),
                                          IPAddress(message=u'Incorrect ip address format'),
                                          Unique(Server, Server.ipmi_address,
@@ -113,7 +113,7 @@ class ServerForm(Form):
                               description=u'Other Address, split by <code>,</code>')
     idc = QuerySelectField(u'IDC', query_factory=IDC.query.all, get_label='name',
                            validators=[Required(message=u'IDC is required')])
-    rack = TextField(u'Rack',
+    rack = TextField(u'Rack', description=u'Unique',
                      validators=[Required(message=u'Rack is required'),
                                  Unique(Server, Server.rack,
                                         message=u'The current rack is already in use')])
@@ -132,15 +132,15 @@ class CreateUserForm(Form):
 
     next_page = HiddenField()
 
-    email = TextField(u'Email', description=u'Unrepeatable.',
+    email = TextField(u'Email', description=u'Unique',
                       validators=[Required(message=u'Email is required'),
                                   Email(message=u'Incorrect email format'),
                                   Unique(User, User.email, message=u'The current email is already in use')])
-    username = TextField(u'Username', description=u'Unrepeatable.',
+    username = TextField(u'Username', description=u'Unique',
                          validators=[Required(message=u'Username is required'),
                                      Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
                                      Unique(User, User.username, message=u'The current name is already in use')])
-    name = TextField(u'Name', description=u'Unrepeatable.',
+    name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
@@ -161,14 +161,14 @@ class EditUserForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    email = TextField(u'Email', description=u'Can not be modified',
+    email = TextField(u'Email', description=u'Unmodifiable',
                       validators=[Required(message=u'Email is required'),
                                   UnChange(User, 'email', message=u'The current email can not be modified')])
-    username = TextField(u'Username', description=u'Can not be modified',
+    username = TextField(u'Username', description=u'Unmodifiable',
                          validators=[Required(message=u'Username is required'),
                                      Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
                                      UnChange(User, 'username', message=u'The current username can not be modified')])
-    name = TextField(u'Name', description=u'Unrepeatable.',
+    name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])

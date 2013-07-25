@@ -55,7 +55,7 @@ class EditSettingForm(Form):
                       validators=[UnChange(User, 'email', message=u'The current email can not be modified')])
     username = TextField(u'Username', description=u'Can not be modified',
                          validators=[UnChange(User, 'username', message=u'The current username can not be modified')])
-    name = TextField(u'Name', description=u'Unrepeatable.',
+    name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
@@ -78,9 +78,9 @@ class GroupForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', validators=[Required(message=u'Name is required'),
-                                          Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect name format'),
-                                          Unique(Group, Group.name, message=u'The current name is already in use')])
+    name = TextField(u'Name', description=u'Unique',
+                     validators=[Required(message=u'Name is required'),
+                                 Unique(Group, Group.name, message=u'The current name is already in use')])
     desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
 
     submit = SubmitField(u'Submit', id='submit')
