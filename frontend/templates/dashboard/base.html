@@ -9,8 +9,8 @@
                 <li class="nav-header">AUTH</li>
                 <li class="{% block active_dashboard_user %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a></li>
                 <li class="{% block active_dashboard_group %}{% endblock %}"><a href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a></li>
-                <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-flag-checkered"></i> Permission</a></li>
                 <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
+                <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-flag-checkered"></i> Permission</a></li>
                 <li class="nav-header">NODE</li>
                 <li class="{% block active_dashboard_idc %}{% endblock %}"><a href="{{ url_for("dashboard.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a></li>
                 <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>

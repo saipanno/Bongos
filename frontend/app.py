@@ -68,11 +68,11 @@ def configure_extensions(app):
             access_control_list = Permission.query.all()
             for access_control in access_control_list:
 
-                access_rules = json.loads(access_control.access_rules)
-                for group_id in access_rules:
+                rules = json.loads(access_control.rules)
+                for group_id in rules:
                     for group_id_key in current_user.groups:
 
-                        if group_id_key == group_id and access_rules[group_id] == 1:
+                        if group_id_key == group_id and rules[group_id] == 1:
                             identity.provides.add(UserAccessNeed(access_control.function))
 
 

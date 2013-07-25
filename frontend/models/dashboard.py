@@ -112,13 +112,13 @@ class Permission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     desc = db.Column(db.String(250))
     function = db.Column(db.String(250), unique=True)
-    access_rules = db.Column(db.Text)
+    rules = db.Column(db.Text)
 
-    def __init__(self, desc, function, access_rules):
+    def __init__(self, desc, function, rules):
 
         self.desc = desc
         self.function = function
-        self.access_rules = access_rules
+        self.rules = rules
 
 
 class IDC(db.Model):

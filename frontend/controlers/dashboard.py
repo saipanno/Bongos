@@ -753,11 +753,11 @@ def show_permission_ctrl():
         permissions_handler.append(dict(id=permission_id, desc=permission_desc))
 
         try:
-            access_rules = json.loads(permission.access_rules)
+            rules = json.loads(permission.rules)
         except Exception, e:
-            access_rules = dict()
+            rules = dict()
 
-        for (group_id, status) in access_rules.items():
+        for (group_id, status) in rules.items():
 
             try:
                 group_permissions[group_id][permission_id] = status
@@ -778,22 +778,22 @@ def update_permission_ctrl(group_id, handler_id, status):
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    access_control = Permission.query.filter_by(id=handler_id).first()
+    permission = Permission.query.filter_by(id=handler_id).first()
 
     try:
-        access_rules = json.loads(access_control.access_rules)
+        rules = json.loads(permission.rules)
     except Exception, e:
-        access_rules = dict()
+        rules = dict()
 
     if status == 'disable':
-        access_rules[group_id] = 0
+        rules[group_id] = 0
     elif status == 'enable':
-        access_rules[group_id] = 1
+        rules[group_id] = 1
     else:
         flash(u'Error permission status', 'error')
         return redirect(url_for('dashboard.show_permission_ctrl'))
 
-    access_control.access_rules = json.dumps(access_rules, ensure_ascii=False)
+    permission.rules = json.dumps(rules, ensure_ascii=False)
     db.session.commit()
 
     flash(u'Update permission successfully', 'success')
