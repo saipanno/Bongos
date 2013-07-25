@@ -118,7 +118,11 @@
                     {{ form.hidden_tag() }}
 
                     <legend>
+                    {% if form.name.data %}
+                        Edit: {{ form.name.data }}
+                    {% else %}
                         Edit User
+                    {% endif %}
                     </legend>
 
                     <div class="box form-container row-fluid form-horizontal">
@@ -136,7 +140,8 @@
                     </div>
 
                     <div class="form-actions">
-                        {{ form.submit(class="btn btn-danger") }}
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('dashboard.update_user_status_ctrl', user_id=form.id.data, status="delete") }}" class="btn btn-danger pull-right"><i class="icon-remove"></i> Delete</a>
                     </div>
 
                 </form>

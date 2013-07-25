@@ -92,7 +92,7 @@
             <ul class="breadcrumb">
                 <li><a href="/">Home</a> <span class="divider">/</span></li>
                 <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
-                <li class="active">Create</li>
+                <li class="active">Edit</li>
             </ul>
 
             {{ ext.feedback_message() }}
@@ -103,7 +103,13 @@
                     {{ form.hidden_tag() }}
 
                     <legend>
+                    {% if form.desc.data %}
+                        Edit: {{ form.desc.data }}
+                    {% elif form.name.data %}
+                        Edit: {{ form.name.data }}
+                    {% else %}
                         Edit Group
+                    {% endif %}
                     </legend>
 
                     <div class="box form-container row-fluid form-horizontal">
@@ -115,7 +121,8 @@
                     </div>
 
                     <div class="form-actions">
-                        {{ form.submit(class="btn btn-danger") }}
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('dashboard.delete_group_ctrl', group_id=form.id.data) }}" class="btn btn-danger pull-right"><i class="icon-remove"></i> Delete</a>
                     </div>
 
                 </form>

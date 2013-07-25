@@ -70,7 +70,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ script.name }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
+                    <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id) }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
                 </div>
             </div>
 
@@ -128,7 +128,13 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
+                {% if form.desc.data %}
+                    Edit: {{ form.desc.data }}
+                {% elif form.name.data %}
+                    Edit: {{ form.name.data }}
+                {% else %}
                     Edit PreDefined Script
+                {% endif %}
                 </legend>
 
                 <div class="box form-container row-fluid form-horizontal">
@@ -142,7 +148,8 @@
                 </div>
 
                 <div class="form-actions">
-                    {{ form.submit(class="btn btn-danger") }}
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('dashboard.delete_predefined_script_ctrl', script_id=script.id) }}" class="btn btn-danger pull-right"><i class="icon-remove"></i> Delete</a>
                 </div>
 
             </form>

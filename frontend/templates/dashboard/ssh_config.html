@@ -114,7 +114,13 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Edit Ssh Config
+                    {% if form.desc.data %}
+                        Edit: {{ form.desc.data }}
+                    {% elif form.name.data %}
+                        Edit: {{ form.name.data }}
+                    {% else %}
+                        Edit Ssh Config
+                    {% endif %}
                 </legend>
 
                 <div class="box form-container row-fluid form-horizontal">
@@ -134,7 +140,8 @@
                 </div>
 
                 <div class="form-actions">
-                    {{ form.submit(class="btn btn-danger") }}
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('dashboard.delete_ssh_config_ctrl', config_id=form.id.data) }}" class="btn btn-danger pull-right"><i class="icon-remove"></i> Delete</a>
                 </div>
 
             </form>

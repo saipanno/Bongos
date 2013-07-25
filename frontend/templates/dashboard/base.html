@@ -12,6 +12,7 @@
                 <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
                 <li class="nav-header">PERMISSION</li>
                 <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.list_permission_ctrl") }}"><i class="icon-lock"></i> Permission</a></li>
+                <li class="{% block active_dashboard_permission_desc %}{% endblock %}"><a href="#"><i class="icon-lock"></i> Permission Desc</a></li>
                 <li class="nav-header">NODE</li>
                 <li class="{% block active_dashboard_idc %}{% endblock %}"><a href="{{ url_for("dashboard.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a></li>
                 <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>

@@ -158,6 +158,26 @@ def edit_predefined_script_ctrl(script_id):
         return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
 
 
+@dashboard.route('/predefined_script/<int:script_id>/delete')
+@login_required
+def delete_predefined_script_ctrl(script_id):
+
+    user_access = UserAccessPermission('dashboard.delete_predefined_script_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    script = PreDefinedScript.query.filter_by(id=script_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(script)
+    db.session.commit()
+
+    flash(u'Delete predefined script successfully.', 'success')
+    return redirect(url_for('dashboard.list_predefined_script_ctrl'))
+
+
 @dashboard.route('/user/list')
 @login_required
 def list_user_ctrl():
@@ -390,6 +410,26 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
 
 
+@dashboard.route('/ssh_config/<int:config_id>/delete')
+@login_required
+def delete_ssh_config_ctrl(config_id):
+
+    user_access = UserAccessPermission('dashboard.delete_ssh_config_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    config = SshConfig.query.filter_by(id=config_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(config)
+    db.session.commit()
+
+    flash(u'Delete ssh configuration successfully', 'success')
+    return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+
+
 @dashboard.route('/logging')
 @login_required
 def logging_reader_ctrl():
@@ -497,6 +537,26 @@ def edit_group_ctrl(group_id):
 
         flash(messages, 'error')
         return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
+
+
+@dashboard.route('/group/<int:group_id>/delete')
+@login_required
+def delete_group_ctrl(group_id):
+
+    user_access = UserAccessPermission('dashboard.delete_group_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    group = Group.query.filter_by(id=group_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(group)
+    db.session.commit()
+
+    flash(u'Edit group successfully', 'success')
+    return redirect(url_for('dashboard.list_group_ctrl'))
 
 
 @dashboard.route('/server/list')
@@ -646,6 +706,26 @@ def edit_server_ctrl(server_id):
 
         flash(messages, 'error')
         return redirect(url_for('dashboard.edit_server_ctrl', server_id=server_id))
+
+
+@dashboard.route('/group/<int:server_id>/delete')
+@login_required
+def delete_server_ctrl(server_id):
+
+    user_access = UserAccessPermission('dashboard.delete_server_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    server = Server.query.filter_by(id=server_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(server)
+    db.session.commit()
+
+    flash(u'Edit server successfully', 'success')
+    return redirect(url_for('dashboard.list_server_ctrl'))
 
 
 @dashboard.route('/permission/list')
@@ -803,3 +883,23 @@ def edit_idc_ctrl(idc_id):
 
         flash(messages, 'error')
         return redirect(url_for('dashboard.edit_idc_ctrl', idc_id=idc_id))
+
+
+@dashboard.route('/group/<int:idc_id>/delete')
+@login_required
+def delete_idc_ctrl(idc_id):
+
+    user_access = UserAccessPermission('dashboard.delete_idc_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    idc = IDC.query.filter_by(id=idc_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(idc)
+    db.session.commit()
+
+    flash(u'Edit idc successfully', 'success')
+    return redirect(url_for('dashboard.list_idc_ctrl'))
