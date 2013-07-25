@@ -27,30 +27,21 @@
         <table class="table table-hover table-bordered table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>NAME</th>
-                    <th>DESC</th>
-                    <th>AUTHOR</th>
+                    <th>PreDefined ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Author</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for script in scripts %}
                     <tr>
-                        <td>
-                            <a href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id) }}" title="view">
-                                {{ script.name }}
-                            </a>
-                        </td>
+                        <td><a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" title="Edit PreDefined Script">{{ script.id }}</a></td>
+                        <td>{{ script.name }}</td>
                         <td>{{ script.desc }}</td>
                         <td>{{ script.author_name }}</td>
-                        <td>
-                            <div class="dropdown related_menu">
-                                <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}"><i class="icon-edit"></i> Edit</a></li>
-                                </ul>
-                            </div>
-                        </td>
+                        <td><a class="btn btn-mini" href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id) }}"><i class="icon-eye-open"></i> Show</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -70,7 +61,7 @@
             <div class="navbar-inner">
                 <a class="brand" href="#">{{ script.name }}</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id) }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
+                    <a class="btn btn-primary" href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id) }}"><i class="icon-plus icon-white"></i> Edit Script</a>
                 </div>
             </div>
 
@@ -103,7 +94,7 @@
 
                     {{ ext.create_standard_field(form.desc, class="span6") }}
 
-                    {{ ext.create_standard_field(form.script, class="span6", rows="10") }}
+                    {{ ext.create_standard_field(form.script, class="span8", rows="10") }}
 
                 </div>
 
@@ -129,9 +120,9 @@
 
                 <legend>
                 {% if form.desc.data %}
-                    Edit: {{ form.desc.data }}
+                    {{ form.desc.data }}
                 {% elif form.name.data %}
-                    Edit: {{ form.name.data }}
+                    {{ form.name.data }}
                 {% else %}
                     Edit PreDefined Script
                 {% endif %}
@@ -143,7 +134,7 @@
 
                     {{ ext.create_standard_field(form.desc, class="span6") }}
 
-                    {{ ext.create_standard_field(form.script, class="span6", rows="10") }}
+                    {{ ext.create_standard_field(form.script, class="span8", rows="10") }}
 
                 </div>
 

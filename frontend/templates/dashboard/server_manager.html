@@ -27,20 +27,22 @@
         <table class="table table-hover table-bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
+                    <th>Server ID</th>
                     <th>Assets Number</th>
-                    <th>EXT ADDRESS</th>
-                    <th>INT ADDRESS</th>
-                    <th>GROUP</th>
+                    <th>Ext Address</th>
+                    <th>Int Address</th>
+                    <th>Group</th>
                     <th>IDC</th>
-                    <th>RACK</th>
-                    <th>MANUFACTURER</th>
-                    <th>MODEL</th>
+                    <th>Rack</th>
+                    <th>Manufacturer</th>
+                    <th>Model</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for server in servers %}
                     <tr>
+                        <td><a href="{{ url_for('dashboard.edit_server_ctrl', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
                         <td>{{ server.assets_number }}</td>
                         <td>{{ server.ext_address }}</td>
                         <td>{{ server.int_address }}</td>
@@ -52,9 +54,6 @@
                         <td>
                             <div class="dropdown related_menu">
                                 <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="{{ url_for('dashboard.edit_server_ctrl', server_id=server.id) }}"><i class="icon-edit"></i> Edit</a></li>
-                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -147,7 +146,7 @@
 
                 <legend>
                 {% if form.desc.data %}
-                    Edit: {{ form.desc.data }}
+                    {{ form.desc.data }}
                 {% else %}
                     Edit Server
                 {% endif %}

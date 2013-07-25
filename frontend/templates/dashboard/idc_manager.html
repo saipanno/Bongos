@@ -27,16 +27,18 @@
             <table class="table table-hover table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th>name</th>
-                        <th>desc</th>
-                        <th>operators</th>
-                        <th>address</th>
+                        <th>IDC ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Operators</th>
+                        <th>Address</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for idc in idcs %}
                         <tr>
+                            <td><a href="{{ url_for('dashboard.edit_idc_ctrl', idc_id=idc.id) }}" title="Edit IDC">{{ idc.id }}</a></td>
                             <td>{{ idc.name }}</td>
                             <td>{{ idc.desc }}</td>
                             <td>{{ idc.operators }}</td>
@@ -44,9 +46,6 @@
                             <td>
                                 <div class="dropdown related_menu">
                                     <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="{{ url_for('dashboard.edit_idc_ctrl', idc_id=idc.id) }}"><i class="icon-edit"></i> Edit</a></li>
-                                    </ul>
                                 </div>
                             </td>
                         </tr>
@@ -110,9 +109,9 @@
 
                     <legend>
                     {% if form.desc.data %}
-                        Edit: {{ form.desc.data }}
+                        {{ form.desc.data }}
                     {% elif form.name.data %}
-                        Edit: {{ form.name.data }}
+                        {{ form.name.data }}
                     {% else %}
                         Edit IDC
                     {% endif %}

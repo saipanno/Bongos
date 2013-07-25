@@ -65,7 +65,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
+                <li class="#"><a href="#">Permission Handler Manager</a><span class="divider">/</span></li>
                 <li class="active">List</li>
             </ul>
 
@@ -73,24 +73,30 @@
 
             <div class="navbar">
                 <div class="navbar-inner">
-                    <a class="brand" href="#">Permission Manager</a>
+                    <a class="brand" href="#">Permission Handler Manager</a>
                 </div>
             </div>
 
             <table class="table table-hover table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>function</th>
-                        <th>desc</th>
+                        <th>Permission ID</th>
+                        <th>Function</th>
+                        <th>Description</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for permission in permissions %}
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_handler_ctrl', handler_id=permission.id) }}">{{ permission.id }}</a></td>
+                            <td><a href="{{ url_for('dashboard.edit_handler_ctrl', handler_id=permission.id) }}" title="Edit Permission Handler">{{ permission.id }}</a></td>
                             <td>{{ permission.function }}</td>
                             <td>{{ permission.desc }}</td>
+                            <td>
+                                <div class="dropdown related_menu">
+                                    <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -100,7 +106,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
+                <li class="#"><a href="#">Permission Handler Manager</a><span class="divider">/</span></li>
                 <li class="active">Create</li>
             </ul>
 
@@ -112,7 +118,7 @@
                     {{ form.hidden_tag() }}
 
                     <legend>
-                        Create Permission
+                        Create Permission Handler
                     </legend>
 
                     <div class="box form-container row-fluid form-horizontal">
@@ -135,7 +141,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
+                <li class="#"><a href="#">Permission Handler Manager</a><span class="divider">/</span></li>
                 <li class="active">Edit</li>
             </ul>
 
@@ -148,9 +154,9 @@
 
                     <legend>
                     {% if form.desc.data %}
-                        Edit: {{ form.desc.data }}
+                        {{ form.desc.data }}
                     {% else %}
-                        Edit Permission
+                        Edit Permission Handler
                     {% endif %}
                     </legend>
 
