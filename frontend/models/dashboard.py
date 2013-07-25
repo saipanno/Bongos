@@ -67,9 +67,11 @@ class PreDefinedScript(db.Model):
 
 class Server(db.Model):
 
-    __tablename__ = 'server_assets_lists'
+    __tablename__ = 'server_lists'
 
     id = db.Column(db.Integer, primary_key=True)
+    serial_number = db.Column(db.String(50))
+    assets_number = db.Column(db.String(50))
     groups = db.Column(db.String(50))
     desc = db.Column(db.Text)
     ext_address = db.Column(db.String(250), unique=True)
@@ -84,8 +86,10 @@ class Server(db.Model):
     disk_info = db.Column(db.Text)
     memory_info = db.Column(db.Text)
 
-    def __init__(self, group, desc, ext_address, int_address, ipmi_address, other_address, idc, rack,
-                 manufacturer, model, cpu_info, disk_info, memory_info):
+    def __init__(self, serial_number, assets_number, group, desc, ext_address, int_address, ipmi_address, other_address,
+                 idc, rack, manufacturer, model, cpu_info, disk_info, memory_info):
+        self.serial_number = serial_number
+        self.assets_number = assets_number
         self.group = group
         self.desc = desc
         self.ext_address = ext_address
@@ -113,3 +117,21 @@ class Permission(db.Model):
 
         self.function = function
         self.access_rules = access_rules
+
+
+class IDC(db.Model):
+
+    __tablename__ = 'idc_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(50))
+    operators = db.Column(db.String(50))
+    address = db.Column(db.Text)
+
+    def __init__(self, name, desc, operators, address):
+
+        self.name = name
+        self.desc = desc
+        self.operators = operators
+        self.address = address

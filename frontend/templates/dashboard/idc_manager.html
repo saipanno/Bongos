@@ -1,0 +1,139 @@
+{% extends "dashboard/base.html" %}
+
+{% block active_dashboard_idc %}active{% endblock %}
+
+{% block main %}
+    <div class="span10">
+
+        {% if type == 'list' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                <li class="active">List</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <a class="brand" href="#">IDC Manager</a>
+                    <div class="btn-group pull-right">
+                        <a href="{{ url_for('dashboard.create_idc_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add IDC</a>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>desc</th>
+                        <th>operators</th>
+                        <th>address</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for idc in idcs %}
+                        <tr>
+                            <td>{{ idc.name }}</td>
+                            <td>{{ idc.desc }}</td>
+                            <td>{{ idc.operators }}</td>
+                            <td>{{ idc.address }}</td>
+                            <td>
+                                <div class="dropdown related_menu">
+                                    <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="{{ url_for('dashboard.edit_idc_ctrl', idc_id=idc.id) }}"><i class="icon-edit"></i> Edit</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% elif type == 'create' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                <li class="active">Create</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="tabbable">
+                <form method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Create IDC
+                    </legend>
+
+                    <div class="box form-container row-fluid form-horizontal">
+
+                        {{ ext.create_standard_field(form.name) }}
+
+                        {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.operators) }}
+
+                        {{ ext.create_standard_field(form.address) }}
+
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
+
+        {% elif type == 'edit' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                <li class="active">Create</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="tabbable">
+                <form method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Edit IDC
+                    </legend>
+
+                    <div class="box form-container row-fluid form-horizontal">
+
+                        {{ ext.create_standard_field(form.name) }}
+
+                        {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.operators) }}
+
+                        {{ ext.create_standard_field(form.address) }}
+
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

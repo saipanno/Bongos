@@ -25,11 +25,11 @@
 
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    PasswordField, BooleanField, QuerySelectMultipleField
+    PasswordField, BooleanField, QuerySelectField, QuerySelectMultipleField
 from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email
 
 from frontend.models.account import Group, User
-from frontend.models.dashboard import PreDefinedScript, SshConfig, Server
+from frontend.models.dashboard import PreDefinedScript, SshConfig, Server, IDC
 
 from frontend.extensions.utility import Unique, UnChange
 
@@ -83,6 +83,14 @@ class ServerForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
+    serial_number = TextField(u'Serial Number',
+                              validators=[Optional(),
+                                          Unique(Server, Server.serial_number,
+                                                 message=u'The current serial number is already in use')])
+    assets_number = TextField(u'Assets Number',
+                              validators=[Optional(),
+                                          Unique(Server, Server.assets_number,
+                                                 message=u'The current assets number is already in use')])
     groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group List is required')])
     desc = TextField(u'Server Description')
@@ -103,8 +111,8 @@ class ServerForm(Form):
                                                 message=u'The current ipmi address is already in use')])
     other_address = TextField(u'Other Address',
                               description=u'Other Address, split by <code>,</code>')
-    idc = TextField(u'IDC',
-                    validators=[Required(message=u'IDC is required')])
+    idc = QuerySelectField(u'IDC', query_factory=IDC.query.all, get_label='name',
+                           validators=[Required(message=u'IDC is required')])
     rack = TextField(u'Rack',
                      validators=[Required(message=u'Rack is required'),
                                  Unique(Server, Server.rack,
@@ -169,5 +177,19 @@ class EditUserForm(Form):
     password = TextField(u'Password', description=u'At least five characters',
                          validators=[Optional(),
                                      Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class IDCForm(Form):
+
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
+
+    name = TextField(u'Name', validators=[Required(message=u'Name is required'),
+                                          Regexp(u'^[a-zA-Z0-9\_\-\.]{3,20}$', message=u'Incorrect name format')])
+    desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
+    operators = TextField(u'Operators', validators=[Required(message=u'Operators is required')])
+    address = TextField(u'Address', validators=[Required(message=u'Address is required')])
 
     submit = SubmitField(u'Submit', id='submit')

@@ -25,17 +25,18 @@
 
 
 from sqlalchemy import exc
-from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json, abort
+from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
 from frontend.extensions.utility import catch_errors
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission
+from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission, IDC
 
 from frontend.forms.account import GroupForm
-from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm
+from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
+    IDCForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -517,8 +518,10 @@ def list_server_ctrl():
 
             group = Group.query.filter_by(id=group_id).first()
             group_name = '%s, %s' % (group_name, group.desc)
-
         server.group_name = group_name[2:]
+
+        idc = IDC.query.filter_by(id=server.id).first()
+        server.idc_name = idc.name
 
     return render_template('dashboard/server_manager.html', servers=servers, type='list')
 
@@ -544,10 +547,10 @@ def create_server_ctrl():
         for group in form.groups.data:
             groups[group.id] = 1
 
-        server = Server(json.dumps(groups, ensure_ascii=False), form.desc.data, form.ext_address.data,
-                        form.int_address.data, form.ipmi_address.data, form.other_address.data, form.idc.data,
-                        form.rack.data, form.manufacturer.data, form.model.data, form.cpu_info.data,
-                        form.disk_info.data, form.memory_info.data)
+        server = Server(form.serial_number.data, form.assets_number.data, json.dumps(groups, ensure_ascii=False),
+                        form.desc.data, form.ext_address.data, form.int_address.data, form.ipmi_address.data,
+                        form.other_address.data, form.idc.data.id, form.rack.data, form.manufacturer.data,
+                        form.model.data, form.cpu_info.data, form.disk_info.data, form.memory_info.data)
         db.session.add(server)
         db.session.commit()
 
@@ -572,7 +575,8 @@ def edit_server_ctrl(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
-    form = ServerForm(id=server.id, desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
+    form = ServerForm(id=server.id, serial_number=server.serial_number, assets_number=server.assets_number,
+                      desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
                       disk_info=server.disk_info, memory_info=server.memory_info)
@@ -582,6 +586,12 @@ def edit_server_ctrl(server_id):
         return render_template('dashboard/server_manager.html', form=form, type='edit')
 
     elif request.method == 'POST' and form.validate():
+
+        if form.serial_number.data != server.serial_number:
+            server.serial_number = form.serial_number.data
+
+        if form.assets_number.data != server.assets_number:
+            server.assets_number = form.assets_number.data
 
         groups = dict()
         for group in form.groups.data:
@@ -605,8 +615,8 @@ def edit_server_ctrl(server_id):
         if form.other_address != server.other_address:
             server.other_address = form.other_address.data
 
-        if form.idc.data != server.idc:
-            server.idc = form.idc.data
+        if form.idc.data.id != server.idc:
+            server.idc = form.idc.data.id
 
         if form.rack.data != server.rack:
             server.rack = form.rack.data
@@ -708,3 +718,88 @@ def update_permission_ctrl(group_id, function, status):
 
     flash(u'Update ACL successfully', 'success')
     return redirect(url_for('dashboard.list_permission_ctrl'))
+
+
+@dashboard.route('/idc/list')
+@login_required
+def list_idc_ctrl():
+
+    user_access = UserAccessPermission('dashboard.list_idc_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    idcs = IDC.query.all()
+
+    return render_template('dashboard/idc_manager.html', idcs=idcs, type='list')
+
+
+@dashboard.route('/idc/create', methods=("GET", "POST"))
+@login_required
+def create_idc_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_idc_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    form = IDCForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/idc_manager.html', form=form, type='create')
+
+    elif request.method == 'POST' and form.validate():
+
+        group = IDC(form.name.data, form.desc.data, form.operators.data, form.address.data)
+        db.session.add(group)
+        db.session.commit()
+
+        flash(u'Create IDC successfully', 'success')
+        return redirect(url_for('dashboard.list_idc_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_idc_ctrl'))
+
+
+@dashboard.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_idc_ctrl(idc_id):
+
+    user_access = UserAccessPermission('dashboard.edit_idc_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    idc = IDC.query.filter_by(id=idc_id).first()
+
+    form = IDCForm(id=idc.id, name=idc.name, desc=idc.desc, operators=idc.operators, address=idc.address)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/idc_manager.html', form=form, type='edit')
+
+    elif request.method == 'POST' and form.validate():
+
+        if form.name.data != idc.name:
+            idc.name = form.name.data
+
+        if form.operators.data != idc.operators:
+            idc.operators = form.operators.data
+
+        if form.address.data != idc.address:
+            idc.address = form.address.data
+
+        db.session.commit()
+
+        flash(u'Edit IDC successfully', 'success')
+        return redirect(url_for('dashboard.list_idc_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.edit_idc_ctrl', idc_id=idc_id))

@@ -27,6 +27,7 @@
         <table class="table table-hover table-bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
+                    <th>Assets Number</th>
                     <th>EXT ADDRESS</th>
                     <th>INT ADDRESS</th>
                     <th>GROUP</th>
@@ -40,10 +41,11 @@
             <tbody>
                 {% for server in servers %}
                     <tr>
+                        <td>{{ server.assets_number }}</td>
                         <td>{{ server.ext_address }}</td>
                         <td>{{ server.int_address }}</td>
                         <td>{{ server.group_name }}</td>
-                        <td>{{ server.idc }}</td>
+                        <td>{{ server.idc_name }}</td>
                         <td>{{ server.rack }}</td>
                         <td>{{ server.manufacturer }}</td>
                         <td>{{ server.model }}</td>
@@ -103,12 +105,14 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
+                    {{ ext.create_standard_field(form.serial_number) }}
+                    {{ ext.create_standard_field(form.assets_number) }}
                     {{ ext.create_standard_field(form.groups, class="select2 span4") }}
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
                     {{ ext.create_standard_field(form.ipmi_address) }}
                     {{ ext.create_standard_field(form.other_address, class="span6") }}
-                    {{ ext.create_standard_field(form.idc) }}
+                    {{ ext.create_standard_field(form.idc, class="select2") }}
                     {{ ext.create_standard_field(form.rack) }}
                     {{ ext.create_standard_field(form.manufacturer) }}
                     {{ ext.create_standard_field(form.model) }}
@@ -146,6 +150,8 @@
 
                 <div class="box form-container row-fluid form-horizontal">
 
+                    {{ ext.create_standard_field(form.serial_number) }}
+                    {{ ext.create_standard_field(form.assets_number) }}
                     {{ ext.create_standard_field(form.groups, class="select2 span4") }}
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
