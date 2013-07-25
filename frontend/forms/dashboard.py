@@ -91,8 +91,9 @@ class ServerForm(Form):
                               validators=[Optional(),
                                           Unique(Server, Server.assets_number,
                                                  message=u'The current assets number is already in use')])
-    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
-                                      validators=[Required(message=u'Group List is required')])
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
     desc = TextField(u'Server Description')
     ext_address = TextField(u'Ext Address', description=u'Unique',
                             validators=[Optional(),
@@ -144,8 +145,9 @@ class CreateUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
-                                      validators=[Required(message=u'Group List is required')])
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
     password = TextField(u'Password', description=u'At least five characters',
                          validators=[Required(message=u'Password is required'),
                                      Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
@@ -172,7 +174,8 @@ class EditUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    groups = QuerySelectMultipleField(u'Group List', query_factory=Group.query.all, get_label='desc',
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])
     password = TextField(u'Password', description=u'At least five characters',
                          validators=[Optional(),
