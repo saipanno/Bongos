@@ -110,11 +110,13 @@ class Permission(db.Model):
     __tablename__ = 'access_control_lists'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250))
     function = db.Column(db.String(250), unique=True)
     access_rules = db.Column(db.Text)
 
-    def __init__(self, function, access_rules):
+    def __init__(self, name, function, access_rules):
 
+        self.name = name
         self.function = function
         self.access_rules = access_rules
 

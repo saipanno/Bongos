@@ -196,3 +196,14 @@ class IDCForm(Form):
     address = TextField(u'Address', validators=[Required(message=u'Address is required')])
 
     submit = SubmitField(u'Submit', id='submit')
+
+
+class PermissionForm(Form):
+
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
+
+    name = TextField(u'Name', validators=[Required(message=u'Name is required')])
+    function = TextField(u'Function Name', validators=[Required(message=u'Function is required')])
+
+    submit = SubmitField(u'Submit', id='submit')

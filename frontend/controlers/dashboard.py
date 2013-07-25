@@ -36,7 +36,7 @@ from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permi
 
 from frontend.forms.account import GroupForm
 from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
-    IDCForm
+    IDCForm, PermissionForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -765,8 +765,76 @@ def list_permission_ctrl():
                 access_control_dicts[group_id] = dict()
                 access_control_dicts[group_id][function] = status
 
-    return render_template('dashboard/permission_manager.html', function_lists=function_lists, type='list',
+    return render_template('dashboard/permission_manager.html', function_lists=function_lists, type='show',
                            group_information=group_information, access_control_dicts=access_control_dicts)
+
+
+@dashboard.route('/permission/create', methods=("GET", "POST"))
+@login_required
+def create_permission_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_permission_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    form = PermissionForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/permission_manager.html', form=form, type='create')
+
+    elif request.method == 'POST' and form.validate():
+
+        permission = Permission(form.name.data, form.function.data, u'')
+        db.session.add(permission)
+        db.session.commit()
+
+        flash(u'Create permission successfully', 'success')
+        return redirect(url_for('dashboard.list_permission_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_permission_ctrl'))
+
+
+@dashboard.route('/permission/<int:permission_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_permission_ctrl(permission_id):
+
+    user_access = UserAccessPermission('dashboard.edit_permission_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    permission = Permission.query.filter_by(id=permission_id).first()
+
+    form = PermissionForm(id=permission.id, name=permission.name, funcion=permission.funcion)
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/permission_manager.html', form=form, type='edit')
+
+    elif request.method == 'POST' and form.validate():
+
+        if form.name.data != permission.name:
+            permission.name = form.name.data
+
+        if form.funcion.data != permission.funcion:
+            permission.funcion = form.funcion.data
+
+        db.session.commit()
+
+        flash(u'Edit permission description successfully', 'success')
+        return redirect(url_for('dashboard.list_permission_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.edit_permission_ctrl', permission_id=permission_id))
 
 
 @dashboard.route('/permission/<group_id>/on/<function>/status/<status>')
@@ -790,13 +858,13 @@ def update_permission_ctrl(group_id, function, status):
     elif status == 'enable':
         access_rules[group_id] = 1
     else:
-        flash(u'Error ACL status', 'error')
+        flash(u'Error permission status', 'error')
         return redirect(url_for('dashboard.list_permission_ctrl'))
 
     access_control.access_rules = json.dumps(access_rules, ensure_ascii=False)
     db.session.commit()
 
-    flash(u'Update ACL successfully', 'success')
+    flash(u'Update permission successfully', 'success')
     return redirect(url_for('dashboard.list_permission_ctrl'))
 
 
