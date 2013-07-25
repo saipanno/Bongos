@@ -268,7 +268,6 @@ def create_predefined_execute_ctrl():
         return redirect(url_for('operation.create_custom_execute_ctrl'))
 
 
-
 @operation.route('/power_control/create', methods=("GET", "POST"))
 @login_required
 def create_power_control_ctrl():

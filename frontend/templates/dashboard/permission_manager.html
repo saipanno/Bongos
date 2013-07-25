@@ -10,7 +10,7 @@
             <ul class="breadcrumb">
                 <li><a href="/">Home</a> <span class="divider">/</span></li>
                 <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
-                <li class="active">List</li>
+                <li class="active">Show</li>
             </ul>
 
             {{ ext.feedback_message() }}
@@ -18,19 +18,16 @@
             <div class="navbar">
                 <div class="navbar-inner">
                     <a class="brand" href="#">Permission Manager</a>
-                    <div class="btn-group pull-right">
-                        <a href="{{ url_for('dashboard.create_permission_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Permission</a>
-                    </div>
                 </div>
             </div>
 
             <div class="accordion" id="accordion2">
 
-                {% for group_id in group_information %}
+                {% for group_id in user_groups %}
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ group_id }}">
-                            Group: {{ group_information.get(group_id) }}
+                            Group: {{ user_groups.get(group_id, 'UnKnown Group Name') }}
                         </a>
                     </div>
 
@@ -45,14 +42,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for function in function_lists %}
-                                    {% set status = access_control_dicts.get(group_id, dict()).get(function, 0) %}
+                                {% for permission_handler in permissions_handler %}
+                                    {% set status = group_permissions.get(group_id, dict()).get(permission_handler.get('id', dict()), 0) %}
                                     <tr>
-                                        <td>{{ function }}</td>
+                                        <td>{{ permission_handler.desc }}</td>
                                         <td>{{ ext.get_status(status) }}</td>
                                         <td>
-                                            <a class="btn btn-mini" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, function=function, status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
-                                            <a class="btn btn-mini" href="#">Edit</a>
+                                            <a class="btn btn-mini" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, handler_id=permission_handler.get('id', 0), status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -64,6 +60,41 @@
 
                 {% endfor %}
             </div>
+
+        {% elif type == 'list' %}
+
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a> <span class="divider">/</span></li>
+                <li class="#"><a href="#">Permission Manager</a><span class="divider">/</span></li>
+                <li class="active">List</li>
+            </ul>
+
+            {{ ext.feedback_message() }}
+
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <a class="brand" href="#">Permission Manager</a>
+                </div>
+            </div>
+
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>function</th>
+                        <th>desc</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for permission in permissions %}
+                        <tr>
+                            <td><a href="{{ url_for('dashboard.edit_handler_ctrl', handler_id=permission.id) }}">{{ permission.id }}</a></td>
+                            <td>{{ permission.function }}</td>
+                            <td>{{ permission.desc }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
         {% elif type == 'create' %}
 
@@ -86,9 +117,9 @@
 
                     <div class="box form-container row-fluid form-horizontal">
 
-                        {{ ext.create_standard_field(form.name) }}
-
                         {{ ext.create_standard_field(form.function) }}
+
+                        {{ ext.create_standard_field(form.desc) }}
 
                     </div>
 
@@ -118,8 +149,6 @@
                     <legend>
                     {% if form.desc.data %}
                         Edit: {{ form.desc.data }}
-                    {% elif form.name.data %}
-                        Edit: {{ form.name.data }}
                     {% else %}
                         Edit Permission
                     {% endif %}
@@ -127,9 +156,9 @@
 
                     <div class="box form-container row-fluid form-horizontal">
 
-                        {{ ext.create_standard_field(form.name) }}
+                        {{ ext.create_standard_field(form.function, class="uneditable-input") }}
 
-                        {{ ext.create_standard_field(form.function) }}
+                        {{ ext.create_standard_field(form.desc) }}
 
                     </div>
 

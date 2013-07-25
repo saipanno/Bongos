@@ -9,16 +9,17 @@
                 <li class="nav-header">AUTH</li>
                 <li class="{% block active_dashboard_user %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a></li>
                 <li class="{% block active_dashboard_group %}{% endblock %}"><a href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a></li>
+                <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-flag-checkered"></i> Permission</a></li>
                 <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
-                <li class="nav-header">PERMISSION</li>
-                <li class="{% block active_dashboard_permission %}{% endblock %}"><a href="{{ url_for("dashboard.list_permission_ctrl") }}"><i class="icon-lock"></i> Permission</a></li>
                 <li class="nav-header">NODE</li>
                 <li class="{% block active_dashboard_idc %}{% endblock %}"><a href="{{ url_for("dashboard.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a></li>
                 <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>
-                <li class="nav-header">Other</li>
+                <li class="nav-header">SETTING</li>
+                <li class="{% block active_dashboard_permission_handler %}{% endblock %}"><a href="{{ url_for("dashboard.list_handler_ctrl") }}"><i class="icon-leaf"></i> Permission Handler</a></li>
+                <li class="nav-header">OTHER</li>
                 <li class="{% block active_dashboard_script %}{% endblock %}"><a href="{{ url_for("dashboard.list_predefined_script_ctrl") }}"><i class="icon-code"></i> PreDefined Script</a></li>
                 <li class="nav-header">JOURNAL</li>
-                <li class="{% block active_dashboard_logging %}{% endblock %}"><a href="{{ url_for("dashboard.logging_reader_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a></li>
+                <li class="{% block active_dashboard_logging %}{% endblock %}"><a href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a></li>
                 <li class="nav-header">STATUS</li>
                 <li class=""><a href="#"><i class="icon-sitemap"></i> IPMI VPN</a></li>
                 <li class=""><a href="#"><i class="icon-globe"></i> Back-end DB</a></li>

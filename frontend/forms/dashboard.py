@@ -29,7 +29,7 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email
 
 from frontend.models.account import Group, User
-from frontend.models.dashboard import PreDefinedScript, SshConfig, Server, IDC
+from frontend.models.dashboard import PreDefinedScript, SshConfig, Server, IDC, Permission
 
 from frontend.extensions.utility import Unique, UnChange
 
@@ -203,7 +203,9 @@ class PermissionForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    name = TextField(u'Name', validators=[Required(message=u'Name is required')])
-    function = TextField(u'Function Name', validators=[Required(message=u'Function is required')])
+    desc = TextField(u'Description', validators=[Required(message=u'Name is required')])
+    function = TextField(u'Function', validators=[Required(message=u'Function is required'),
+                                                  UnChange(Permission, 'function',
+                                                           message=u'The current function name can not be modified')])
 
     submit = SubmitField(u'Submit', id='submit')
