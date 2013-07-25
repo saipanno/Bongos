@@ -51,9 +51,9 @@ class EditSettingForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    email = TextField(u'Email', description=u'Can not be modified',
+    email = TextField(u'Email', description=u'Unmodifiable',
                       validators=[UnChange(User, 'email', message=u'The current email can not be modified')])
-    username = TextField(u'Username', description=u'Can not be modified',
+    username = TextField(u'Username', description=u'Unmodifiable',
                          validators=[UnChange(User, 'username', message=u'The current username can not be modified')])
     name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
