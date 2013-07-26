@@ -203,7 +203,9 @@ class PermissionForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    desc = TextField(u'Description', validators=[Required(message=u'Name is required')])
+    desc = TextField(u'Description', validators=[Required(message=u'Name is required'),
+                                                 Unique(Permission, Permission.desc,
+                                                        message=u'The current function description is already in use')])
     function = TextField(u'Function', validators=[Required(message=u'Function is required'),
                                                   UnChange(Permission, 'function',
                                                            message=u'The current function name can not be modified')])

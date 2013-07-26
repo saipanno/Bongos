@@ -44,6 +44,21 @@ from frontend.extensions.principal import UserAccessPermission
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 
+@dashboard.route('/logging')
+@login_required
+def show_logging_ctrl():
+
+    user_access = UserAccessPermission('dashboard.show_logging_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    MAX_LEN = -200
+    with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
+        logging_buffer = f.readlines()
+        return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])
+
+
 @dashboard.route('/predefined_script/list')
 @login_required
 def list_predefined_script_ctrl():
@@ -430,21 +445,6 @@ def delete_ssh_config_ctrl(config_id):
     return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
 
-@dashboard.route('/logging')
-@login_required
-def show_logging_ctrl():
-
-    user_access = UserAccessPermission('dashboard.show_logging_ctrl')
-    if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    MAX_LEN = -200
-    with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
-        logging_buffer = f.readlines()
-        return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])
-
-
 @dashboard.route('/group/list')
 @login_required
 def list_group_ctrl():
@@ -802,23 +802,54 @@ def update_permission_ctrl(group_id, handler_id, status):
 
 @dashboard.route('/permission_handler/list')
 @login_required
-def list_handler_ctrl():
+def list_permission_handler_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_handler_ctrl')
+    user_access = UserAccessPermission('dashboard.list_permission_handler_ctrl')
     if not user_access.can():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     permissions = Permission.query.all()
 
-    return render_template('dashboard/permission_manager.html', permissions=permissions, type='list')
+    return render_template('dashboard/permission_handler.html', permissions=permissions, type='list')
+
+
+@dashboard.route('/permission_handler/create', methods=("GET", "POST"))
+@login_required
+def create_permission_handler_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_permission_handler_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    form = PermissionForm()
+
+    if request.method == 'GET':
+
+        return render_template('dashboard/permission_handler.html', form=form, type='create')
+
+    elif request.method == 'POST' and form.validate():
+
+        permission = Permission(form.desc.data, form.function.data, u'')
+        db.session.add(permission)
+        db.session.commit()
+
+        flash(u'Create permission handler successfully', 'success')
+        return redirect(url_for('dashboard.list_permission_handler_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_permission_handler_ctrl'))
 
 
 @dashboard.route('/permission_handler/<int:handler_id>/edit', methods=("GET", "POST"))
 @login_required
-def edit_handler_ctrl(handler_id):
+def edit_permission_handler_ctrl(handler_id):
 
-    user_access = UserAccessPermission('dashboard.edit_handler_ctrl')
+    user_access = UserAccessPermission('dashboard.edit_permission_handler_ctrl')
     if not user_access.can():
         flash('Do not have permissions, Forbidden', 'warning')
         return redirect(url_for('account.index_ctrl'))
@@ -829,7 +860,7 @@ def edit_handler_ctrl(handler_id):
 
     if request.method == 'GET':
 
-        return render_template('dashboard/permission_manager.html', form=form, type='edit')
+        return render_template('dashboard/permission_handler.html', form=form, type='edit')
 
     elif request.method == 'POST' and form.validate():
 
@@ -842,13 +873,13 @@ def edit_handler_ctrl(handler_id):
         db.session.commit()
 
         flash(u'Edit permission description successfully', 'success')
-        return redirect(url_for('dashboard.list_handler_ctrl'))
+        return redirect(url_for('dashboard.list_permission_handler_ctrl'))
 
     else:
         messages = catch_errors(form.errors)
 
         flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_handler_ctrl', handler_id=handler_id))
+        return redirect(url_for('dashboard.edit_permission_handler_ctrl', handler_id=handler_id))
 
 
 @dashboard.route('/idc/list')
