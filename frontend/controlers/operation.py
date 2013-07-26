@@ -118,6 +118,7 @@ def export_operation_results_ctrl(operation_id):
     except ValueError:
         fruits = dict()
 
+    # Each yield expression is directly sent to the browser
     def create_result_csv():
         yield 'address,return code,message,error message\n'
         for address in fruits:
@@ -167,7 +168,6 @@ def create_ssh_detect_ctrl():
 
         flash(messages, 'error')
         return redirect(url_for('operation.create_ssh_detect_ctrl'))
-
 
 
 @operation.route('/ping_detect/create', methods=("GET", "POST"))
