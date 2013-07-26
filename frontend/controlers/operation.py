@@ -25,7 +25,6 @@
 
 
 import time
-import StringIO
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response
