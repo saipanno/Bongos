@@ -65,9 +65,10 @@
                 </div>
             </div>
 
-            <div style="padding-top:9px; padding-bottom: 9px;">
-                <pre>{{ script.script|safe }}</pre>
-            </div>
+        </div>
+
+        <div>
+            <pre class="prettyprint linenums">{{ script.script|safe }}</pre>
         </div>
 
     {% elif type == 'create' %}

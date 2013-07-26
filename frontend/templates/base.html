@@ -12,6 +12,7 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/font-awesome/font-awesome.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2-bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/google-code-prettify/prettify.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bongos/bongos.css') }}">
 
     {% block style %}
@@ -101,10 +102,12 @@
         <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.ColReorderWithResize.js') }}"></script>
         <script src="{{ url_for('static', filename='package/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/select2/js/select2.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/google-code-prettify/prettify.js') }}"></script>
         <script src="{{ url_for('static', filename='bongos/bongos.js') }}"></script>
 
         <script type="text/javascript" charset="utf-8">
             $(document).ready(function() {
+                prettyPrint();
                 $(".select2").select2();
                 $(".datatable").dataTable( {
                     "sPaginationType": "bootstrap",
