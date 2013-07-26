@@ -1,4 +1,4 @@
-ansible
+fabric
 
 Flask
 Flask-WTF

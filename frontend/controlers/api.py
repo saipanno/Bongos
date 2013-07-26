@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/11.
+#                    Created at 2013/07/26.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,16 @@
 # SOFTWARE.
 
 
-from frontend.controlers.api import api
-from frontend.controlers.account import account
-from frontend.controlers.operation import operation
-from frontend.controlers.dashboard import dashboard
+from flask import Blueprint
+
+api = Blueprint('api', __name__, url_prefix='/api')
+
+
+@api.route('/operation/<int:operation_id>/status', methods="POST")
+def update_operation_status(operation_id):
+    pass
+
+
+@api.route('/operation/<int:operation_id>/result', methods="POST")
+def push_operation_result(operation_id):
+    pass
