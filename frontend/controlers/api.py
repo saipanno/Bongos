@@ -29,11 +29,11 @@ from flask import Blueprint
 api = Blueprint('api', __name__, url_prefix='/api')
 
 
-@api.route('/operation/<int:operation_id>/status', methods="POST")
+@api.route('/operation/<int:operation_id>/status', methods="PUT")
 def update_operation_status(operation_id):
     pass
 
 
-@api.route('/operation/<int:operation_id>/result', methods="POST")
+@api.route('/operation/<int:operation_id>/result', methods="PUT")
 def push_operation_result(operation_id):
     pass
