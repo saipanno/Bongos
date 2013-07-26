@@ -15,9 +15,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ ext.get_operation_title(operation_type) }}</a>
+                <a class="brand" href="#">Show Operation</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ ext.generation_create_operation_link(operation_type) }}" class="btn btn-primary"><i class="icon-plus"></i> Add Operation</a>
+                    <a class="btn btn-primary" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=execute.id) }}"><i class="icon-cloud-download"></i> Export Results</a>
                 </div>
             </div>
         </div>
@@ -25,10 +25,10 @@
         <table class="table table-hover table-bordered table-striped table-condensed datatable">
             <thead>
             <tr>
-                <th>ADDRESS</th>
-                <th>STATUS</th>
-                <th>MESSAGE</th>
-                <th>ERROR</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Message</th>
+                <th>Error Message</th>
             </tr>
             </thead>
             <tbody>

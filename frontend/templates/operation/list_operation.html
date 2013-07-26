@@ -25,31 +25,21 @@
         <table class="table table-hover table-bordered table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>id</th>
-                    <th>server list</th>
-                    <th>author</th>
-                    <th>status</th>
+                    <th>Operation ID</th>
+                    <th>Server List</th>
+                    <th>Author</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
             {% for execute in executes %}
             <tr>
-                <td>
-                    <a href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}" title="查看">
-                        {{ execute.id }}
-                    </a>
-                </td>
+                <td>{{ execute.id }}</td>
                 <td>{{ execute.server_list }}</td>
                 <td>{{ execute.author_name }}</td>
                 <td>{{ ext.get_operation_status(execute.status) }}</td>
-                <td>
-                    <div class="dropdown related_menu">
-                        <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                        <ul class="dropdown-menu pull-right" role="menu">
-                        </ul>
-                    </div>
-                </td>
+                <td><a class="btn btn-mini" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}"><i class="icon-eye-open"></i> Show</a></td>
             </tr>
             {% endfor %}
             </tbody>

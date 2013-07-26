@@ -831,7 +831,7 @@ def create_permission_handler_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        permission = Permission(form.desc.data, form.function.data, u'')
+        permission = Permission(form.desc.data, form.function.data, json.dumps({1: 1}))
         db.session.add(permission)
         db.session.commit()
 

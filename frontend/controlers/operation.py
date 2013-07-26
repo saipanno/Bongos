@@ -25,9 +25,10 @@
 
 
 import time
+import StringIO
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
-from flask import render_template, request, redirect, url_for, flash, Blueprint, json
+from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
@@ -88,7 +89,43 @@ def show_operation_ctrl(operation_id):
     except ValueError:
         fruits = dict()
 
-    return render_template('operation/show_operation.html', execute=execute, fruits=fruits, operation_type=execute.operation_type)
+    return render_template('operation/show_operation.html', execute=execute, fruits=fruits,
+                           operation_type=execute.operation_type)
+
+
+@operation.route('/<int:operation_id>/operation_export_result.csv')
+@login_required
+def export_operation_results_ctrl(operation_id):
+
+    user_access = UserAccessPermission('operation.export_operation_results_ctrl')
+    if not user_access.can():
+        flash('Do not have permissions, Forbidden', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    try:
+        execute = OperationDb.query.filter_by(id=operation_id).first()
+
+    except exc.SQLAlchemyError:
+        flash(u'Internal database error', 'error')
+        return redirect(url_for('operation.list_operation_ctrl'))
+
+    if execute is None:
+        flash(u'The operating does not exist.', 'error')
+        return redirect(url_for('operation.list_operation_ctrl'))
+
+    try:
+        fruits = json.loads(execute.result)
+    except ValueError:
+        fruits = dict()
+
+    def create_result_csv():
+        yield 'address,return code,message,error message\n'
+        for address in fruits:
+            yield '%s,%s,%s,%s\n' % \
+                  (address, fruits[address].get('code', ''),
+                   fruits[address].get('msg', ''), fruits[address].get('error', ''))
+
+    return Response(create_result_csv(), mimetype='text/csv')
 
 
 @operation.route('/ssh_detect/create', methods=("GET", "POST"))
