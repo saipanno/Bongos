@@ -50,7 +50,7 @@ def show_logging_ctrl():
 
     user_access = UserAccessPermission('dashboard.show_logging_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     MAX_LEN = -200
@@ -65,7 +65,7 @@ def list_predefined_script_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_predefined_script_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     scripts = PreDefinedScript.query.all()
@@ -83,7 +83,7 @@ def show_predefined_script_ctrl(script_id):
 
     user_access = UserAccessPermission('dashboard.show_predefined_script_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
@@ -109,7 +109,7 @@ def create_predefined_script_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_predefined_script_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = PreDefinedScriptForm()
@@ -140,7 +140,7 @@ def edit_predefined_script_ctrl(script_id):
 
     user_access = UserAccessPermission('dashboard.edit_predefined_script_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
@@ -179,7 +179,7 @@ def delete_predefined_script_ctrl(script_id):
 
     user_access = UserAccessPermission('dashboard.delete_predefined_script_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     script = PreDefinedScript.query.filter_by(id=script_id).first()
@@ -199,7 +199,7 @@ def list_user_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_user_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     users = User.query.all()
@@ -223,7 +223,7 @@ def create_user_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_user_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = CreateUserForm()
@@ -259,7 +259,7 @@ def edit_user_ctrl(user_id):
 
     user_access = UserAccessPermission('dashboard.edit_user_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     user = User.query.filter_by(id=user_id).first()
@@ -302,7 +302,7 @@ def update_user_status_ctrl(user_id, status):
 
     user_access = UserAccessPermission('dashboard.update_user_status_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     user = User.query.filter_by(id=user_id).first()
@@ -336,7 +336,7 @@ def list_ssh_config_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     ssh_configs = SshConfig.query.all()
@@ -350,7 +350,7 @@ def create_ssh_config_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = SshConfigForm()
@@ -382,7 +382,7 @@ def edit_ssh_config_ctrl(config_id):
 
     user_access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     config = SshConfig.query.filter_by(id=config_id).first()
@@ -431,7 +431,7 @@ def delete_ssh_config_ctrl(config_id):
 
     user_access = UserAccessPermission('dashboard.delete_ssh_config_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     config = SshConfig.query.filter_by(id=config_id).first()
@@ -451,7 +451,7 @@ def list_group_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_group_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     group_members = dict()
@@ -477,7 +477,7 @@ def create_group_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_group_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = GroupForm()
@@ -508,7 +508,7 @@ def edit_group_ctrl(group_id):
 
     user_access = UserAccessPermission('dashboard.edit_group_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.filter_by(id=group_id).first()
@@ -545,7 +545,7 @@ def delete_group_ctrl(group_id):
 
     user_access = UserAccessPermission('dashboard.delete_group_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.filter_by(id=group_id).first()
@@ -565,7 +565,7 @@ def list_server_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_server_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     servers = Server.query.all()
@@ -592,7 +592,7 @@ def create_server_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_server_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = ServerForm()
@@ -630,7 +630,7 @@ def edit_server_ctrl(server_id):
 
     user_access = UserAccessPermission('dashboard.edit_server_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
@@ -714,7 +714,7 @@ def delete_server_ctrl(server_id):
 
     user_access = UserAccessPermission('dashboard.delete_server_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
@@ -734,7 +734,7 @@ def show_permission_ctrl():
 
     user_access = UserAccessPermission('dashboard.show_permission_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     user_groups = dict()
@@ -775,7 +775,7 @@ def update_permission_ctrl(group_id, handler_id, status):
 
     user_access = UserAccessPermission('dashboard.update_permission_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     permission = Permission.query.filter_by(id=handler_id).first()
@@ -806,7 +806,7 @@ def list_permission_handler_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_permission_handler_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     permissions = Permission.query.all()
@@ -820,7 +820,7 @@ def create_permission_handler_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_permission_handler_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = PermissionForm()
@@ -851,7 +851,7 @@ def edit_permission_handler_ctrl(handler_id):
 
     user_access = UserAccessPermission('dashboard.edit_permission_handler_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     permission = Permission.query.filter_by(id=handler_id).first()
@@ -888,7 +888,7 @@ def list_idc_ctrl():
 
     user_access = UserAccessPermission('dashboard.list_idc_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     idcs = IDC.query.all()
@@ -902,7 +902,7 @@ def create_idc_ctrl():
 
     user_access = UserAccessPermission('dashboard.create_idc_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     form = IDCForm()
@@ -933,7 +933,7 @@ def edit_idc_ctrl(idc_id):
 
     user_access = UserAccessPermission('dashboard.edit_idc_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     idc = IDC.query.filter_by(id=idc_id).first()
@@ -973,7 +973,7 @@ def delete_idc_ctrl(idc_id):
 
     user_access = UserAccessPermission('dashboard.delete_idc_ctrl')
     if not user_access.can():
-        flash('Do not have permissions, Forbidden', 'warning')
+        flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
     idc = IDC.query.filter_by(id=idc_id).first()

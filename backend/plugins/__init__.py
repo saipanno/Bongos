@@ -22,3 +22,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+#from backend.plugins.ssh_connectivity import ssh_connectivity_checking
+#from backend.plugins.ping_connectivity import ping_connectivity_checking
+#from backend.plugins.custom_execute import custom_script_execute
+#from backend.plugins.predefined_execute import predefined_script_execute
+#from backend.plugins.remote_power_control import exec_power_management

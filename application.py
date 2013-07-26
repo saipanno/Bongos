@@ -24,10 +24,4 @@
 # SOFTWARE.
 
 
-from backend import app
-from backend.extensions.logger import logger
-
-if __name__ == '__main__':
-
-    logger.info(u'Start bongos background services.')
-    app.run()
+from backend import task_runner
