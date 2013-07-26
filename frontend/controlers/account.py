@@ -73,7 +73,7 @@ def user_login_ctrl():
             login_user(user)
             identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
-            flash(u'Login successful', 'success')
+            flash(u'Login successfully', 'success')
             return redirect(default_next_page)
 
         else:

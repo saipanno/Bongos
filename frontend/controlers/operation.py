@@ -122,7 +122,7 @@ def create_ssh_detect_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating operation successful', 'success')
+        flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
@@ -163,7 +163,7 @@ def create_ping_detect_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating operation successful', 'success')
+        flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
@@ -211,7 +211,7 @@ def create_custom_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating operation successful', 'success')
+        flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
@@ -258,7 +258,7 @@ def create_predefined_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating operation successful', 'success')
+        flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
@@ -282,7 +282,7 @@ def create_power_control_ctrl():
     form = CreatePowerCtrlForm()
 
     if request.method == 'GET':
-        return  render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
@@ -299,7 +299,7 @@ def create_power_control_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        flash(u'Creating operation successful', 'success')
+        flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
