@@ -24,16 +24,32 @@
 # SOFTWARE.
 
 
-from flask import Blueprint
+from flask import Blueprint, request, jsonify, json
+
+from frontend.extensions.database import db
+from frontend.models.operation import OperationDb
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
 
-@api.route('/operation/<int:operation_id>/status', methods="PUT")
-def update_operation_status(operation_id):
-    pass
+@api.route('/operation', methods=["PUT"])
+def update_operation_status():
 
+    if request.method == 'PUT':
 
-@api.route('/operation/<int:operation_id>/result', methods="PUT")
-def push_operation_result(operation_id):
-    pass
+        id = request.json.get('id', None)
+        status = request.json.get('status', None)
+        result = request.json.get('result', None)
+
+        operation = OperationDb.query.filter_by(id=id).first()
+
+        if operation is not None:
+
+            operation.status = status
+            operation.result = json.dumps(result)
+
+            db.session.commit()
+
+            return jsonify({'status': 'success'})
+
+    return jsonify({'status': 'error'})

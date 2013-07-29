@@ -1,4 +1,4 @@
-BONGOS
+Bongos
 ===
 
 An Useful Server Administration Web Tools.

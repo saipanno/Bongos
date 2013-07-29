@@ -48,17 +48,11 @@
 
 {% macro get_operation_status(status)  -%}
     {% if status == '0' %}
-        <i class="icon-info-sign text-info" title="队列中"></i>
+        <i class="icon-download text-info" title="执行中"></i>
     {% elif status == '1' %}
         <i class="icon-ok-sign text-success" title="已完成"></i>
     {% elif status == '2' %}
-        <i class="icon-exclamation text-error" title="内部错误"></i>
-    {% elif status == '5' %}
-        <i class="icon-download text-info" title="执行中"></i>
-    {% elif status == '10' %}
-        <i class="icon-ban-circle text-info" title="已禁用"></i>
-    {% else %}
-        <i class="icon-exclamation text-warning" title="异常结果"></i>
+        <i class="icon-exclamation text-error" title="错误"></i>
     {% endif %}
 {%- endmacro %}
 
