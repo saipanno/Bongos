@@ -1,6 +1,6 @@
+rq
 celery
 fabric
-
 Flask
 Flask-WTF
 Flask-Login

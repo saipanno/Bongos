@@ -7,13 +7,13 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">STATUS DETECT</li>
-                <li class="{% if operation_type == 'ssh_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_detect') }}"><i class="icon-exchange"></i> Ssh Status</a></li>
-                <li class="{% if operation_type == 'ping_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_detect') }}"><i class="icon-exchange"></i> Ping Connectivity</a></li>
+                <li class="{% if operation_type == 'ssh_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}"><i class="icon-exchange"></i> Ssh Status</a></li>
+                <li class="{% if operation_type == 'ping_detect' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting') }}"><i class="icon-exchange"></i> Ping Connectivity</a></li>
                 <li class="nav-header">REMOTE EXECUTE</li>
-                <li class="{% if operation_type == 'predefined_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='predefined_execute') }}"><i class="icon-tasks"></i> PreDefined</a></li>
-                <li class="{% if operation_type == 'custom_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_execute') }}"><i class="icon-tasks"></i> User Custom</a></li>
+                <li class="{% if operation_type == 'predefined_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='predefined_script_execute') }}"><i class="icon-tasks"></i> PreDefined</a></li>
+                <li class="{% if operation_type == 'custom_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}"><i class="icon-tasks"></i> User Custom</a></li>
                 <li class="nav-header">IPMI OVER LAN</li>
-                <li class="{% if operation_type == 'power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='power_control') }}"><i class="icon-off"></i> Power Control</a></li>
+                <li class="{% if operation_type == 'power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='power_supply_control') }}"><i class="icon-off"></i> Power Control</a></li>
             </ul>
         </div>
     </div>

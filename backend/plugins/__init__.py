@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-#from backend.plugins.ssh_connectivity import ssh_connectivity_checking
-#from backend.plugins.ping_connectivity import ping_connectivity_checking
-#from backend.plugins.custom_execute import custom_script_execute
-#from backend.plugins.predefined_execute import predefined_script_execute
-#from backend.plugins.remote_power_control import exec_power_management
+from backend.plugins.status_detecting import ssh_status_detecting
+from backend.plugins.status_detecting import ping_status_detecting
+#from backend.plugins.remote_execute import custom_script_execute
+#from backend.plugins.remote_execute import predefined_script_execute
+#from backend.plugins.remote_control import power_supply_control

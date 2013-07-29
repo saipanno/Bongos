@@ -39,7 +39,9 @@ from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
 from frontend.extensions.utility import format_address_list, format_template_vars, catch_errors
 
-from application import task_runner
+from frontend.extensions.tasks import q
+
+from application import backend_runner
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
@@ -139,7 +141,7 @@ def create_ssh_detect_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'ssh_detect'
+    operation_type = u'ssh_status_detecting'
 
     form = CreateSshDetectForm()
 
@@ -180,7 +182,7 @@ def create_ping_detect_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'ping_detect'
+    operation_type = u'ping_status_detecting'
 
     form = CreatePingDetectForm()
 
@@ -213,7 +215,7 @@ def create_ping_detect_ctrl():
         operation_dict['status'] = operation.status
         operation_dict['result'] = operation.result
 
-        task_runner.delay(operation_dict, current_app.config)
+        q.enqueue(backend_runner, operation_dict, current_app.config)
 
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
@@ -235,7 +237,7 @@ def create_custom_execute_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'custom_execute'
+    operation_type = u'custom_script_execute'
 
     form = CreateCustomExecuteForm()
 
@@ -282,7 +284,7 @@ def create_predefined_execute_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'predefined_execute'
+    operation_type = u'predefined_script_execute'
 
     form = CreatePreDefinedExecuteForm()
 
@@ -329,7 +331,7 @@ def create_power_control_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'power_control'
+    operation_type = u'power_supply_control'
 
     form = CreatePowerCtrlForm()
 

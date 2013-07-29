@@ -29,9 +29,6 @@ from jinja2 import Template
 from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from backend.models import SshConfig, PreDefinedScript
-
-from backend.extensions.database import db
 from backend.extensions.logger import logger
 from backend.extensions.utility import generate_private_path, analysis_script_output
 

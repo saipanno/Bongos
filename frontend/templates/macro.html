@@ -15,16 +15,16 @@
 
 
 {% macro get_operation_title(operation_type)  -%}
-    {% if operation_type == 'ssh_detect' %}
-        Ssh Detect
-    {% elif operation_type == 'ping_detect' %}
-        Ping Detect
-    {% elif operation_type == 'custom_execute' %}
+    {% if operation_type == 'ssh_status_detecting' %}
+        Ssh Detecting
+    {% elif operation_type == 'ping_status_detecting' %}
+        Ping Detecting
+    {% elif operation_type == 'custom_script_execute' %}
         Custom Execute
-    {% elif operation_type == 'predefined_execute' %}
+    {% elif operation_type == 'predefined_script_execute' %}
         PreDefined Execute
-    {% elif operation_type == 'power_control' %}
-        Power Control
+    {% elif operation_type == 'power_supply_control' %}
+        Power Supply Control
     {% else %}
         Error Operation Type
     {% endif %}
@@ -32,15 +32,15 @@
 
 
 {% macro generation_create_operation_link(operation_type)  -%}
-    {% if operation_type == 'ssh_detect' %}
+    {% if operation_type == 'ssh_status_detecting' %}
         {{ url_for('operation.create_ssh_detect_ctrl') }}
-    {% elif operation_type == 'ping_detect' %}
+    {% elif operation_type == 'ping_status_detecting' %}
         {{ url_for('operation.create_ping_detect_ctrl') }}
-    {% elif operation_type == 'custom_execute' %}
+    {% elif operation_type == 'custom_script_execute' %}
         {{ url_for('operation.create_custom_execute_ctrl') }}
-    {% elif operation_type == 'predefined_execute' %}
+    {% elif operation_type == 'predefined_script_execute' %}
         {{ url_for('operation.create_predefined_execute_ctrl') }}
-    {% elif operation_type == 'power_control' %}
+    {% elif operation_type == 'power_supply_control' %}
         {{ url_for('operation.create_power_control_ctrl') }}
     {% endif %}
 {%- endmacro %}

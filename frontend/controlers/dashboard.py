@@ -53,7 +53,7 @@ def show_logging_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    MAX_LEN = -200
+    MAX_LEN = -20
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
         logging_buffer = f.readlines()
         return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])

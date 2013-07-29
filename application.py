@@ -27,17 +27,13 @@
 from fabric.api import env
 
 from backend.extensions.logger import logger
-from backend.extensions.tasks import celery
 
-#from backend.plugins.status_detecting import ssh_status_detecting
-from backend.plugins.status_detecting import ping_status_detecting
-#from backend.plugins.remote_execute import custom_script_execute
-#from backend.plugins.remote_execute import predefined_script_execute
-#from backend.plugins.remote_control import power_supply_control
+from backend.plugins import ping_status_detecting, ssh_status_detecting
+#from backend.plugins import custom_script_execute, predefined_script_execute
+#from backend.plugins import power_supply_control
 
 
-@celery.task
-def task_runner(operation=None, config=None):
+def backend_runner(operation=None, config=None):
 
     env.parallel = True
     env.warn_only = True
@@ -47,19 +43,21 @@ def task_runner(operation=None, config=None):
     env.command_timeout = config.get('SSH_COMMAND_TIMEOUT', 60)
     env.disable_known_hosts = config.get('DISABLE_KNOWN_HOSTS', True)
 
-    if operation.get('operation_type', '') == u'ping_detect':
+    operation_type = operation.get('operation_type', '')
+
+    if operation_type == u'ping_status_detecting':
         ping_status_detecting(operation, config)
 
-    #elif operation.get('operation_type', '') == u'ssh_detect':
-    #    ssh_status_detecting(operation, config)
+    elif operation_type == u'ssh_status_detecting':
+        ssh_status_detecting(operation, config)
 
-    #elif operation.get('operation_type', '') == u'custom_execute':
+    #elif operation_type == u'custom_script_execute':
     #    custom_script_execute(operation, config)
 
-    #elif operation.get('operation_type', '') == u'predefined_execute':
+    #elif operation_type == u'predefined_script_execute':
     #    predefined_script_execute(operation, config)
 
-    #elif operation.get('operation_type', '') == u'power_control':
+    #elif operation_type == u'power_supply_control':
     #    power_supply_control(operation, config)
 
     else:

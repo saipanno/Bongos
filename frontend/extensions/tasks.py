@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/07/16.
+#                    Created at 2013/07/29.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,8 @@
 # SOFTWARE.
 
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
-import settings
+from redis import Redis
+from rq import Queue
 
 
-Base = declarative_base()
-engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
-Session = sessionmaker(bind=engine)
-db = Session()
+q = Queue('Bongos', connection=Redis())
