@@ -137,7 +137,7 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
         return fruit
 
 
-def custom_script_execute(operation=None, config=None):
+def custom_script_execute(operation, config):
     """
     :Return:
 
@@ -294,7 +294,7 @@ def final_predefined_execute(user, port, password, private_key, script_template,
         return fruit
 
 
-def predefined_script_execute(operation=None, config=None):
+def predefined_script_execute(operation, config):
     """
     :Return:
 

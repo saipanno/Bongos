@@ -24,7 +24,9 @@
 # SOFTWARE.
 
 
+import os
 import re
+from flask import current_app
 from flask.ext.wtf import ValidationError
 
 
@@ -151,3 +153,30 @@ class Depend(object):
 
         if hasattr(form, self.attr) and not getattr(form, self.attr).data:
             raise ValidationError(self.message)
+
+
+def generate_private_path(filename):
+
+    if filename is not u'':
+        return os.path.join(current_app.config.get('PRIVATE_KEY_PATH'), filename)
+    else:
+        return None
+
+
+def analysis_script_output(output):
+
+    # \S 匹配所有非空字符
+    # +? 匹配前面正则一次或多次，非贪婪模式
+    regexp = u'BD:\S+?:EOF'
+
+    fruit = re.findall(regexp, output)
+
+    # 字符串掐头去尾操作，删除BD:和:EOF
+    return ' '.join(fruit[3:][:-4])
+
+
+def generate_ipmi_address(address):
+
+    fruit = address.split('.')
+
+    return '%s.%s.%s' % (current_app.config.get('IPMI_NETWORK'), fruit[2], fruit[3])

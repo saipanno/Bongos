@@ -39,21 +39,27 @@ def update_operation_status():
 
         access_address = current_app.config.get('API_ACCESS_CLIENTS', '127.0.0.1')
 
+        current_app.logger.info(str(request.json))
+
         if request.remote_addr in access_address:
 
-            id = request.json.get('id', None)
-            status = request.json.get('status', None)
-            result = request.json.get('result', None)
+            id = request.json.get('id', 0)
+            status = request.json.get('status', 2)
+            result = request.json.get('result', dict())
 
             operation = OperationDb.query.filter_by(id=id).first()
 
             if operation is not None:
 
                 operation.status = status
-                operation.result = json.dumps(result)
+                operation.result = json.dumps(result, ensure_ascii=False)
 
                 db.session.commit()
 
                 return jsonify({'status': 'success'})
 
-    return jsonify({'status': 'error'})
+            return jsonify({'status': 'error', 'message': 'Unknown operation number'})
+
+        return jsonify({'status': 'error', 'message': 'Authentication permissions fails'})
+
+    return jsonify({'status': 'error', 'message': 'Request method error'})

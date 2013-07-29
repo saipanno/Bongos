@@ -27,7 +27,7 @@
 import time
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
-from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response
+from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
 
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
@@ -38,6 +38,8 @@ from frontend.models.operation import OperationDb
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
 from frontend.extensions.utility import format_address_list, format_template_vars, catch_errors
+
+from application import task_runner
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
@@ -198,6 +200,20 @@ def create_ping_detect_ctrl():
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], u'', u'', 0, 0, u'')
         db.session.add(operation)
         db.session.commit()
+
+        operation_dict = dict()
+        operation_dict['id'] = operation.id
+        operation_dict['operation_type'] = operation.operation_type
+        operation_dict['author'] = operation.author
+        operation_dict['datetime'] = operation.datetime
+        operation_dict['server_list'] = operation.server_list
+        operation_dict['script_template'] = operation.script_template
+        operation_dict['ssh_config'] = operation.ssh_config
+        operation_dict['template_vars'] = operation.template_vars
+        operation_dict['status'] = operation.status
+        operation_dict['result'] = operation.result
+
+        task_runner.delay(operation_dict, current_app.config)
 
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))

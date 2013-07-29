@@ -25,6 +25,7 @@
 
 
 import json
+import requests
 from fabric.api import env, run, local, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
@@ -81,7 +82,7 @@ def final_ping_detecting(COUNT, TIMEOUT):
         return fruit
 
 
-def ping_status_detecting(operation=None, config=None):
+def ping_status_detecting(operation, config):
     """
     :Return:
 
@@ -92,170 +93,166 @@ def ping_status_detecting(operation=None, config=None):
 
     """
 
-    # 修改任务状态，标记为操作中。
-    operation.status = 5
-    db.commit()
+    id = operation.get('id', 0)
+    status = 1
+
+    update_api_url = '%s/operation' % config.get('API_BASIC_URL', 'http://localhost/api')
 
     with hide('everything'):
 
         do_exec = execute(final_ping_detecting, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
-                          hosts=operation.server_list.split())
-
-    operation.status = 1
+                          hosts=operation.get('server_list').split())
 
     try:
-        operation.result = json.dumps(do_exec, ensure_ascii=False)
+        data = json.dumps(dict(id=id, status=status, result=do_exec), ensure_ascii=False)
     except Exception, e:
-        operation.status = 2
+        status = 2
+        data = dict()
         logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
-                     (operation.id, operation.status, e))
+                     (operation.get('id'), status, e))
 
-    db.commit()
+    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
+    if response.status_code != 200:
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s' % id)
 
-def final_ssh_detecting(user, port, password, private_key):
-    """
-    :Return:
+#def final_ssh_detecting(user, port, password, private_key):
+#    """
+#    :Return:
+#
+#        default return: dict(code=100, msg='')
+#
+#        0: PING SUCCESS(可联通)
+#        1: PING FAIL(超时)
+#
+#        0: SSH SUCCESS(成功)
+#        1: SSH FAIL(超时, RESET, NO_ROUTE)
+#        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+#        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+#        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+#
+#        10: NETWORK ERROR(IP无法解析)
+#
+#        20: OTHER ERROR
+#        100: DEFAULT
 
-        default return: dict(code=100, msg='')
+#        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
+#        CommandTimeout = ["socket.timeout"]
 
-        0: PING SUCCESS(可联通)
-        1: PING FAIL(超时)
+#        SSH认证是先看private_key，后看password.
 
-        0: SSH SUCCESS(成功)
-        1: SSH FAIL(超时, RESET, NO_ROUTE)
-        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
-        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+#    """
 
-        10: NETWORK ERROR(IP无法解析)
+#    env.user = user
+#    env.port = port
+#    env.password = password
+#    if private_key is not None:
+#        env.key_filename = private_key
 
-        20: OTHER ERROR
-        100: DEFAULT
+#    fruit = dict(code=100, msg='')
 
-        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
-        CommandTimeout = ["socket.timeout"]
+#    try:
+#        output = run('uptime', shell=True, quiet=True)
 
-        SSH认证是先看private_key，后看password.
-
-    """
-
-    env.user = user
-    env.port = port
-    env.password = password
-    if private_key is not None:
-        env.key_filename = private_key
-
-    fruit = dict(code=100, msg='')
-
-    try:
-        output = run('uptime', shell=True, quiet=True)
-
-        if output.return_code == 0:
-            fruit['code'] = 0
-            fruit['msg'] = analysis_script_output(output.stdout)
-        else:
-            fruit['code'] = 20
+#        if output.return_code == 0:
+#            fruit['code'] = 0
+#            fruit['msg'] = analysis_script_output(output.stdout)
+#        else:
+#            fruit['code'] = 20
             # SSH联通性测试，不再保存命令输出。
             #fruit['msg'] = analysis_script_output(output.stdout)
-            fruit['error'] = output.stderr
+#            fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
-    except SystemExit:
-        fruit['code'] = 2
-        fruit['error'] = 'Authentication failed'
-
+#    except SystemExit:
+#        fruit['code'] = 2
+#        fruit['error'] = 'Authentication failed'
+#
     # CommandTimeout 无异常说明字符串
-    except CommandTimeout:
-        fruit['code'] = 3
-        fruit['error'] = 'Script execute timeout'
+#    except CommandTimeout:
+#        fruit['code'] = 3
+#        fruit['error'] = 'Script execute timeout'
 
-    except NetworkError, e:
-        if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            fruit['code'] = 1
-            fruit['error'] = 'Connect timeout'
+#    except NetworkError, e:
+#        if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
+#            fruit['code'] = 1
+#            fruit['error'] = 'Connect timeout'
 
-        elif 'Name lookup failed for' in e.__str__():
-            fruit['code'] = 10
-            fruit['error'] = 'Network address error'
+#        elif 'Name lookup failed for' in e.__str__():
+#            fruit['code'] = 10
+#            fruit['error'] = 'Network address error'
 
-        elif 'Authentication failed' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Authentication failed'
+#        elif 'Authentication failed' in e.__str__():
+#            fruit['code'] = 2
+#            fruit['error'] = 'Authentication failed'
 
         # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
-        elif 'Private key file is encrypted' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Private key file is encrypted'
+#        elif 'Private key file is encrypted' in e.__str__():
+#            fruit['code'] = 2
+#            fruit['error'] = 'Private key file is encrypted'
 
-        elif 'not match pre-existing key' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Host key verification failed'
+#        elif 'not match pre-existing key' in e.__str__():
+#            fruit['code'] = 2
+#            fruit['error'] = 'Host key verification failed'
 
-        else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
+#        else:
+#            fruit['code'] = 20
+#            fruit['error'] = '%s' % e
+#            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+#                           (env.host, fruit['code'], fruit['error']))
 
-    except Exception, e:
-        if 'No such file or directory' in e:
-            fruit['code'] = 2
-            fruit['error'] = 'Can\'t find private key'
-        else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
+#    except Exception, e:
+#        if 'No such file or directory' in e:
+#            fruit['code'] = 2
+#            fruit['error'] = 'Can\'t find private key'
+#        else:
+#            fruit['code'] = 20
+#            fruit['error'] = '%s' % e
 
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
+#            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
+#                           (env.host, fruit['code'], fruit['error']))
 
-    finally:
-        return fruit
+#    finally:
+#        return fruit
 
 
-def ssh_status_detecting(operation, config=None):
-    """
-    :Return:
+#def ssh_status_detecting(operation, config):
+#    """
+#    :Return:
 
-        0: 队列中
-        1: 已完成
-        2: 内部错误
-        5: 执行中
+#        0: 队列中
+#        1: 已完成
+#        2: 内部错误
+#        5: 执行中
 
-    """
+#    """
 
-    # 修改任务状态，标记为操作中。
-    operation.status = 5
-    db.commit()
+#    try:
+#        ssh_config_id = operation.ssh_config
+#        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
+#    except Exception, e:
+#        operation.status = 2
+#        message = 'Failed to get the ssh configuration. %s' % e
+#        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+#                     (operation.id, operation.operation_type, operation.status, message))
 
-    try:
-        ssh_config_id = operation.ssh_config
-        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to get the ssh configuration. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
+#    if operation.status != 2:
 
-    if operation.status != 2:
+#        with hide('everything'):
 
-        with hide('everything'):
+#            do_exec = execute(final_ssh_checking,
+#                              ssh_config.username,
+#                              ssh_config.port,
+#                              ssh_config.password,
+#                              generate_private_path(ssh_config.private_key),
+#                              hosts=operation.server_list.split())
 
-            do_exec = execute(final_ssh_checking,
-                              ssh_config.username,
-                              ssh_config.port,
-                              ssh_config.password,
-                              generate_private_path(ssh_config.private_key),
-                              hosts=operation.server_list.split())
+#        operation.status = 1
 
-        operation.status = 1
-
-        try:
-            operation.result = json.dumps(do_exec, ensure_ascii=False)
-        except Exception, e:
-            operation.status = 2
-            message = 'Integrate data error. %s' % e
-            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operation.id, operation.operation_type, operation.status, message))
-
-    db.commit()
+#        try:
+#            operation.result = json.dumps(do_exec, ensure_ascii=False)
+#        except Exception, e:
+#            operation.status = 2
+#            message = 'Integrate data error. %s' % e
+#            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
+#                         (operation.id, operation.operation_type, operation.status, message))

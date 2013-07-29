@@ -26,9 +26,9 @@
 
 import re
 import json
+import requests
 from fabric.api import env, hide, show, local, execute
 
-from backend.extensions.database import db
 from backend.extensions.logger import logger
 from backend.extensions.utility import generate_ipmi_address
 
@@ -93,7 +93,7 @@ def final_power_execute(ipmi_user, ipmi_password, operate, spec=None):
         return fruit
 
 
-def remote_power_control(config, operation):
+def power_supply_control(operation, config):
     """
     :Return:
 
@@ -104,24 +104,28 @@ def remote_power_control(config, operation):
 
     """
 
-    # 修改任务状态，标记为操作中。
-    operation.status = 5
-    db.commit()
+    update_api_url = '%s/operation' % config.get('API_BASIC_URL', 'http://localhost/api')
 
     with hide('everything'):
 
         do_exec = execute(final_power_execute, config.get('IPMI_USER', 'root'),
-                          config.get('IPMI_PASSWORD', 'calvin'), operation.script_template,
+                          config.get('IPMI_PASSWORD', ''), operation.script_template,
                           hosts=operation.server_list.split())
 
-    operation.status = 1
-
     try:
-        operation.result = json.dumps(do_exec, ensure_ascii=False)
+        result = json.dumps(do_exec, ensure_ascii=False)
     except Exception, e:
-        operation.status = 2
+        status = 2
+        result = json.dumps(dict(), ensure_ascii=False)
+
         message = 'Integrate data error. %s' % e
         logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
                      (operation.id, operation.operation_type, operation.status, message))
+    else:
+        status = 1
 
-    db.commit()
+    data = dict(status=status, result=result)
+
+    response = requests.put(update_api_url,
+                            data=json.dumps(data, ensure_ascii=False),
+                            headers={'content-type': 'application/json'})
