@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask import Blueprint, request, jsonify, json
+from flask import Blueprint, current_app, request, jsonify, json
 
 from frontend.extensions.database import db
 from frontend.models.operation import OperationDb
@@ -37,19 +37,23 @@ def update_operation_status():
 
     if request.method == 'PUT':
 
-        id = request.json.get('id', None)
-        status = request.json.get('status', None)
-        result = request.json.get('result', None)
+        access_address = current_app.config.get('API_ACCESS_CLIENTS', '127.0.0.1')
 
-        operation = OperationDb.query.filter_by(id=id).first()
+        if request.remote_addr in access_address:
 
-        if operation is not None:
+            id = request.json.get('id', None)
+            status = request.json.get('status', None)
+            result = request.json.get('result', None)
 
-            operation.status = status
-            operation.result = json.dumps(result)
+            operation = OperationDb.query.filter_by(id=id).first()
 
-            db.session.commit()
+            if operation is not None:
 
-            return jsonify({'status': 'success'})
+                operation.status = status
+                operation.result = json.dumps(result)
+
+                db.session.commit()
+
+                return jsonify({'status': 'success'})
 
     return jsonify({'status': 'error'})
