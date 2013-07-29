@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/16.
+#                    Created at 2013/07/29.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 
 
 import json
-from fabric.api import env, run, hide, show, execute
+from fabric.api import env, run, local, hide, show, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.models import SshConfig
@@ -34,7 +34,86 @@ from backend.extensions.logger import logger
 from backend.extensions.utility import generate_private_path, analysis_script_output
 
 
-def final_ssh_checking(user, port, password, private_key):
+def final_ping_detecting(COUNT, TIMEOUT):
+    """
+    :Return:
+
+        default return: dict(code=100, msg='')
+
+        0: PING SUCCESS(可联通)
+        1: PING FAIL(超时)
+
+        0: SSH SUCCESS(成功)
+        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+
+        10: NETWORK ERROR(IP无法解析)
+
+        20: OTHER ERROR
+        100: DEFAULT
+
+    """
+
+    fruit = dict(code=100, msg='')
+
+    command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
+
+    try:
+        output = local(command, capture=True)
+        if output.return_code == 0:
+            fruit['code'] = 0
+        elif output.return_code == 1:
+            fruit['code'] = 1
+        elif output.return_code == 2 and 'unknown host' in output.stderr:
+            fruit['code'] = 10
+            fruit['msg'] = 'Network address error'
+
+    except Exception, e:
+        fruit['code'] = 20
+        fruit['msg'] = '%s' % e
+
+        logger.warning(u'UNKNOWN FAILS| Ping %s fails, Status is %s, Message is %s' %
+                       (env.host, fruit['code'], fruit['msg']))
+
+    finally:
+        return fruit
+
+
+def ping_status_detecting(operation=None, config=None):
+    """
+    :Return:
+
+        0: 队列中
+        1: 已完成
+        2: 内部错误
+        5: 执行中
+
+    """
+
+    # 修改任务状态，标记为操作中。
+    operation.status = 5
+    db.commit()
+
+    with hide('everything'):
+
+        do_exec = execute(final_ping_detecting, config.get('PING_COUNT', 4), config.get('PING_TIMEOUT', 5),
+                          hosts=operation.server_list.split())
+
+    operation.status = 1
+
+    try:
+        operation.result = json.dumps(do_exec, ensure_ascii=False)
+    except Exception, e:
+        operation.status = 2
+        logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, e))
+
+    db.commit()
+
+
+def final_ssh_detecting(user, port, password, private_key):
     """
     :Return:
 
@@ -134,7 +213,7 @@ def final_ssh_checking(user, port, password, private_key):
         return fruit
 
 
-def ssh_connectivity_checking(operation):
+def ssh_status_detecting(operation, config=None):
     """
     :Return:
 

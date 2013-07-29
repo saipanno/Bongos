@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/17.
+#                    Created at 2013/07/29.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 
 import json
 from jinja2 import Template
-from fabric.api import env, run, hide, show, execute
+from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.models import SshConfig, PreDefinedScript
@@ -34,6 +34,163 @@ from backend.models import SshConfig, PreDefinedScript
 from backend.extensions.database import db
 from backend.extensions.logger import logger
 from backend.extensions.utility import generate_private_path, analysis_script_output
+
+
+def final_custom_execute(user, port, password, private_key, script_template, template_vars):
+    """
+    :Return:
+
+        default return: dict(code=100, error='', msg='')
+
+        0: PING SUCCESS(可联通)
+        1: PING FAIL(超时)
+
+        0: SSH SUCCESS(成功)
+        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
+        3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
+        4: COMMAND EXECUTE FAIL(脚本中途失败)
+
+        10: NETWORK ERROR(IP无法解析)
+
+        20: OTHER ERROR
+        100: DEFAULT
+
+        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
+        CommandTimeout = ["socket.timeout"]
+
+        SSH认证是先看private_key，后看password.
+
+    """
+
+    env.user = user
+    env.port = port
+    env.password = password
+    if private_key is not None:
+        env.key_filename = private_key
+
+    fruit = dict(code=100, error='', msg='')
+
+    template = Template(script_template)
+    script = template.render(template_vars.get(env.host, dict()))
+
+    try:
+        output = run(script, shell=True, quiet=True)
+        if output.return_code == 0:
+            fruit['code'] = 0
+            fruit['msg'] = analysis_script_output(output.stdout)
+        else:
+            fruit['code'] = 4
+            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['error'] = output.stderr
+
+    # SystemExit 无异常说明字符串
+    except SystemExit:
+        fruit['code'] = 2
+        fruit['error'] = 'Authentication failed'
+
+    # CommandTimeout 无异常说明字符串
+    except CommandTimeout:
+        fruit['code'] = 3
+        fruit['error'] = 'Script execute timeout'
+
+    except NetworkError, e:
+        if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
+            fruit['code'] = 1
+            fruit['error'] = 'Ssh connect timeout'
+
+        elif 'Name lookup failed for' in e.__str__():
+            fruit['code'] = 10
+            fruit['error'] = 'Network address error'
+
+        elif 'Authentication failed' in e.__str__():
+            fruit['code'] = 2
+            fruit['error'] = 'Authentication failed'
+
+        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
+        elif 'Private key file is encrypted' in e.__str__():
+            fruit['code'] = 2
+            fruit['error'] = 'Private key file is encrypted'
+
+        elif 'not match pre-existing key' in e.__str__():
+            fruit['code'] = 2
+            fruit['error'] = 'Host key verification failed'
+
+        else:
+            fruit['code'] = 20
+            fruit['error'] = '%s' % e
+            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
+                           (env.host, fruit['code'], fruit['error']))
+
+    except Exception, e:
+        if 'No such file or directory' in e:
+            fruit['code'] = 2
+            fruit['error'] = 'Can\'t find private key'
+        else:
+            fruit['code'] = 20
+            fruit['error'] = '%s' % e
+
+            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
+                           (env.host, fruit['code'], fruit['error']))
+
+    finally:
+        return fruit
+
+
+def custom_script_execute(operation=None, config=None):
+    """
+    :Return:
+
+        0: 队列中
+        1: 已完成
+        2: 内部错误
+        5: 执行中
+
+    """
+
+    # 修改任务状态，标记为操作中。
+    operation.status = 5
+    db.commit()
+
+    try:
+        ssh_config_id = operation.ssh_config
+        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
+    except Exception, e:
+        operation.status = 2
+        message = 'Failed to get the ssh configuration. %s' % e
+        logger.error(u'DATABASE FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, message))
+
+    try:
+        template_vars = json.loads(operation.template_vars)
+    except Exception, e:
+        operation.status = 2
+        message = 'Failed to load template vars. %s' % e
+        logger.error(u'USER DATA FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                     (operation.id, operation.status, message))
+
+    if operation.status != 2:
+
+        with hide('everything'):
+
+            do_exec = execute(final_custom_execute,
+                              ssh_config.username,
+                              ssh_config.port,
+                              ssh_config.password,
+                              generate_private_path(ssh_config.private_key),
+                              operation.script_template,
+                              template_vars,
+                              hosts=operation.server_list.split())
+
+        operation.status = 1
+        try:
+            operation.result = json.dumps(do_exec, ensure_ascii=False)
+        except Exception, e:
+            operation.status = 2
+            logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
+                         (operation.id, operation.status, e))
+
+    db.commit()
 
 
 def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
@@ -137,7 +294,7 @@ def final_predefined_execute(user, port, password, private_key, script_template,
         return fruit
 
 
-def predefined_script_execute(operation):
+def predefined_script_execute(operation=None, config=None):
     """
     :Return:
 

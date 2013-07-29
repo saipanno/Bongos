@@ -24,12 +24,21 @@
 # SOFTWARE.
 
 
-from backend.plugins.ssh_connectivity import ssh_connectivity_checking
-from backend.plugins.ping_connectivity import ping_connectivity_checking
-from backend.plugins.custom_execute import custom_script_execute
-from backend.plugins.predefined_execute import predefined_script_execute
-from backend.plugins.remote_power_control import exec_power_management
+from fabric.api import env
+
+from backend.plugins.status_detecting import ssh_status_detecting
+from backend.plugins.status_detecting import ping_status_detecting
+from backend.plugins.remote_execute import custom_script_execute
+from backend.plugins.remote_execute import predefined_script_execute
+from backend.plugins.remote_control import remote_power_control
 
 
 def task_runner(operation=None, config=None):
-    pass
+
+    env.parallel = True
+    env.warn_only = True
+
+    env.pool_size = config.get('POOL_SIZE', 250)
+    env.timeout = config.get('SSH_TIMEOUT', 30)
+    env.command_timeout = config.get('SSH_COMMAND_TIMEOUT', 60)
+    env.disable_known_hosts = config.get('DISABLE_KNOWN_HOSTS', True)
