@@ -1,6 +1,8 @@
 rq
 fabric
 requests
+supervisor
+
 Flask
 Flask-WTF
 Flask-Login
