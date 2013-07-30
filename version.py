@@ -24,20 +24,4 @@
 # SOFTWARE.
 
 
-import logging
-from logging import FileHandler, Formatter
-from flask import current_app
-
-levels = {
-    'DEBUG':    logging.DEBUG,
-    'INFO':     logging.INFO,
-    'WARNING':  logging.WARNING,
-    'ERROR':    logging.ERROR,
-    'CRITICAL': logging.CRITICAL
-}
-
-logging_handler = FileHandler(current_app.config['LOGGING_FILENAME'], mode='a')
-logging_handler.setFormatter(Formatter('%(asctime)s - FRONTEND - %(levelname)s: %(message)s'))
-
-current_app.logger.addHandler(logging_handler)
-current_app.logger.setLevel(levels.get(current_app.config.get('LOGGING_LEVEL', 'ERROR')))
+VERSION = '0.1'

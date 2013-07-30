@@ -42,7 +42,7 @@ def analysis_script_output(output):
 
     # \S 匹配所有非空字符
     # +? 匹配前面正则一次或多次，非贪婪模式
-    regexp = u'BD:\S+?:EOF'
+    regexp = 'BD:\S+?:EOF'
 
     fruit = re.findall(regexp, output)
 

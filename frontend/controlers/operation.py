@@ -34,14 +34,15 @@ from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, 
 
 from frontend.models.account import User
 from frontend.models.operation import OperationDb
+from frontend.models.dashboard import SshConfig, PreDefinedScript
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
-from frontend.extensions.utility import format_address_list, format_template_vars, catch_errors
-
-from frontend.extensions.tasks import q
+from frontend.extensions.utility import catch_errors, format_address_list, format_template_vars,\
+    get_obj_attributes, get_dict_items
 
 from application import backend_runner
+from frontend.extensions.tasks import q
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
@@ -163,6 +164,14 @@ def create_ssh_detect_ctrl():
         db.session.add(operation)
         db.session.commit()
 
+        ssh_config = SshConfig.query.filter_by(id=form.ssh_config.data.id).first()
+        ssh_config_dict = get_obj_attributes(ssh_config, 'SSH')
+
+        operations = get_obj_attributes(operation, 'OPT')
+        operations.update(ssh_config_dict)
+
+        q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
+
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
@@ -203,19 +212,7 @@ def create_ping_detect_ctrl():
         db.session.add(operation)
         db.session.commit()
 
-        operation_dict = dict()
-        operation_dict['id'] = operation.id
-        operation_dict['operation_type'] = operation.operation_type
-        operation_dict['author'] = operation.author
-        operation_dict['datetime'] = operation.datetime
-        operation_dict['server_list'] = operation.server_list
-        operation_dict['script_template'] = operation.script_template
-        operation_dict['ssh_config'] = operation.ssh_config
-        operation_dict['template_vars'] = operation.template_vars
-        operation_dict['status'] = operation.status
-        operation_dict['result'] = operation.result
-
-        q.enqueue(backend_runner, operation_dict, current_app.config)
+        q.enqueue(backend_runner, get_obj_attributes(operation, 'OPT'), get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
@@ -265,6 +262,14 @@ def create_custom_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
+        ssh_config = SshConfig.query.filter_by(id=form.ssh_config.data.id).first()
+        ssh_config_dict = get_obj_attributes(ssh_config, 'SSH')
+
+        operations = get_obj_attributes(operation, 'OPT')
+        operations.update(ssh_config_dict)
+
+        q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
+
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
@@ -312,6 +317,17 @@ def create_predefined_execute_ctrl():
         db.session.add(operation)
         db.session.commit()
 
+        ssh_config = SshConfig.query.filter_by(id=form.ssh_config.data.id).first()
+        ssh_config_dict = get_obj_attributes(ssh_config, 'SSH')
+        predefined_script = PreDefinedScript.query.filter_by(id=form.script_template.data.id).first()
+        predefined_script_dict = get_obj_attributes(predefined_script, 'SCRIPT')
+
+        operations = get_obj_attributes(operation, 'OPT')
+        operations.update(ssh_config_dict)
+        operations.update(predefined_script_dict)
+
+        q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
+
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
@@ -352,6 +368,8 @@ def create_power_control_ctrl():
                                 form.script_template.data, u'', 0, 0, u'')
         db.session.add(operation)
         db.session.commit()
+
+        q.enqueue(backend_runner, get_obj_attributes(operation, 'OPT'), get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))

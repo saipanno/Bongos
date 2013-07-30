@@ -26,6 +26,7 @@
 
 from flask import Flask, json
 from flask.ext.login import current_user
+from logging import FileHandler, Formatter
 from flask.ext.principal import identity_loaded, Principal
 
 from frontend.models.dashboard import Permission
@@ -43,10 +44,20 @@ def create_app(config=None):
     if config is not None:
         app.config.from_object(config)
 
+    configure_logger(app)
     configure_extensions(app)
     configure_blueprints(app)
 
     return app
+
+
+def configure_logger(app):
+
+    logging_handler = FileHandler(app.config['LOGGING_FILENAME'], mode='a')
+    logging_handler.setFormatter(Formatter('%(asctime)s - FRONTEND - %(levelname)s: %(message)s'))
+
+    app.logger.addHandler(logging_handler)
+    app.logger.setLevel(app.config.get('LOGGING_LEVEL', 'ERROR'))
 
 
 def configure_extensions(app):

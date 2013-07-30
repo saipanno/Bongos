@@ -1,6 +1,6 @@
 rq
-celery
 fabric
+requests
 Flask
 Flask-WTF
 Flask-Login

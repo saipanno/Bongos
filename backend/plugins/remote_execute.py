@@ -25,15 +25,16 @@
 
 
 import json
+import requests
 from jinja2 import Template
 from fabric.api import env, run, hide, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_private_path, analysis_script_output
+from backend.extensions.utility import generate_private_path
 
 
-def final_custom_execute(user, port, password, private_key, script_template, template_vars):
+def final_custom_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE, TEMPLATE_VARS):
     """
     :Return:
 
@@ -60,25 +61,24 @@ def final_custom_execute(user, port, password, private_key, script_template, tem
 
     """
 
-    env.user = user
-    env.port = port
-    env.password = password
-    if private_key is not None:
-        env.key_filename = private_key
+    env.user = USERNAME
+    env.password = PASSWORD
+    env.port = PORT
+    env.key_filename = PRIVATE_KEY
 
     fruit = dict(code=100, error='', msg='')
 
-    template = Template(script_template)
-    script = template.render(template_vars.get(env.host, dict()))
+    template = Template(SCRIPT_TEMPLATE)
+    script = template.render(TEMPLATE_VARS.get(env.host, dict()))
 
     try:
         output = run(script, shell=True, quiet=True)
         if output.return_code == 0:
             fruit['code'] = 0
-            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['msg'] = output.stdout
         else:
             fruit['code'] = 4
-            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['msg'] = output.stdout
             fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
@@ -145,52 +145,30 @@ def custom_script_execute(operation, config):
 
     """
 
-    # 修改任务状态，标记为操作中。
-    operation.status = 5
-    db.commit()
+    id = operation.get('OPT_ID', 0)
+    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
-    try:
-        ssh_config_id = operation.ssh_config
-        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to get the ssh configuration. %s' % e
-        logger.error(u'DATABASE FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
-                     (operation.id, operation.status, message))
+    with hide('everything'):
 
-    try:
-        template_vars = json.loads(operation.template_vars)
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to load template vars. %s' % e
-        logger.error(u'USER DATA FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
-                     (operation.id, operation.status, message))
+        result = execute(final_custom_execute,
+                         operation.get('SSH_USERNAME', 'root'),
+                         operation.get('SSH_PASSWORD', 'password'),
+                         operation.get('SSH_PORT', 22),
+                         generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key')),
+                         operation.get('OPT_SCRIPT_TEMPLATE', 'uptime'),
+                         json.loads(operation.get('OPT_TEMPLATE_VARS', dict())),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    if operation.status != 2:
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
-        with hide('everything'):
+    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
-            do_exec = execute(final_custom_execute,
-                              ssh_config.username,
-                              ssh_config.port,
-                              ssh_config.password,
-                              generate_private_path(ssh_config.private_key),
-                              operation.script_template,
-                              template_vars,
-                              hosts=operation.server_list.split())
-
-        operation.status = 1
-        try:
-            operation.result = json.dumps(do_exec, ensure_ascii=False)
-        except Exception, e:
-            operation.status = 2
-            logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
-                         (operation.id, operation.status, e))
-
-    db.commit()
+    if response.status_code != requests.codes.ok:
+        message = response.json.get('message', 'unknown errors')
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))
 
 
-def final_predefined_execute(user, port, password, private_key, script_template, template_vars):
+def final_predefined_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE, TEMPLATE_VARS):
     """
     :Return:
 
@@ -217,25 +195,24 @@ def final_predefined_execute(user, port, password, private_key, script_template,
 
     """
 
-    env.user = user
-    env.port = port
-    env.password = password
-    if private_key is not None:
-        env.key_filename = private_key
+    env.user = USERNAME
+    env.password = PASSWORD
+    env.port = PORT
+    env.key_filename = PRIVATE_KEY
 
     fruit = dict(code=100, error='', msg='')
 
-    template = Template(script_template)
-    script = template.render(template_vars.get(env.host, dict()))
+    template = Template(SCRIPT_TEMPLATE)
+    script = template.render(TEMPLATE_VARS.get(env.host, dict()))
 
     try:
         output = run(script, shell=True, quiet=True)
         if output.return_code == 0:
             fruit['code'] = 0
-            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['msg'] = output.stdout
         else:
             fruit['code'] = 4
-            fruit['msg'] = analysis_script_output(output.stdout)
+            fruit['msg'] = output.stdout
             fruit['error'] = output.stderr
 
     # SystemExit 无异常说明字符串
@@ -295,63 +272,30 @@ def predefined_script_execute(operation, config):
     """
     :Return:
 
-        0: 队列中
+        0: 执行中
         1: 已完成
         2: 内部错误
-        5: 执行中
 
     """
 
-    # 修改任务状态，标记为操作中。
-    operation.status = 5
-    db.commit()
+    id = operation.get('OPT_ID', 0)
+    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
-    try:
-        ssh_config_id = operation.ssh_config
-        ssh_config = db.query(SshConfig).filter_by(id=int(ssh_config_id)).first()
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to get the ssh configuration. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
+    with hide('everything'):
 
-    try:
-        predefined_script_id = operation.script_template
-        script_template = db.query(PreDefinedScript).filter_by(id=int(predefined_script_id)).first().script
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to get the script template. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
+        result = execute(final_predefined_execute,
+                         operation.get('SSH_USERNAME', 'root'),
+                         operation.get('SSH_PASSWORD', 'password'),
+                         operation.get('SSH_PORT', 22),
+                         generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key')),
+                         operation.get('SCRIPT_SCRIPT', 'uptime'),
+                         json.loads(operation.get('OPT_TEMPLATE_VARS', dict())),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    try:
-        template_vars = json.loads(operation.template_vars)
-    except Exception, e:
-        operation.status = 2
-        message = 'Failed to load template vars. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
-    if operation.status != 2:
+    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
-        with hide('everything'):
-
-            do_exec = execute(final_predefined_execute,
-                              ssh_config.username,
-                              ssh_config.port,
-                              ssh_config.password,
-                              generate_private_path(ssh_config.private_key),
-                              script_template,
-                              template_vars,
-                              hosts=operation.server_list.split())
-
-        operation.status = 1
-        try:
-            operation.result = json.dumps(do_exec, ensure_ascii=False)
-        except Exception, e:
-            operation.status = 2
-            message = 'Integrate data error. %s' % e
-            logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                         (operation.id, operation.operation_type, operation.status, message))
-
-    db.commit()
+    if response.status_code != requests.codes.ok:
+        message = response.json.get('message', 'unknown errors')
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))

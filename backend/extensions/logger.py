@@ -25,6 +25,7 @@
 
 
 import logging
+from logging import FileHandler, Formatter
 
 import settings
 
@@ -37,12 +38,10 @@ levels = {
     'CRITICAL': logging.CRITICAL
 }
 
+logger = logging.getLogger('backend.app')
 
-logging.basicConfig(
-    filemode='a',
-    filename=settings.LOGGING_FILENAME,
-    level=levels.get(settings.LOGGING_LEVEL, 'INFO'),
-    format='%(asctime)s - BACKEND - %(levelname)s: %(message)s'
-)
+logging_handler = FileHandler(settings.LOGGING_FILENAME, mode='a')
+logging_handler.setFormatter(Formatter('%(asctime)s - BACKEND - %(levelname)s: %(message)s'))
 
-logger = logging.getLogger()
+logger.addHandler(logging_handler)
+logger.setLevel(levels.get(settings.LOGGING_LEVEL, 'ERROR'))

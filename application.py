@@ -29,7 +29,7 @@ from fabric.api import env
 from backend.extensions.logger import logger
 
 from backend.plugins import ping_status_detecting, ssh_status_detecting
-#from backend.plugins import custom_script_execute, predefined_script_execute
+from backend.plugins import custom_script_execute, predefined_script_execute
 #from backend.plugins import power_supply_control
 
 
@@ -38,12 +38,12 @@ def backend_runner(operation=None, config=None):
     env.parallel = True
     env.warn_only = True
 
-    env.timeout = config.get('SSH_TIMEOUT', 30)
-    env.pool_size = config.get('POOL_SIZE', 250)
-    env.command_timeout = config.get('SSH_COMMAND_TIMEOUT', 60)
-    env.disable_known_hosts = config.get('DISABLE_KNOWN_HOSTS', True)
+    env.timeout = config.get('SETTINGS_SSH_TIMEOUT', 30)
+    env.pool_size = config.get('SETTINGS_POOL_SIZE', 250)
+    env.command_timeout = config.get('SETTINGS_SSH_COMMAND_TIMEOUT', 60)
+    env.disable_known_hosts = config.get('SETTINGS_DISABLE_KNOWN_HOSTS', True)
 
-    operation_type = operation.get('operation_type', '')
+    operation_type = operation.get('OPT_OPERATION_TYPE', '')
 
     if operation_type == u'ping_status_detecting':
         ping_status_detecting(operation, config)
@@ -51,14 +51,14 @@ def backend_runner(operation=None, config=None):
     elif operation_type == u'ssh_status_detecting':
         ssh_status_detecting(operation, config)
 
-    #elif operation_type == u'custom_script_execute':
-    #    custom_script_execute(operation, config)
+    elif operation_type == u'custom_script_execute':
+        custom_script_execute(operation, config)
 
-    #elif operation_type == u'predefined_script_execute':
-    #    predefined_script_execute(operation, config)
+    elif operation_type == u'predefined_script_execute':
+        predefined_script_execute(operation, config)
 
     #elif operation_type == u'power_supply_control':
     #    power_supply_control(operation, config)
 
     else:
-        logger.error('Error operation type. ID is %s' % operation.id)
+        logger.error('Error operation type. ID is %s' % operation['OPT_ID'])

@@ -27,13 +27,13 @@
 import re
 import json
 import requests
-from fabric.api import env, hide, show, local, execute
+from fabric.api import env, hide, local, execute
 
 from backend.extensions.logger import logger
 from backend.extensions.utility import generate_ipmi_address
 
 
-def final_power_execute(ipmi_user, ipmi_password, operate, spec=None):
+def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE, IPMI_SPEC_TAG=None):
     """
     :Return:
 
@@ -59,9 +59,9 @@ def final_power_execute(ipmi_user, ipmi_password, operate, spec=None):
 
     ipmi_address = generate_ipmi_address(env.host)
 
-    specifies = '-I lanplus' if spec else ''
-    command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address, ipmi_user, ipmi_password,
-                                                                  operate)
+    specifies = '-I lanplus' if IPMI_SPEC_TAG else ''
+    command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address,
+                                                                  IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE)
 
     try:
         output = local(command, capture=True)
@@ -73,7 +73,7 @@ def final_power_execute(ipmi_user, ipmi_password, operate, spec=None):
             if re.match(u'Activate Session command failed', output.stderr):
                 fruit['error'] = 'IPMI connection failed'
                 logger.warning(u'IPMI Connection Failed. ADDRESS: %s USER: %s, PASSWORD: %s' %
-                               (ipmi_address, ipmi_user, ipmi_password))
+                               (ipmi_address, IPMI_USER, IPMI_PASSWORD))
             elif re.match(u'Invalid chassis power command', output.stderr):
                 fruit['error'] = 'Wrong type of power operate'
             else:
@@ -97,35 +97,27 @@ def power_supply_control(operation, config):
     """
     :Return:
 
-        0: 队列中
+        0: 执行中
         1: 已完成
         2: 内部错误
-        5: 执行中
 
     """
 
-    update_api_url = '%s/operation' % config.get('API_BASIC_URL', 'http://localhost/api')
+    id = operation.get('OPT_ID', 0)
+    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
     with hide('everything'):
 
-        do_exec = execute(final_power_execute, config.get('IPMI_USER', 'root'),
-                          config.get('IPMI_PASSWORD', ''), operation.script_template,
-                          hosts=operation.server_list.split())
+        result = execute(final_power_execute,
+                         config.get('SETTINGS_IPMI_USER', 'root'),
+                         config.get('SETTINGS_IPMI_PASSWORD', 'password'),
+                         operation.get('OPT_SCRIPT_TEMPLATE', 'status'),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    try:
-        result = json.dumps(do_exec, ensure_ascii=False)
-    except Exception, e:
-        status = 2
-        result = json.dumps(dict(), ensure_ascii=False)
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
-        message = 'Integrate data error. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
-    else:
-        status = 1
+    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
-    data = dict(status=status, result=result)
-
-    response = requests.put(update_api_url,
-                            data=json.dumps(data, ensure_ascii=False),
-                            headers={'content-type': 'application/json'})
+    if response.status_code != requests.codes.ok:
+        message = response.json.get('message', 'unknown errors')
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))

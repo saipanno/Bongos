@@ -24,9 +24,7 @@
 # SOFTWARE.
 
 
-import os
 import re
-from flask import current_app
 from flask.ext.wtf import ValidationError
 
 
@@ -155,28 +153,20 @@ class Depend(object):
             raise ValidationError(self.message)
 
 
-def generate_private_path(filename):
+def get_obj_attributes(obj, key_header):
 
-    if filename is not u'':
-        return os.path.join(current_app.config.get('PRIVATE_KEY_PATH'), filename)
-    else:
-        return None
+    fruit = dict()
+    fruit['%s_ID' % key_header.upper()] = obj.id
+    for key in obj.__dict__.keys():
+        fruit['%s_%s' % (key_header.upper(), key.upper())] = obj.__dict__[key]
 
-
-def analysis_script_output(output):
-
-    # \S 匹配所有非空字符
-    # +? 匹配前面正则一次或多次，非贪婪模式
-    regexp = u'BD:\S+?:EOF'
-
-    fruit = re.findall(regexp, output)
-
-    # 字符串掐头去尾操作，删除BD:和:EOF
-    return ' '.join(fruit[3:][:-4])
+    return fruit
 
 
-def generate_ipmi_address(address):
+def get_dict_items(obj, key_header):
 
-    fruit = address.split('.')
+    fruit = dict()
+    for key in obj:
+        fruit['%s_%s' % (key_header.upper(), key.upper())] = obj[key]
 
-    return '%s.%s.%s' % (current_app.config.get('IPMI_NETWORK'), fruit[2], fruit[3])
+    return fruit

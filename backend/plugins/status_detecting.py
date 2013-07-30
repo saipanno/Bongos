@@ -30,7 +30,7 @@ from fabric.api import env, run, hide, local, execute
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_private_path, analysis_script_output
+from backend.extensions.utility import generate_private_path
 
 
 def final_ping_detecting(COUNT, TIMEOUT):
@@ -73,7 +73,7 @@ def final_ping_detecting(COUNT, TIMEOUT):
         fruit['code'] = 20
         fruit['msg'] = '%s' % e
 
-        logger.warning(u'UNKNOWN FAILS | Ping %s fails, Status is %s, Message is %s' %
+        logger.warning(u'UNKNOWN FAILS|Ping %s fails, Status is %s, Message is %s' %
                        (env.host, fruit['code'], fruit['msg']))
 
     finally:
@@ -84,35 +84,29 @@ def ping_status_detecting(operation, config):
     """
     :Return:
 
-        0: 队列中
+        0: 执行中
         1: 已完成
         2: 内部错误
-        5: 执行中
 
     """
 
-    id = operation.get('id', 0)
-    update_api_url = '%s/operation' % config.get('API_BASIC_URL', 'http://localhost/api')
+    id = operation.get('OPT_ID', 0)
+    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
     with hide('everything'):
 
-        try:
-            result = execute(final_ping_detecting, config.get('PING_COUNT', 4),
-                             config.get('PING_TIMEOUT', 5),
-                             hosts=operation.get('server_list').split())
-            operation_result = dict(id=id, status=1, result=result)
-        except Exception, e:
-            operation_result = dict(id=id, status=2, result=dict())
-            logger.error(u'INTERNAL FAILS| Operation ID is %s, Operation status is %s, Message is %s' %
-                         (id, 2, e))
+        result = execute(final_ping_detecting,
+                         config.get('SETTINGS_PING_COUNT', 4),
+                         config.get('SETTINGS_PING_TIMEOUT', 5),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    data = json.dumps(operation_result,  ensure_ascii=False)
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
     response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
     if response.status_code != requests.codes.ok:
         message = response.json.get('message', 'unknown errors')
-        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))
+        logger.error(u'UPDATE OPERATION FAILS|Operation ID is %s, Message is %s' % (id, message))
 
 
 def final_ssh_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
@@ -145,9 +139,7 @@ def final_ssh_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
     env.user = USERNAME
     env.password = PASSWORD
     env.port = PORT
-
-    if PRIVATE_KEY is not None:
-        env.key_filename = PRIVATE_KEY
+    env.key_filename = PRIVATE_KEY
 
     fruit = dict(code=100, msg='')
 
@@ -220,35 +212,25 @@ def ssh_status_detecting(operation, config):
     """
     :Return:
 
-        0: 队列中
+        0: 执行中
         1: 已完成
         2: 内部错误
-        5: 执行中
 
     """
 
-    id = operation.get('id', 0)
-    update_api_url = '%s/operation' % config.get('API_BASIC_URL', 'http://localhost/api')
+    id = operation.get('OPT_ID', 0)
+    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
     with hide('everything'):
 
         result = execute(final_ssh_detecting,
-                         config.get('ssh_username', 'root'),
-                         config.get('ssh_password', 'root'),
-                         config.get('ssh_server_port', 22),
-                         generate_private_path(config.get('private_key', 'default.key')),
-                         hosts=operation.server_list.split())
+                         operation.get('SSH_USERNAME', 'root'),
+                         operation.get('SSH_PASSWORD', 'password'),
+                         operation.get('SSH_PORT', 22),
+                         generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key')),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    try:
-        operation_result = json.dumps(result, ensure_ascii=False)
-    except Exception, e:
-        operation_status = 2
-        operation_result = dict()
-        message = 'Integrate data error. %s' % e
-        logger.error(u'ID:%s, TYPE:%s, STATUS: %s, MESSAGE: %s' %
-                     (operation.id, operation.operation_type, operation.status, message))
-
-    data = json.dumps(operation_result,  ensure_ascii=False)
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
     response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 

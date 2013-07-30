@@ -26,6 +26,6 @@
 
 from backend.plugins.status_detecting import ssh_status_detecting
 from backend.plugins.status_detecting import ping_status_detecting
-#from backend.plugins.remote_execute import custom_script_execute
-#from backend.plugins.remote_execute import predefined_script_execute
-#from backend.plugins.remote_control import power_supply_control
+from backend.plugins.remote_execute import custom_script_execute
+from backend.plugins.remote_execute import predefined_script_execute
+from backend.plugins.remote_control import power_supply_control
