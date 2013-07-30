@@ -37,7 +37,7 @@ DEBUG = True
 
 # api config
 API_ACCESS_CLIENTS = ['127.0.0.1']  # default is 127.0.0.1, could
-API_BASIC_URL = 'http://www.you.com/api'
+API_BASIC_URL = 'http://127.0.0.1/api'
 
 # application config
 IPMI_NETWORK = '192.168'

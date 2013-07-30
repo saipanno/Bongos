@@ -30,7 +30,7 @@ from backend.extensions.logger import logger
 
 from backend.plugins import ping_status_detecting, ssh_status_detecting
 from backend.plugins import custom_script_execute, predefined_script_execute
-#from backend.plugins import power_supply_control
+from backend.plugins import power_supply_control
 
 
 def backend_runner(operation=None, config=None):
@@ -57,8 +57,8 @@ def backend_runner(operation=None, config=None):
     elif operation_type == u'predefined_script_execute':
         predefined_script_execute(operation, config)
 
-    #elif operation_type == u'power_supply_control':
-    #    power_supply_control(operation, config)
+    elif operation_type == u'power_supply_control':
+        power_supply_control(operation, config)
 
     else:
         logger.error('Error operation type. ID is %s' % operation['OPT_ID'])
