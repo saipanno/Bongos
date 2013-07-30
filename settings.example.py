@@ -36,8 +36,8 @@ SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
 DEBUG = True
 
 # api config
-API_ACCESS_CLIENTS = ['127.0.0.1']  # default is 127.0.0.1, could
-API_BASIC_URL = 'http://127.0.0.1/api'
+API_ACCESS_CLIENTS = ['hostname']      # server address, Normally equal to hostname
+API_BASIC_URL = 'http://hostname/api'  # server address, Normally equal to hostname
 
 # application config
 IPMI_NETWORK = '192.168'

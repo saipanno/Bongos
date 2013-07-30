@@ -9,6 +9,7 @@ An Useful Server Administration Web Tools.
 * 服务器资产管理
 * 操作系统自动部署
 * 服务器自动化操作
+* 后台管理界面
 
 
 
@@ -21,5 +22,11 @@ http://bongos.saipanno.com
 ### 默认权限
 
 admin/admin
-member/member
-guest/guest
+
+
+
+# 服务部署
+
+1. `pip install -r requirements.txt`
+2. `yum install ipmitool redis`
+
