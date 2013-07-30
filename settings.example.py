@@ -35,22 +35,26 @@ PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
 SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
 DEBUG = True
 
+# api config
+API_ACCESS_CLIENTS = ['127.0.0.1']  # default is 127.0.0.1, could
+API_BASIC_URL = 'http://www.you.com/api'
+
 # application config
-IPMI_NETWORK = '10.10'
+IPMI_NETWORK = '192.168'
 IPMI_USER = 'root'
 IPMI_PASSWORD = 'calvin'
 
 # fabric config
-POOL_SIZE = 250           # default is 250
-PING_COUNT = 4            # default is 4
-PING_TIMEOUT = 5          # default is 5
-SSH_TIMEOUT = 30          # default is 30
-SSH_COMMAND_TIMEOUT = 120  # default is 60
+POOL_SIZE = 250             # default is 250
+PING_COUNT = 4              # default is 4
+PING_TIMEOUT = 5            # default is 5
+SSH_TIMEOUT = 30            # default is 30
+SSH_COMMAND_TIMEOUT = 120   # default is 60
 DISABLE_KNOWN_HOSTS = True  # default is True
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
 
 # logging config
-LOGGING_LEVEL = 'INFO'
+LOGGING_LEVEL = 'WARNING'
 LOGGING_FILENAME = os.path.join(_basedir, 'bongos.log')
