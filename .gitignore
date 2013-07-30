@@ -3,7 +3,6 @@ env
 *.log
 *.pyc
 *.key
-celery.db
 
 .idea
 .DS_Store
