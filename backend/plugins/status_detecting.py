@@ -26,7 +26,8 @@
 
 import json
 import requests
-from fabric.api import env, run, hide, local, execute
+from fabric.api import env, hide, run, local, execute
+from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
@@ -35,49 +36,43 @@ from backend.extensions.utility import generate_private_path
 
 def final_ping_detecting(COUNT, TIMEOUT):
     """
-    :Return:
+    :Return Code Description:
 
-        default return: dict(code=100, msg='')
+        0: PING SUCCESS(SUCCESS)
+        1: PING FAIL(TIMEOUT)
 
-        0: PING SUCCESS(可联通)
-        1: PING FAIL(超时)
-
-        0: SSH SUCCESS(成功)
-        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        0: SSH SUCCESS(SUCCESS)
+        1: SSH FAIL(TIMEOUT, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+        4: COMMAND EXECUTE FAIL(脚本中途失败)
 
-        10: NETWORK ERROR(IP无法解析)
+        10: NETWORK ERROR(ADDRESS ERROR)
 
         20: OTHER ERROR
         100: DEFAULT
 
-    """
+        SSH认证是先看private_key，后看password.
 
-    fruit = dict(code=100, msg='')
+    """
 
     command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
 
+    # TODO: 统计其它异常情况
+
     try:
-        output = local(command, capture=True)
-        if output.return_code == 0:
-            fruit['code'] = 0
-        elif output.return_code == 1:
-            fruit['code'] = 1
-        elif output.return_code == 2 and 'unknown host' in output.stderr:
-            fruit['code'] = 10
-            fruit['msg'] = 'Network address error'
+        data = local(command, shell=True)
+        if data.return_code == 0 or data.return_code == 1:
+            output = dict(code=data.return_code, error_message='', message='')
+        elif data.return_code == 2 and 'unknown host' in data.stderr:
+            output = dict(code=10, error_message='Incorrect Node Address', message='')
+        else:
+            output = dict(code=data.return_code, error_message=data.stderr, message=data.stdout)
 
     except Exception, e:
-        fruit['code'] = 20
-        fruit['msg'] = '%s' % e
+        output = dict(code=20, error_message='Base Exception: %s' % e, message='')
 
-        logger.warning(u'UNKNOWN FAILS|Ping %s fails, Status is %s, Message is %s' %
-                       (env.host, fruit['code'], fruit['msg']))
-
-    finally:
-        return fruit
+    return output
 
 
 def ping_status_detecting(operation, config):
@@ -110,27 +105,23 @@ def ping_status_detecting(operation, config):
 
 
 def final_ssh_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
+
     """
-    :Return:
+    :Return Code Description:
 
-        default return: dict(code=100, msg='')
+        0: PING SUCCESS(SUCCESS)
+        1: PING FAIL(TIMEOUT)
 
-        0: PING SUCCESS(可联通)
-        1: PING FAIL(超时)
-
-        0: SSH SUCCESS(成功)
-        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        0: SSH SUCCESS(SUCCESS)
+        1: SSH FAIL(TIMEOUT, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+        4: COMMAND EXECUTE FAIL(脚本中途失败)
 
-        10: NETWORK ERROR(IP无法解析)
+        10: NETWORK ERROR(ADDRESS ERROR)
 
         20: OTHER ERROR
         100: DEFAULT
-
-        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
-        CommandTimeout = ["socket.timeout"]
 
         SSH认证是先看private_key，后看password.
 
@@ -141,76 +132,58 @@ def final_ssh_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
     env.port = PORT
     env.key_filename = PRIVATE_KEY
 
-    fruit = dict(code=100, msg='')
+    # TODO: 统计其它异常情况
 
     try:
-        output = run('uptime', shell=True, quiet=True)
-
-        if output.return_code == 0:
-            fruit['code'] = 0
-            fruit['msg'] = ''
+        data = run('ls', shell=True, quiet=True)
+        if data.return_code == 0:
+            output = dict(code=0, error_message='', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = output.stderr
+            output = dict(code=data.return_code, error_message=data.stderr, message='')
 
-    # SystemExit 无异常说明字符串
+    # SystemExit 认证失败
     except SystemExit:
-        fruit['code'] = 2
-        fruit['error'] = 'Authentication failed'
+        output = dict(code=2, error_message='Ssh Authentication Failed', message='')
 
-    # CommandTimeout 无异常说明字符串
+    # 远程命令执行时间超过`env.command_timeout`时触发
     except CommandTimeout:
-        fruit['code'] = 3
-        fruit['error'] = 'Script execute timeout'
+        output = dict(code=3, error_message='Remote Command Execute Timeout', message='')
+
+    # 通过设定`env.disable_known_hosts = True`可以避归此问题，但在异常处理上依然保留此逻辑。
+    except SSHException, e:
+        if 'Invalid key' in e.__str__():
+            output = dict(code=2, error_message='User’s Known-Hosts Check Failed', message='')
+        else:
+            output = dict(code=20, error_message='SSHException Exception: %s' % e, message='')
+
+    # 匹配错误的密钥路径
+    except IOError, e:
+        if 'No such file or directory' in e.__str__():
+            output = dict(code=2, error_message='Ssh Private Key Not Found', message='')
+        else:
+            output = dict(code=20, error_message='IOError Exception: %s' % e, message='')
 
     except NetworkError, e:
-
+        # 匹配SSH连接超时
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            fruit['code'] = 1
-            fruit['error'] = 'Connect timeout'
-
+            output = dict(code=1, error_message='Ssh Connection Timeout', message='')
         elif 'Name lookup failed for' in e.__str__():
-            fruit['code'] = 10
-            fruit['error'] = 'Network address error'
-
-        elif 'Authentication failed' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Authentication failed'
-
-        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
-        elif 'Private key file is encrypted' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Private key file is encrypted'
-
-        elif 'not match pre-existing key' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Host key verification failed'
-
+            output = dict(code=10, error_message='Incorrect Node Address', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
-            logger.warning(u'UNKNOWN FAILS|MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
+            output = dict(code=20, error_message='NetworkError Exception: %s' % e, message='')
 
     except Exception, e:
-
-        if 'No such file or directory' in e:
-            fruit['code'] = 2
-            fruit['error'] = 'Can\'t find private key'
+        if 'Private key file is encrypted' in e.__str__():
+            output = dict(code=2, error_message='Private key file is encrypted', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
+            output = dict(code=20, error_message='Base Exception: %s' % e, message='')
 
-            logger.warning(u'UNKNOWN FAILS|MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
-
-    finally:
-        return fruit
+    return output
 
 
 def ssh_status_detecting(operation, config):
     """
-    :Return:
+    :Return Code Description:
 
         0: 执行中
         1: 已完成

@@ -33,7 +33,7 @@ from backend.extensions.logger import logger
 from backend.extensions.utility import generate_ipmi_address
 
 
-def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE, IPMI_SPEC_TAG=None):
+def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_POWER_COMMAND, IPMI_SPEC_TAG=None):
     """
     :Return:
 
@@ -61,7 +61,7 @@ def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE, IPMI_SPEC_T
 
     specifies = '-I lanplus' if IPMI_SPEC_TAG else ''
     command = 'ipmitool %s -H %s -U %s -P %s chassis power %s' % (specifies, ipmi_address,
-                                                                  IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE)
+                                                                  IPMI_USER, IPMI_PASSWORD, IPMI_POWER_COMMAND)
 
     try:
         output = local(command, capture=True)
@@ -71,11 +71,11 @@ def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE, IPMI_SPEC_T
         elif output.return_code == 1:
             fruit['code'] = 1
             if re.match(u'Activate Session command failed', output.stderr):
-                fruit['error'] = 'IPMI connection failed'
-                logger.warning(u'IPMI Connection Failed. ADDRESS: %s USER: %s, PASSWORD: %s' %
+                fruit['error'] = 'IPMI Connection Failed'
+                logger.warning(u'IPMI FAILS|Connection Failed. Address is %s User is %s, Password is %s' %
                                (ipmi_address, IPMI_USER, IPMI_PASSWORD))
             elif re.match(u'Invalid chassis power command', output.stderr):
-                fruit['error'] = 'Wrong type of power operate'
+                fruit['error'] = 'Invalid IPMI Power Command'
             else:
                 fruit['error'] = output.stderr
         else:
@@ -86,8 +86,7 @@ def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_OPERATE_TYPE, IPMI_SPEC_T
         fruit['code'] = 20
         fruit['error'] = '%s' % e
 
-        logger.warning(u'UNKNOWN FAILS. MESSAGE: IPMI exec %s fails, except status is %s, except message is %s' %
-                       (env.host, fruit['code'], fruit['error']))
+        logger.warning(u'IPMI UNKNOWN FAILS|Message is %s' % fruit['error'])
 
     finally:
         return fruit

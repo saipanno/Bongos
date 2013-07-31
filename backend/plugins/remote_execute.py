@@ -28,34 +28,31 @@ import json
 import requests
 from jinja2 import Template
 from fabric.api import env, run, hide, execute
+from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_private_path
+from backend.extensions.utility import generate_private_path, analysis_script_output
 
 
 def final_custom_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE, TEMPLATE_VARS):
+
     """
-    :Return:
+    :Return Code Description:
 
-        default return: dict(code=100, error='', msg='')
+        0: PING SUCCESS(SUCCESS)
+        1: PING FAIL(TIMEOUT)
 
-        0: PING SUCCESS(可联通)
-        1: PING FAIL(超时)
-
-        0: SSH SUCCESS(成功)
-        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        0: SSH SUCCESS(SUCCESS)
+        1: SSH FAIL(TIMEOUT, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
         4: COMMAND EXECUTE FAIL(脚本中途失败)
 
-        10: NETWORK ERROR(IP无法解析)
+        10: NETWORK ERROR(ADDRESS ERROR)
 
         20: OTHER ERROR
         100: DEFAULT
-
-        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
-        CommandTimeout = ["socket.timeout"]
 
         SSH认证是先看private_key，后看password.
 
@@ -66,82 +63,69 @@ def final_custom_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE,
     env.port = PORT
     env.key_filename = PRIVATE_KEY
 
-    fruit = dict(code=100, error='', msg='')
-
     template = Template(SCRIPT_TEMPLATE)
     script = template.render(TEMPLATE_VARS.get(env.host, dict()))
 
+    # TODO: 统计其它异常情况
+
     try:
-        output = run(script, shell=True, quiet=True)
-        if output.return_code == 0:
-            fruit['code'] = 0
-            fruit['msg'] = output.stdout
+        data = run(script, shell=True, quiet=True)
+        if data.return_code == 0:
+            output = dict(code=0,
+                          error_message=data.stderr,
+                          message=analysis_script_output(data.stdout))
         else:
-            fruit['code'] = 4
-            fruit['msg'] = output.stdout
-            fruit['error'] = output.stderr
+            output = dict(code=data.return_code,
+                          error_message=data.stderr,
+                          message=data.stdout)
 
-    # SystemExit 无异常说明字符串
+    # SystemExit 认证失败
     except SystemExit:
-        fruit['code'] = 2
-        fruit['error'] = 'Authentication failed'
+        output = dict(code=2, error_message='Ssh Authentication Failed', message='')
 
-    # CommandTimeout 无异常说明字符串
+    # 远程命令执行时间超过`env.command_timeout`时触发
     except CommandTimeout:
-        fruit['code'] = 3
-        fruit['error'] = 'Script execute timeout'
+        output = dict(code=3, error_message='Remote Command Execute Timeout', message='')
+
+    # 通过设定`env.disable_known_hosts = True`可以避归此问题，但在异常处理上依然保留此逻辑。
+    except SSHException, e:
+        if 'Invalid key' in e.__str__():
+            output = dict(code=2, error_message='User’s Known-Hosts Check Failed', message='')
+        else:
+            output = dict(code=20, error_message='SSHException Exception: %s' % e, message='')
+
+    # 匹配错误的密钥路径
+    except IOError, e:
+        if 'No such file or directory' in e.__str__():
+            output = dict(code=2, error_message='Ssh Private Key Not Found', message='')
+        else:
+            output = dict(code=20, error_message='IOError Exception: %s' % e, message='')
 
     except NetworkError, e:
+        # 匹配SSH连接超时
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            fruit['code'] = 1
-            fruit['error'] = 'Ssh connect timeout'
-
+            output = dict(code=1, error_message='Ssh Connection Timeout', message='')
         elif 'Name lookup failed for' in e.__str__():
-            fruit['code'] = 10
-            fruit['error'] = 'Network address error'
-
-        elif 'Authentication failed' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Authentication failed'
-
-        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
-        elif 'Private key file is encrypted' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Private key file is encrypted'
-
-        elif 'not match pre-existing key' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Host key verification failed'
-
+            output = dict(code=10, error_message='Incorrect Node Address', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
-            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
+            output = dict(code=20, error_message='NetworkError Exception: %s' % e, message='')
 
     except Exception, e:
-        if 'No such file or directory' in e:
-            fruit['code'] = 2
-            fruit['error'] = 'Can\'t find private key'
+        if 'Private key file is encrypted' in e.__str__():
+            output = dict(code=2, error_message='Private key file is encrypted', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
+            output = dict(code=20, error_message='Base Exception: %s' % e, message='')
 
-            logger.warning(u'UNKNOWN FAILS| Connect %s fails, Status is %s, Message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
-
-    finally:
-        return fruit
+    return output
 
 
 def custom_script_execute(operation, config):
     """
-    :Return:
+    :Return Code Description:
 
-        0: 队列中
+        0: 执行中
         1: 已完成
         2: 内部错误
-        5: 执行中
 
     """
 
@@ -170,26 +154,21 @@ def custom_script_execute(operation, config):
 
 def final_predefined_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE, TEMPLATE_VARS):
     """
-    :Return:
+    :Return Code Description:
 
-        default return: dict(code=100, msg='')
+        0: PING SUCCESS(SUCCESS)
+        1: PING FAIL(TIMEOUT)
 
-        0: PING SUCCESS(可联通)
-        1: PING FAIL(超时)
-
-        0: SSH SUCCESS(成功)
-        1: SSH FAIL(超时, RESET, NO_ROUTE)
+        0: SSH SUCCESS(SUCCESS)
+        1: SSH FAIL(TIMEOUT, RESET, NO_ROUTE)
         2: SSH AUTHENTICATE FAIL(验证错误, 密钥格式错误, 密钥无法找到)
         3: COMMAND EXECUTE TIMEOUT(脚本执行超时)
-        4: COMMAND FAIL(ERROR OUTPUT FORMAT)
+        4: COMMAND EXECUTE FAIL(脚本中途失败)
 
-        10: NETWORK ERROR(IP无法解析)
+        10: NETWORK ERROR(ADDRESS ERROR)
 
         20: OTHER ERROR
         100: DEFAULT
-
-        NetworkError = ["ssh.BadHostKeyException", "socket.gaierror", "socket.error", "ssh.AuthenticationException", "ssh.PasswordRequiredException", "ssh.SSHException"]
-        CommandTimeout = ["socket.timeout"]
 
         SSH认证是先看private_key，后看password.
 
@@ -200,72 +179,60 @@ def final_predefined_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPL
     env.port = PORT
     env.key_filename = PRIVATE_KEY
 
-    fruit = dict(code=100, error='', msg='')
-
     template = Template(SCRIPT_TEMPLATE)
     script = template.render(TEMPLATE_VARS.get(env.host, dict()))
 
+    # TODO: 统计其它异常情况
+
     try:
-        output = run(script, shell=True, quiet=True)
-        if output.return_code == 0:
-            fruit['code'] = 0
-            fruit['msg'] = output.stdout
+        data = run(script, shell=True, quiet=True)
+        if data.return_code == 0:
+            output = dict(code=0,
+                          error_message=data.stderr,
+                          message=analysis_script_output(data.stdout))
         else:
-            fruit['code'] = 4
-            fruit['msg'] = output.stdout
-            fruit['error'] = output.stderr
+            output = dict(code=data.return_code,
+                          error_message=data.stderr,
+                          message=data.stdout)
 
-    # SystemExit 无异常说明字符串
+    # SystemExit 认证失败
     except SystemExit:
-        fruit['code'] = 2
-        fruit['error'] = 'Authentication failed'
+        output = dict(code=2, error_message='Ssh Authentication Failed', message='')
 
-    # CommandTimeout 无异常说明字符串
+    # 远程命令执行时间超过`env.command_timeout`时触发
     except CommandTimeout:
-        fruit['code'] = 3
-        fruit['error'] = 'Script execute timeout'
+        output = dict(code=3, error_message='Remote Command Execute Timeout', message='')
+
+    # 通过设定`env.disable_known_hosts = True`可以避归此问题，但在异常处理上依然保留此逻辑。
+    except SSHException, e:
+        if 'Invalid key' in e.__str__():
+            output = dict(code=2, error_message='User’s Known-Hosts Check Failed', message='')
+        else:
+            output = dict(code=20, error_message='SSHException Exception: %s' % e, message='')
+
+    # 匹配错误的密钥路径
+    except IOError, e:
+        if 'No such file or directory' in e.__str__():
+            output = dict(code=2, error_message='Ssh Private Key Not Found', message='')
+        else:
+            output = dict(code=20, error_message='IOError Exception: %s' % e, message='')
 
     except NetworkError, e:
+        # 匹配SSH连接超时
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            fruit['code'] = 1
-            fruit['error'] = 'Connect timeout'
-
+            output = dict(code=1, error_message='Ssh Connection Timeout', message='')
         elif 'Name lookup failed for' in e.__str__():
-            fruit['code'] = 10
-            fruit['error'] = 'Network address error'
-
-        elif 'Authentication failed' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Authentication failed'
-
-        # 通过DISABLE_KNOWN_HOSTS选项可以避归此问题，但在异常处理上依然保留此逻辑。
-        elif 'Private key file is encrypted' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Private key file is encrypted'
-
-        elif 'not match pre-existing key' in e.__str__():
-            fruit['code'] = 2
-            fruit['error'] = 'Host key verification failed'
-
+            output = dict(code=10, error_message='Incorrect Node Address', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
+            output = dict(code=20, error_message='NetworkError Exception: %s' % e, message='')
 
     except Exception, e:
-        if 'No such file or directory' in e:
-            fruit['code'] = 2
-            fruit['error'] = 'Can\'t find private key'
+        if 'Private key file is encrypted' in e.__str__():
+            output = dict(code=2, error_message='Private key file is encrypted', message='')
         else:
-            fruit['code'] = 20
-            fruit['error'] = '%s' % e
+            output = dict(code=20, error_message='Base Exception: %s' % e, message='')
 
-            logger.warning(u'UNKNOWN FAILS. MESSAGE: Connect %s fails, except status is %s, except message is %s' %
-                           (env.host, fruit['code'], fruit['error']))
-
-    finally:
-        return fruit
+    return output
 
 
 def predefined_script_execute(operation, config):
