@@ -347,7 +347,7 @@ def create_power_control_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'power_supply_control'
+    operation_type = u'remote_power_control'
 
     form = CreatePowerCtrlForm()
 
