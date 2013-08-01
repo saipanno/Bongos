@@ -24,19 +24,20 @@
 # SOFTWARE.
 
 
+import os
 from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
-from frontend.extensions.utility import catch_errors
+from frontend.extensions.libs import catch_errors
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission, IDC
+from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission, IDC, FabricFile
 
 from frontend.forms.account import GroupForm
 from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
-    IDCForm, PermissionForm
+    IDCForm, PermissionForm, FabricFileForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -985,3 +986,137 @@ def delete_idc_ctrl(idc_id):
 
     flash(u'Edit idc successfully', 'success')
     return redirect(url_for('dashboard.list_idc_ctrl'))
+
+
+@dashboard.route('/fabfile/list')
+@login_required
+def list_fabfile_ctrl():
+
+    user_access = UserAccessPermission('dashboard.list_fabfile_ctrl')
+    if not user_access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    fabfiles = FabricFile.query.all()
+
+    for fabfile in fabfiles:
+        user = User.query.filter_by(id=int(fabfile.author)).first()
+        fabfile.author_name = user.name
+
+    return render_template('dashboard/fabfile_manager.html', fabfiles=fabfiles, type='list')
+
+
+@dashboard.route('/fabfile/<int:fabfile_id>/show')
+@login_required
+def show_fabfile_ctrl(fabfile_id):
+
+    user_access = UserAccessPermission('dashboard.show_fabfile_ctrl')
+    if not user_access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
+
+    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+
+    if fabfile is None:
+        flash(u'Fabfile does not exist', 'error')
+        return redirect(default_next_page)
+
+    fabfile.script = ''
+    with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], fabfile.name), 'r') as f:
+        fabfile.script = f.read().decode('utf-8')
+
+    return render_template('dashboard/fabfile_manager.html', fabfile=fabfile, type='show')
+
+
+@dashboard.route('/fabfile/create', methods=("GET", "POST"))
+@login_required
+def create_fabfile_ctrl():
+
+    user_access = UserAccessPermission('dashboard.create_fabfile_ctrl')
+    if not user_access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    form = FabricFileForm()
+    if request.method == 'GET':
+        return render_template('dashboard/fabfile_manager.html', form=form, type='create')
+
+    elif request.method == 'POST' and form.validate():
+
+        author = current_user.id
+
+        with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), 'w') as f:
+            f.write(form.script.data.encode('utf-8'))
+
+        fabfile = FabricFile(form.name.data, form.desc.data, author)
+        db.session.add(fabfile)
+        db.session.commit()
+
+        flash(u'Create fabfile successfully', 'success')
+        return redirect(url_for('dashboard.list_fabfile_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_fabfile_ctrl'))
+
+
+@dashboard.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_fabfile_ctrl(fabfile_id):
+
+    user_access = UserAccessPermission('dashboard.edit_fabfile_ctrl')
+    if not user_access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+    with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], fabfile.name), 'r') as f:
+        fabfile.script = f.read().decode('utf-8')
+
+    form = FabricFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
+
+    if request.method == 'GET':
+        return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
+
+    elif request.method == 'POST' and form.validate():
+
+        with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), 'w') as f:
+            f.write(form.script.data.encode('utf-8'))
+
+        if form.desc.data != fabfile.desc:
+            fabfile.desc = form.desc.data
+
+        db.session.commit()
+
+        flash(u'Edit fabfile successfully', 'success')
+        return redirect(url_for('dashboard.list_fabfile_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_fabfile_ctrl'))
+
+
+@dashboard.route('/fabfile/<int:fabfile_id>/delete')
+@login_required
+def delete_fabfile_ctrl(fabfile_id):
+
+    user_access = UserAccessPermission('dashboard.delete_fabfile_ctrl')
+    if not user_access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(fabfile)
+    db.session.commit()
+
+    flash(u'Edit idc successfully', 'success')
+    return redirect(url_for('dashboard.list_fabfile_ctrl'))

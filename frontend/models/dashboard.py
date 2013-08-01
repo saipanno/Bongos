@@ -127,7 +127,7 @@ class IDC(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
-    desc = db.Column(db.String(50))
+    desc = db.Column(db.String(100))
     operators = db.Column(db.String(50))
     address = db.Column(db.Text)
 
@@ -137,3 +137,19 @@ class IDC(db.Model):
         self.desc = desc
         self.operators = operators
         self.address = address
+
+
+class FabricFile(db.Model):
+
+    __tablename__ = 'fabfile_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(100))
+    author = db.Column(db.Integer)
+
+    def __init__(self, name, desc, author):
+
+        self.name = name
+        self.desc = desc
+        self.author = author

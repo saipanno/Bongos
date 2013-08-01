@@ -38,7 +38,7 @@ from frontend.models.dashboard import SshConfig, PreDefinedScript
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
-from frontend.extensions.utility import catch_errors, format_address_list, format_template_vars,\
+from frontend.extensions.libs import catch_errors, format_address_list, format_template_vars,\
     get_obj_attributes, get_dict_items
 
 from application import backend_runner

@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 
-{% block active_dashboard_script %}active{% endblock %}
+{% block active_dashboard_fabfile %}active{% endblock %}
 
 {% block main %}
     <div class="span10">
@@ -9,7 +9,7 @@
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">PreDefined Script Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
             <li class="active">List</li>
         </ul>
 
@@ -17,9 +17,9 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">PreDefined Script Manager</a>
+                <a class="brand" href="#">Fabfile Manager</a>
                 <div class="btn-group pull-right">
-                    <a href="{{ url_for('dashboard.create_predefined_script_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Predefined Script</a>
+                    <a href="{{ url_for('dashboard.create_fabfile_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Fabfile</a>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
         <table class="table table-hover table-bordered table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>PreDefined ID</th>
+                    <th>Fabfile ID</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Author</th>
@@ -35,13 +35,13 @@
                 </tr>
             </thead>
             <tbody>
-                {% for script in scripts %}
+                {% for fabfile in fabfiles %}
                     <tr>
-                        <td><a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" title="Edit PreDefined Script">{{ script.id }}</a></td>
-                        <td>{{ script.name }}</td>
-                        <td>{{ script.desc }}</td>
-                        <td>{{ script.author_name }}</td>
-                        <td><a class="btn btn-mini" href="{{ url_for('dashboard.show_predefined_script_ctrl', script_id=script.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                        <td><a href="{{ url_for('dashboard.edit_fabfile_ctrl', fabfile_id=fabfile.id) }}" title="Edit Fabfile">{{ fabfile.id }}</a></td>
+                        <td>{{ fabfile.name }}</td>
+                        <td>{{ fabfile.desc }}</td>
+                        <td>{{ fabfile.author_name }}</td>
+                        <td><a class="btn btn-mini" href="{{ url_for('dashboard.show_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -51,7 +51,7 @@
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">PreDefined Script Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
             <li class="active">Show</li>
         </ul>
 
@@ -59,24 +59,23 @@
 
         <div class="navbar">
             <div class="navbar-inner">
-                <a class="brand" href="#">{{ script.name }}</a>
+                <a class="brand" href="#">{{ fabfile.name }}</a>
                 <div class="btn-group pull-right">
-                    <a class="btn btn-primary" href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id) }}"><i class="icon-plus icon-white"></i> Edit Script</a>
+                    <a class="btn btn-primary" href="{{ url_for('dashboard.edit_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-plus icon-white"></i> Edit Fabfile</a>
                 </div>
             </div>
 
         </div>
 
         <div>
-            <pre class="prettyprint linenums">{{ script.script|safe }}</pre>
+            <pre class="prettyprint linenums">{{ fabfile.script|safe }}</pre>
         </div>
 
     {% elif type == 'create' %}
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Manager</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">PreDefined Script</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Fabfile Manager</a> <span class="divider">/</span></li>
             <li class="active">Create</li>
         </ul>
 
@@ -88,12 +87,12 @@
                 {{ form.hidden_tag() }}
 
                 <legend>
-                    Create PreDefined Script
+                    Create Fabfile
                 </legend>
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    {{ ext.create_standard_field(form.name) }}
+                    {{ ext.create_standard_field(form.name, backaddon=".py") }}
 
                     {{ ext.create_standard_field(form.desc, class="span6") }}
 
@@ -112,11 +111,11 @@
 
         <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">PreDefined Script Manager</a><span class="divider">/</span></li>
+            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
             <li class="active">Edit</li>
         </ul>
 
-        {{ ext.feedback_message() }}
+        <!-- {{ ext.feedback_message() }} -->
 
         <div class="tabbable">
             <form method="post" action="">
@@ -129,13 +128,13 @@
                 {% elif form.name.data %}
                     {{ form.name.data }}
                 {% else %}
-                    Edit PreDefined Script
+                    Edit Fabfile
                 {% endif %}
                 </legend>
 
                 <div class="box form-container row-fluid form-horizontal">
 
-                    {{ ext.create_standard_field(form.name) }}
+                    {{ ext.create_standard_field(form.name, backaddon=".py") }}
 
                     {{ ext.create_standard_field(form.desc, class="span6") }}
 
@@ -153,11 +152,11 @@
                             <h3 id="DeleteLabel">Confirm</h3>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete this script?</p>
+                            <p>Are you sure you want to delete this fabfile?</p>
                             <span class="label label-info">{{ form.desc.data }}</span>
                         </div>
                         <div class="modal-footer">
-                            <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_predefined_script_ctrl', script_id=script.id) }}">Yes, I'm sure</a>
+                            <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_fabfile_ctrl', fabfile_id=form.id.data) }}">Yes, I'm sure</a>
                             <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                         </div>
                     </div>

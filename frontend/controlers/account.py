@@ -34,7 +34,7 @@ from frontend.forms.account import UserLoginForm, EditSettingForm
 from frontend.models.account import User
 
 from frontend.extensions.database import db
-from frontend.extensions.utility import catch_errors
+from frontend.extensions.libs import catch_errors
 
 
 account = Blueprint('account', __name__)
@@ -44,7 +44,7 @@ account = Blueprint('account', __name__)
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('operation.list_operation_ctrl', operation_type='ssh_detect'))
+    return redirect(url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting'))
 
 
 @account.route('/login', methods=['GET', 'POST'])

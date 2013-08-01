@@ -30,7 +30,7 @@ import requests
 from fabric.api import env, hide, local, execute
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_ipmi_address
+from backend.extensions.libs import generate_ipmi_address
 
 
 def final_power_execute(IPMI_USER, IPMI_PASSWORD, IPMI_POWER_COMMAND, IPMI_SPEC_TAG=None):

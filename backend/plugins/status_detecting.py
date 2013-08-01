@@ -31,7 +31,7 @@ from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_private_path
+from backend.extensions.libs import generate_private_path
 
 
 def final_ping_detecting(COUNT, TIMEOUT):

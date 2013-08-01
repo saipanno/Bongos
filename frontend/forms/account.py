@@ -29,7 +29,7 @@ from flask.ext.wtf import Required, EqualTo, Regexp, Optional
 
 from frontend.models.account import User, Group
 
-from frontend.extensions.utility import Unique, UnChange, Depend
+from frontend.extensions.libs import Unique, UnChange, Depend
 
 
 class UserLoginForm(Form):

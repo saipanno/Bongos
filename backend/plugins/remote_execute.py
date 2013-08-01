@@ -32,7 +32,7 @@ from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
 from backend.extensions.logger import logger
-from backend.extensions.utility import generate_private_path, analysis_script_output
+from backend.extensions.libs import generate_private_path, analysis_script_output
 
 
 def final_custom_execute(USERNAME, PASSWORD, PORT, PRIVATE_KEY, SCRIPT_TEMPLATE, TEMPLATE_VARS):
