@@ -24,13 +24,16 @@
 # SOFTWARE.
 
 
-from fabric.api import env, run, task
+from jinja2 import Template
+from fabric.api import env, run
 from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
+from backend.extensions.libs import analysis_script_output
 
-@task
-def ssh_status_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
+
+def basic_remote_runner(SCRIPT_TEMPLATE, TEMPLATE_VARS, USERNAME, PASSWORD, PORT, PRIVATE_KEY,
+                        stdout=False, stderr=False, regex=False):
     """
     :Return Code Description:
 
@@ -57,51 +60,76 @@ def ssh_status_detecting(USERNAME, PASSWORD, PORT, PRIVATE_KEY):
     env.port = PORT
     env.key_filename = PRIVATE_KEY
 
+    template = Template(SCRIPT_TEMPLATE)
+    script = template.render(TEMPLATE_VARS.get(env.host, dict()))
+
     # TODO: 统计其它异常情况
 
     try:
-        data = run('ls', shell=True, quiet=True)
+        data = run(script, shell=True, quiet=True)
 
     # SystemExit 认证失败
     except SystemExit:
-        output = dict(code=2, error_message='Ssh Authentication Failed', message='')
+        output = dict(code=2,
+                      error_message='Ssh Authentication Failed' if stderr else '',
+                      message='')
 
     # 远程命令执行时间超过`env.command_timeout`时触发
     except CommandTimeout:
-        output = dict(code=3, error_message='Remote Command Execute Timeout', message='')
+        output = dict(code=3,
+                      error_message='Remote Command Execute Timeout' if stderr else '',
+                      message='')
 
     # 通过设定`env.disable_known_hosts = True`可以避归此问题，但在异常处理上依然保留此逻辑。
     except SSHException, e:
         if 'Invalid key' in e.__str__():
-            output = dict(code=2, error_message='User’s Known-Hosts Check Failed', message='')
+            output = dict(code=2,
+                          error_message='User’s Known-Hosts Check Failed' if stderr else '',
+                          message='')
         else:
-            output = dict(code=20, error_message='SSHException Exception: %s' % e, message='')
+            output = dict(code=20,
+                          error_message='SSHException Exception: %s' % e if stderr else '',
+                          message='')
 
     # 匹配错误的密钥路径
     except IOError, e:
         if 'No such file or directory' in e.__str__():
-            output = dict(code=2, error_message='Ssh Private Key Not Found', message='')
+            output = dict(code=2,
+                          error_message='Ssh Private Key Not Found' if stderr else '',
+                          message='')
         else:
-            output = dict(code=20, error_message='IOError Exception: %s' % e, message='')
+            output = dict(code=20,
+                          error_message='IOError Exception: %s' % e if stderr else '',
+                          message='')
 
     except NetworkError, e:
         # 匹配SSH连接超时
         if 'Timed out trying to connect to' in e.__str__() or 'Low level socket error connecting' in e.__str__():
-            output = dict(code=1, error_message='Ssh Connection Timeout', message='')
+            output = dict(code=1,
+                          error_message='Ssh Connection Timeout' if stderr else '',
+                          message='')
         elif 'Name lookup failed for' in e.__str__():
-            output = dict(code=10, error_message='Incorrect Node Address', message='')
+            output = dict(code=10,
+                          error_message='Incorrect Node Address' if stderr else '',
+                          message='')
         else:
-            output = dict(code=20, error_message='NetworkError Exception: %s' % e, message='')
+            output = dict(code=20,
+                          error_message='NetworkError Exception: %s' % e if stderr else '',
+                          message='')
 
     except Exception, e:
         if 'Private key file is encrypted' in e.__str__():
-            output = dict(code=2, error_message='Private key file is encrypted', message='')
+            output = dict(code=2,
+                          error_message='Private key file is encrypted' if stderr else '',
+                          message='')
         else:
-            output = dict(code=20, error_message='Base Exception: %s' % e, message='')
+            output = dict(code=20,
+                          error_message='Base Exception: %s' % e if stderr else '',
+                          message='')
 
     else:
-        if data.return_code == 0:
-            output = dict(code=0, error_message='', message='')
-        else:
-            output = dict(code=data.return_code, error_message=data.stderr, message='')
+        output = dict(code=data.return_code,
+                      error_message=data.stderr if stderr else '',
+                      message='' if not stdout else analysis_script_output(data.stdout) if regex else data.stdout)
+
     return output

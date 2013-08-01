@@ -31,10 +31,11 @@ from backend.extensions.logger import logger
 
 from backend.extensions.libs import get_fab_tasks
 
-from backend.plugins.ssh_status_detecting import ssh_status_detecting
-from backend.plugins.ping_status_detecting import ping_status_detecting
-#from backend.plugins import custom_script_execute, predefined_script_execute
-from backend.plugins.remote_power_control import remote_power_control
+from backend.operations.ssh_status_detecting import ssh_status_detecting
+from backend.operations.ping_status_detecting import ping_status_detecting
+from backend.operations.custom_script_execute import custom_script_execute
+#from backend.operations.predefined_fabfile_execute import predefined_fabfile_execute
+from backend.operations.remote_power_control import remote_power_control
 
 
 def backend_runner(operation=None, config=None):
@@ -55,19 +56,19 @@ def backend_runner(operation=None, config=None):
     _type = operation.get('OPT_OPERATION_TYPE', '')
 
     if _type == u'ssh_status_detecting':
-        ssh_status_detecting(operation, config, fab_task_list)
+        ssh_status_detecting(operation, config)
 
     elif _type == u'ping_status_detecting':
-        ping_status_detecting(operation, config, fab_task_list)
+        ping_status_detecting(operation, config)
 
-    #elif _type == u'custom_script_execute':
-    #    custom_script_execute(operation, config)
+    elif _type == u'custom_script_execute':
+        custom_script_execute(operation, config)
 
-    #elif _type == u'predefined_script_execute':
-    #    predefined_script_execute(operation, config)
+    #elif _type == u'predefined_fabfile_execute':
+    #    predefined_fabfile_execute(operation, config, fab_task_list)
 
     elif _type == u'remote_power_control':
-        remote_power_control(operation, config, fab_task_list)
+        remote_power_control(operation, config)
 
     else:
         logger.error(u'Error operation type. ID is %s' % operation['OPT_ID'])

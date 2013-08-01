@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2013 Ruoyan Wong(@saipanno).
 #
-#                    Created at 2013/04/16.
+#                    Created at 2013/07/29.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,10 @@ from fabric.api import hide, execute
 
 from backend.extensions.logger import logger
 
+from backend.fabfiles.basic_local_runner import base_local_runner
 
-def remote_power_control(operation, config, fab_task_list):
+
+def ping_status_detecting(operation, config):
     """
     :Return:
 
@@ -41,29 +43,24 @@ def remote_power_control(operation, config, fab_task_list):
 
     """
 
-    _id = operation.get('OPT_ID', 0)
-    _type = operation.get('OPT_OPERATION_TYPE', '')
-    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
+    ID = operation.get('OPT_ID', 0)
+    API_URL = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', None)
 
-    task_runner = fab_task_list.get(_type, None)
+    COMMAND = 'ping -c%s -W%s {{ address }}' % \
+              (config.get('SETTINGS_PING_COUNT', 4), config.get('SETTINGS_PING_TIMEOUT', 5))
 
-    if task_runner is not None:
-
+    if API_URL is not None:
         with hide('everything'):
-
-            result = execute(task_runner,
-                             config.get('SETTINGS_IPMI_USER', 'root'),
-                             config.get('SETTINGS_IPMI_PASSWORD', 'password'),
-                             operation.get('OPT_SCRIPT_TEMPLATE', 'status'),
+            result = execute(base_local_runner, COMMAND,
                              hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-        data = json.dumps(dict(id=_id, status=1, result=result),  ensure_ascii=False)
+        data = json.dumps(dict(id=ID, status=1, result=result),  ensure_ascii=False)
+
+        response = requests.put(API_URL, data=data, headers={'content-type': 'application/json'})
+
+        if response.status_code != requests.codes.ok:
+            message = response.json.get('message', 'unknown errors')
+            logger.error(u'UPDATE OPERATION FAILS|Operation ID is %s, Message is %s' % (ID, message))
 
     else:
-        data = json.dumps(dict(id=_id, status=2, result=dict()),  ensure_ascii=False)
-
-    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
-
-    if response.status_code != requests.codes.ok:
-        message = response.json.get('message', 'unknown errors')
-        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (_id, message))
+        logger.error(u'CONFIG FAILS|Message is can\'t get API url from config')

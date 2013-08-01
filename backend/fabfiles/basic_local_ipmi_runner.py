@@ -24,10 +24,13 @@
 # SOFTWARE.
 
 
+from jinja2 import Template
 from fabric.api import env, local
 
+from backend.extensions.libs import generate_ipmi_address, analysis_script_output
 
-def ping_status_detecting(COUNT, TIMEOUT):
+
+def basic_local_ipmi_runner(SCRIPT_TEMPLATE, stdout=False, stderr=False, regex=False):
     """
     :Return Code Description:
 
@@ -49,20 +52,23 @@ def ping_status_detecting(COUNT, TIMEOUT):
 
     """
 
-    command = 'ping -c%s -W%s %s' % (COUNT, TIMEOUT, env.host)
+    ipmi_address = generate_ipmi_address(env.host)
+
+    template = Template(SCRIPT_TEMPLATE)
+    script = template.render(dict(ipmi_address=ipmi_address))
 
     # TODO: 统计其它异常情况
 
     try:
-        data = local(command, capture=True)
+        data = local(script, capture=True)
     except Exception, e:
-        output = dict(code=20, error_message='Base Exception: %s' % e, message='')
+        output = dict(code=20,
+                      error_message='Base Exception: %s' % e if stderr else '',
+                      message='')
+
     else:
-        if data.return_code == 0 or data.return_code == 1:
-            output = dict(code=data.return_code, error_message='', message='')
-        elif data.return_code == 2 and 'unknown host' in data.stderr:
-            output = dict(code=10, error_message='Incorrect Node Address', message='')
-        else:
-            output = dict(code=data.return_code, error_message=data.stderr, message='')
+        output = dict(code=data.return_code,
+                      error_message=data.stderr if stderr else '',
+                      message='' if not stdout else analysis_script_output(data.stdout) if regex else data.stdout)
 
     return output

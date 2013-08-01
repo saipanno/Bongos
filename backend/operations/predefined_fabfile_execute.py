@@ -29,9 +29,10 @@ import requests
 from fabric.api import hide, execute
 
 from backend.extensions.logger import logger
+from backend.extensions.libs import generate_private_path
 
 
-def ping_status_detecting(operation, config, fab_task_list):
+def predefined_fabfile_execute(operation, config, task):
     """
     :Return:
 
@@ -41,28 +42,24 @@ def ping_status_detecting(operation, config, fab_task_list):
 
     """
 
-    _id = operation.get('OPT_ID', 0)
-    _type = operation.get('OPT_OPERATION_TYPE', '')
+    id = operation.get('OPT_ID', 0)
     update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
 
-    task_runner = fab_task_list.get(_type, None)
+    with hide('everything'):
 
-    if task_runner is not None:
+        result = execute(task,
+                         operation.get('SSH_USERNAME', 'root'),
+                         operation.get('SSH_PASSWORD', 'password'),
+                         operation.get('SSH_PORT', 22),
+                         generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key')),
+                         operation.get('SCRIPT_SCRIPT', 'uptime'),
+                         json.loads(operation.get('OPT_TEMPLATE_VARS', dict())),
+                         hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-        with hide('everything'):
-
-            result = execute(task_runner,
-                             config.get('SETTINGS_PING_COUNT', 4),
-                             config.get('SETTINGS_PING_TIMEOUT', 5),
-                             hosts=operation.get('OPT_SERVER_LIST', '').split())
-
-        data = json.dumps(dict(id=_id, status=1, result=result),  ensure_ascii=False)
-
-    else:
-        data = json.dumps(dict(id=_id, status=2, result=dict()),  ensure_ascii=False)
+    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
 
     response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
 
     if response.status_code != requests.codes.ok:
         message = response.json.get('message', 'unknown errors')
-        logger.error(u'UPDATE OPERATION FAILS|Operation ID is %s, Message is %s' % (_id, message))
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))
