@@ -25,6 +25,7 @@
 
 
 import os
+import io
 from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
 from flask.ext.login import login_required, current_user
@@ -1023,9 +1024,9 @@ def show_fabfile_ctrl(fabfile_id):
         flash(u'Fabfile does not exist', 'error')
         return redirect(default_next_page)
 
-    fabfile.script = ''
-    with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], fabfile.name), 'r') as f:
-        fabfile.script = f.read().decode('utf-8')
+    with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
+                 encoding='utf-8') as f:
+        fabfile.script = f.read()
 
     return render_template('dashboard/fabfile_manager.html', fabfile=fabfile, type='show')
 
@@ -1047,8 +1048,9 @@ def create_fabfile_ctrl():
 
         author = current_user.id
 
-        with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), 'w') as f:
-            f.write(form.script.data.encode('utf-8'))
+        with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
+                    encoding='utf-8') as f:
+            f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
         fabfile = FabricFile(form.name.data, form.desc.data, author)
         db.session.add(fabfile)
@@ -1074,8 +1076,9 @@ def edit_fabfile_ctrl(fabfile_id):
         return redirect(url_for('account.index_ctrl'))
 
     fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
-    with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], fabfile.name), 'r') as f:
-        fabfile.script = f.read().decode('utf-8')
+    with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
+                 encoding='utf-8') as f:
+        fabfile.script = f.read()
 
     form = FabricFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
 
@@ -1084,8 +1087,9 @@ def edit_fabfile_ctrl(fabfile_id):
 
     elif request.method == 'POST' and form.validate():
 
-        with open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), 'w') as f:
-            f.write(form.script.data.encode('utf-8'))
+        with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
+                  encoding='utf-8') as f:
+            f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
         if form.desc.data != fabfile.desc:
             fabfile.desc = form.desc.data
