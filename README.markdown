@@ -1,10 +1,14 @@
 Bongos
 ===
+######An Operation Management Web Platform for SA.
 
-An Useful Server Administration Web Tools.
 
 
-# 功能列表
+You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
+
+
+
+# Summary
 
 * 服务器资产管理
 * 操作系统自动部署
@@ -13,20 +17,21 @@ An Useful Server Administration Web Tools.
 
 
 
-# DEMO网站
+# Deploy and Run
 
-### URL
+* Download source: `git clone https://github.com/saipanno/Bongos.git`
+* Create virtualenv environment: `virtualenv --never-download --distribute Bongos/env`
+* Activate environment: `source Bongos/env/bin/activate`
+* Install python library: `pip install -r requirements.txt`
+* Install system tools: `yum install ipmitool redis`
+* Initialization database: `python manage.py init_db`
+* Create **setting.py** from template and Update: `cp settings.example.py settings.py`
+* Create **supervisord.conf** from template and Update: `cp supervisord.example.conf supervisord.conf`
+* Start redis: `service redis start`
+* Start frontend and backend process: `supervisord -c Bongos/supervisord.conf`
 
-http://bongos.saipanno.com
-
-### 默认权限
-
-admin/admin
 
 
+# License
 
-# 服务部署
-
-1. `pip install -r requirements.txt`
-2. `yum install ipmitool redis`
-
+Bongos is released under the **MIT** license
