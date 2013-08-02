@@ -47,12 +47,12 @@ class OperationDb(db.Model):
     operation_type = db.Column(db.String(25))
     server_list = db.Column(db.Text)
     script_template = db.Column(db.Text)
-    template_vars = db.Column(db.Text)
+    ext_variables = db.Column(db.Text)
     ssh_config = db.Column(db.Integer)
     status = db.Column(db.Integer)
     result = db.Column(db.Text)
 
-    def __init__(self, author, datetime, operation_type, server_list, script_template, template_vars, ssh_config, status, result):
+    def __init__(self, author, datetime, operation_type, server_list, script_template, ext_variables, ssh_config, status, result):
 
         self.author = author
         self.datetime = datetime
@@ -60,6 +60,6 @@ class OperationDb(db.Model):
         self.server_list = server_list
         self.script_template = script_template
         self.ssh_config = ssh_config
-        self.template_vars = template_vars
+        self.ext_variables = ext_variables
         self.status = status
         self.result = result

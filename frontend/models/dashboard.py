@@ -48,23 +48,6 @@ class SshConfig(db.Model):
         self.private_key = private_key
 
 
-class PreDefinedScript(db.Model):
-
-    __tablename__ = 'predefined_script_lists'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-    desc = db.Column(db.String(255))
-    script = db.Column(db.Text)
-    author = db.Column(db.Integer)
-
-    def __init__(self, name, desc, script, author):
-        self.name = name
-        self.desc = desc
-        self.script = script
-        self.author = author
-
-
 class Server(db.Model):
 
     __tablename__ = 'server_lists'

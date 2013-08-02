@@ -29,11 +29,10 @@ from fabric.api import env, run
 from paramiko.ssh_exception import SSHException
 from fabric.exceptions import NetworkError, CommandTimeout
 
-from backend.extensions.libs import analysis_script_output
+from backend.libs.utility import analysis_script_output
 
 
-def basic_remote_runner(SCRIPT_TEMPLATE, TEMPLATE_VARS, USERNAME, PASSWORD, PORT, PRIVATE_KEY,
-                        stdout=False, stderr=False, regex=False):
+def basic_remote_runner(SCRIPT_TEMPLATE, EXT_VARIABLES, stdout=False, stderr=False, regex=False):
     """
     :Return Code Description:
 
@@ -55,13 +54,8 @@ def basic_remote_runner(SCRIPT_TEMPLATE, TEMPLATE_VARS, USERNAME, PASSWORD, PORT
 
     """
 
-    env.user = USERNAME
-    env.password = PASSWORD
-    env.port = PORT
-    env.key_filename = PRIVATE_KEY
-
     template = Template(SCRIPT_TEMPLATE)
-    script = template.render(TEMPLATE_VARS.get(env.host, dict()))
+    script = template.render(EXT_VARIABLES.get(env.host, dict()))
 
     # TODO: 统计其它异常情况
 

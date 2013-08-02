@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
 
     backend_runner({'OPT_SERVER_LIST': u'8.8.8.8', 'OPT_ID': 72, 'OPT_RESULT': u'', 'OPT_SCRIPT_TEMPLATE': u'',
-                    'OPT_OPERATION_TYPE': u'ping_status_detecting', 'OPT_SSH_CONFIG': 0, 'OPT_TEMPLATE_VARS': u'',
+                    'OPT_OPERATION_TYPE': u'ping_status_detecting', 'OPT_SSH_CONFIG': 0, 'OPT_EXT_VARIABLES': u'',
                     'OPT_DATETIME': u'2013-08-01 15:31', 'OPT_AUTHOR': u'1', 'OPT_STATUS': u'0'},
                    {'SETTINGS_APPLICATION_ROOT': None, 'SETTINGS_SSH_COMMAND_TIMEOUT': 120,
                     'SETTINGS_SESSION_COOKIE_NAME': 'session', 'SETTINGS_JSON_SORT_KEYS': True,

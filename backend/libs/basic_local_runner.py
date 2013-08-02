@@ -27,7 +27,7 @@
 from jinja2 import Template
 from fabric.api import env, local
 
-from backend.extensions.libs import analysis_script_output
+from backend.libs.utility import analysis_script_output
 
 
 def base_local_runner(SCRIPT_TEMPLATE, stdout=False, stderr=False, regex=False):

@@ -71,12 +71,12 @@ def format_address_list(address_list):
     return {'status': True, 'servers': u'%s' % new_address_list.strip()}
 
 
-def format_template_vars(template_vars):
+def format_ext_variables(ext_variables):
 
     address_vars_group = dict()
 
-    for oneline in template_vars.split('\n'):
-        # 跳过template_vars中的空行
+    for oneline in ext_variables.split('\n'):
+        # 跳过ext_variables中的空行
         if oneline == u'':
             continue
         try:

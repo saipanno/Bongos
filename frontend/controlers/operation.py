@@ -29,16 +29,16 @@ from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
 
-from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreatePreDefinedExecuteForm, \
+from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreateFabfileExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
 
 from frontend.models.account import User
 from frontend.models.operation import OperationDb
-from frontend.models.dashboard import SshConfig, PreDefinedScript
+from frontend.models.dashboard import SshConfig, FabricFile
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
-from frontend.extensions.libs import catch_errors, format_address_list, format_template_vars,\
+from frontend.extensions.libs import catch_errors, format_address_list, format_ext_variables,\
     get_obj_attributes, get_dict_items
 
 from application import backend_runner
@@ -147,7 +147,7 @@ def create_ssh_detect_ctrl():
     form = CreateSshDetectForm()
 
     if request.method == 'GET':
-        return render_template('operation/create_ssh_detect.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_ssh_detecting.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
@@ -196,7 +196,7 @@ def create_ping_detect_ctrl():
     form = CreatePingDetectForm()
 
     if request.method == 'GET':
-        return render_template('operation/create_ping_detect.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_ping_detecting.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
@@ -239,7 +239,7 @@ def create_custom_execute_ctrl():
     form = CreateCustomExecuteForm()
 
     if request.method == 'GET':
-        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_custom_script_execute.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
@@ -251,14 +251,14 @@ def create_custom_execute_ctrl():
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_custom_execute_ctrl'))
 
-        template_vars_dict = format_template_vars(form.template_vars.data)
-        if template_vars_dict['status'] is not True:
-            flash(template_vars_dict['desc'], 'error')
+        ext_variables_dict = format_ext_variables(form.ext_variables.data)
+        if ext_variables_dict['status'] is not True:
+            flash(ext_variables_dict['desc'], 'error')
             return redirect(url_for('operation.create_custom_execute_ctrl'))
-        template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
+        ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data,
-                                template_vars, form.ssh_config.data.id, 0, u'')
+                                ext_variables, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
@@ -280,21 +280,21 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operation.create_custom_execute_ctrl'))
 
 
-@operation.route('/predefined_execute/create', methods=("GET", "POST"))
+@operation.route('/fabfile_execute/create', methods=("GET", "POST"))
 @login_required
-def create_predefined_execute_ctrl():
+def create_fabfile_execute_ctrl():
 
-    user_access = UserAccessPermission('operation.create_predefined_execute_ctrl')
+    user_access = UserAccessPermission('operation.create_fabfile_execute_ctrl')
     if not user_access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'predefined_script_execute'
+    operation_type = u'fabfile_execute'
 
-    form = CreatePreDefinedExecuteForm()
+    form = CreateFabfileExecuteForm()
 
     if request.method == 'GET':
-        return render_template('operation/create_predefined_execute.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_fabfile_execute.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
@@ -304,27 +304,27 @@ def create_predefined_execute_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_predefined_execute_ctrl'))
+            return redirect(url_for('operation.create_fabfile_execute_ctrl'))
 
-        template_vars_dict = format_template_vars(form.template_vars.data)
-        if template_vars_dict['status'] is not True:
-            flash(template_vars_dict['desc'], 'error')
-            return redirect(url_for('operation.create_predefined_execute_ctrl'))
-        template_vars = json.dumps(template_vars_dict['vars'], ensure_ascii=False)
+        ext_variables_dict = format_ext_variables(form.ext_variables.data)
+        if ext_variables_dict['status'] is not True:
+            flash(ext_variables_dict['desc'], 'error')
+            return redirect(url_for('operation.create_fabfile_execute_ctrl'))
+        ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data.id,
-                                template_vars, form.ssh_config.data.id, 0, u'')
+                                ext_variables, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
         ssh_config = SshConfig.query.filter_by(id=form.ssh_config.data.id).first()
         ssh_config_dict = get_obj_attributes(ssh_config, 'SSH')
-        predefined_script = PreDefinedScript.query.filter_by(id=form.script_template.data.id).first()
-        predefined_script_dict = get_obj_attributes(predefined_script, 'SCRIPT')
+        fabfile = FabricFile.query.filter_by(id=form.script_template.data.id).first()
+        fabfile_dict = get_obj_attributes(fabfile, 'FABFILE')
 
         operations = get_obj_attributes(operation, 'OPT')
         operations.update(ssh_config_dict)
-        operations.update(predefined_script_dict)
+        operations.update(fabfile_dict)
 
         q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 

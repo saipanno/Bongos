@@ -28,9 +28,8 @@ import json
 import requests
 from fabric.api import hide, execute
 
-from backend.extensions.logger import logger
-
-from backend.fabfiles.basic_local_runner import base_local_runner
+from backend.logger import logger
+from backend.libs.basic_local_runner import base_local_runner
 
 
 def ping_status_detecting(operation, config):

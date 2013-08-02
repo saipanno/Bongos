@@ -25,12 +25,12 @@
 
 
 import json
-from backend.fabfiles import basic_local_ipmi_runner
 import requests
 from fabric.api import hide, execute
 
-from backend.extensions.logger import logger
-from backend.extensions.libs import generate_ipmi_address
+from backend.logger import logger
+from backend.libs.utility import generate_ipmi_address
+from backend.libs.basic_local_ipmi_runner import basic_local_ipmi_runner
 
 
 def remote_power_control(operation, config):

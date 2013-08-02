@@ -26,7 +26,6 @@
 
 import os
 import io
-from sqlalchemy import exc
 from flask import render_template, request, redirect, url_for, flash, Blueprint, current_app, json
 from flask.ext.login import login_required, current_user
 
@@ -34,10 +33,10 @@ from frontend.extensions.database import db
 from frontend.extensions.libs import catch_errors
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, PreDefinedScript, Server, Permission, IDC, FabricFile
+from frontend.models.dashboard import SshConfig, Server, Permission, IDC, FabricFile
 
 from frontend.forms.account import GroupForm
-from frontend.forms.dashboard import PreDefinedScriptForm, SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
+from frontend.forms.dashboard import SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
     IDCForm, PermissionForm, FabricFileForm
 
 from frontend.extensions.principal import UserAccessPermission
@@ -59,140 +58,6 @@ def show_logging_ctrl():
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
         logging_buffer = f.readlines()
         return render_template('dashboard/logging_reader.html', logging_buffer=logging_buffer[MAX_LEN:])
-
-
-@dashboard.route('/predefined_script/list')
-@login_required
-def list_predefined_script_ctrl():
-
-    user_access = UserAccessPermission('dashboard.list_predefined_script_ctrl')
-    if not user_access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    scripts = PreDefinedScript.query.all()
-
-    for script in scripts:
-        user = User.query.filter_by(id=int(script.author)).first()
-        script.author_name = user.name
-
-    return render_template('dashboard/predefined_script.html', scripts=scripts, type='list')
-
-
-@dashboard.route('/predefined_script/<int:script_id>/show')
-@login_required
-def show_predefined_script_ctrl(script_id):
-
-    user_access = UserAccessPermission('dashboard.show_predefined_script_ctrl')
-    if not user_access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
-
-    try:
-        script = PreDefinedScript.query.filter_by(id=script_id).first()
-
-    except exc.SQLAlchemyError:
-        flash(u'Internal database error', 'error')
-        return redirect(default_next_page)
-        # TODO: 增加异常日志记录
-
-    if script is None:
-        flash(u'PreDefined Script does not exist', 'error')
-        return redirect(default_next_page)
-
-    return render_template('dashboard/predefined_script.html', script=script, type='show')
-
-
-@dashboard.route('/predefined_script/create', methods=("GET", "POST"))
-@login_required
-def create_predefined_script_ctrl():
-
-    user_access = UserAccessPermission('dashboard.create_predefined_script_ctrl')
-    if not user_access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    form = PreDefinedScriptForm()
-    if request.method == 'GET':
-        return render_template('dashboard/predefined_script.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
-
-        author = current_user.id
-
-        script = PreDefinedScript(form.name.data, form.desc.data, form.script.data, author)
-        db.session.add(script)
-        db.session.commit()
-
-        flash(u'Create predefined script successfully', 'success')
-        return redirect(url_for('dashboard.list_predefined_script_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_predefined_script_ctrl'))
-
-
-@dashboard.route('/predefined_script/<int:script_id>/edit', methods=("GET", "POST"))
-@login_required
-def edit_predefined_script_ctrl(script_id):
-
-    user_access = UserAccessPermission('dashboard.edit_predefined_script_ctrl')
-    if not user_access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    script = PreDefinedScript.query.filter_by(id=script_id).first()
-
-    form = PreDefinedScriptForm(id=script.id, name=script.name, desc=script.desc, script=script.script)
-
-    if request.method == 'GET':
-        return render_template('dashboard/predefined_script.html', form=form, script=script, type='edit')
-
-    elif request.method == 'POST' and form.validate():
-
-        if form.name.data != script.name:
-            script.name = form.name.data
-
-        if form.desc.data != script.desc:
-            script.desc = form.desc.data
-
-        if form.script != script.script:
-            script.script = form.script.data
-
-        db.session.commit()
-
-        flash(u'Update predefined script successfully.', 'success')
-        return redirect(url_for('dashboard.list_predefined_script_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_predefined_script_ctrl', script_id=script_id))
-
-
-@dashboard.route('/predefined_script/<int:script_id>/delete')
-@login_required
-def delete_predefined_script_ctrl(script_id):
-
-    user_access = UserAccessPermission('dashboard.delete_predefined_script_ctrl')
-    if not user_access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    script = PreDefinedScript.query.filter_by(id=script_id).first()
-
-    # TODO:增加清理数据库环境操作
-
-    db.session.delete(script)
-    db.session.commit()
-
-    flash(u'Delete predefined script successfully.', 'success')
-    return redirect(url_for('dashboard.list_predefined_script_ctrl'))
 
 
 @dashboard.route('/user/list')

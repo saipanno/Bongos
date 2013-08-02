@@ -26,13 +26,13 @@
 
 import json
 import requests
-from fabric.api import hide, execute
+from fabric.api import env, hide, execute
 
-from backend.extensions.logger import logger
-from backend.extensions.libs import generate_private_path
+from backend.logger import logger
+from backend.libs.utility import generate_private_path
 
 
-def predefined_fabfile_execute(operation, config, task):
+def fabfile_execute(operation, config, tasks):
     """
     :Return:
 
@@ -42,24 +42,26 @@ def predefined_fabfile_execute(operation, config, task):
 
     """
 
-    id = operation.get('OPT_ID', 0)
-    update_api_url = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', 'http://localhost/api')
+    ID = operation.get('OPT_ID', 0)
+    API_URL = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', None)
+
+    env.user = operation.get('SSH_USERNAME', 'root')
+    env.password = operation.get('SSH_PASSWORD', 'password')
+    env.port = operation.get('SSH_PORT', 22)
+    env.key_filename = generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key'))
+
+    task = tasks.get(operation.get('FABFILE_NAME', 'default'), None)
 
     with hide('everything'):
 
         result = execute(task,
-                         operation.get('SSH_USERNAME', 'root'),
-                         operation.get('SSH_PASSWORD', 'password'),
-                         operation.get('SSH_PORT', 22),
-                         generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key')),
-                         operation.get('SCRIPT_SCRIPT', 'uptime'),
-                         json.loads(operation.get('OPT_TEMPLATE_VARS', dict())),
+                         ext_vars=json.loads(operation.get('OPT_EXT_VARIABLES', dict())),
                          hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-    data = json.dumps(dict(id=id, status=1, result=result),  ensure_ascii=False)
+    data = json.dumps(dict(id=ID, status=1, result=result),  ensure_ascii=False)
 
-    response = requests.put(update_api_url, data=data, headers={'content-type': 'application/json'})
+    response = requests.put(API_URL, data=data, headers={'content-type': 'application/json'})
 
     if response.status_code != requests.codes.ok:
         message = response.json.get('message', 'unknown errors')
-        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (id, message))
+        logger.error(u'UPDATE OPERATION FAILS| Operation ID is %s, Message is %s' % (ID, message))

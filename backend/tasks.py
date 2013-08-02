@@ -27,14 +27,12 @@
 import sys
 from fabric.api import env
 
-from backend.extensions.logger import logger
-
-from backend.extensions.libs import get_fab_tasks
-
+from backend.logger import logger
+from backend.libs.utility import get_fab_tasks
 from backend.operations.ssh_status_detecting import ssh_status_detecting
 from backend.operations.ping_status_detecting import ping_status_detecting
 from backend.operations.custom_script_execute import custom_script_execute
-#from backend.operations.predefined_fabfile_execute import predefined_fabfile_execute
+from backend.operations.fabfile_execute import fabfile_execute
 from backend.operations.remote_power_control import remote_power_control
 
 
@@ -51,8 +49,6 @@ def backend_runner(operation=None, config=None):
     if config['SETTINGS_FABRIC_FILE_PATH'] not in sys.path:
         sys.path.append(config['SETTINGS_FABRIC_FILE_PATH'])
 
-    fab_task_list = get_fab_tasks(config['SETTINGS_FABRIC_FILE_PATH'])
-
     _type = operation.get('OPT_OPERATION_TYPE', '')
 
     if _type == u'ssh_status_detecting':
@@ -64,8 +60,8 @@ def backend_runner(operation=None, config=None):
     elif _type == u'custom_script_execute':
         custom_script_execute(operation, config)
 
-    #elif _type == u'predefined_fabfile_execute':
-    #    predefined_fabfile_execute(operation, config, fab_task_list)
+    elif _type == u'fabfile_execute':
+        fabfile_execute(operation, config, get_fab_tasks(config['SETTINGS_FABRIC_FILE_PATH']))
 
     elif _type == u'remote_power_control':
         remote_power_control(operation, config)

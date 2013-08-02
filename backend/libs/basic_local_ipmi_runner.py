@@ -27,7 +27,7 @@
 from jinja2 import Template
 from fabric.api import env, local
 
-from backend.extensions.libs import generate_ipmi_address, analysis_script_output
+from backend.libs.utility import generate_ipmi_address, analysis_script_output
 
 
 def basic_local_ipmi_runner(SCRIPT_TEMPLATE, stdout=False, stderr=False, regex=False):

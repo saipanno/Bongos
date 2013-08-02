@@ -21,10 +21,10 @@
         Ping Detecting
     {% elif operation_type == 'custom_script_execute' %}
         Custom Execute
-    {% elif operation_type == 'predefined_script_execute' %}
-        PreDefined Execute
+    {% elif operation_type == 'fabfile_execute' %}
+        Fabfile Execute
     {% elif operation_type == 'remote_power_control' %}
-        Power Supply Control
+        Remote Power Control
     {% else %}
         Error Operation Type
     {% endif %}
@@ -38,8 +38,8 @@
         {{ url_for('operation.create_ping_detect_ctrl') }}
     {% elif operation_type == 'custom_script_execute' %}
         {{ url_for('operation.create_custom_execute_ctrl') }}
-    {% elif operation_type == 'predefined_script_execute' %}
-        {{ url_for('operation.create_predefined_execute_ctrl') }}
+    {% elif operation_type == 'fabfile_execute' %}
+        {{ url_for('operation.create_fabfile_execute_ctrl') }}
     {% elif operation_type == 'remote_power_control' %}
         {{ url_for('operation.create_power_control_ctrl') }}
     {% endif %}
