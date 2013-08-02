@@ -40,7 +40,6 @@ API_ACCESS_CLIENTS = ['127.0.0.1']
 API_BASIC_URL = 'http://127.0.0.1/api'
 
 # application config
-IPMI_NETWORK = '192.168'
 IPMI_USER = 'root'
 IPMI_PASSWORD = 'calvin'
 

@@ -28,8 +28,6 @@ import re
 import os
 from fabric.main import load_fabfile
 
-import settings
-
 
 def get_fab_tasks(fabfile_dir):
 
@@ -46,10 +44,10 @@ def get_fab_tasks(fabfile_dir):
     return fab_task_list
 
 
-def generate_private_path(filename):
+def generate_private_path(filename, folder):
 
     if filename is not u'':
-        return os.path.join(settings.PRIVATE_KEY_PATH, filename)
+        return os.path.join(folder, filename)
     else:
         return None
 
@@ -70,4 +68,4 @@ def generate_ipmi_address(address):
 
     fruit = address.split('.')
 
-    return '%s.%s.%s' % (settings.IPMI_NETWORK, fruit[2], fruit[3])
+    return '%s.%s.%s' % ('192.168', fruit[2], fruit[3])
