@@ -72,12 +72,9 @@ def list_user_ctrl():
     users = User.query.all()
 
     for user in users:
-
         group_name = ''
-        groups = json.loads(user.groups)
-        for group_id in groups.keys():
-
-            group = Group.query.filter_by(id=group_id).first()
+        for group_id in user.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
             group_name = '%s, %s' % (group_name, group.desc)
         user.group_name = group_name[2:]
 
@@ -100,11 +97,12 @@ def create_user_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        groups = dict()
+        groups = list()
         for group in form.groups.data:
-            groups[group.id] = 1
+            groups.append(str(group.id))
+        groups.sort()
 
-        user = User(form.email.data, form.username.data, form.name.data, json.dumps(groups, ensure_ascii=False),
+        user = User(form.email.data, form.username.data, form.name.data, ','.join(groups),
                     form.password.data, 1 if form.status.data else 0)
         db.session.add(user)
         db.session.commit()
@@ -144,10 +142,12 @@ def edit_user_ctrl(user_id):
         if len(form.password.data) > 0:
             user.update_password(form.password.data)
 
-        groups = dict()
+        groups = list()
         for group in form.groups.data:
-            groups[group.id] = 1
-        user_groups = json.dumps(groups, ensure_ascii=False)
+            groups.append(str(group.id))
+        groups.sort()
+        user_groups = ','.join(groups)
+
         if user_groups != user.groups:
             user.groups = user_groups
 
@@ -323,16 +323,16 @@ def list_group_ctrl():
 
     group_members = dict()
     users = User.query.all()
-    for user in users:
-        groups = json.loads(user.groups)
-        for group in groups:
-            try:
-                group_members[group] = '%s, %s' % (group_members[group], user.name)
-            except:
-                group_members[group] = user.name
-
     groups = Group.query.all()
+
     for group in groups:
+        for user in users:
+            if unicode(group.id) in user.groups.split(','):
+                try:
+                    group_members[unicode(group.id)] = '%s, %s' % (group_members[unicode(group.id)], user.name)
+                except:
+                    group_members[unicode(group.id)] = user.name
+
         group.members = group_members.get(unicode(group.id), u'')
 
     return render_template('dashboard/group_manager.html', groups=groups, type='list')
@@ -417,7 +417,22 @@ def delete_group_ctrl(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
-    # TODO:增加清理数据库环境操作
+    # 清理用户的Group属性
+    users = User.query.all()
+    for user in users:
+        if unicode(group.id) in user.groups.split(','):
+            user_groups = user.groups.split(',')
+            user_groups.remove(unicode(group.id))
+            user_groups.sort()
+            user.groups = ','.join(user_groups)
+
+    # 清理权限的Group属性
+    permissions = Permission.query.all()
+    for permission in permissions:
+        permission_rules = permission.rules.split(',')
+        permission_rules.remove(unicode(group_id))
+        permission_rules.sort()
+        permission.rules = ','.join(permission_rules)
 
     db.session.delete(group)
     db.session.commit()
@@ -438,12 +453,9 @@ def list_server_ctrl():
     servers = Server.query.all()
 
     for server in servers:
-
         group_name = ''
-        groups = json.loads(server.groups)
-        for group_id in groups.keys():
-
-            group = Group.query.filter_by(id=group_id).first()
+        for group_id in server.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
             group_name = '%s, %s' % (group_name, group.desc)
         server.group_name = group_name[2:]
 
@@ -470,11 +482,12 @@ def create_server_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        groups = dict()
+        groups = list()
         for group in form.groups.data:
-            groups[group.id] = 1
+            groups.append(str(group.id))
+        groups.sort()
 
-        server = Server(form.serial_number.data, form.assets_number.data, json.dumps(groups, ensure_ascii=False),
+        server = Server(form.serial_number.data, form.assets_number.data, groups,
                         form.desc.data, form.ext_address.data, form.int_address.data, form.ipmi_address.data,
                         form.other_address.data, form.idc.data.id, form.rack.data, form.manufacturer.data,
                         form.model.data, form.cpu_info.data, form.disk_info.data, form.memory_info.data)
@@ -520,10 +533,11 @@ def edit_server_ctrl(server_id):
         if form.assets_number.data != server.assets_number:
             server.assets_number = form.assets_number.data
 
-        groups = dict()
+        groups = list()
         for group in form.groups.data:
-            groups[group.id] = 1
-        server_groups = json.dumps(groups, ensure_ascii=False)
+            groups.append(str(group.id))
+        groups.sort()
+        server_groups = ','.join(groups)
         if server_groups != server.groups:
             server.groups = server_groups
 
@@ -586,8 +600,6 @@ def delete_server_ctrl(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
-    # TODO:增加清理数据库环境操作
-
     db.session.delete(server)
     db.session.commit()
 
@@ -619,18 +631,15 @@ def show_permission_ctrl():
         permission_desc = permission.desc
         permissions_handler.append(dict(id=permission_id, desc=permission_desc))
 
-        try:
-            rules = json.loads(permission.rules)
-        except Exception, e:
-            rules = dict()
+        permission_rules = permission.rules.split(',')
 
-        for (group_id, status) in rules.items():
+        for group_id in permission_rules:
 
             try:
-                group_permissions[group_id][permission_id] = status
+                group_permissions[group_id][permission_id] = 1
             except Exception:
                 group_permissions[group_id] = dict()
-                group_permissions[group_id][permission_id] = status
+                group_permissions[group_id][permission_id] = 1
 
     return render_template('dashboard/permission_manager.html', permissions_handler=permissions_handler,
                            user_groups=user_groups, group_permissions=group_permissions, type='show')
@@ -647,20 +656,18 @@ def update_permission_ctrl(group_id, handler_id, status):
 
     permission = Permission.query.filter_by(id=handler_id).first()
 
-    try:
-        rules = json.loads(permission.rules)
-    except Exception, e:
-        rules = dict()
+    permission_rules = permission.rules.split(',')
 
     if status == 'disable':
-        rules[group_id] = 0
+        permission_rules.remove(unicode(group_id))
     elif status == 'enable':
-        rules[group_id] = 1
+        permission_rules.append(unicode(group_id))
     else:
         flash(u'Error permission status', 'error')
         return redirect(url_for('dashboard.show_permission_ctrl'))
 
-    permission.rules = json.dumps(rules, ensure_ascii=False)
+    permission_rules.sort()
+    permission.rules = ','.join(permission_rules)
     db.session.commit()
 
     flash(u'Update permission successfully', 'success')

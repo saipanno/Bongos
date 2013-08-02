@@ -77,18 +77,15 @@ def configure_extensions(app):
     def on_identity_loaded(sender, identity):
 
         if hasattr(current_user, 'groups'):
-            access_control_list = Permission.query.all()
-            for access_control in access_control_list:
+            acls = Permission.query.all()
+            for acl in acls:
 
                 if current_user.id == 1:
-                    identity.provides.add(UserAccessNeed(access_control.function))
+                    identity.provides.add(UserAccessNeed(acl.function))
 
-                rules = json.loads(access_control.rules)
-                for group_id in rules:
-                    for group_id_key in current_user.groups:
-
-                        if group_id_key == group_id and rules[group_id] == 1:
-                            identity.provides.add(UserAccessNeed(access_control.function))
+                for group_id in current_user.groups.split(','):
+                    if group_id in acl.rules.split(','):
+                        identity.provides.add(UserAccessNeed(acl.function))
 
 
 def configure_blueprints(app):
