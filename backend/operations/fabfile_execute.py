@@ -30,6 +30,7 @@ from fabric.api import env, hide, execute
 
 from backend.logger import logger
 from backend.libs.utility import generate_private_path
+from backend.libs.basic_remote_runner import basic_remote_runner
 
 
 def fabfile_execute(operation, config, tasks):
@@ -54,12 +55,22 @@ def fabfile_execute(operation, config, tasks):
     task = tasks.get(operation.get('FABFILE_NAME', 'default'), None)
 
     with hide('everything'):
+        connectivity = execute(basic_remote_runner, 'ls', dict(), stderr=True,
+                               hosts=operation.get('OPT_SERVER_LIST', '').split())
 
-        result = execute(task,
-                         ext_vars=json.loads(operation.get('OPT_EXT_VARIABLES', dict())),
-                         hosts=operation.get('OPT_SERVER_LIST', '').split())
+    connectivity_nodes = list()
+    for (k, v) in connectivity.items():
+        if v.get('code', 1) == 0:
+            connectivity_nodes.append(k)
 
-    data = json.dumps(dict(id=ID, status=1, result=result),  ensure_ascii=False)
+    with hide('everything'):
+
+        result = execute(task, ext_vars=json.loads(operation.get('OPT_EXT_VARIABLES', dict())),
+                         hosts=connectivity_nodes)
+
+    connectivity.update(result)
+
+    data = json.dumps(dict(id=ID, status=1, result=connectivity),  ensure_ascii=False)
 
     response = requests.put(API_URL, data=data, headers={'content-type': 'application/json'})
 

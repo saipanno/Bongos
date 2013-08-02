@@ -56,8 +56,7 @@ def custom_script_execute(operation, config):
 
         result = execute(basic_remote_runner,
                          operation.get('OPT_SCRIPT_TEMPLATE', 'ls'),
-                         json.loads(operation.get('OPT_EXT_VARIABLES', dict())),
-                         stdout=True, stderr=True,
+                         json.loads(operation.get('OPT_EXT_VARIABLES', dict())), stdout=True, stderr=True,
                          hosts=operation.get('OPT_SERVER_LIST', '').split())
 
     data = json.dumps(dict(id=ID, status=1, result=result),  ensure_ascii=False)
