@@ -68,4 +68,9 @@ def generate_ipmi_address(address):
 
     fruit = address.split('.')
 
-    return '%s.%s.%s' % ('192.168', fruit[2], fruit[3])
+    if address.startswith('122.11') or address.startswith('122.12'):
+        return '%s.%s.%s' % ('192.168', fruit[2], fruit[3])
+    elif address.startswith('10.178'):
+        return '%s.%s.%s.%s' % (fruit[0], fruit[1], int(fruit[2])+1, fruit[3])
+    else:
+        return address
