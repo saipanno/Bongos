@@ -27,7 +27,7 @@ You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
 * Initialization database: `python manage.py init_db`
 * Create **setting.py** from template and Update: `cp settings.example.py settings.py`
 * Create **supervisord.conf** from template and Update: `cp supervisord.example.conf supervisord.conf`
-* Start redis: `service redis start`
+* Start redis server: `service redis start`
 * Start frontend and backend process: `supervisord -c Bongos/supervisord.conf`
 
 
