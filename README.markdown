@@ -10,10 +10,10 @@ You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
 
 # Summary
 
-* 服务器资产管理
-* 操作系统自动部署
-* 服务器自动化操作
-* 后台管理界面
+* Asset Management
+* Group-based Permission Management. Accurate to Resource Access and Feature Uses.
+* Fabric-based. Support External Variables and Output Record.
+* Full-featured Dashboard. Support Resources CRUD.
 
 
 
