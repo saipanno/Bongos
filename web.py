@@ -24,12 +24,34 @@
 # SOFTWARE.
 
 
+from flask.ext.script import Manager, Server
+
 from frontend.app import create_app
 
 
 app = create_app()
 
+manager = Manager(app)
+manager.add_command("runserver", Server(host=app.config.get('HOST', '0.0.0.0'),
+                                        port=app.config.get('PORT', 80)))
+
+
+@manager.command
+def init_db():
+    """Creates default database."""
+    from frontend.models.account import User, Group
+    from frontend.extensions.database import db
+
+    db.create_all()
+
+    super_user = User(email='admin@bongos', username='admin', name='Administrator',
+                      groups='1', password='admin', status=1)
+    super_group = Group(name='Administrator', desc='Super Administrator Group')
+    db.session.add(super_user)
+    db.session.add(super_group)
+    db.session.commit()
+
 
 if __name__ == '__main__':
 
-    app.run(host=app.config['HOST'], port=int(app.config['PORT']), debug=app.config['DEBUG'])
+    manager.run()

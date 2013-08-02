@@ -6,5 +6,6 @@ supervisor
 Flask
 Flask-WTF
 Flask-Login
+Flask-Script
 Flask-Principal
 Flask-SQLAlchemy

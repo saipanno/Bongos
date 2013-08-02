@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 
+import json
 from flask import Flask, json
 from flask.ext.login import current_user
 from logging import FileHandler, Formatter
@@ -78,6 +79,9 @@ def configure_extensions(app):
         if hasattr(current_user, 'groups'):
             access_control_list = Permission.query.all()
             for access_control in access_control_list:
+
+                if current_user.id == 1:
+                    identity.provides.add(UserAccessNeed(access_control.function))
 
                 rules = json.loads(access_control.rules)
                 for group_id in rules:
