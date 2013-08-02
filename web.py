@@ -34,7 +34,10 @@ from frontend.app import create_app
 app = create_app()
 
 manager = Manager(app)
-manager.add_command("runserver", Server(host=app.config.get('HOST', '0.0.0.0'), port=app.config.get('PORT', 80)))
+manager.add_command("runserver", Server(use_debugger=True,
+                                        use_reloader=True,
+                                        host=app.config.get('HOST', '0.0.0.0'),
+                                        port=app.config.get('PORT', 80)))
 
 
 @manager.command
