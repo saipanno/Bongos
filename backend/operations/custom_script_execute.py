@@ -49,7 +49,8 @@ def custom_script_execute(operation, config):
     env.user = operation.get('SSH_USERNAME', 'root')
     env.password = operation.get('SSH_PASSWORD', 'password')
     env.port = operation.get('SSH_PORT', 22)
-    env.key_filename = generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key'))
+    env.key_filename = generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key'),
+                                             config.get('SETTINGS_PRIVATE_KEY_PATH'))
 
     with hide('everything'):
 

@@ -25,12 +25,12 @@
 
 
 import json
-from backend.logger import logger
-from backend.libs import basic_remote_runner
 import requests
 from fabric.api import env, hide, execute
 
+from backend.logger import logger
 from backend.libs.utility import generate_private_path
+from backend.libs.basic_remote_runner import basic_remote_runner
 
 
 def ssh_status_detecting(operation, config):
@@ -49,7 +49,8 @@ def ssh_status_detecting(operation, config):
     env.user = operation.get('SSH_USERNAME', 'root')
     env.password = operation.get('SSH_PASSWORD', 'password')
     env.port = operation.get('SSH_PORT', 22)
-    env.key_filename = generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key'))
+    env.key_filename = generate_private_path(operation.get('SSH_PRIVATE_KEY', 'default.key'),
+                                             config.get('SETTINGS_PRIVATE_KEY_PATH'))
 
     with hide('everything'):
 

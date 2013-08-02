@@ -49,8 +49,7 @@ def init_db():
 
     db.create_all()
 
-    user = User(email='admin@bongos', username='admin', name='Administrator',
-                groups='1', password='admin', status=1)
+    user = User(email='admin@bongos', username='admin', name='Administrator', groups='1', password='admin', status=1)
     group = Group(name='Administrator', desc='Super Administrator Group')
     db.session.add(user)
     db.session.add(group)
@@ -62,8 +61,6 @@ def init_db():
             db.session.add(permission)
 
     db.session.commit()
-
-
 
 
 @manager.command
