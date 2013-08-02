@@ -36,8 +36,8 @@ SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
 DEBUG = True
 
 # api config
-API_ACCESS_CLIENTS = ['hostname']      # server address, Normally equal to hostname
-API_BASIC_URL = 'http://hostname/api'  # server address, Normally equal to hostname
+API_ACCESS_CLIENTS = ['127.0.0.1']
+API_BASIC_URL = 'http://127.0.0.1/api'
 
 # application config
 IPMI_NETWORK = '192.168'
@@ -51,9 +51,11 @@ PING_TIMEOUT = 5            # default is 5
 SSH_TIMEOUT = 30            # default is 30
 SSH_COMMAND_TIMEOUT = 120   # default is 60
 DISABLE_KNOWN_HOSTS = True  # default is True
+FABRIC_FILE_PATH = os.path.join(_basedir, 'backend/fabfiles')
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
+BASIC_PERMISSION_LIST = os.path.join(_basedir, 'data/access_control_lists.txt')
 
 # logging config
 LOGGING_LEVEL = 'WARNING'
