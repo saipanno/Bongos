@@ -26,6 +26,7 @@
 
 import time
 from sqlalchemy import exc, desc
+from flask.ext.principal import UserNeed
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
 
@@ -52,8 +53,8 @@ operation = Blueprint('operation', __name__, url_prefix='/operation')
 @login_required
 def list_operation_ctrl(operation_type):
 
-    user_access = UserAccessPermission('operation.list_operation_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.list_operation_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -70,8 +71,8 @@ def list_operation_ctrl(operation_type):
 @login_required
 def show_operation_ctrl(operation_id):
 
-    user_access = UserAccessPermission('operation.show_operation_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.show_operation_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -101,8 +102,8 @@ def show_operation_ctrl(operation_id):
 @login_required
 def export_operation_results_ctrl(operation_id):
 
-    user_access = UserAccessPermission('operation.export_operation_results_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.export_operation_results_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -137,8 +138,8 @@ def export_operation_results_ctrl(operation_id):
 @login_required
 def create_ssh_detect_ctrl():
 
-    user_access = UserAccessPermission('operation.create_ssh_detect_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.create_ssh_detect_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -186,8 +187,8 @@ def create_ssh_detect_ctrl():
 @login_required
 def create_ping_detect_ctrl():
 
-    user_access = UserAccessPermission('operation.create_ping_detect_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.create_ping_detect_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -229,8 +230,8 @@ def create_ping_detect_ctrl():
 @login_required
 def create_custom_execute_ctrl():
 
-    user_access = UserAccessPermission('operation.create_custom_execute_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.create_custom_execute_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -284,8 +285,8 @@ def create_custom_execute_ctrl():
 @login_required
 def create_fabfile_execute_ctrl():
 
-    user_access = UserAccessPermission('operation.create_fabfile_execute_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.create_fabfile_execute_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -342,8 +343,8 @@ def create_fabfile_execute_ctrl():
 @login_required
 def create_power_control_ctrl():
 
-    user_access = UserAccessPermission('operation.create_power_control_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('operation.create_power_control_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 

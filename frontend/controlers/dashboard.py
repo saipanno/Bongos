@@ -49,8 +49,8 @@ dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @login_required
 def show_logging_ctrl():
 
-    user_access = UserAccessPermission('dashboard.show_logging_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.show_logging_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -64,8 +64,8 @@ def show_logging_ctrl():
 @login_required
 def list_user_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_user_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_user_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -85,8 +85,8 @@ def list_user_ctrl():
 @login_required
 def create_user_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_user_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_user_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -122,8 +122,8 @@ def create_user_ctrl():
 @login_required
 def edit_user_ctrl(user_id):
 
-    user_access = UserAccessPermission('dashboard.edit_user_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_user_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -167,8 +167,8 @@ def edit_user_ctrl(user_id):
 @login_required
 def update_user_status_ctrl(user_id, status):
 
-    user_access = UserAccessPermission('dashboard.update_user_status_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.update_user_status_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -201,8 +201,8 @@ def update_user_status_ctrl(user_id, status):
 @login_required
 def list_ssh_config_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -215,8 +215,8 @@ def list_ssh_config_ctrl():
 @login_required
 def create_ssh_config_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -247,8 +247,8 @@ def create_ssh_config_ctrl():
 @login_required
 def edit_ssh_config_ctrl(config_id):
 
-    user_access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -296,8 +296,8 @@ def edit_ssh_config_ctrl(config_id):
 @login_required
 def delete_ssh_config_ctrl(config_id):
 
-    user_access = UserAccessPermission('dashboard.delete_ssh_config_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.delete_ssh_config_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -316,8 +316,8 @@ def delete_ssh_config_ctrl(config_id):
 @login_required
 def list_group_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_group_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_group_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -342,8 +342,8 @@ def list_group_ctrl():
 @login_required
 def create_group_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_group_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_group_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -373,8 +373,8 @@ def create_group_ctrl():
 @login_required
 def edit_group_ctrl(group_id):
 
-    user_access = UserAccessPermission('dashboard.edit_group_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_group_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -410,8 +410,8 @@ def edit_group_ctrl(group_id):
 @login_required
 def delete_group_ctrl(group_id):
 
-    user_access = UserAccessPermission('dashboard.delete_group_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.delete_group_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -445,8 +445,8 @@ def delete_group_ctrl(group_id):
 @login_required
 def list_server_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_server_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_server_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -469,8 +469,8 @@ def list_server_ctrl():
 @login_required
 def create_server_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_server_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_server_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -508,8 +508,8 @@ def create_server_ctrl():
 @login_required
 def edit_server_ctrl(server_id):
 
-    user_access = UserAccessPermission('dashboard.edit_server_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_server_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -593,8 +593,8 @@ def edit_server_ctrl(server_id):
 @login_required
 def delete_server_ctrl(server_id):
 
-    user_access = UserAccessPermission('dashboard.delete_server_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.delete_server_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -611,8 +611,8 @@ def delete_server_ctrl(server_id):
 @login_required
 def show_permission_ctrl():
 
-    user_access = UserAccessPermission('dashboard.show_permission_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.show_permission_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -649,8 +649,8 @@ def show_permission_ctrl():
 @login_required
 def update_permission_ctrl(group_id, handler_id, status):
 
-    user_access = UserAccessPermission('dashboard.update_permission_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.update_permission_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -678,8 +678,8 @@ def update_permission_ctrl(group_id, handler_id, status):
 @login_required
 def list_permission_handler_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_permission_handler_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_permission_handler_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -692,8 +692,8 @@ def list_permission_handler_ctrl():
 @login_required
 def create_permission_handler_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_permission_handler_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_permission_handler_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -723,8 +723,8 @@ def create_permission_handler_ctrl():
 @login_required
 def edit_permission_handler_ctrl(handler_id):
 
-    user_access = UserAccessPermission('dashboard.edit_permission_handler_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_permission_handler_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -760,8 +760,8 @@ def edit_permission_handler_ctrl(handler_id):
 @login_required
 def list_idc_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_idc_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_idc_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -774,8 +774,8 @@ def list_idc_ctrl():
 @login_required
 def create_idc_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_idc_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_idc_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -805,8 +805,8 @@ def create_idc_ctrl():
 @login_required
 def edit_idc_ctrl(idc_id):
 
-    user_access = UserAccessPermission('dashboard.edit_idc_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_idc_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -845,8 +845,8 @@ def edit_idc_ctrl(idc_id):
 @login_required
 def delete_idc_ctrl(idc_id):
 
-    user_access = UserAccessPermission('dashboard.delete_idc_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.delete_idc_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -865,8 +865,8 @@ def delete_idc_ctrl(idc_id):
 @login_required
 def list_fabfile_ctrl():
 
-    user_access = UserAccessPermission('dashboard.list_fabfile_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.list_fabfile_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -883,8 +883,8 @@ def list_fabfile_ctrl():
 @login_required
 def show_fabfile_ctrl(fabfile_id):
 
-    user_access = UserAccessPermission('dashboard.show_fabfile_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.show_fabfile_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -907,8 +907,8 @@ def show_fabfile_ctrl(fabfile_id):
 @login_required
 def create_fabfile_ctrl():
 
-    user_access = UserAccessPermission('dashboard.create_fabfile_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.create_fabfile_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -942,8 +942,8 @@ def create_fabfile_ctrl():
 @login_required
 def edit_fabfile_ctrl(fabfile_id):
 
-    user_access = UserAccessPermission('dashboard.edit_fabfile_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.edit_fabfile_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
@@ -982,8 +982,8 @@ def edit_fabfile_ctrl(fabfile_id):
 @login_required
 def delete_fabfile_ctrl(fabfile_id):
 
-    user_access = UserAccessPermission('dashboard.delete_fabfile_ctrl')
-    if not user_access.can():
+    access = UserAccessPermission('dashboard.delete_fabfile_ctrl')
+    if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
