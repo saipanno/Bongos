@@ -24,54 +24,19 @@
 # SOFTWARE.
 
 
-import io
-from flask import current_app
-from flask.ext.script import prompt_bool, Manager, Server
+import argparse
 
 from frontend.app import create_app
 
 
-app = create_app()
-
-manager = Manager(app)
-manager.add_command("runserver", Server(use_debugger=True,
-                                        use_reloader=True,
-                                        host=app.config.get('HOST', '0.0.0.0'),
-                                        port=app.config.get('PORT', 80)))
-
-
-@manager.command
-def init_db():
-    """Creates default database."""
-    from frontend.models.account import User, Group
-    from frontend.models.dashboard import Permission
-    from frontend.extensions.database import db
-
-    db.create_all()
-
-    user = User(email='admin@bongos', username='admin', name='Administrator', groups='1', password='admin', status=1)
-    group = Group(name='Administrator', desc='Super Administrator Group')
-    db.session.add(user)
-    db.session.add(group)
-
-    with io.open(current_app.config.get('BASIC_PERMISSION_LIST'), 'rt') as f:
-        for oneline in f.readlines():
-            function, desc = oneline.split(',')
-            permission = Permission(desc=desc, function=function, rules=u'1')
-            db.session.add(permission)
-
-    db.session.commit()
-
-
-@manager.command
-def drop_db():
-    """Drop current database."""
-    from frontend.extensions.database import db
-
-    if prompt_bool(u'Are you sure you want to lose all your data:'):
-        db.drop_all()
-
-
 if __name__ == '__main__':
 
-    manager.run()
+    parser = argparse.ArgumentParser(description='web app launcher.')
+    parser.add_argument('-c', '--config', dest='config', default=None)
+
+    args = vars(parser.parse_args())
+
+    app = create_app(args['config'])
+    app.run(host=app.config.get('HOST', '127.0.0.1'),
+            port=app.config.get('PORT', 8080),
+            debug=app.config.get('DEBUG', False))
