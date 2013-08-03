@@ -20,15 +20,17 @@ You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
 # Deploy and Run
 
 * Download source: `git clone https://github.com/saipanno/Bongos.git`
-* Create virtualenv environment: `virtualenv --never-download --distribute Bongos/env`
-* Activate environment: `source Bongos/env/bin/activate`
+* Into the project directory： `cd Bongos`
+* Create virtualenv environment: `virtualenv --never-download --distribute env`
+* Activate environment: `source env/bin/activate`
 * Install python library: `pip install -r requirements.txt`
 * Install system tools: `yum install ipmitool redis`
-* Initialization database: `python manage.py init_db`
-* Create **setting.py** from template and Update: `cp settings.example.py settings.py`
-* Create **supervisord.conf** from template and Update: `cp supervisord.example.conf supervisord.conf`
+* Update **setting.py**.
+* Update **supervisord.conf** if necessary.
+* Init database: `python manage.py init_db`
+* Init permission: `python manage.py init_user`
 * Start redis server: `service redis start`
-* Start frontend and backend process: `supervisord -c Bongos/supervisord.conf`
+* Start supervisord: `supervisord -c supervisord.conf`
 
 
 
