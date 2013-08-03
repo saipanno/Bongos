@@ -28,11 +28,11 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 # web config
-PORT = 80
+PORT = 8080
 HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
 PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
-SECRET_KEY = '\x17s\\\x8cY\x00X\xf3 .V\xfb\x01\xd0\xbb\x16Z`\xd84ZHk\xd7'
+SECRET_KEY = 'MUST UPDATE'  # Create by os.urandom(24)
 DEBUG = True
 
 # api config
@@ -40,8 +40,8 @@ API_ACCESS_CLIENTS = ['127.0.0.1']
 API_BASIC_URL = 'http://127.0.0.1/api'
 
 # application config
-IPMI_USER = 'root'
-IPMI_PASSWORD = 'calvin'
+IPMI_USER = 'MUST UPDATE'
+IPMI_PASSWORD = 'MUST UPDATE'
 
 # fabric config
 POOL_SIZE = 250             # default is 250

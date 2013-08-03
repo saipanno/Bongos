@@ -4,9 +4,10 @@ env
 *.pyc
 *.key
 
+
 .idea
 .DS_Store
 
 sqlite.db
-settings.py
+*_settings.py
 supervisord.conf
