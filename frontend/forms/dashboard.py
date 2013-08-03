@@ -29,7 +29,7 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from flask.ext.wtf import Required, Optional, Regexp, IPAddress, Email
 
 from frontend.models.account import Group, User
-from frontend.models.dashboard import SshConfig, Server, IDC, Permission, FabricFile
+from frontend.models.dashboard import SshConfig, Server, IDC, Permission, FabFile
 
 from frontend.extensions.libs import Unique, UnChange
 
@@ -192,7 +192,7 @@ class PermissionForm(Form):
     submit = SubmitField(u'Submit', id='submit')
 
 
-class FabricFileForm(Form):
+class FabFileForm(Form):
 
     script_desc = u'''作为shell中的 <code>$</code> 内部变量的扩展，模板还支持外部变量。\
     <code>{{</code> 和 <code>}}</code> 作为外部变量的定界符,此类变量会依据变量文件中的同名赋值定义进行替换, \
@@ -205,7 +205,7 @@ class FabricFileForm(Form):
     name = TextField(u'Name', description=u'Fabfile name. Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_]{5,50}$', message=u'Incorrect name format'),
-                                 Unique(FabricFile, FabricFile.name,
+                                 Unique(FabFile, FabFile.name,
                                         message=u'The current name is already in use')])
     desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
     script = TextAreaField(u'Fabfile', description=u'Fabric\'s fabfile')

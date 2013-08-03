@@ -35,7 +35,7 @@ from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, 
 
 from frontend.models.account import User
 from frontend.models.operation import OperationDb
-from frontend.models.dashboard import SshConfig, FabricFile
+from frontend.models.dashboard import SshConfig, FabFile
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
@@ -320,7 +320,7 @@ def create_fabfile_execute_ctrl():
 
         ssh_config = SshConfig.query.filter_by(id=form.ssh_config.data.id).first()
         ssh_config_dict = get_obj_attributes(ssh_config, 'SSH')
-        fabfile = FabricFile.query.filter_by(id=form.script_template.data.id).first()
+        fabfile = FabFile.query.filter_by(id=form.script_template.data.id).first()
         fabfile_dict = get_obj_attributes(fabfile, 'FABFILE')
 
         operations = get_obj_attributes(operation, 'OPT')

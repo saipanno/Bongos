@@ -33,11 +33,11 @@ from frontend.extensions.database import db
 from frontend.extensions.libs import catch_errors
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, Server, Permission, IDC, FabricFile
+from frontend.models.dashboard import SshConfig, Server, Permission, IDC, FabFile
 
 from frontend.forms.account import GroupForm
 from frontend.forms.dashboard import SshConfigForm, ServerForm, CreateUserForm, EditUserForm, \
-    IDCForm, PermissionForm, FabricFileForm
+    IDCForm, PermissionForm, FabFileForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -870,7 +870,7 @@ def list_fabfile_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    fabfiles = FabricFile.query.all()
+    fabfiles = FabFile.query.all()
 
     for fabfile in fabfiles:
         user = User.query.filter_by(id=int(fabfile.author)).first()
@@ -890,7 +890,7 @@ def show_fabfile_ctrl(fabfile_id):
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
-    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+    fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
     if fabfile is None:
         flash(u'Fabfile does not exist', 'error')
@@ -912,7 +912,7 @@ def create_fabfile_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    form = FabricFileForm()
+    form = FabFileForm()
     if request.method == 'GET':
         return render_template('dashboard/fabfile_manager.html', form=form, type='create')
 
@@ -924,7 +924,7 @@ def create_fabfile_ctrl():
                     encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
-        fabfile = FabricFile(form.name.data, form.desc.data, author)
+        fabfile = FabFile(form.name.data, form.desc.data, author)
         db.session.add(fabfile)
         db.session.commit()
 
@@ -947,12 +947,12 @@ def edit_fabfile_ctrl(fabfile_id):
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+    fabfile = FabFile.query.filter_by(id=fabfile_id).first()
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
                  encoding='utf-8') as f:
         fabfile.script = f.read()
 
-    form = FabricFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
+    form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
 
     if request.method == 'GET':
         return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
@@ -987,7 +987,7 @@ def delete_fabfile_ctrl(fabfile_id):
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    fabfile = FabricFile.query.filter_by(id=fabfile_id).first()
+    fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
     # TODO:增加清理数据库环境操作
 

@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField, SelectField, Required
 
-from frontend.models.dashboard import SshConfig, FabricFile
+from frontend.models.dashboard import SshConfig, FabFile
 
 
 class CreateSshDetectForm(Form):
@@ -90,7 +90,7 @@ class CreateFabfileExecuteForm(Form):
     Separated by <code>;</code>、<code>,</code>、<code>空格</code> and <code>换行</code>',
                                 validators=[Required(message=u'Server list is required')])
     script_template = QuerySelectField(u'Fabfile Script', description=u'Fabfile Script.',
-                                       query_factory=FabricFile.query.all, get_label='desc',
+                                       query_factory=FabFile.query.all, get_label='desc',
                                        validators=[Required(message=u'Fabfile Script is required')])
     ext_variables = TextAreaField(u'External Variables', description=vars_desc)
     ssh_config = QuerySelectField(u'Ssh Config', query_factory=SshConfig.query.all, get_label='desc',

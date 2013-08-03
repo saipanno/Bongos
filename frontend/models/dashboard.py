@@ -122,7 +122,7 @@ class IDC(db.Model):
         self.address = address
 
 
-class FabricFile(db.Model):
+class FabFile(db.Model):
 
     __tablename__ = 'fabfile_lists'
 

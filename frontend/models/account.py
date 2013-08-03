@@ -36,7 +36,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(50), unique=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), unique=True)
     groups = db.Column(db.String(50))
     passwd_hash = db.Column(db.String(50))
     status = db.Column(db.Integer)
