@@ -9,5 +9,5 @@ env
 .DS_Store
 
 sqlite.db
-*_settings.py
+config.py
 supervisord.conf
