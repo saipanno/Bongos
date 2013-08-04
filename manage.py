@@ -54,7 +54,7 @@ def drop_db():
 
 
 @manager.command
-def init_user():
+def init_ugp():
     """Create Default Account and Permissions."""
     from frontend.models.account import User, Group
     from frontend.models.dashboard import Permission
