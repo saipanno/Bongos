@@ -34,6 +34,8 @@ def validate_address(address):
         octets = address.split('.')
         if len(octets) != 4:
             return False
+        if int(octets[0]) == 127:
+            return False
         for x in octets:
             if not (0 <= int(x) <= 255):
                 return False
