@@ -641,7 +641,7 @@ def show_permission_ctrl():
                 group_permissions[group_id] = dict()
                 group_permissions[group_id][permission_id] = 1
 
-    return render_template('dashboard/permission_manager.html', permissions_handler=permissions_handler,
+    return render_template('dashboard/acl_manager.html', permissions_handler=permissions_handler,
                            user_groups=user_groups, group_permissions=group_permissions, type='show')
 
 
@@ -672,88 +672,6 @@ def update_permission_ctrl(group_id, handler_id, status):
 
     flash(u'Update permission successfully', 'success')
     return redirect(url_for('dashboard.show_permission_ctrl'))
-
-
-@dashboard.route('/permission_handler/list')
-@login_required
-def list_permission_handler_ctrl():
-
-    access = UserAccessPermission('dashboard.list_permission_handler_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    permissions = Permission.query.all()
-
-    return render_template('dashboard/permission_handler.html', permissions=permissions, type='list')
-
-
-@dashboard.route('/permission_handler/create', methods=("GET", "POST"))
-@login_required
-def create_permission_handler_ctrl():
-
-    access = UserAccessPermission('dashboard.create_permission_handler_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    form = PermissionForm()
-
-    if request.method == 'GET':
-
-        return render_template('dashboard/permission_handler.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
-
-        permission = Permission(form.desc.data, form.function.data, json.dumps({1: 1}))
-        db.session.add(permission)
-        db.session.commit()
-
-        flash(u'Create permission handler successfully', 'success')
-        return redirect(url_for('dashboard.list_permission_handler_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_permission_handler_ctrl'))
-
-
-@dashboard.route('/permission_handler/<int:handler_id>/edit', methods=("GET", "POST"))
-@login_required
-def edit_permission_handler_ctrl(handler_id):
-
-    access = UserAccessPermission('dashboard.edit_permission_handler_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    permission = Permission.query.filter_by(id=handler_id).first()
-
-    form = PermissionForm(id=permission.id, desc=permission.desc, function=permission.function)
-
-    if request.method == 'GET':
-
-        return render_template('dashboard/permission_handler.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
-
-        if form.desc.data != permission.desc:
-            permission.desc = form.desc.data
-
-        if form.function.data != permission.function:
-            permission.function = form.function.data
-
-        db.session.commit()
-
-        flash(u'Edit permission description successfully', 'success')
-        return redirect(url_for('dashboard.list_permission_handler_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_permission_handler_ctrl', handler_id=handler_id))
 
 
 @dashboard.route('/idc/list')

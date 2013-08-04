@@ -15,8 +15,7 @@
                 <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>
                 <li class="{% block active_dashboard_fabfile %}{% endblock %}"><a href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a></li>
                 <li class="nav-header">PERMISSION</li>
-                <li class="{% block active_dashboard_permission_handler %}{% endblock %}"><a href="{{ url_for("dashboard.list_permission_handler_ctrl") }}"><i class="icon-flag-checkered"></i> Permission Handler</a></li>
-                <li class="{% block active_dashboard_permission_manager %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i>Permission Manager</a></li>
+                <li class="{% block active_dashboard_permission_manager %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i> ACL Manager</a></li>
                 <li class="nav-header">JOURNAL</li>
                 <li class="{% block active_dashboard_logging %}{% endblock %}"><a href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a></li>
                 <li class="nav-header">STATUS</li>

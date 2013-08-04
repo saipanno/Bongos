@@ -1,7 +1,6 @@
 dashboard.create_fabfile_ctrl,Create Fabfile Permission
 dashboard.create_group_ctrl,Create User Group Permission
 dashboard.create_idc_ctrl,Create Idc Permission
-dashboard.create_permission_handler_ctrl,Create Permission Handler Permission
 dashboard.create_server_ctrl,Create Server Permission
 dashboard.create_ssh_config_ctrl,Create Ssh Config Permission
 dashboard.create_user_ctrl,Create User Permission
@@ -14,7 +13,6 @@ dashboard.delete_ssh_config_ctrl,Delete Ssh Config Permission
 dashboard.edit_fabfile_ctrl,Edit Fabfile Permission
 dashboard.edit_group_ctrl,Edit User Group Permission
 dashboard.edit_idc_ctrl,Edit Idc Permission
-dashboard.edit_permission_handler_ctrl,Edit Permission Handler Permission
 dashboard.edit_server_ctrl,Edit Server Permission
 dashboard.edit_ssh_config_ctrl,Edit Ssh Config Permission
 dashboard.edit_user_ctrl,Edit User Permission
@@ -22,7 +20,6 @@ dashboard.list_fabfile_ctrl,List Fabfile Permission
 dashboard.list_group_ctrl,List User Group Permission
 dashboard.list_idc_ctrl,List Idc Permission
 dashboard.list_permission_ctrl,List Permission Permission
-dashboard.list_permission_handler_ctrl,List Permission Handler Permission
 dashboard.list_server_ctrl,List Server Permission
 dashboard.list_ssh_config_ctrl,List Ssh Config Permission
 dashboard.list_user_ctrl,List User Permission
