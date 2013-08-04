@@ -33,7 +33,7 @@ HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
 PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
 SECRET_KEY = 'MUST UPDATE'  # Create by os.urandom(24)
-DEBUG = True
+DEBUG = False 
 
 # api config
 API_ACCESS_CLIENTS = ['127.0.0.1']
