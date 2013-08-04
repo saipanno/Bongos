@@ -90,6 +90,7 @@ def configure_blueprints(app):
 
     BLUEPRINTS = (
         frontend.controlers.api,
+        frontend.controlers.assets,
         frontend.controlers.account,
         frontend.controlers.operation,
         frontend.controlers.dashboard

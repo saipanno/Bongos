@@ -1,45 +1,54 @@
 {% extends "operation/base.html" %}
 
-{% block main %}
-    <div class="span10">
+{% block container %}
 
-        <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a><span class="divider">/</span></li>
-            <li class="active">Show</li>
-        </ul>
+    <div class="container">
 
-        {{ ext.feedback_message() }}
+        <div class="row">
 
-        <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Show Operation</a>
-                <div class="btn-group pull-right">
-                    <a class="btn btn-primary" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=execute.id) }}"><i class="icon-cloud-download"></i> Export Results</a>
+            <div class="span12">
+
+                <ul class="breadcrumb">
+                    <li><a href="/">Home</a> <span class="divider">/</span></li>
+                    <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a><span class="divider">/</span></li>
+                    <li class="active">Show</li>
+                </ul>
+
+                {{ ext.feedback_message() }}
+
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <a class="brand" href="#">Show Operation</a>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-primary" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=execute.id) }}"><i class="icon-cloud-download"></i> Export Results</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <table class="table table-hover table-bordered table-striped table-condensed datatable">
-            <thead>
-            <tr>
-                <th>Address</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th>Error Message</th>
-            </tr>
-            </thead>
-            <tbody>
-            {%- for address in fruits %}
-            <tr>
-                <td class="span1">{{ address }}</td>
-                <td class="span1">{{ fruits[address]['code'] }}</td>
-                <td class="span4">{{ fruits[address]['message'] }}</td>
-                <td class="span4">{{ fruits[address]['error_message'] }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                <table class="table table-hover table-bordered table-striped table-condensed datatable">
+                    <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Message</th>
+                        <th>Error Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {%- for address in fruits %}
+                    <tr>
+                        <td class="span1">{{ address }}</td>
+                        <td class="span1">{{ fruits[address]['code'] }}</td>
+                        <td class="span4">{{ fruits[address]['message'] }}</td>
+                        <td class="span4">{{ fruits[address]['error_message'] }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 

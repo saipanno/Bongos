@@ -25,6 +25,7 @@
 
 
 from frontend.controlers.api import api
+from frontend.controlers.assets import assets
 from frontend.controlers.account import account
 from frontend.controlers.operation import operation
 from frontend.controlers.dashboard import dashboard
