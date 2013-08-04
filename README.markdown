@@ -4,7 +4,7 @@ Bongos
 
 
 
-You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
+You can use the demo at [bongos.saipanno.com](http://bongos.saipanno.com) with admin/admin.
 
 
 
