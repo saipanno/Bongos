@@ -62,7 +62,7 @@
                             <li class="dropdown {% block active_assets %}{% endblock %}"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Assets</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url_for("assets.list_server_ctrl") }}">Server</a></li>
-                                <li><a href="{{ url_for("assets.list_idc_ctrl") }}">IDC</a></li>
+                                <li><a href="{{ url_for("assets.list_idc_ctrl") }}">DataCenter</a></li>
                             </ul>
                             </li>
                         </ul>
@@ -99,7 +99,22 @@
         </div>
     </div>
 
-    {% block container %}{% endblock %}
+    {% block container %}
+
+        <div class="container-fluid">
+
+            <div class="row-fluid">
+
+                {% block sidebar %}{% endblock %}
+
+                {% block main %}{% endblock %}
+
+            </div>
+
+        </div>
+
+    {% endblock %}
+
     <hr>
 
     <footer class="footer">
