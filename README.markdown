@@ -28,7 +28,7 @@ You can use the demo at: [bongos.saipanno.com](http://bongos.saipanno.com)
 * Update **setting.py**.
 * Update **supervisord.conf** if necessary.
 * Initialize database: `python manage.py init_db`
-* Initialize permission: `python manage.py init_user`
+* Initialize user, group and permission: `python manage.py init_ugp`
 * Start redis server: `service redis start`
 * Start the project process: `supervisord -c supervisord.conf`
 
