@@ -37,7 +37,7 @@ manager = Manager(app)
 
 @manager.command
 def init_db():
-    """Creates default database."""
+    """Create Default Database."""
     from frontend.extensions.database import db
 
     db.create_all()
@@ -46,7 +46,7 @@ def init_db():
 
 @manager.command
 def drop_db():
-    """Drop current database."""
+    """Drop Current Database."""
     from frontend.extensions.database import db
 
     if prompt_bool(u'Are you sure you want to lose all your data:'):
@@ -55,7 +55,7 @@ def drop_db():
 
 @manager.command
 def init_ugp():
-    """Create Default Account and Permissions."""
+    """Create Default User, Group and Permissions."""
     from frontend.models.account import User, Group
     from frontend.models.dashboard import Permission
     from frontend.extensions.database import db
