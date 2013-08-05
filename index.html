@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Bongos by saipanno</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Bongos</h1>
+        <h2>An Operation Management Web Platform for SA.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/saipanno/Bongos/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/saipanno/Bongos/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/saipanno/Bongos" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a name="bongos" class="anchor" href="#bongos"><span class="octicon octicon-link"></span></a>Bongos</h1>
+
+<h6>
+<a name="an-operation-management-web-platform-for-sa" class="anchor" href="#an-operation-management-web-platform-for-sa"><span class="octicon octicon-link"></span></a>An Operation Management Web Platform for SA.</h6>
+
+<p>You can use the demo at <a href="http://bongos.saipanno.com">bongos.saipanno.com</a> with admin/admin.</p>
+
+<h1>
+<a name="summary" class="anchor" href="#summary"><span class="octicon octicon-link"></span></a>Summary</h1>
+
+<ul>
+<li>Asset Management</li>
+<li>Group-based Permission Management. Accurate to Resource Access and Feature Uses.</li>
+<li>Fabric-based. Support External Variables and Output Record.</li>
+<li>Full-featured Dashboard. Support Resources CRUD.</li>
+</ul><h1>
+<a name="deploy-and-run" class="anchor" href="#deploy-and-run"><span class="octicon octicon-link"></span></a>Deploy and Run</h1>
+
+<ul>
+<li>Download source: <code>git clone https://github.com/saipanno/Bongos.git</code>
+</li>
+<li>Switch to the project directory： <code>cd Bongos</code>
+</li>
+<li>Create virtualenv environment: <code>virtualenv --never-download --distribute env</code>
+</li>
+<li>Activate environment: <code>source env/bin/activate</code>
+</li>
+<li>Install python library: <code>pip install -r requirements.txt</code>
+</li>
+<li>Install system tools: <code>yum install redis ipmitool</code>
+</li>
+<li>Update <strong>setting.py</strong>.</li>
+<li>Update <strong>supervisord.conf</strong> if necessary.</li>
+<li>Initialize database: <code>python manage.py init_db</code>
+</li>
+<li>Initialize user, group and permission: <code>python manage.py init_ugp</code>
+</li>
+<li>Start redis server: <code>service redis start</code>
+</li>
+<li>Start the project process: <code>supervisord -c supervisord.conf</code>
+</li>
+</ul><h1>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>Bongos is released under the <strong>MIT</strong> license</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
