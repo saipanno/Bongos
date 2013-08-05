@@ -1,3 +1,29 @@
 {% extends "base.html" %}
 
 {% block active_assets %}active{% endblock %}
+
+{% block container %}
+<div class="container-fluid">
+
+    <div class="row-fluid">
+
+        {% block sidebar %}
+            <div class="span3">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">NODE</li>
+                        <li class="{% block active_assets_server %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Server</a></li>
+                        <li class="nav-header">DATA CENTER</li>
+                        <li class="{% block active_assets_idc %}{% endblock %}"><a href="{{ url_for("assets.list_idc_ctrl") }}">IDC</a></li>
+                        <li class="{% block active_assets_rack %}{% endblock %}"><a href="#">RACK</a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block main %}{% endblock %}
+
+    </div>
+
+</div>
+{% endblock %}

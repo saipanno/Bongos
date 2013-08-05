@@ -218,7 +218,7 @@ def list_idc_ctrl():
 
     idcs = IDC.query.all()
 
-    return render_template('assets/datacenter.html', idcs=idcs, type='list')
+    return render_template('assets/idc.html', idcs=idcs, type='list')
 
 
 @assets.route('/idc/create', methods=("GET", "POST"))
@@ -234,7 +234,7 @@ def create_idc_ctrl():
 
     if request.method == 'GET':
 
-        return render_template('assets/datacenter.html', form=form, type='create')
+        return render_template('assets/idc.html', form=form, type='create')
 
     elif request.method == 'POST' and form.validate():
 
@@ -267,7 +267,7 @@ def edit_idc_ctrl(idc_id):
 
     if request.method == 'GET':
 
-        return render_template('assets/datacenter.html', form=form, type='edit')
+        return render_template('assets/idc.html', form=form, type='edit')
 
     elif request.method == 'POST' and form.validate():
 

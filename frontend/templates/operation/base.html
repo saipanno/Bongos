@@ -1,3 +1,32 @@
 {% extends "base.html" %}
 
 {% block active_operation %}active{% endblock %}
+
+{% block container %}
+<div class="container-fluid">
+
+    <div class="row-fluid">
+
+        {% block sidebar %}
+            <div class="span3">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">STATUS DETECT</li>
+                        <li class="{% if operation_type == 'ssh_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}"><i class="icon-exchange"></i> Ssh Status</a></li>
+                        <li class="{% if operation_type == 'ping_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting') }}"><i class="icon-exchange"></i> Ping Connectivity</a></li>
+                        <li class="nav-header">REMOTE EXECUTE</li>
+                        <li class="{% if operation_type == 'custom_script_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}"><i class="icon-tasks"></i> Custom Script</a></li>
+                        <li class="{% if operation_type == 'fabfile_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}"><i class="icon-tasks"></i> PreDefined Fabfile</a></li>
+                        <li class="nav-header">IPMI OVER LAN</li>
+                        <li class="{% if operation_type == 'remote_power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_power_control') }}"><i class="icon-off"></i> Power Control</a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block main %}{% endblock %}
+
+    </div>
+
+</div>
+{% endblock %}

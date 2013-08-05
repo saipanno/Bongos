@@ -57,31 +57,8 @@
                 <a class="brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> BONGOS</a>
 
                 <ul class="nav">
-                    <li>
-                        <ul class="nav nav-pills">
-                            <li class="dropdown {% block active_assets %}{% endblock %}"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Assets</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ url_for("assets.list_server_ctrl") }}">Server</a></li>
-                                <li><a href="{{ url_for("assets.list_idc_ctrl") }}">DataCenter</a></li>
-                            </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <ul class="nav nav-pills">
-                            <li class="dropdown {% block active_operation %}{% endblock %}"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Operation</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting') }}"><i class="icon-exchange"></i> Ping Status</a></li>
-                                <li><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}"><i class="icon-exchange"></i> Ssh Status</a></li>
-                                <li class=""></li>
-                                <li><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}"><i class="icon-tasks"></i> Custom Script</a></li>
-                                <li><a href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}"><i class="icon-tasks"></i> PreDefined Fabfile</a></li>
-                                <li class="nav-header"></li>
-                                <li><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_power_control') }}"><i class="icon-off"></i> Power Control</a></li>
-                            </ul>
-                            </li>
-                        </ul>
-                    </li>
+                    <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
+                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Operation</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 

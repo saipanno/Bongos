@@ -1,12 +1,10 @@
 {% extends "assets/base.html" %}
 
-{% block container %}
+{% block active_assets_server %}active{% endblock %}
 
-    <div class="container">
+{% block main %}
 
-        <div class="row">
-
-            <div class="span12">
+            <div class="span9">
 
             {% if type == 'list' %}
 
@@ -126,8 +124,8 @@
                         {{ form.hidden_tag() }}
 
                         <legend>
-                        {% if form.desc.data %}
-                            {{ form.desc.data }}
+                        {% if form.assets_number.data %}
+                            {{ form.assets_number.data }}
                         {% else %}
                             Edit Server
                         {% endif %}
@@ -164,7 +162,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Are you sure you want to delete this server?</p>
-                                        <span class="label label-info">{{ form.name.data }}</span>
+                                        <span class="label label-info">{{ form.assets_number.data }}</span>
                                     </div>
                                     <div class="modal-footer">
                                         <a class="btn btn-large btn-danger pull-left" href="{{ url_for('assets.delete_server_ctrl', server_id=form.id.data) }}">Yes, I'm sure</a>
@@ -179,9 +177,5 @@
             {% endif %}
 
             </div>
-
-        </div>
-
-    </div>
 
 {% endblock %}
