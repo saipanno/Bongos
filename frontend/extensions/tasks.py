@@ -24,8 +24,8 @@
 # SOFTWARE.
 
 
-from redis import Redis
 from rq import Queue
+from redis import Redis
 
 
 q = Queue('Bongos', connection=Redis())
