@@ -4,21 +4,21 @@
 
 {% block main %}
 
-            <div class="span9">
+            <div class="col-lg-9">
 
                 {% if type == 'list' %}
 
                     <ul class="breadcrumb">
-                        <li><a href="/">Home</a> <span class="divider">/</span></li>
-                        <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                        <li><a href="/">Home</a></li>
+                        <li class="#"><a href="#">IDC Manager</a></li>
                         <li class="active">List</li>
                     </ul>
 
                     {{ ext.feedback_message() }}
 
                     <div class="navbar">
-                        <div class="navbar-inner">
-                            <a class="brand" href="#">IDC Manager</a>
+                        <div class="container">
+                            <a class="navbar-brand" href="#">IDC Manager</a>
                             <div class="btn-group pull-right">
                                 <a href="{{ url_for('assets.create_idc_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add IDC</a>
                             </div>
@@ -57,8 +57,8 @@
                 {% elif type == 'create' %}
 
                     <ul class="breadcrumb">
-                        <li><a href="/">Home</a> <span class="divider">/</span></li>
-                        <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                        <li><a href="/">Home</a></li>
+                        <li class="#"><a href="#">IDC Manager</a></li>
                         <li class="active">Create</li>
                     </ul>
 
@@ -73,7 +73,7 @@
                                 Create IDC
                             </legend>
 
-                            <div class="box form-container row-fluid form-horizontal">
+                            <div class="box form-container row form-horizontal">
 
                                 {{ ext.create_standard_field(form.name) }}
 
@@ -96,8 +96,8 @@
                 {% elif type == 'edit' %}
 
                     <ul class="breadcrumb">
-                        <li><a href="/">Home</a> <span class="divider">/</span></li>
-                        <li class="#"><a href="#">IDC Manager</a><span class="divider">/</span></li>
+                        <li><a href="/">Home</a></li>
+                        <li class="#"><a href="#">IDC Manager</a></li>
                         <li class="active">Edit</li>
                     </ul>
 
@@ -118,7 +118,7 @@
                             {% endif %}
                             </legend>
 
-                            <div class="box form-container row-fluid form-horizontal">
+                            <div class="box form-container row form-horizontal">
 
                                 {{ ext.create_standard_field(form.name) }}
 

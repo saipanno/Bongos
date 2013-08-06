@@ -7,11 +7,15 @@
     <meta name="description" content="">
     <meta name="author" content="Ruoyan Wong">
 
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap/css/bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap3/css/bootstrap.css') }}">
+    <!--
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap/css/bootstrap-responsive.css') }}">
+    -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/font-awesome/font-awesome.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
+    <!--
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2-bootstrap.css') }}">
+    -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/google-code-prettify/prettify.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bongos/bongos.css') }}">
 
@@ -42,27 +46,21 @@
 
     {% block body %}
 
-    {% block header %}
-
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
 
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+        <div class="container">
 
-                <a class="brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> BONGOS</a>
+            <a class="navbar-brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> Bongos Project</a>
 
-                <ul class="nav">
+            <div class="nav-collapse collapse bs-navbar-collapse">
+
+                <ul class="nav navbar-nav">
                     <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
                     <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Operation</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 
-                <ul class="nav pull-right">
+                <ul class="nav navbar-nav pull-right">
                     <li class="divider-vertical"></li>
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.name }}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -73,18 +71,21 @@
                 </ul>
 
             </div>
+
         </div>
     </div>
 
     {% block container %}
 
-        <div class="container-fluid">
+        {% block subhead %}{% endblock subhead %}
 
-            <div class="row-fluid">
+        <div class="container">
 
-                {% block sidebar %}{% endblock %}
+            <div class="row">
 
-                {% block main %}{% endblock %}
+                {% block sidebar %}{% endblock sidebar %}
+
+                {% block main %}{% endblock main %}
 
             </div>
 
@@ -110,11 +111,12 @@
         <script src="{{ url_for('static', filename='package/jquery/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.ColReorderWithResize.js') }}"></script>
-        <script src="{{ url_for('static', filename='package/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/bootstrap3/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/select2/js/select2.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/google-code-prettify/prettify.js') }}"></script>
+        <!--
         <script src="{{ url_for('static', filename='bongos/bongos.js') }}"></script>
-
+        -->
         <script type="text/javascript" charset="utf-8">
             $(document).ready(function() {
                 prettyPrint();
@@ -131,9 +133,7 @@
 
     </footer>
 
-    {% endblock %}
-
-    {% endblock %}
+{% endblock %}
 
 </body>
 </html>

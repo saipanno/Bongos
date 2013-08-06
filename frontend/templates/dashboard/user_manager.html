@@ -3,21 +3,21 @@
 {% block active_dashboard_user %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
         {% if type == 'list' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">User Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">User Manager</a></li>
                 <li class="active">List</li>
             </ul>
 
             {{ ext.feedback_message() }}
 
             <div class="navbar">
-                <div class="navbar-inner">
-                    <a class="brand" href="#">User Manager</a>
+                <div class="container">
+                    <a class="navbar-brand" href="#">User Manager</a>
                     <div class="btn-group pull-right">
                         <a href="{{ url_for('dashboard.create_user_ctrl') }}" class="btn btn-primary"><i class="icon-plus"></i> Add User</a>
                     </div>
@@ -45,7 +45,7 @@
                             <td>{{ user.name }}</td>
                             <td>{{ user.group_name }}</td>
                             <td>{{ ext.get_status(user.status) }}</td>
-                            <td><a class="btn btn-mini" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
+                            <td><a class="btn btn-small btn-primary" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -54,8 +54,8 @@
         {% elif type == 'create' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">User Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">User Manager</a></li>
                 <li class="active">Create</li>
             </ul>
 
@@ -70,7 +70,7 @@
                         Create User
                     </legend>
 
-                    <div class="box form-container row-fluid form-horizontal">
+                    <div class="box form-container row form-horizontal">
 
                         {{ ext.create_standard_field(form.email) }}
 
@@ -97,8 +97,8 @@
         {% elif type == 'edit' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">User Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">User Manager</a></li>
                 <li class="active">Edit</li>
             </ul>
 
@@ -117,7 +117,7 @@
                     {% endif %}
                     </legend>
 
-                    <div class="box form-container row-fluid form-horizontal">
+                    <div class="box form-container row form-horizontal">
 
                         {{ ext.create_standard_field(form.email, class="uneditable-input") }}
 

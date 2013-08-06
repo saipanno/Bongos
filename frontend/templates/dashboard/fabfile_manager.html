@@ -3,21 +3,21 @@
 {% block active_dashboard_fabfile %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
     {% if type == 'list' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Fabfile Manager</a></li>
             <li class="active">List</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Fabfile Manager</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">Fabfile Manager</a>
                 <div class="btn-group pull-right">
                     <a href="{{ url_for('dashboard.create_fabfile_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Fabfile</a>
                 </div>
@@ -41,7 +41,7 @@
                         <td>{{ fabfile.name }}</td>
                         <td>{{ fabfile.desc }}</td>
                         <td>{{ fabfile.author_name }}</td>
-                        <td><a class="btn btn-mini" href="{{ url_for('dashboard.show_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                        <td><a class="btn btn-small btn-primary" href="{{ url_for('dashboard.show_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -50,16 +50,16 @@
     {% elif type == 'show' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Fabfile Manager</a></li>
             <li class="active">Show</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">{{ fabfile.name }}</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">{{ fabfile.name }}</a>
                 <div class="btn-group pull-right">
                     <a class="btn btn-primary" href="{{ url_for('dashboard.edit_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-plus icon-white"></i> Edit Fabfile</a>
                 </div>
@@ -74,8 +74,8 @@
     {% elif type == 'create' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Fabfile Manager</a> <span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Fabfile Manager</a></li>
             <li class="active">Create</li>
         </ul>
 
@@ -90,13 +90,13 @@
                     Create Fabfile
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.name, backaddon=".py") }}
 
-                    {{ ext.create_standard_field(form.desc, class="span6") }}
+                    {{ ext.create_standard_field(form.desc, class="col-lg-6") }}
 
-                    {{ ext.create_standard_field(form.script, class="span8", rows="10") }}
+                    {{ ext.create_standard_field(form.script, class="col-lg-8", rows="10") }}
 
                 </div>
 
@@ -110,8 +110,8 @@
         {% elif type == 'edit' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Fabfile Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Fabfile Manager</a></li>
             <li class="active">Edit</li>
         </ul>
 
@@ -132,13 +132,13 @@
                 {% endif %}
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.name, class="uneditable-input", backaddon=".py") }}
 
-                    {{ ext.create_standard_field(form.desc, class="span6") }}
+                    {{ ext.create_standard_field(form.desc, class="col-lg-6") }}
 
-                    {{ ext.create_standard_field(form.script, class="span8", rows="10") }}
+                    {{ ext.create_standard_field(form.script, class="col-lg-8", rows="10") }}
 
                 </div>
 

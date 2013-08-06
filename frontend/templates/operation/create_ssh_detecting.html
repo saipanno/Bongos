@@ -2,11 +2,11 @@
 
 {% block main %}
 
-            <div class="span9">
+            <div class="col-lg-12">
 
                 <ul class="breadcrumb">
-                    <li><a href="/">Home</a> <span class="divider">/</span></li>
-                    <li class="active"><a href="#">Ssh Detect</a><span class="divider">/</span></li>
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="#">Ssh Detect</a></li>
                     <li class="active">Create</li>
                 </ul>
 
@@ -21,9 +21,9 @@
                             Create Ssh Detect
                         </legend>
 
-                        <div class="box form-container row-fluid form-horizontal">
+                        <div class="box form-container row form-horizontal">
 
-                            {{ ext.create_standard_field(form.server_list, class="span6", rows="10") }}
+                            {{ ext.create_standard_field(form.server_list, class="col-lg-6", rows="10") }}
 
                             {{ ext.create_standard_field(form.ssh_config, class="select2 span4") }}
 

@@ -3,21 +3,21 @@
 {% block active_dashboard_server %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
     {% if type == 'list' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Server Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Server Manager</a></li>
             <li class="active">List</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Server Manager</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">Server Manager</a>
                 <div class="btn-group pull-right">
                     <a href="{{ url_for('dashboard.create_server_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Server</a>
                 </div>
@@ -64,16 +64,16 @@
     {% elif type == 'show' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Server Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Server Manager</a></li>
             <li class="active">Show</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">{{ script.name }}</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">{{ script.name }}</a>
                 <div class="btn-group pull-right">
                     <a href="{{ url_for('dashboard.edit_predefined_script_ctrl', script_id=script.id)}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Edit Script</a>
                 </div>
@@ -86,8 +86,8 @@
     {% elif type == 'create' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Server Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Server Manager</a></li>
             <li class="active">Create</li>
         </ul>
 
@@ -102,7 +102,7 @@
                     Create Server
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.serial_number) }}
                     {{ ext.create_standard_field(form.assets_number) }}
@@ -111,14 +111,14 @@
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
                     {{ ext.create_standard_field(form.ipmi_address) }}
-                    {{ ext.create_standard_field(form.other_address, class="span6") }}
+                    {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
                     {{ ext.create_standard_field(form.idc, class="select2") }}
                     {{ ext.create_standard_field(form.rack) }}
                     {{ ext.create_standard_field(form.manufacturer) }}
                     {{ ext.create_standard_field(form.model) }}
-                    {{ ext.create_standard_field(form.cpu_info, class="span6") }}
-                    {{ ext.create_standard_field(form.disk_info, class="span6") }}
-                    {{ ext.create_standard_field(form.memory_info, class="span6") }}
+                    {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
+                    {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
+                    {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
 
                 </div>
 
@@ -132,8 +132,8 @@
         {% elif type == 'edit' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Server Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Server Manager</a></li>
             <li class="active">Edit</li>
         </ul>
 
@@ -152,7 +152,7 @@
                 {% endif %}
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.serial_number) }}
                     {{ ext.create_standard_field(form.assets_number) }}
@@ -161,14 +161,14 @@
                     {{ ext.create_standard_field(form.ext_address) }}
                     {{ ext.create_standard_field(form.int_address) }}
                     {{ ext.create_standard_field(form.ipmi_address) }}
-                    {{ ext.create_standard_field(form.other_address, class="span6") }}
+                    {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
                     {{ ext.create_standard_field(form.idc, class="select2") }}
                     {{ ext.create_standard_field(form.rack) }}
                     {{ ext.create_standard_field(form.manufacturer) }}
                     {{ ext.create_standard_field(form.model) }}
-                    {{ ext.create_standard_field(form.cpu_info, class="span6") }}
-                    {{ ext.create_standard_field(form.disk_info, class="span6") }}
-                    {{ ext.create_standard_field(form.memory_info, class="span6") }}
+                    {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
+                    {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
+                    {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
 
                 </div>
 

@@ -3,21 +3,21 @@
 {% block active_dashboard_ssh_config %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
     {% if type == 'list' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Ssh Config Manager</a> <span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Ssh Config Manager</a></li>
             <li class="active">List</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Ssh Config Manager</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">Ssh Config Manager</a>
                 <div class="btn-group pull-right">
                     <a href="{{ url_for('dashboard.create_ssh_config_ctrl') }}" class="btn btn-primary"><i class="icon-plus"></i> Add Ssh Config</a>
                 </div>
@@ -58,8 +58,8 @@
     {% elif type == 'create' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Ssh Config Manager</a> <span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Ssh Config Manager</a></li>
             <li class="active">Create</li>
         </ul>
 
@@ -74,11 +74,11 @@
                     Create Ssh Config
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.name) }}
 
-                    {{ ext.create_standard_field(form.desc, class="span6") }}
+                    {{ ext.create_standard_field(form.desc, class="col-lg-6") }}
 
                     {{ ext.create_standard_field(form.port) }}
 
@@ -100,8 +100,8 @@
     {% elif type == 'edit' %}
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="#">Ssh Config Manager</a> <span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Ssh Config Manager</a></li>
             <li class="active">Edit</li>
         </ul>
 
@@ -122,11 +122,11 @@
                     {% endif %}
                 </legend>
 
-                <div class="box form-container row-fluid form-horizontal">
+                <div class="box form-container row form-horizontal">
 
                     {{ ext.create_standard_field(form.name) }}
 
-                    {{ ext.create_standard_field(form.desc, class="span6") }}
+                    {{ ext.create_standard_field(form.desc, class="col-lg-6") }}
 
                     {{ ext.create_standard_field(form.port) }}
 

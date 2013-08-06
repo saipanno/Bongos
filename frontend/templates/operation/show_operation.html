@@ -2,19 +2,19 @@
 
 {% block main %}
 
-            <div class="span9">
+            <div class="col-lg-9">
 
                 <ul class="breadcrumb">
-                    <li><a href="/">Home</a> <span class="divider">/</span></li>
-                    <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a><span class="divider">/</span></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a></li>
                     <li class="active">Show</li>
                 </ul>
 
                 {{ ext.feedback_message() }}
 
                 <div class="navbar">
-                    <div class="navbar-inner">
-                        <a class="brand" href="#">Show Operation</a>
+                    <div class="container">
+                        <a class="navbar-brand" href="#">Show Operation</a>
                         <div class="btn-group pull-right">
                             <a class="btn btn-primary" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=execute.id) }}"><i class="icon-cloud-download"></i> Export Results</a>
                         </div>
@@ -33,10 +33,10 @@
                     <tbody>
                     {%- for address in fruits %}
                     <tr>
-                        <td class="span1">{{ address }}</td>
-                        <td class="span1">{{ fruits[address]['code'] }}</td>
-                        <td class="span4">{{ fruits[address]['message'] }}</td>
-                        <td class="span4">{{ fruits[address]['error_message'] }}</td>
+                        <td class="col-lg-1">{{ address }}</td>
+                        <td class="col-lg-1">{{ fruits[address]['code'] }}</td>
+                        <td class="col-lg-4">{{ fruits[address]['message'] }}</td>
+                        <td class="col-lg-4">{{ fruits[address]['error_message'] }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>

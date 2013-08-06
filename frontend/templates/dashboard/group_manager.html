@@ -3,21 +3,21 @@
 {% block active_dashboard_group %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
         {% if type == 'list' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">List</li>
             </ul>
 
             {{ ext.feedback_message() }}
 
             <div class="navbar">
-                <div class="navbar-inner">
-                    <a class="brand" href="#">Group Manager</a>
+                <div class="container">
+                    <a class="navbar-brand" href="#">Group Manager</a>
                     <div class="btn-group pull-right">
                         <a href="{{ url_for('dashboard.create_group_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Group</a>
                     </div>
@@ -54,8 +54,8 @@
         {% elif type == 'create' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">Create</li>
             </ul>
 
@@ -70,7 +70,7 @@
                         Create Group
                     </legend>
 
-                    <div class="box form-container row-fluid form-horizontal">
+                    <div class="box form-container row form-horizontal">
 
                         {{ ext.create_standard_field(form.name) }}
 
@@ -89,8 +89,8 @@
         {% elif type == 'edit' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a> <span class="divider">/</span></li>
-                <li class="#"><a href="#">Group Manager</a><span class="divider">/</span></li>
+                <li><a href="/">Home</a></li>
+                <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">Edit</li>
             </ul>
 
@@ -111,7 +111,7 @@
                     {% endif %}
                     </legend>
 
-                    <div class="box form-container row-fluid form-horizontal">
+                    <div class="box form-container row form-horizontal">
 
                         {{ ext.create_standard_field(form.name) }}
 

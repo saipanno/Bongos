@@ -3,20 +3,18 @@
 {% block active_assets %}active{% endblock %}
 
 {% block container %}
-<div class="container-fluid">
+<div class="container">
 
-    <div class="row-fluid">
+    <div class="row">
 
         {% block sidebar %}
-            <div class="span3">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">NODE</li>
-                        <li class="{% block active_assets_server %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}"><i class="icon-laptop"></i> Server</a></li>
-                        <li class="nav-header">DATA CENTER</li>
-                        <li class="{% block active_assets_idc %}{% endblock %}"><a href="{{ url_for("assets.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a></li>
-                        <li class="{% block active_assets_rack %}{% endblock %}"><a href="#"><i class="icon-align-justify"></i> RACK</a></li>
-                    </ul>
+            <div class="col-lg-3">
+                <div class="bs-sidebar">
+                    <div class="list-group">
+                        <a class="list-group-item {% block active_assets_server %}{% endblock %}" href="{{ url_for("assets.list_server_ctrl") }}"><i class="icon-laptop"></i> Server</a>
+                        <a class="list-group-item {% block active_assets_idc %}{% endblock %}" href="{{ url_for("assets.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a>
+                        <a class="list-group-item {% block active_assets_rack %}{% endblock %}" href="#"><i class="icon-align-justify"></i> RACK</a>
+                    </div>
                 </div>
             </div>
         {% endblock %}

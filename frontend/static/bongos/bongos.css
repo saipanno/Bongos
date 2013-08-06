@@ -1,57 +1,28 @@
-.box {
-    border: 1px solid rgb(214, 214, 214);
-    box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.1);
-    border-radius: 0px 0px 0px 0px;
-}
-.control-group {
-    border-bottom: 1px solid rgb(238, 238, 238);
-    background-color: rgb(251, 251, 251);
-}
-.form-horizontal .control-group {
-    margin-bottom: 0px;
-}
-.control-label {
-    padding: 6px 15px;
-    margin-bottom: 0;
-    font-weight: bold;
-}
-.form-horizontal .control-label {
-    padding: 19px 0px 0px;
-    margin-bottom: 0px;
-    font-weight: bold;
-}
-.controls {
-    padding: 10px 0px 0px 15px;
-    border-left: 1px solid rgb(238, 238, 238);
-    background-color: white;
-}
-.form-horizontal .controls {
-    padding: 15px 0 15px 20px;
-}
-
-
-.form-actions.fixed{
-    position: fixed;
-    _position: absolute;
-    bottom: 0;
-    z-index: 295;
-    margin-left: -10px;
-    -webkit-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    right: 10px;
-}
-
-.form-actions.fixed .pull-right{
-    float: none;
-    margin-left: 20px;
-}
-
 .required {
     color: red;
     font-weight:bold;
 }
 
+.bs-header .container {
+    position: relative;
+    margin: 0px auto;
+    width: 980px;
+}
+
+.bs-header .container {
+    position: relative;
+    margin: 0px auto;
+    width: 980px;
+}
+
+.bs-header-inline {
+    display: inline-block;
+}
+
+.bs-header-inline div {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
 
 /*
  * DataTable Styles

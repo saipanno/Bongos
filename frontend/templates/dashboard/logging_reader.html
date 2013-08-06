@@ -3,19 +3,19 @@
 {% block active_dashboard_logging %}active{% endblock %}
 
 {% block main %}
-    <div class="span9">
+    <div class="col-lg-9">
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">Logging Reader</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">Logging Reader</a></li>
             <li class="active">Show</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Logging Reader</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">Logging Reader</a>
             </div>
         </div>
 

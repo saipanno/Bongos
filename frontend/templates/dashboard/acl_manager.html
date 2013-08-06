@@ -4,19 +4,19 @@
 
 {% block main %}
 
-    <div class="span9">
+    <div class="col-lg-9">
 
         <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li class="#"><a href="#">ACL Manager</a><span class="divider">/</span></li>
+            <li><a href="/">Home</a></li>
+            <li class="#"><a href="#">ACL Manager</a></li>
             <li class="active">Show</li>
         </ul>
 
         {{ ext.feedback_message() }}
 
         <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#">ACL Manager</a>
+            <div class="container">
+                <a class="navbar-brand" href="#">ACL Manager</a>
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                                     <td>{{ permission_handler.desc }}</td>
                                     <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, handler_id=permission_handler.get('id', 0), status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
+                                        <a class="btn btn-small btn-primary" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, handler_id=permission_handler.get('id', 0), status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

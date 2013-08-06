@@ -3,31 +3,25 @@
 {% block active_dashboard %}active{% endblock %}
 
 {% block container %}
-<div class="container-fluid">
+<div class="container">
 
-    <div class="row-fluid">
+    <div class="row">
 
         {% block sidebar %}
-            <div class="span3">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">AUTH</li>
-                        <li class="{% block active_dashboard_user %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a></li>
-                        <li class="{% block active_dashboard_group %}{% endblock %}"><a href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a></li>
-                        <li class="{% block active_dashboard_ssh_config %}{% endblock %}"><a href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
-                        <li class="nav-header">NODE</li>
-                        <!--
-                        <li class="{% block active_dashboard_idc %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}"><i class="icon-building"></i> IDC</a></li>
-                        <li class="{% block active_dashboard_server %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}"><i class="icon-desktop"></i> Server</a></li>
-                        -->
-                        <li class="{% block active_dashboard_fabfile %}{% endblock %}"><a href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> PreDefined Fabfile</a></li>
-                        <li class="nav-header">PERMISSION</li>
-                        <li class="{% block active_dashboard_permission_manager %}{% endblock %}"><a href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i> ACL Manager</a></li>
-                        <li class="nav-header">JOURNAL</li>
-                        <li class="{% block active_dashboard_logging %}{% endblock %}"><a href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a></li>
-                    </ul>
+
+            <div class="col-lg-3">
+                <div class="bs-sidebar">
+                    <div class="list-group">
+                        <a class="list-group-item {% block active_dashboard_user %}{% endblock %}" href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a>
+                        <a class="list-group-item {% block active_dashboard_group %}{% endblock %}" href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a>
+                        <a class="list-group-item {% block active_dashboard_ssh_config %}{% endblock %}" href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
+                        <a class="list-group-item {% block active_dashboard_fabfile %}{% endblock %}" href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> PreDefined Fabfile</a>
+                        <a class="list-group-item {% block active_dashboard_permission_manager %}{% endblock %}" href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i> ACL Manager</a>
+                        <a class="list-group-item {% block active_dashboard_logging %}{% endblock %}" href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a>
+                    </div>
                 </div>
             </div>
+
         {% endblock %}
 
         {% block main %}{% endblock %}
