@@ -2,24 +2,24 @@
 
 {% block style %}
 <style type="text/css">
-      body {
+    body {
         padding-top: 40px;
         padding-bottom: 40px;
         background-color: #f5f5f5;
-      }
+    }
 
-      .form-signin {
+    .form-signin {
         max-width: 300px;
-        padding: 19px 29px 29px;
+        padding: 19px 29px 50px;
         margin: 0 auto 20px;
         background-color: #fff;
         border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+        border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        box-shadow: 0px 4px 10px -1px rgba(200, 200, 200, 0.7)
       }
       .form-signin .form-signin-heading,
       .form-signin .checkbox {
@@ -45,17 +45,16 @@
 
         {{ form.hidden_tag() }}
 
-        <h2 class="">BONGOS</h2>
-        <h6 class="form-signin-heading">Welcome!</h6>
+        <h3 class="">Bongos Project</h3>
+        <h5 class="form-signin-heading">Welcome!</h5>
 
         {{ ext.feedback_message() }}
 
-        {{ form.key_name(class="input-block-level", placeholder=form.key_name.label.text) }}
-        {{ form.password(class="input-block-level", placeholder=form.password.label.text) }}
+        {{ form.key_name(class="form-control", placeholder=form.key_name.label.text) }}
+        {{ form.password(class="form-control", placeholder=form.password.label.text) }}
 
         {{ form.submit(class="btn btn-primary pull-right") }}
 
-        <a href="{{ url_for("account.index_ctrl") }}">← Back to Home.</a>
     </form>
 
 </div>
