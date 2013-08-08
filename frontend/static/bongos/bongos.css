@@ -5,7 +5,7 @@
 }
 
 /* Floating Form Submit Button */
-.form-actions.fixed{
+.form-actions.fixed {
     position: fixed;
     _position: absolute;
     bottom: 0;
@@ -15,10 +15,12 @@
     -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
     box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
     right: 10px;
+    padding: 20px 25px;
 }
 
-.form-actions.fixed .pull-right{
+.form-actions.fixed .pull-right {
     float: none;
+    margin-left: 120px;
 }
 
 /* Operation Style */
@@ -32,9 +34,6 @@
     border-radius: 5px;
     padding: 10px 25px;
     border: 1px solid rgb(204, 204, 204);
-}
-
-.operation-workflow-overview {
 }
 
 .operation-workflow-info {
@@ -135,9 +134,6 @@ div.dataTables_scrollFoot table {
     border-top: none;
 }
 
-
-
-
 /*
  * TableTools styles
  */
@@ -184,10 +180,6 @@ ul.DTTT_dropdown.dropdown-menu li:hover a {
 .form-horizontal legend {
     font-size: 24px;
     padding-bottom: 5px;
-}
-
-.form-horizontal .form-actions {
-    padding-left: 180px;
 }
 
 .form-horizontal .control-label {

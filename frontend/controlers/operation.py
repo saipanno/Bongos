@@ -250,7 +250,7 @@ def create_custom_execute_ctrl():
     form = CreateCustomExecuteForm()
 
     if request.method == 'GET':
-        return render_template('operation/create_custom_script_execute.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
 
     elif form.validate_on_submit():
 
