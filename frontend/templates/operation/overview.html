@@ -2,11 +2,59 @@
 
 {% block active_operation_overview %}active{% endblock %}
 
-{% block main %}
+{% block container %}
 
-    <div class="col-lg-12">
+    <div class="container-fluid col-lg-10 operation-workflow">
 
-    <p>Fabric-based. Support External Variables and Output Record.</p>
+        <div class="row  ">
+
+            <div class="col-lg-7">
+
+                <p>Fabric-based. Support External Variables and Output Record.</p>
+
+            </div>
+
+            <div class="col-lg-3 operation-workflow-info">
+
+                <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>type</th>
+                        <th>count</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <tr>
+                            <td>Operation</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td> - Ssh Status</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td> - Ping Connectivity</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td> - Custom Script</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td> - PreDefined Fabfile</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td> - Power Control</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
-{% endblock %}
+
+{% endblock container %}

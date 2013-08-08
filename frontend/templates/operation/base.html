@@ -3,49 +3,49 @@
 {% block active_operation %}active{% endblock %}
 
 
-{% block container %}
+{% block subhead %}
 
-    {% block subhead %}
+    <div class="sub-header">
 
-        <div class="bs-header">
+        <div class="head">
 
-            <div class="container">
-
+            <div class="btn-group">
                 <h2 class="bs-header-inline">Operation</h2>
-                <div class="btn-group bs-header-inline pull-right">
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Create Operation <span class="caret"></span></button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                            <li class="dropdown-header">Status Detect</li>
-                            <li><a tabindex="-1" href="#">Create Ssh Detecting</a></li>
-                            <li><a tabindex="-1" href="#">Create Ping Detecting</a></li>
-                            <li class="divider"></li>
-                            <li><a tabindex="-1" href="#">Separated link</a></li>
-                        </ul>
-                    </div>
-
+            </div>
+            <div class="btn-group pull-right">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Create Operation <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <li class="dropdown-header">Status Detect</li>
+                        <li><a tabindex="-1" href="{{ url_for('operation.create_ssh_detect_ctrl') }}">Ssh Status Detecting</a></li>
+                        <li><a tabindex="-1" href="{{ url_for('operation.create_ping_detect_ctrl') }}">Ping Connectivity Detecting</a></li>
+                        <li class="dropdown-header">Remote Execute</li>
+                        <li><a tabindex="-1" href="{{ url_for('operation.create_custom_execute_ctrl') }}">Custom Script Execute</a></li>
+                        <li><a tabindex="-1" href="{{ url_for('operation.create_fabfile_execute_ctrl') }}">Fabfile Execute</a></li>
+                        <li class="dropdown-header">IPMI over LAN</li>
+                        <li><a tabindex="-1" href="{{ url_for('operation.create_power_control_ctrl') }}">Remote Power Control</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" href="#">Need another operation? HAHA~~</a></li>
+                    </ul>
                 </div>
 
             </div>
 
-            <ul class="nav nav-tabs nav-justified">
-                <li class=""><a href="#">Summary</a></li>
-                <li class="active"><a href="{{ url_for('operation.list_operation_ctrl') }}">Overview</a></li>
-                <li class=""><a href="#">Add Fabfile</a></li>
-            </ul>
+            <p>Do anything you want to, good luck.</p>
+            {{ ext.feedback_message() }}
 
         </div>
 
-        {% endblock subhead %}
+        <ul class="nav nav-tabs">
+            <li class="{% block active_operation_overview %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Overview</a></li>
+            <li class="{% if operation_type == 'ssh_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a></li>
+            <li class="{% if operation_type == 'ping_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting') }}">Ping Connectivity</a></li>
+            <li class="{% if operation_type == 'custom_script_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a></li>
+            <li class="{% if operation_type == 'fabfile_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a></li>
+            <li class="{% if operation_type == 'remote_power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_power_control') }}">Power Control</a></li>
+            <li class="pull-right"><a href="#">Fabfile Manage</a></li>
+        </ul>
 
-        <div class="container">
-
-            <div class="row">
-
-                {% block main %}{% endblock main %}
-
-            </div>
-
-        </div>
+    </div>
 
 {% endblock %}

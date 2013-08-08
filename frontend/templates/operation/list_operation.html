@@ -1,52 +1,42 @@
 {% extends "operation/base.html" %}
 
-{% block main %}
+{% block active_operation_list %}active{% endblock %}
 
-            <div class="col-lg-12">
+{% block container %}
 
-                <!--
+    <div class="container col-lg-10 operation-workflow">
 
-                <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="#">{{ ext.get_operation_title(operation_type) }}</a></li>
-                    <li class="active">List</li>
-                </ul>
+        <div class="row operation-workflow-list">
 
-                {{ ext.feedback_message() }}
-
-                <div class="navbar">
-                    <div class="container">
-                        <a class="navbar-brand" href="#">{{ ext.get_operation_title(operation_type) }}</a>
-                            <a class="btn btn-primary pull-right" href="{{ ext.generation_create_operation_link(operation_type) }}">Add Operation</a>
-                    </div>
-                </div>
-
-                -->
-
-                <table class="table table-hover table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>type</th>
-                            <th>author</th>
-                            <th>server list</th>
-                            <th>status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for execute in executes %}
+            <table class="table table-hover table-condensed">
+                <thead>
                     <tr>
-                        <td>{{ execute.id }}</td>
-                        <td>{{ ext.get_operation_title(execute.operation_type) }}</td>
-                        <td>{{ execute.author_name }}</td>
-                        <td>{{ execute.server_list }}</td>
-                        <td>{{ ext.get_operation_status(execute.status) }}</td>
-                        <td><a class="btn btn-small btn-primary" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                        <th>id</th>
+                        <th>type</th>
+                        <th>author</th>
+                        <th>server list</th>
+                        <th>status</th>
+                        <th></th>
                     </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                </thead>
+                <tbody>
+                {% for execute in executes %}
+                <tr>
+                    <td>{{ execute.id }}</td>
+                    <td>{{ ext.get_operation_title(execute.operation_type) }}</td>
+                    <td>{{ execute.author_name }}</td>
+                    <td>{{ execute.server_list }}</td>
+                    <td>{{ ext.get_operation_status(execute.status) }}</td>
+                    <td><a class="btn btn-small btn-primary" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}"><i class="icon-eye-open"></i> view results</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-            </div>
+        </div>
+
+    </div>
+
+    <div class="clearfix"></div>
+
 {% endblock %}

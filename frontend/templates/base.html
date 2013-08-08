@@ -12,8 +12,8 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap/css/bootstrap-responsive.css') }}">
     -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/font-awesome/font-awesome.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
     <!--
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2-bootstrap.css') }}">
     -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/google-code-prettify/prettify.css') }}">
@@ -22,7 +22,7 @@
     {% block style %}
         <style type="text/css">
             body {
-                padding-top: 60px;
+                padding-top: 51px;
                 padding-bottom: 40px;
             }
             .sidebar-nav {
@@ -42,9 +42,11 @@
 
 <body>
 
-    {% import "macro.html" as ext %}
+{% import "macro.html" as ext %}
 
-    {% block body %}
+{% block body %}
+
+    {% block navbar %}
 
     <div class="navbar navbar-inverse navbar-fixed-top">
 
@@ -54,9 +56,15 @@
 
             <div class="nav-collapse collapse bs-navbar-collapse">
 
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
                 <ul class="nav navbar-nav">
                     <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
-                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Operation</a></li>
+                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Operation</a></li>
                     <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                 </ul>
 
@@ -75,23 +83,13 @@
         </div>
     </div>
 
+    {% endblock navbar %}
+
+    {% block subhead %}
+    {% endblock subhead %}
+
     {% block container %}
-
-        {% block subhead %}{% endblock subhead %}
-
-        <div class="container">
-
-            <div class="row">
-
-                {% block sidebar %}{% endblock sidebar %}
-
-                {% block main %}{% endblock main %}
-
-            </div>
-
-        </div>
-
-    {% endblock %}
+    {% endblock container %}
 
     <hr>
 
@@ -109,14 +107,11 @@
         </div>
 
         <script src="{{ url_for('static', filename='package/jquery/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.ColReorderWithResize.js') }}"></script>
         <script src="{{ url_for('static', filename='package/bootstrap3/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='package/jquery/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/select2/js/select2.min.js') }}"></script>
         <script src="{{ url_for('static', filename='package/google-code-prettify/prettify.js') }}"></script>
-        <!--
         <script src="{{ url_for('static', filename='bongos/bongos.js') }}"></script>
-        -->
         <script type="text/javascript" charset="utf-8">
             $(document).ready(function() {
                 prettyPrint();
@@ -133,7 +128,7 @@
 
     </footer>
 
-{% endblock %}
+{% endblock body %}
 
 </body>
 </html>
