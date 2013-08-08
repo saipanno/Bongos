@@ -1,27 +1,66 @@
+/* Required */
 .required {
     color: red;
     font-weight:bold;
 }
 
-.bs-header .container {
+/* Floating Form Submit Button */
+.form-actions.fixed{
+    position: fixed;
+    _position: absolute;
+    bottom: 0;
+    z-index: 295;
+    margin-left: -10px;
+    -webkit-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    right: 10px;
+}
+
+.form-actions.fixed .pull-right{
+    float: none;
+}
+
+/* Operation Style */
+.operation-workflow {
+    float: none;
+    padding: 10px;
+    margin: 25px auto;
+}
+
+.operation-workflow-list {
+    border-radius: 5px;
+    padding: 10px 25px;
+    border: 1px solid rgb(204, 204, 204);
+}
+
+.operation-workflow-overview {
+}
+
+.operation-workflow-info {
+    padding: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 5px;
+}
+
+/* Sub Header */
+.sub-header {
+    margin-top: 0;
+    margin-bottom: 25px;
+    background: none repeat scroll 0 0 rgb(245, 245, 245);
+}
+
+.sub-header .head {
     position: relative;
-    margin: 0px auto;
-    width: 980px;
+    margin: 0 100px;
 }
 
-.bs-header .container {
-    position: relative;
-    margin: 0px auto;
-    width: 980px;
+.sub-header .btn-group button {
+    margin-top: 40px;
 }
 
-.bs-header-inline {
-    display: inline-block;
-}
-
-.bs-header-inline div {
-    margin-top: 20px;
-    margin-bottom: 10px;
+.sub-header .nav-tabs {
+    padding: 0 50px;
 }
 
 /*
@@ -142,59 +181,51 @@ ul.DTTT_dropdown.dropdown-menu li:hover a {
     color: white !important;
 }
 
-/* TableTools information display */
-div.DTTT_print_info.modal {
-    height: 150px;
-    margin-top: -75px;
-    text-align: center;
+
+.control-group {
+  margin-bottom: 10px;
+}
+legend + .control-group {
+  margin-top: 20px;
+  -webkit-margin-top-collapse: separate;
+}
+.form-horizontal .control-group {
+  margin-bottom: 20px;
+  *zoom: 1;
+}
+.form-horizontal .control-group:before,
+.form-horizontal .control-group:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.form-horizontal .control-group:after {
+  clear: both;
+}
+.form-horizontal .control-label {
+  float: left;
+  width: 160px;
+  padding-top: 5px;
+  text-align: right;
+}
+.form-horizontal .controls {
+  *display: inline-block;
+  *padding-left: 20px;
+  margin-left: 180px;
+  *margin-left: 0;
+}
+.form-horizontal .controls:first-child {
+  *padding-left: 180px;
 }
 
-div.DTTT_print_info h6 {
-    font-weight: normal;
-    font-size: 28px;
-    line-height: 28px;
-    margin: 1em;
+.form-horizontal input + .help-block,
+.form-horizontal select + .help-block,
+.form-horizontal textarea + .help-block,
+.form-horizontal .uneditable-input + .help-block,
+.form-horizontal .input-prepend + .help-block,
+.form-horizontal .input-append + .help-block {
+  margin-top: 10px;
 }
-
-div.DTTT_print_info p {
-    font-size: 14px;
-    line-height: 20px;
-}
-
-
-
-/*
- * FixedColumns styles
- */
-div.DTFC_LeftHeadWrapper table,
-div.DTFC_LeftFootWrapper table,
-table.DTFC_Cloned tr.even {
-    background-color: white;
-}
-
-div.DTFC_LeftHeadWrapper table {
-    margin-bottom: 0 !important;
-    border-top-right-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-div.DTFC_LeftHeadWrapper table thead tr:last-child th:first-child,
-div.DTFC_LeftHeadWrapper table thead tr:last-child td:first-child {
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-div.DTFC_LeftBodyWrapper table {
-    border-top: none;
-    margin-bottom: 0 !important;
-}
-
-div.DTFC_LeftBodyWrapper tbody tr:first-child th,
-div.DTFC_LeftBodyWrapper tbody tr:first-child td {
-    border-top: none;
-}
-
-div.DTFC_LeftFootWrapper table {
-    border-top: none;
+.form-horizontal .form-actions {
+  padding-left: 180px;
 }

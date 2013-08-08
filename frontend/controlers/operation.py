@@ -25,8 +25,8 @@
 
 
 import time
+from rq import Queue, Worker, cancel_job, requeue_job
 from sqlalchemy import exc, desc
-from flask.ext.principal import UserNeed
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
 
@@ -49,22 +49,33 @@ from frontend.extensions.tasks import q
 operation = Blueprint('operation', __name__, url_prefix='/operation')
 
 
-@operation.route('/list')
+@operation.route('/overview')
 @login_required
-def list_operation_ctrl():
+def overview_operation_ctrl():
+    access = UserAccessPermission('operation.overview_operation_ctrl')
+    if not access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    return render_template('operation/overview.html')
+
+
+@operation.route('/<operation_type>/list')
+@login_required
+def list_operation_ctrl(operation_type):
 
     access = UserAccessPermission('operation.list_operation_ctrl')
     if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    executes = OperationDb.query.order_by(desc(OperationDb.id)).all()
+    executes = OperationDb.query.filter_by(operation_type=operation_type).order_by(desc(OperationDb.id)).all()
 
     for execute in executes:
         user = User.query.filter_by(id=int(execute.author)).first()
         execute.author_name = user.name
 
-    return render_template('operation/list_operation.html', executes=executes)
+    return render_template('operation/list_operation.html', executes=executes, operation_type=operation_type)
 
 
 @operation.route('/<int:operation_id>/show')
@@ -94,8 +105,7 @@ def show_operation_ctrl(operation_id):
     except ValueError:
         fruits = dict()
 
-    return render_template('operation/show_operation.html', execute=execute, fruits=fruits,
-                           operation_type=execute.operation_type)
+    return render_template('operation/show_operation.html', fruits=fruits)
 
 
 @operation.route('/<int:operation_id>/operation_export_result.csv')
