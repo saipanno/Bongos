@@ -54,7 +54,7 @@ def user_login_ctrl():
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
     if request.method == 'GET':
-        return render_template('account/login.html', form=form)
+        return render_template('account/user_login.html', form=form)
 
     elif request.method == 'POST' and form.validate():
 
