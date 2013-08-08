@@ -31,21 +31,6 @@
 {%- endmacro %}
 
 
-{% macro generation_create_operation_link(operation_type)  -%}
-    {% if operation_type == 'ssh_status_detecting' %}
-        {{ url_for('operation.create_ssh_detect_ctrl') }}
-    {% elif operation_type == 'ping_status_detecting' %}
-        {{ url_for('operation.create_ping_detect_ctrl') }}
-    {% elif operation_type == 'custom_script_execute' %}
-        {{ url_for('operation.create_custom_execute_ctrl') }}
-    {% elif operation_type == 'fabfile_execute' %}
-        {{ url_for('operation.create_fabfile_execute_ctrl') }}
-    {% elif operation_type == 'remote_power_control' %}
-        {{ url_for('operation.create_power_control_ctrl') }}
-    {% endif %}
-{%- endmacro %}
-
-
 {% macro get_operation_status(status)  -%}
     {% if status == '0' %}
         <i class="icon-download text-info" title="执行中"></i>
@@ -77,25 +62,23 @@
 {%- endmacro %}
 
 
-{% macro create_standard_field(field, frontaddon=None, backaddon=None)  -%}
-    <div class="control-group">
-        <label class="control-label inline">{{ field.label.text }}{% if field.flags.required %} <span class="required">*</span>{% endif %}</label>
-        <div class="controls">
-            {% if backaddon %}
-                <div class="input-append">
-                    {{ field(**kwargs) }}<span class="add-on">{{ backaddon }}</span>
-                </div>
-            {% elif frontaddon %}
-                <div class="input-append">
-                    <span class="add-on">{{ frontaddon }}</span>{{ field(**kwargs) }}
-                </div>
-            {% else %}
-                {{ field(**kwargs) }}
-            {% endif %}
-
+{% macro create_standard_field(field, label_width='', field_width='')  -%}
+    <div class="form-group">
+        <label for="{{ field.id }}" class="control-label">
+            {{ field.label.text }}{% if field.flags.required %} <span class="required">*</span>{% endif %}
+        </label>
+        {% if field_width %}
+            <div class="{{ field_width }}">
+                {{ field(class="form-control", **kwargs) }}
+                {%- if field.description -%}
+                    <p class="help-block">{{ field.description|safe }}</p>
+                {%- endif %}
+            </div>
+        {% else %}
+            {{ field(class="form-control", **kwargs) }}
             {%- if field.description -%}
                 <p class="help-block">{{ field.description|safe }}</p>
             {%- endif %}
-        </div>
+        {% endif %}
     </div>
 {%- endmacro %}
