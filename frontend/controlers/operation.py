@@ -144,7 +144,7 @@ def export_operation_results_ctrl(operation_id):
     return Response(create_result_csv(), mimetype='text/csv')
 
 
-@operation.route('/ssh_detect/create', methods=("GET", "POST"))
+@operation.route('/ssh_status/create', methods=("GET", "POST"))
 @login_required
 def create_ssh_detect_ctrl():
 
@@ -193,7 +193,7 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
 
-@operation.route('/ping_detect/create', methods=("GET", "POST"))
+@operation.route('/ping_detecting/create', methods=("GET", "POST"))
 @login_required
 def create_ping_detect_ctrl():
 
@@ -202,7 +202,7 @@ def create_ping_detect_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'ping_status_detecting'
+    operation_type = u'ping_connectivity_detecting'
 
     form = CreatePingDetectForm()
 
@@ -349,7 +349,7 @@ def create_fabfile_execute_ctrl():
         return redirect(url_for('operation.create_custom_execute_ctrl'))
 
 
-@operation.route('/power_control/create', methods=("GET", "POST"))
+@operation.route('/remote_control/create', methods=("GET", "POST"))
 @login_required
 def create_power_control_ctrl():
 
@@ -358,7 +358,7 @@ def create_power_control_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    operation_type = u'remote_power_control'
+    operation_type = u'remote_control'
 
     form = CreatePowerCtrlForm()
 

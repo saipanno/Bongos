@@ -17,14 +17,14 @@
 {% macro get_operation_title(type)  -%}
     {% if type == 'ssh_status_detecting' %}
         Ssh Status Detecting
-    {% elif type == 'ping_status_detecting' %}
+    {% elif type == 'ping_connectivity_detecting' %}
         Ping Connectivity Detecting
     {% elif type == 'custom_script_execute' %}
         Custom Script Execute
     {% elif type == 'fabfile_execute' %}
         Fabfile Execute
-    {% elif type == 'remote_power_control' %}
-        Remote Power Control
+    {% elif type == 'remote_control' %}
+        Remote Control
     {% else %}
         Error Operation Type
     {% endif %}

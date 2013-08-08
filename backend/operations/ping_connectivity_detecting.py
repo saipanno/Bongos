@@ -32,7 +32,7 @@ from backend.logger import logger
 from backend.libs.basic_local_runner import base_local_runner
 
 
-def ping_status_detecting(operation, config):
+def ping_connectivity_detecting(operation, config):
     """
     :Return:
 

@@ -39,10 +39,10 @@
         <ul class="nav nav-tabs">
             <li class="{% block active_operation_overview %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Overview</a></li>
             <li class="{% if operation_type == 'ssh_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a></li>
-            <li class="{% if operation_type == 'ping_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting') }}">Ping Connectivity</a></li>
+            <li class="{% if operation_type == 'ping_connectivity_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting') }}">Ping Connectivity</a></li>
             <li class="{% if operation_type == 'custom_script_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a></li>
             <li class="{% if operation_type == 'fabfile_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a></li>
-            <li class="{% if operation_type == 'remote_power_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_power_control') }}">Power Control</a></li>
+            <li class="{% if operation_type == 'remote_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a></li>
             <li class="pull-right"><a href="#">Fabfile Manage</a></li>
         </ul>
 

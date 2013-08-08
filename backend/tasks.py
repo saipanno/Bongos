@@ -30,10 +30,10 @@ from fabric.api import env
 from backend.logger import logger
 from backend.libs.utility import get_fab_tasks
 from backend.operations.ssh_status_detecting import ssh_status_detecting
-from backend.operations.ping_status_detecting import ping_status_detecting
+from backend.operations.ping_connectivity_detecting import ping_connectivity_detecting
 from backend.operations.custom_script_execute import custom_script_execute
 from backend.operations.fabfile_execute import fabfile_execute
-from backend.operations.remote_power_control import remote_power_control
+from backend.operations.remote_control import remote_control
 
 
 def backend_runner(operation=None, config=None):
@@ -54,8 +54,8 @@ def backend_runner(operation=None, config=None):
     if _type == u'ssh_status_detecting':
         ssh_status_detecting(operation, config)
 
-    elif _type == u'ping_status_detecting':
-        ping_status_detecting(operation, config)
+    elif _type == u'ping_connectivity_detecting':
+        ping_connectivity_detecting(operation, config)
 
     elif _type == u'custom_script_execute':
         custom_script_execute(operation, config)
@@ -63,8 +63,8 @@ def backend_runner(operation=None, config=None):
     elif _type == u'fabfile_execute':
         fabfile_execute(operation, config, get_fab_tasks(config['SETTINGS_FABRIC_FILE_PATH']))
 
-    elif _type == u'remote_power_control':
-        remote_power_control(operation, config)
+    elif _type == u'remote_control':
+        remote_control(operation, config)
 
     else:
         logger.error(u'Error operation type. ID is %s' % operation['OPT_ID'])

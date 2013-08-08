@@ -44,7 +44,7 @@ account = Blueprint('account', __name__)
 @login_required
 def index_ctrl():
 
-    return redirect(url_for('operation.list_operation_ctrl', operation_type='ping_status_detecting'))
+    return redirect(url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting'))
 
 
 @account.route('/login', methods=['GET', 'POST'])

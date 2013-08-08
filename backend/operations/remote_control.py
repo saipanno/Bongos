@@ -33,7 +33,7 @@ from backend.libs.utility import generate_ipmi_address
 from backend.libs.basic_local_ipmi_runner import basic_local_ipmi_runner
 
 
-def remote_power_control(operation, config):
+def remote_control(operation, config):
     """
     :Return:
 
