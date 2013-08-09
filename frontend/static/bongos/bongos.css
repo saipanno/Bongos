@@ -4,68 +4,63 @@
     font-weight:bold;
 }
 
-/* Floating Form Submit Button */
-.form-actions.fixed {
-    position: fixed;
-    _position: absolute;
-    bottom: 0;
-    z-index: 295;
-    margin-left: -10px;
-    -webkit-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
-    right: 10px;
-    padding: 20px 25px;
+.navbar {
+    margin-bottom: 0;
 }
 
-.form-actions.fixed .pull-right {
-    float: none;
-    margin-left: 120px;
+/* Missing element in bootstrap3*/
+.btn-mini {
+    padding: 2px 6px;
+    font-size: 11px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
-/* Operation Style */
-.operation-workflow {
-    float: none;
-    padding: 10px;
-    margin: 25px auto;
+/* Fix "navbar" padding-bottom overflow. Update bootstrap3 or google-bootstrap. */
+.nav-collapse.collapse {
+    padding-bottom: 0;
 }
 
-.operation-workflow-list {
-    border-radius: 5px;
-    padding: 10px 25px;
-    border: 1px solid rgb(204, 204, 204);
+.bs-header {
+    background: none repeat scroll 0 0 rgb(241, 241, 241);
 }
 
-.operation-workflow-info {
-    padding: 10px;
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 5px;
+.bs-header h1 {
+    margin: 30px 0 30px;
 }
 
-/* Sub Header */
-.sub-header {
-    margin-top: 0;
-    margin-bottom: 25px;
-    background: none repeat scroll 0 0 rgb(245, 245, 245);
+.bs-header > .navbar {
+    margin-bottom: 20px;
 }
 
-.sub-header .head {
-    position: relative;
-    margin: 0 100px;
+/* Header Button Position */
+.bs-header .btn-group .dropdown button {
+    margin-top: 35px;
+    margin-right: 100px;
 }
 
-.sub-header .btn-group button {
-    margin-top: 40px;
+.workflow {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 20px;
 }
 
-.sub-header .nav-tabs {
-    padding: 10px 50px 0;
-}
 
-/*
- * DataTable Styles
- */
 
+
+
+
+
+
+
+
+
+
+
+
+
+/* DataTables */
 div.dataTables_length label {
     float: left;
     text-align: left;
@@ -176,25 +171,3 @@ ul.DTTT_dropdown.dropdown-menu li:hover a {
     background-color: #0088cc;
     color: white !important;
 }
-
-.form-horizontal legend {
-    font-size: 24px;
-    padding-bottom: 5px;
-}
-
-.form-horizontal .control-label {
-    float: left;
-    width: 160px;
-    padding-top: 5px;
-    text-align: right;
-}
-
-.form-horizontal input + .help-block,
-.form-horizontal select + .help-block,
-.form-horizontal textarea + .help-block,
-.form-horizontal .uneditable-input + .help-block,
-.form-horizontal .input-prepend + .help-block,
-.form-horizontal .input-append + .help-block {
-  margin-top: 10px;
-}
-

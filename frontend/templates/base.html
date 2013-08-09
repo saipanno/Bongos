@@ -2,31 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BONGOS{% block title %}{% endblock %}</title>
+    <title>Bongos Project{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Ruoyan Wong">
 
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap3/css/bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/bootstrap3/css/google-bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/font-awesome/font-awesome.css') }}">
-    <!--
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/select2/css/select2-bootstrap.css') }}">
-    -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='package/google-code-prettify/prettify.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bongos/bongos.css') }}">
 
-    {% block style %}
-        <style type="text/css">
-            body {
-                padding-top: 51px;
-                padding-bottom: 40px;
-            }
-            .sidebar-nav {
-                padding: 9px 0;
-            }
-        </style>
-    {% endblock %}
+    {% block style %}{% endblock style %}
 
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='bongos/favicon.ico') }}">
 
@@ -45,48 +32,48 @@
 
     {% block navbar %}
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar navbar-static-top" role="navigation">
 
-        <div class="container">
-
-            <a class="navbar-brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> Bongos Project</a>
-
-            <div class="nav-collapse collapse bs-navbar-collapse">
+            <div class="container">
 
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
 
-                <ul class="nav navbar-nav">
-                    <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
-                    <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Operation</a></li>
-                    <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
-                </ul>
+                <a class="navbar-brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> Bongos Project</a>
 
-                <ul class="nav navbar-nav pull-right">
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.name }}<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-cogs"></i> Change Settings</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url_for("account.user_logout_ctrl") }}">Log out</a></li>
-                </ul>
+                <div class="nav-collapse collapse bs-navbar-collapse">
+
+                    <ul class="nav navbar-nav">
+                        <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
+                        <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Operation</a></li>
+                        <li class="{% block active_fabfile %}{% endblock %}"><a href="#">Fabfile</a></li>
+                        <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.name }}<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-cogs"></i> Change Settings</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for("account.user_logout_ctrl") }}">Log out</a></li>
+                    </ul>
+
+                </div>
 
             </div>
-
         </div>
-    </div>
 
     {% endblock navbar %}
 
-    {% block subhead %}
-    {% endblock subhead %}
+    {% block bs_header %}{% endblock bs_header %}
 
-    {% block container %}
-    {% endblock container %}
+    {% block container %}{% endblock container %}
 
     <hr>
 

@@ -3,15 +3,18 @@
 {% block active_operation %}active{% endblock %}
 
 
-{% block subhead %}
+{% block bs_header %}
 
-    <div class="sub-header">
+    <div class="bs-header" id="content" role="banner">
 
-        <div class="head">
+        <div class="container">
 
             <div class="btn-group">
-                <h2 class="bs-header-inline">Operation</h2>
+                <h1 class="bs-header-inline">Operation</h1>
+                {{ ext.feedback_message() }}
+
             </div>
+
             <div class="btn-group pull-right">
                 <div class="dropdown">
                     <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Create Operation <span class="caret"></span></button>
@@ -27,25 +30,28 @@
                         <li class="divider"></li>
                         <li><a tabindex="-1" href="#">Need another operation? HAHA~~</a></li>
                     </ul>
+
                 </div>
 
             </div>
 
-            <p>Do anything you want to, good luck.</p>
-            {{ ext.feedback_message() }}
-
         </div>
 
-        <ul class="nav nav-tabs">
-            <li class="{% block active_operation_overview %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Overview</a></li>
-            <li class="{% if operation_type == 'ssh_status_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a></li>
-            <li class="{% if operation_type == 'ping_connectivity_detecting' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting') }}">Ping Connectivity</a></li>
-            <li class="{% if operation_type == 'custom_script_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a></li>
-            <li class="{% if operation_type == 'fabfile_execute' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a></li>
-            <li class="{% if operation_type == 'remote_control' %}active{% endif %}"><a href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a></li>
-            <li class="pull-right"><a href="#">Fabfile Manage</a></li>
-        </ul>
-
+        <div class="navbar navbar-toolbar" role="navigation">
+            <div class="container btn-toolbar">
+                <div class="btn-group">
+                    <a class="btn {% block active_operation_overview %}btn-default{% endblock %}" href="{{ url_for('operation.overview_operation_ctrl') }}">Overview</a>
+                </div>
+                <div class="btn-group">
+                    <a class="btn {% if type == 'ssh_status_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a>
+                    <a class="btn {% if type == 'ping_connectivity_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting') }}">Ping Connectivity</a>
+                    <a class="btn {% if type == 'custom_script_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a>
+                    <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a>
+                    <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
+                </div>
+                {% block navbar_append %}{% endblock navbar_append %}
+            </div>
+        </div>
     </div>
 
-{% endblock %}
+{% endblock bs_header %}

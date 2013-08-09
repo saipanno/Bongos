@@ -75,7 +75,7 @@ def list_operation_ctrl(operation_type):
         user = User.query.filter_by(id=int(execute.author)).first()
         execute.author_name = user.name
 
-    return render_template('operation/list_operation.html', executes=executes, operation_type=operation_type)
+    return render_template('operation/list_operation.html', executes=executes, type=operation_type)
 
 
 @operation.route('/<int:operation_id>/show')
@@ -105,7 +105,7 @@ def show_operation_ctrl(operation_id):
     except ValueError:
         fruits = dict()
 
-    return render_template('operation/show_operation.html', fruits=fruits)
+    return render_template('operation/show_operation.html', fruits=fruits, id=operation_id)
 
 
 @operation.route('/<int:operation_id>/operation_export_result.csv')
