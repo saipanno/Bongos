@@ -50,7 +50,6 @@
                     <ul class="nav navbar-nav">
                         <li class="{% block active_assets %}{% endblock %}"><a href="{{ url_for("assets.list_server_ctrl") }}">Assets</a></li>
                         <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Operation</a></li>
-                        <li class="{% block active_fabfile %}{% endblock %}"><a href="#">Fabfile</a></li>
                         <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
                     </ul>
 

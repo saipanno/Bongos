@@ -32,10 +32,11 @@
 
 .bs-header > .navbar {
     margin-bottom: 20px;
+    padding: 5px 0;
 }
 
 /* Header Button Position */
-.bs-header .btn-group .dropdown button {
+.bs-header .btn-toolbar .btn-group button {
     margin-top: 35px;
     margin-right: 100px;
 }
@@ -43,7 +44,7 @@
 .workflow {
     border: 1px solid #dddddd;
     border-radius: 4px;
-    padding: 20px;
+    padding: 10px 20px;
 }
 
 

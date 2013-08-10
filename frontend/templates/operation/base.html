@@ -17,20 +17,23 @@
 
             <div class="btn-group pull-right">
                 <div class="dropdown">
-                    <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Create Operation <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                        <li class="dropdown-header">Status Detect</li>
-                        <li><a tabindex="-1" href="{{ url_for('operation.create_ssh_detect_ctrl') }}">Ssh Status Detecting</a></li>
-                        <li><a tabindex="-1" href="{{ url_for('operation.create_ping_detect_ctrl') }}">Ping Connectivity Detecting</a></li>
-                        <li class="dropdown-header">Remote Execute</li>
-                        <li><a tabindex="-1" href="{{ url_for('operation.create_custom_execute_ctrl') }}">Custom Script Execute</a></li>
-                        <li><a tabindex="-1" href="{{ url_for('operation.create_fabfile_execute_ctrl') }}">Fabfile Execute</a></li>
-                        <li class="dropdown-header">IPMI over LAN</li>
-                        <li><a tabindex="-1" href="{{ url_for('operation.create_power_control_ctrl') }}">Remote Power Control</a></li>
-                        <li class="divider"></li>
-                        <li><a tabindex="-1" href="#">Need another operation? HAHA~~</a></li>
-                    </ul>
-
+                    <div class="btn-toolbar" style="margin: 0;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Create Operation <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                <li class="dropdown-header">Status Detect</li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_ssh_detect_ctrl') }}">Ssh Status Detecting</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_ping_detect_ctrl') }}">Ping Connectivity Detecting</a></li>
+                                <li class="dropdown-header">Remote Execute</li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_custom_execute_ctrl') }}">Custom Script Execute</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_fabfile_execute_ctrl') }}">Fabfile Execute</a></li>
+                                <li class="dropdown-header">IPMI over LAN</li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_power_control_ctrl') }}">Remote Power Control</a></li>
+                                <li class="divider"></li>
+                                <li><a tabindex="-1" href="#">Need another operation? HAHA~~</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -49,7 +52,7 @@
                     <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a>
                     <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
                 </div>
-                {% block navbar_append %}{% endblock navbar_append %}
+                {% block operation_group_append %}{% endblock operation_group_append %}
             </div>
         </div>
     </div>
