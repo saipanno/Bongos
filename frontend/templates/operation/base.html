@@ -54,10 +54,9 @@
                     <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">Fabfile Execute</a>
                     <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
                 </div>
-                {% block bs_header_btn_append %}{% endblock bs_header_btn_append %}
+                {% block bs_header_navbar_append %}{% endblock bs_header_navbar_append %}
             </div>
         </div>
-
         {% endblock bs_header_navbar %}
     </div>
 

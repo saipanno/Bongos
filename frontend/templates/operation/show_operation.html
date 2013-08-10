@@ -1,11 +1,11 @@
 {% extends "operation/base.html" %}
 
-{% block bs_header_btn_append %}
+{% block bs_header_navbar_append %}
     <div class="btn-group">
         <a class="btn btn-danger" href="#">Show Results</a>
         <a class="btn btn-default" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=id) }}" title="Export to CSV"><i class="icon-save"></i> Export</a>
     </div>
-{% endblock bs_header_btn_append %}
+{% endblock bs_header_navbar_append %}
 
 {% block container %}
 

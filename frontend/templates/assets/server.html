@@ -1,181 +1,154 @@
 {% extends "assets/base.html" %}
 
-{% block active_assets_server %}active{% endblock %}
+{% block container %}
 
-{% block main %}
+    <div class="container">
 
-            <div class="col-lg-9">
+        <div class="row">
 
-            {% if type == 'list' %}
+            <div class="col-lg-12">
 
-                <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li class="#"><a href="#">Server Manager</a></li>
-                    <li class="active">List</li>
-                </ul>
+                {% if type == 'list' %}
 
-                {{ ext.feedback_message() }}
-
-                <div class="navbar">
-                    <div class="container">
-                        <a class="navbar-brand" href="#">Server Manager</a>
-                        <div class="btn-group pull-right">
-                            <a href="{{ url_for('assets.create_server_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Server</a>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="table table-hover table-condensed datatable">
-                    <thead>
-                        <tr>
-                            <th>Server ID</th>
-                            <th>Assets Number</th>
-                            <th>Ext Address</th>
-                            <th>Int Address</th>
-                            <th>Group</th>
-                            <th>IDC</th>
-                            <th>Rack</th>
-                            <th>Manufacturer</th>
-                            <th>Model</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for server in servers %}
+                    <table class="table table-hover table-condensed datatable">
+                        <thead>
                             <tr>
-                                <td><a href="{{ url_for('assets.edit_server_ctrl', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
-                                <td>{{ server.assets_number }}</td>
-                                <td>{{ server.ext_address }}</td>
-                                <td>{{ server.int_address }}</td>
-                                <td>{{ server.group_name }}</td>
-                                <td>{{ server.idc_name }}</td>
-                                <td>{{ server.rack }}</td>
-                                <td>{{ server.manufacturer }}</td>
-                                <td>{{ server.model }}</td>
-                                <td>
-                                    <div class="dropdown related_menu">
-                                        <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                    </div>
-                                </td>
+                                <th>#</th>
+                                <th>assets number</th>
+                                <th>ext address</th>
+                                <th>int address</th>
+                                <th>group</th>
+                                <th>IDC</th>
+                                <th>Rack</th>
+                                <th>Manufacturer</th>
+                                <th>Model</th>
+                                <th></th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for server in servers %}
+                                <tr>
+                                    <td><a href="{{ url_for('assets.edit_server_ctrl', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
+                                    <td>{{ server.assets_number }}</td>
+                                    <td>{{ server.ext_address }}</td>
+                                    <td>{{ server.int_address }}</td>
+                                    <td>{{ server.group_name }}</td>
+                                    <td>{{ server.idc_name }}</td>
+                                    <td>{{ server.rack }}</td>
+                                    <td>{{ server.manufacturer }}</td>
+                                    <td>{{ server.model }}</td>
+                                    <td>
+                                        <div class="dropdown related_menu">
+                                            <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-            {% elif type == 'create' %}
+                {% elif type == 'create' %}
 
-                <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li class="#"><a href="#">Server Manager</a></li>
-                    <li class="active">Create</li>
-                </ul>
+                    <div class="tabbable">
+                        <form method="post" action="">
 
-                {{ ext.feedback_message() }}
+                            {{ form.hidden_tag() }}
 
-                <div class="tabbable">
-                    <form method="post" action="">
+                            <legend>
+                                Create Server
+                            </legend>
 
-                        {{ form.hidden_tag() }}
+                            <div class="box form-container row form-horizontal">
 
-                        <legend>
-                            Create Server
-                        </legend>
+                                {{ ext.create_standard_field(form.serial_number) }}
+                                {{ ext.create_standard_field(form.assets_number) }}
+                                {{ ext.create_standard_field(form.groups, class="select2 span4") }}
+                                {{ ext.create_standard_field(form.desc) }}
+                                {{ ext.create_standard_field(form.ext_address) }}
+                                {{ ext.create_standard_field(form.int_address) }}
+                                {{ ext.create_standard_field(form.ipmi_address) }}
+                                {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.idc, class="select2") }}
+                                {{ ext.create_standard_field(form.rack) }}
+                                {{ ext.create_standard_field(form.manufacturer) }}
+                                {{ ext.create_standard_field(form.model) }}
+                                {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
 
-                        <div class="box form-container row form-horizontal">
+                            </div>
 
-                            {{ ext.create_standard_field(form.serial_number) }}
-                            {{ ext.create_standard_field(form.assets_number) }}
-                            {{ ext.create_standard_field(form.groups, class="select2 span4") }}
-                            {{ ext.create_standard_field(form.desc) }}
-                            {{ ext.create_standard_field(form.ext_address) }}
-                            {{ ext.create_standard_field(form.int_address) }}
-                            {{ ext.create_standard_field(form.ipmi_address) }}
-                            {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.idc, class="select2") }}
-                            {{ ext.create_standard_field(form.rack) }}
-                            {{ ext.create_standard_field(form.manufacturer) }}
-                            {{ ext.create_standard_field(form.model) }}
-                            {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
+                            <div class="form-actions">
+                                {{ form.submit(class="btn btn-danger") }}
+                            </div>
 
-                        </div>
-
-                        <div class="form-actions">
-                            {{ form.submit(class="btn btn-danger") }}
-                        </div>
-
-                    </form>
-                </div>
+                        </form>
+                    </div>
 
                 {% elif type == 'edit' %}
 
-                <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li class="#"><a href="#">Server Manager</a></li>
-                    <li class="active">Edit</li>
-                </ul>
+                    <div class="tabbable">
+                        <form method="post" action="">
 
-                {{ ext.feedback_message() }}
+                            {{ form.hidden_tag() }}
 
-                <div class="tabbable">
-                    <form method="post" action="">
+                            <legend>
+                            {% if form.assets_number.data %}
+                                {{ form.assets_number.data }}
+                            {% else %}
+                                Edit Server
+                            {% endif %}
+                            </legend>
 
-                        {{ form.hidden_tag() }}
+                            <div class="box form-container row form-horizontal">
 
-                        <legend>
-                        {% if form.assets_number.data %}
-                            {{ form.assets_number.data }}
-                        {% else %}
-                            Edit Server
-                        {% endif %}
-                        </legend>
+                                {{ ext.create_standard_field(form.serial_number) }}
+                                {{ ext.create_standard_field(form.assets_number) }}
+                                {{ ext.create_standard_field(form.groups, class="select2 span4") }}
+                                {{ ext.create_standard_field(form.desc) }}
+                                {{ ext.create_standard_field(form.ext_address) }}
+                                {{ ext.create_standard_field(form.int_address) }}
+                                {{ ext.create_standard_field(form.ipmi_address) }}
+                                {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.idc, class="select2") }}
+                                {{ ext.create_standard_field(form.rack) }}
+                                {{ ext.create_standard_field(form.manufacturer) }}
+                                {{ ext.create_standard_field(form.model) }}
+                                {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
 
-                        <div class="box form-container row form-horizontal">
-
-                            {{ ext.create_standard_field(form.serial_number) }}
-                            {{ ext.create_standard_field(form.assets_number) }}
-                            {{ ext.create_standard_field(form.groups, class="select2 span4") }}
-                            {{ ext.create_standard_field(form.desc) }}
-                            {{ ext.create_standard_field(form.ext_address) }}
-                            {{ ext.create_standard_field(form.int_address) }}
-                            {{ ext.create_standard_field(form.ipmi_address) }}
-                            {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.idc, class="select2") }}
-                            {{ ext.create_standard_field(form.rack) }}
-                            {{ ext.create_standard_field(form.manufacturer) }}
-                            {{ ext.create_standard_field(form.model) }}
-                            {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
-                            {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
-
-                        </div>
-
-                            <div class="form-actions">
-                                {{ form.submit(class="btn btn-primary") }}
-
-                                <a href="#delete" data-toggle="modal" class="btn btn-danger pull-right" role="button"><i class="icon-remove"></i> Delete</a>
-                                <div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h3 id="DeleteLabel">Confirm</h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to delete this server?</p>
-                                        <span class="label label-info">{{ form.assets_number.data }}</span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('assets.delete_server_ctrl', server_id=form.id.data) }}">Yes, I'm sure</a>
-                                        <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
-                                    </div>
-                                </div>
                             </div>
 
-                    </form>
-                </div>
+                                <div class="form-actions">
+                                    {{ form.submit(class="btn btn-primary") }}
 
-            {% endif %}
+                                    <a href="#delete" data-toggle="modal" class="btn btn-danger pull-right" role="button"><i class="icon-remove"></i> Delete</a>
+                                    <div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3 id="DeleteLabel">Confirm</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this server?</p>
+                                            <span class="label label-info">{{ form.assets_number.data }}</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-large btn-danger pull-left" href="{{ url_for('assets.delete_server_ctrl', server_id=form.id.data) }}">Yes, I'm sure</a>
+                                            <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </form>
+                    </div>
+
+                {% endif %}
 
             </div>
+
+        </div>
+
+    </div>
 
 {% endblock %}

@@ -19,10 +19,10 @@
                 <div class="dropdown">
                     <div class="btn-toolbar" style="margin: 0;">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Operation <span class="caret"></span></button>
+                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Assets <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                 <li class="dropdown-header">Status Detect</li>
-                                <li><a tabindex="-1" href="{{ url_for('operation.create_ssh_detect_ctrl') }}">Ssh Status Detecting</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('operation.create_ssh_detect_ctrl') }}">Server</a></li>
                                 <li><a tabindex="-1" href="{{ url_for('operation.create_ping_detect_ctrl') }}">Ping Connectivity Detecting</a></li>
                                 <li class="dropdown-header">Remote Execute</li>
                                 <li><a tabindex="-1" href="{{ url_for('operation.create_custom_execute_ctrl') }}">Custom Script Execute</a></li>
@@ -45,19 +45,14 @@
         <div class="navbar navbar-toolbar" role="navigation">
             <div class="container btn-toolbar">
                 <div class="btn-group">
-                    <a class="btn {% block active_operation_overview %}btn-default{% endblock %}" href="{{ url_for('operation.overview_operation_ctrl') }}">Overview</a>
+                    <a class="btn btn-default" href="{{ url_for('assets.list_server_ctrl') }}">Overview</a>
+                    <a class="btn btn-default" href="#">Search</a>
+                    <a class="btn btn-default" href="#">Import</a>
+                    <a class="btn btn-default" href="#">Export</a>
                 </div>
-                <div class="btn-group">
-                    <a class="btn {% if type == 'ssh_status_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a>
-                    <a class="btn {% if type == 'ping_connectivity_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting') }}">Ping Connectivity</a>
-                    <a class="btn {% if type == 'custom_script_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a>
-                    <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a>
-                    <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
-                </div>
-                {% block bs_header_btn_append %}{% endblock bs_header_btn_append %}
+                {% block bs_header_navbar_append %}{% endblock bs_header_navbar_append %}
             </div>
         </div>
-
         {% endblock bs_header_navbar %}
     </div>
 
