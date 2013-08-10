@@ -131,6 +131,8 @@ class Unique(object):
 
 class UnChange(object):
     """ validator that checks field unchange """
+    field_flags = ('unchanged', )
+
     def __init__(self, model, attr, message=None):
         self.model = model
         self.attr = attr
@@ -141,6 +143,17 @@ class UnChange(object):
         check = self.model.query.filter_by(id=form.id.data).first()
         if check is not None and field.data != getattr(check, self.attr):
             raise ValidationError('%s: %s' % (self.message, field.data))
+
+
+class UnChanged(object):
+    """ validator that checks field unchange """
+    field_flags = ('unchanged', )
+
+    def __init__(self):
+        pass
+
+    def __call__(self, *args, **kwargs):
+        pass
 
 
 class Depend(object):

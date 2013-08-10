@@ -91,10 +91,7 @@ def create_user_ctrl():
 
     form = CreateUserForm()
 
-    if request.method == 'GET':
-        return render_template('dashboard/user_manager.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -111,10 +108,7 @@ def create_user_ctrl():
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_user_ctrl'))
+        return render_template('dashboard/user_manager.html', form=form, type='create')
 
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
@@ -130,10 +124,7 @@ def edit_user_ctrl(user_id):
 
     form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
-    if request.method == 'GET':
-        return render_template('dashboard/user_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
@@ -156,10 +147,7 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_user_ctrl', user_id=user_id))
+        return render_template('dashboard/user_manager.html', form=form, type='edit')
 
 
 @dashboard.route('/user/<int:user_id>/status/<status>')

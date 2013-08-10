@@ -29,7 +29,7 @@ from flask.ext.wtf import Required, EqualTo, Regexp, Optional
 
 from frontend.models.account import User, Group
 
-from frontend.extensions.libs import Unique, UnChange, Depend
+from frontend.extensions.libs import Unique, UnChanged, Depend
 
 
 class UserLoginForm(Form):
@@ -51,10 +51,8 @@ class EditSettingForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    email = TextField(u'Email', description=u'Unmodifiable',
-                      validators=[UnChange(User, 'email', message=u'The current email can not be modified')])
-    username = TextField(u'Username', description=u'Unmodifiable',
-                         validators=[UnChange(User, 'username', message=u'The current username can not be modified')])
+    email = TextField(u'Email', validators=[UnChanged()])
+    username = TextField(u'Username', validators=[UnChanged()])
     name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),

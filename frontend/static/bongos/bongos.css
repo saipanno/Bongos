@@ -35,20 +35,77 @@
     padding: 5px 0;
 }
 
+.dashboard {
+    margin-bottom: 20px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(215, 215, 215)
+}
+
 /* Header Button Position */
 .bs-header .btn-toolbar .btn-group button {
     margin-top: 35px;
     margin-right: 100px;
 }
 
-.workflow {
+.operation-workflow {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    margin-top: 25px;
+    padding: 25px;
+}
+
+.dashboard-workflow {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 25px;
+}
+
+.info-sidebar {
     border: 1px solid #dddddd;
     border-radius: 4px;
     padding: 10px 20px;
 }
 
 
+.form-horizontal legend {
+    font-size: 24px;
+    padding: 10px 0 10px;
+}
 
+.form-horizontal .control-label {
+    float: left;
+    width: 160px;
+    padding-top: 5px;
+    text-align: right;
+}
+
+.form-horizontal input + .help-block,
+.form-horizontal select + .help-block,
+.form-horizontal textarea + .help-block,
+.form-horizontal .uneditable-input + .help-block,
+.form-horizontal .input-prepend + .help-block,
+.form-horizontal .input-append + .help-block {
+  margin-top: 10px;
+}
+
+/* Floating Form Submit Button */
+.form-actions.fixed {
+    position: fixed;
+    _position: absolute;
+    bottom: 0;
+    z-index: 295;
+    margin-left: -10px;
+    -webkit-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.5);
+    right: 10px;
+    padding: 20px 25px;
+}
+
+.form-actions.fixed .pull-right {
+    float: none;
+    margin-left: 120px;
+}
 
 
 

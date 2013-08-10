@@ -5,7 +5,7 @@
 
 {% block bs_header %}
 
-    <div class="bs-header" id="content" role="banner">
+    <div class="bs-header operation" id="content" role="banner">
 
         <div class="container">
 
@@ -40,6 +40,8 @@
 
         </div>
 
+        {% block bs_header_navbar %}
+
         <div class="navbar navbar-toolbar" role="navigation">
             <div class="container btn-toolbar">
                 <div class="btn-group">
@@ -52,9 +54,11 @@
                     <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a>
                     <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
                 </div>
-                {% block operation_group_append %}{% endblock operation_group_append %}
+                {% block bs_header_btn_append %}{% endblock bs_header_btn_append %}
             </div>
         </div>
+
+        {% endblock bs_header_navbar %}
     </div>
 
 {% endblock bs_header %}

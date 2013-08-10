@@ -3,34 +3,25 @@
 {% block active_dashboard_group %}active{% endblock %}
 
 {% block main %}
+
     <div class="col-lg-9">
 
         {% if type == 'list' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Dashboard</a></li>
                 <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">List</li>
             </ul>
 
-            {{ ext.feedback_message() }}
-
-            <div class="navbar">
-                <div class="container">
-                    <a class="navbar-brand" href="#">Group Manager</a>
-                    <div class="btn-group pull-right">
-                        <a href="{{ url_for('dashboard.create_group_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add Group</a>
-                    </div>
-                </div>
-            </div>
-
-            <table class="table table-hover table-bordered table-striped table-condensed">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
-                        <th>Group ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Members</th>
+                        <th>#</th>
+                        <th>name</th>
+                        <th>description</th>
+                        <th>members</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -54,15 +45,15 @@
         {% elif type == 'create' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Dashboard</a></li>
                 <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">Create</li>
             </ul>
 
-            {{ ext.feedback_message() }}
+            <div class="col-lg-12 dashboard-workflow">
 
-            <div class="tabbable">
-                <form method="post" action="">
+                <form class="form-horizontal" method="post" action="">
 
                     {{ form.hidden_tag() }}
 
@@ -89,22 +80,20 @@
         {% elif type == 'edit' %}
 
             <ul class="breadcrumb">
-                <li><a href="/">Home</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Dashboard</a></li>
                 <li class="#"><a href="#">Group Manager</a></li>
                 <li class="active">Edit</li>
             </ul>
 
-            {{ ext.feedback_message() }}
+            <div class="col-lg-12 dashboard-workflow">
 
-            <div class="tabbable">
-                <form method="post" action="">
+                <form class="form-horizontal" method="post" action="">
 
                     {{ form.hidden_tag() }}
 
                     <legend>
-                    {% if form.desc.data %}
-                        {{ form.desc.data }}
-                    {% elif form.name.data %}
+                    {% if form.name.data %}
                         {{ form.name.data }}
                     {% else %}
                         Edit Group
@@ -123,18 +112,22 @@
                         {{ form.submit(class="btn btn-primary") }}
 
                         <a href="#delete" data-toggle="modal" class="btn btn-danger pull-right" role="button"><i class="icon-remove"></i> Delete</a>
-                        <div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h3 id="DeleteLabel">Confirm</h3>
-                            </div>
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this group?</p>
-                                <span class="label label-info">{{ form.desc.data }}</span>
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_group_ctrl', group_id=form.id.data) }}">Yes, I'm sure</a>
-                                <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
+                        <div id="delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h3 id="DeleteLabel">Confirm</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this group?</p>
+                                        <span class="label label-info">{{ form.name.data }}</span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_group_ctrl', group_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

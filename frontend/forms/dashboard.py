@@ -29,9 +29,9 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from flask.ext.wtf import Required, Optional, Regexp, Email
 
 from frontend.models.account import Group, User
-from frontend.models.dashboard import SshConfig, Permission, FabFile
+from frontend.models.dashboard import SshConfig, FabFile
 
-from frontend.extensions.libs import Unique, UnChange
+from frontend.extensions.libs import Unique, UnChanged
 
 
 class SshConfigForm(Form):
@@ -93,13 +93,8 @@ class EditUserForm(Form):
     next_page = HiddenField()
     id = IntegerField(widget=HiddenInput())
 
-    email = TextField(u'Email', description=u'Unmodifiable',
-                      validators=[Required(message=u'Email is required'),
-                                  UnChange(User, 'email', message=u'The current email can not be modified')])
-    username = TextField(u'Username', description=u'Unmodifiable',
-                         validators=[Required(message=u'Username is required'),
-                                     Regexp(u'^[a-zA-Z0-9\_\-\.]{5,20}$', message=u'Incorrect username format'),
-                                     UnChange(User, 'username', message=u'The current username can not be modified')])
+    email = TextField(u'Email', validators=[UnChanged()])
+    username = TextField(u'Username', validators=[UnChanged()])
     name = TextField(u'Name', description=u'Unique',
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
@@ -110,21 +105,6 @@ class EditUserForm(Form):
     password = TextField(u'Password', description=u'At least five characters',
                          validators=[Optional(),
                                      Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
-
-    submit = SubmitField(u'Submit', id='submit')
-
-
-class PermissionForm(Form):
-
-    next_page = HiddenField()
-    id = IntegerField(widget=HiddenInput())
-
-    desc = TextField(u'Description', validators=[Required(message=u'Name is required'),
-                                                 Unique(Permission, Permission.desc,
-                                                        message=u'The current function description is already in use')])
-    function = TextField(u'Function', validators=[Required(message=u'Function is required'),
-                                                  UnChange(Permission, 'function',
-                                                           message=u'The current function name can not be modified')])
 
     submit = SubmitField(u'Submit', id='submit')
 
