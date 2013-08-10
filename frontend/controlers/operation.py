@@ -25,7 +25,6 @@
 
 
 import time
-from rq import Queue, Worker, cancel_job, requeue_job
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
@@ -108,7 +107,7 @@ def show_operation_ctrl(operation_id):
     return render_template('operation/show_operation.html', fruits=fruits, id=operation_id)
 
 
-@operation.route('/<int:operation_id>/operation_export_result.csv')
+@operation.route('/<int:operation_id>/export.csv')
 @login_required
 def export_operation_results_ctrl(operation_id):
 
@@ -122,10 +121,6 @@ def export_operation_results_ctrl(operation_id):
 
     except exc.SQLAlchemyError:
         flash(u'Internal database error', 'error')
-        return redirect(url_for('operation.list_operation_ctrl'))
-
-    if execute is None:
-        flash(u'The operating does not exist.', 'error')
         return redirect(url_for('operation.list_operation_ctrl'))
 
     try:
