@@ -1,4 +1,5 @@
 rq
+xlwt
 fabric
 requests
 supervisor
