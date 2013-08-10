@@ -89,6 +89,15 @@
 }
 
 /* Floating Form Submit Button */
+
+.form-actions {
+    padding: 20px 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgb(229, 229, 229);
+}
+
 .form-actions.fixed {
     position: fixed;
     _position: absolute;

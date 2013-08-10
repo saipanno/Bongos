@@ -4,29 +4,37 @@
 
 {% block container %}
 
-    <div class="container col-lg-10 operation-workflow">
+    <div class="container">
 
-        <div class="operation-workflow-list">
+        <div class="row">
 
-            <form class="form-horizontal" method="post" action="">
+            <div class="col-lg-2"></div>
 
-                {{ form.hidden_tag() }}
+            <div class="col-lg-8 operation-workflow">
 
-                <legend>
-                    Create Power Control
-                </legend>
+                <form class="form-horizontal" method="post" action="">
 
-                {{ ext.create_standard_field(form.server_list, field_width="col-lg-6", rows="10") }}
-                {{ ext.create_standard_field(form.script_template) }}
+                    {{ form.hidden_tag() }}
 
-                <div class="form-actions">
-                    {{ form.submit(class="btn btn-danger") }}
-                </div>
+                    <legend>
+                        Create Power Control
+                    </legend>
 
-            </form>
+                    {{ ext.create_standard_field(form.server_list, rows="10") }}
+                    {{ ext.create_standard_field(form.script_template) }}
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-lg-2"></div>
 
         </div>
 
     </div>
 
-{% endblock %}
+{% endblock container %}

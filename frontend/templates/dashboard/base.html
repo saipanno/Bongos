@@ -19,19 +19,17 @@
                 <div class="dropdown">
                     <div class="btn-toolbar" style="margin: 0;">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Create Resource <span class="caret"></span></button>
+                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Resource <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                 <li class="dropdown-header">Permission</li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_user_ctrl') }}">User</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_group_ctrl') }}">Group</a></li>
-                                <li class="dropdown-header">Other</li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ssh_config_ctrl') }}">Ssh Config</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_fabfile_ctrl') }}">Fabfile</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_user_ctrl') }}"><i class="icon-user"></i> User</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_group_ctrl') }}"><i class="icon-group"></i> Group</a></li>
                                 <li class="dropdown-header">Assets</li>
-                                <li><a tabindex="-1" href="{{ url_for('assets.create_idc_ctrl')}}">IDC</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('assets.create_server_ctrl')}}">Server</a></li>
-                                <li class="divider"></li>
-                                <li><a tabindex="-1" href="#">Need another dashboard? HAHA~~</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('assets.create_idc_ctrl')}}"><i class="icon-building"></i> IDC</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('assets.create_server_ctrl')}}"><i class="icon-laptop"></i> Server</a></li>
+                                <li class="dropdown-header">Other</li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ssh_config_ctrl') }}"><i class="icon-key"></i> Ssh Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_fabfile_ctrl') }}"><i class="icon-code"></i> Fabfile</a></li>
                             </ul>
                         </div>
                     </div>
