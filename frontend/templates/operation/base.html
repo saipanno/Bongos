@@ -51,7 +51,7 @@
                     <a class="btn {% if type == 'ssh_status_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ssh_status_detecting') }}">Ssh Status</a>
                     <a class="btn {% if type == 'ping_connectivity_detecting' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting') }}">Ping Connectivity</a>
                     <a class="btn {% if type == 'custom_script_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='custom_script_execute') }}">Custom Script</a>
-                    <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">PreDefined Fabfile</a>
+                    <a class="btn {% if type == 'fabfile_execute' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='fabfile_execute') }}">Fabfile Execute</a>
                     <a class="btn {% if type == 'remote_control' %}btn-danger{% else %}btn-default{% endif %}" href="{{ url_for('operation.list_operation_ctrl', operation_type='remote_control') }}">Remote Control</a>
                 </div>
                 {% block bs_header_btn_append %}{% endblock bs_header_btn_append %}
