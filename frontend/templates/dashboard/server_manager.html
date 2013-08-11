@@ -11,7 +11,7 @@
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
-                <li class="#"><a href="#">Server Manager</a></li>
+                <li><a href="#">Server Manager</a></li>
                 <li class="active">List</li>
             </ul>
 
@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Are you sure you want to delete this server?</p>
-                                        <span class="label label-info">{{ form.name.data }}</span>
+                                        <span class="label label-info">{{ form.assets_number.data }}</span>
                                     </div>
                                     <div class="modal-footer">
                                         <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_server_ctrl', server_id=form.id.data) }}">Yes, I'm sure</a>
