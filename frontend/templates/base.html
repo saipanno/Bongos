@@ -28,12 +28,12 @@
 
 {% import "macro.html" as ext %}
 
-{% block body %}
+<!-- Top alert message bar -->
+{% if ext.feedback_message() %}
+    {{ ext.feedback_message() }}
+{% endif %}
 
-    <!-- Top alert message bar -->
-    {% if ext.feedback_message() %}
-        {{ ext.feedback_message() }}
-    {% endif %}
+{% block body %}
 
     {% block navbar %}
 
