@@ -8,5 +8,6 @@ Flask
 Flask-WTF
 Flask-Login
 Flask-Script
+Flask-Paginate
 Flask-Principal
 Flask-SQLAlchemy
