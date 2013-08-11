@@ -52,17 +52,15 @@
         {% block sidebar %}
 
             <div class="col-lg-3">
-                <div class="bs-sidebar">
-                    <div class="list-group">
-                        <a class="list-group-item {% block active_dashboard_user %}{% endblock %}" href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a>
-                        <a class="list-group-item {% block active_dashboard_group %}{% endblock %}" href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a>
-                        <a class="list-group-item {% block active_dashboard_ssh_config %}{% endblock %}" href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
-                        <a class="list-group-item {% block active_dashboard_fabfile %}{% endblock %}" href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
-                        <a class="list-group-item {% block active_dashboard_idc %}{% endblock %}" href="{{ url_for("dashboard.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a>
-                        <a class="list-group-item {% block active_dashboard_server %}{% endblock %}" href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-laptop"></i> Server</a>
-                        <a class="list-group-item {% block active_dashboard_permission_manager %}{% endblock %}" href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i> ACL Manager</a>
-                        <a class="list-group-item {% block active_dashboard_logging %}{% endblock %}" href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a>
-                    </div>
+                <div class="list-group">
+                    <a class="list-group-item {% block active_dashboard_user %}{% endblock %}" href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> User</a>
+                    <a class="list-group-item {% block active_dashboard_group %}{% endblock %}" href="{{ url_for("dashboard.list_group_ctrl") }}"><i class="icon-group"></i> Group</a>
+                    <a class="list-group-item {% block active_dashboard_ssh_config %}{% endblock %}" href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
+                    <a class="list-group-item {% block active_dashboard_fabfile %}{% endblock %}" href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
+                    <a class="list-group-item {% block active_dashboard_idc %}{% endblock %}" href="{{ url_for("dashboard.list_idc_ctrl") }}"><i class="icon-building"></i> IDC</a>
+                    <a class="list-group-item {% block active_dashboard_server %}{% endblock %}" href="{{ url_for("dashboard.list_server_ctrl") }}"><i class="icon-laptop"></i> Server</a>
+                    <a class="list-group-item {% block active_dashboard_permission_manager %}{% endblock %}" href="{{ url_for("dashboard.show_permission_ctrl") }}"><i class="icon-leaf"></i> ACL Manager</a>
+                    <a class="list-group-item {% block active_dashboard_logging %}{% endblock %}" href="{{ url_for("dashboard.show_logging_ctrl") }}"><i class="icon-warning-sign"></i> System Exception</a>
                 </div>
             </div>
 

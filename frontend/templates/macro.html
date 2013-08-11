@@ -3,13 +3,13 @@
         {% if flash_messages %}
             {% for category, message in flash_messages %}
                 {% if category == 'success' %}
-                    <div class="alert alert-success">
+                    <div class="alert alert-success text-center navbar-fixed-top">
                         <b>Well done!</b>
                 {% elif category == 'error' %}
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger text-center navbar-fixed-top">
                         <b>Oh snap!</b>
                 {% else %}
-                    <div class="alert">
+                    <div class="alert text-center navbar-fixed-top">
                         <b>Heads up!</b>
                 {% endif %}
                         <button type="button" class="close" data-dismiss="alert">&times;</button>

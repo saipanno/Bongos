@@ -27,14 +27,12 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required
 
-from frontend.extensions.database import db
-from frontend.extensions.libs import catch_errors
-
 from frontend.models.account import Group
 from frontend.models.assets import Server, IDC
 
-from frontend.forms.assets import ServerForm, IDCForm
+from frontend.forms.assets import ServerForm
 
+from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
 
 
@@ -65,45 +63,6 @@ def list_server_ctrl():
     return render_template('assets/server.html', servers=servers, type='list')
 
 
-@assets.route('/server/create', methods=("GET", "POST"))
-@login_required
-def create_server_ctrl():
-
-    access = UserAccessPermission('assets.create_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    form = ServerForm()
-
-    if request.method == 'GET':
-
-        return render_template('assets/server.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
-
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
-        server = Server(form.serial_number.data, form.assets_number.data, groups,
-                        form.desc.data, form.ext_address.data, form.int_address.data, form.ipmi_address.data,
-                        form.other_address.data, form.idc.data.id, form.rack.data, form.manufacturer.data,
-                        form.model.data, form.cpu_info.data, form.disk_info.data, form.memory_info.data)
-        db.session.add(server)
-        db.session.commit()
-
-        flash(u'Create server successfully', 'success')
-        return redirect(url_for('assets.list_server_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('assets.create_server_ctrl'))
-
-
 @assets.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
 def edit_server_ctrl(server_id):
@@ -121,11 +80,7 @@ def edit_server_ctrl(server_id):
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
                       disk_info=server.disk_info, memory_info=server.memory_info)
 
-    if request.method == 'GET':
-
-        return render_template('assets/server.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.serial_number.data != server.serial_number:
             server.serial_number = form.serial_number.data
@@ -183,28 +138,7 @@ def edit_server_ctrl(server_id):
         return redirect(url_for('assets.list_server_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('assets.edit_server_ctrl', server_id=server_id))
-
-
-@assets.route('/group/<int:server_id>/delete')
-@login_required
-def delete_server_ctrl(server_id):
-
-    access = UserAccessPermission('assets.delete_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    server = Server.query.filter_by(id=server_id).first()
-
-    db.session.delete(server)
-    db.session.commit()
-
-    flash(u'Edit server successfully', 'success')
-    return redirect(url_for('assets.list_server_ctrl'))
+        return render_template('assets/server.html', form=form, type='edit')
 
 
 @assets.route('/idc/list')
@@ -219,95 +153,3 @@ def list_idc_ctrl():
     idcs = IDC.query.all()
 
     return render_template('assets/idc.html', idcs=idcs, type='list')
-
-
-@assets.route('/idc/create', methods=("GET", "POST"))
-@login_required
-def create_idc_ctrl():
-
-    access = UserAccessPermission('assets.create_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    form = IDCForm()
-
-    if request.method == 'GET':
-
-        return render_template('assets/idc.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
-
-        group = IDC(form.name.data, form.desc.data, form.operators.data, form.address.data)
-        db.session.add(group)
-        db.session.commit()
-
-        flash(u'Create IDC successfully', 'success')
-        return redirect(url_for('assets.list_idc_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('assets.create_idc_ctrl'))
-
-
-@assets.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
-@login_required
-def edit_idc_ctrl(idc_id):
-
-    access = UserAccessPermission('assets.edit_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    idc = IDC.query.filter_by(id=idc_id).first()
-
-    form = IDCForm(id=idc.id, name=idc.name, desc=idc.desc, operators=idc.operators, address=idc.address)
-
-    if request.method == 'GET':
-
-        return render_template('assets/idc.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
-
-        if form.name.data != idc.name:
-            idc.name = form.name.data
-
-        if form.operators.data != idc.operators:
-            idc.operators = form.operators.data
-
-        if form.address.data != idc.address:
-            idc.address = form.address.data
-
-        db.session.commit()
-
-        flash(u'Edit IDC successfully', 'success')
-        return redirect(url_for('assets.list_idc_ctrl'))
-
-    else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('assets.edit_idc_ctrl', idc_id=idc_id))
-
-
-@assets.route('/group/<int:idc_id>/delete')
-@login_required
-def delete_idc_ctrl(idc_id):
-
-    access = UserAccessPermission('assets.delete_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
-    idc = IDC.query.filter_by(id=idc_id).first()
-
-    # TODO:增加清理数据库环境操作
-
-    db.session.delete(idc)
-    db.session.commit()
-
-    flash(u'Edit idc successfully', 'success')
-    return redirect(url_for('assets.list_idc_ctrl'))
-
