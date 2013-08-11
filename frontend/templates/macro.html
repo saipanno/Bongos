@@ -71,8 +71,9 @@
 {%- endmacro %}
 
 
-{% macro create_standard_field(field, label_width='', field_width='col-lg-6', type='')  -%}
+{% macro create_standard_field(field, frontaddon=None, backaddon=None, field_width='col-lg-6', type='')  -%}
     <div class="form-group {% if field.errors %}has-error{% endif %}">
+
         <label for="{{ field.id }}" class="control-label">
             {{ field.label.text }}{% if field.flags.required %} <span class="required">*</span>{% endif %}
         </label>
@@ -80,6 +81,14 @@
         <div class="{{ field_width }}">
             {% if field.flags.unchanged %}
                 <p class="form-control-static">{{ field.data }}</p>
+            {% elif backaddon %}
+                <div class="input-group">
+                    {{ field(class="form-control", **kwargs) }}<span class="input-group-addon">{{ backaddon }}</span>
+                </div>
+            {% elif frontaddon %}
+                <div class="input-group">
+                    <span class="input-group-addon">{{ frontaddon }}</span>{{ field(class="form-control", **kwargs) }}
+                </div>
             {% else %}
                 {{ field(class="form-control", **kwargs) }}
             {% endif %}
@@ -92,5 +101,6 @@
                 <p class="help-block">{{ field.description|safe }}</p>
             {%- endif %}
         </div>
+
     </div>
 {%- endmacro %}
