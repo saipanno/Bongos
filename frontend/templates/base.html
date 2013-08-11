@@ -29,9 +29,7 @@
 {% import "macro.html" as ext %}
 
 <!-- Top alert message bar -->
-{% if ext.feedback_message() %}
-    {{ ext.feedback_message() }}
-{% endif %}
+{{ ext.feedback_message() }}
 
 {% block body %}
 
