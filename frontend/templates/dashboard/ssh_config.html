@@ -24,7 +24,6 @@
                         <th>port</th>
                         <th>username</th>
                         <th>private key</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,11 +35,6 @@
                         <td>{{ ssh_config.port }}</td>
                         <td>{{ ssh_config.username }}</td>
                         <td>{{ ssh_config.private_key }}</td>
-                        <td>
-                            <div class="dropdown related_menu">
-                                <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                            </div>
-                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

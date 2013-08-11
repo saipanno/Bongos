@@ -22,7 +22,6 @@
                         <th>name</th>
                         <th>description</th>
                         <th>members</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,11 +31,6 @@
                             <td>{{ group.name }}</td>
                             <td>{{ group.desc }}</td>
                             <td>{{ group.members }}</td>
-                            <td>
-                                <div class="dropdown related_menu">
-                                    <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                </div>
-                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
