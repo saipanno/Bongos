@@ -39,10 +39,6 @@ DEBUG = False
 API_ACCESS_CLIENTS = ['127.0.0.1']
 API_BASIC_URL = 'http://127.0.0.1/api'
 
-# application config
-IPMI_USER = 'MUST UPDATE'
-IPMI_PASSWORD = 'MUST UPDATE'
-
 # fabric config
 POOL_SIZE = 250             # default is 250
 PING_COUNT = 4              # default is 4

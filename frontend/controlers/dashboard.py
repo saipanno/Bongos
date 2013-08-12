@@ -33,12 +33,12 @@ from frontend.extensions.database import db
 from frontend.extensions.libs import catch_errors
 
 from frontend.models.account import User, Group
-from frontend.models.dashboard import SshConfig, Permission, FabFile
+from frontend.models.dashboard import SshConfig, IpmiConfig, Permission, FabFile
 from frontend.models.assets import Server, IDC
 
 from frontend.forms.assets import ServerForm, IDCForm
 from frontend.forms.account import GroupForm
-from frontend.forms.dashboard import SshConfigForm, CreateUserForm, EditUserForm, FabFileForm
+from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, CreateUserForm, EditUserForm, FabFileForm
 
 from frontend.extensions.principal import UserAccessPermission
 
@@ -196,6 +196,9 @@ def list_ssh_config_ctrl():
         return redirect(url_for('account.index_ctrl'))
 
     ssh_configs = SshConfig.query.all()
+    for ssh_config in ssh_configs:
+        user = User.query.filter_by(id=ssh_config.author).first()
+        ssh_config.author_name = user.name
 
     return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
@@ -216,7 +219,7 @@ def create_ssh_config_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        ssh_config = SshConfig(form.username.data, form.desc.data, form.port.data,
+        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
         db.session.add(ssh_config)
         db.session.commit()
@@ -256,6 +259,8 @@ def edit_ssh_config_ctrl(config_id):
 
         if form.desc.data != config.desc:
             config.desc = form.desc.data
+
+        config.author = current_user.id
 
         if form.port.data != config.port:
             config.port = form.port.data
@@ -299,6 +304,125 @@ def delete_ssh_config_ctrl(config_id):
 
     flash(u'Delete ssh configuration successfully', 'success')
     return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+
+
+@dashboard.route('/ipmi_config/list')
+@login_required
+def list_ipmi_config_ctrl():
+
+    access = UserAccessPermission('dashboard.list_ipmi_config_ctrl')
+    if not access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    ipmi_configs = IpmiConfig.query.all()
+    for ipmi_config in ipmi_configs:
+        user = User.query.filter_by(id=ipmi_config.author).first()
+        ipmi_config.author_name = user.name
+
+    return render_template('dashboard/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
+
+
+@dashboard.route('/ipmi_config/create', methods=("GET", "POST"))
+@login_required
+def create_ipmi_config_ctrl():
+
+    access = UserAccessPermission('dashboard.create_ipmi_config_ctrl')
+    if not access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    form = IpmiConfigForm()
+
+    if request.method == 'GET':
+        return render_template('dashboard/ipmi_config.html', form=form, type='create')
+
+    elif request.method == 'POST' and form.validate():
+
+        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id,
+                                 form.username.data, form.password.data, 1 if form.interface.data else 0)
+        db.session.add(ipmi_config)
+        db.session.commit()
+
+        flash(u'Creating IPMI configuration successfully', 'success')
+
+        return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.create_ipmi_config_ctrl'))
+
+
+@dashboard.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
+@login_required
+def edit_ipmi_config_ctrl(config_id):
+
+    access = UserAccessPermission('dashboard.edit_ipmi_config_ctrl')
+    if not access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    config = IpmiConfig.query.filter_by(id=config_id).first()
+
+    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
+                          interface=True if config.interface else False)
+
+    if request.method == 'GET':
+        return render_template('dashboard/ipmi_config.html', form=form, type='edit')
+
+    elif request.method == 'POST' and form.validate():
+
+        if form.name.data != config.name:
+            config.name = form.name.data
+
+        if form.desc.data != config.desc:
+            config.desc = form.desc.data
+
+        config.author = current_user.id
+
+        if form.username.data != config.username:
+            config.username = form.username.data
+
+        if form.password.data != config.password:
+            config.password = form.password.data
+
+        if form.interface.data or config.interface:
+            config.interface = 1 if form.interface.data else 0
+
+        db.session.commit()
+
+        flash(u'Edit IPMI configuration successfully', 'success')
+        return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('dashboard.edit_ipmi_config_ctrl', config_id=config_id))
+
+
+@dashboard.route('/ipmi_config/<int:config_id>/delete')
+@login_required
+def delete_ipmi_config_ctrl(config_id):
+
+    access = UserAccessPermission('dashboard.delete_ipmi_config_ctrl')
+    if not access.can():
+        flash(u'Don\'t have permission to this page', 'warning')
+        return redirect(url_for('account.index_ctrl'))
+
+    config = IpmiConfig.query.filter_by(id=config_id).first()
+
+    # TODO:增加清理数据库环境操作
+
+    db.session.delete(config)
+    db.session.commit()
+
+    flash(u'Delete IPMI configuration successfully', 'success')
+    return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+
+
 
 
 @dashboard.route('/group/list')

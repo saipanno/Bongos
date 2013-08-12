@@ -50,13 +50,10 @@ def remote_control(operation, config):
     for address in operation.get('OPT_SERVER_LIST', '').split():
         ipmi_address_list.append(generate_ipmi_address(address))
 
-    # TODO: 为部分机型增加IPMI_SPEC_TAG的支持，比如早起的HP服务器
-    IPMI_SPEC_TAG = None
-
-    specifies = '-I lanplus' if IPMI_SPEC_TAG else ''
+    specifies = '-I lanplus' if operation.get('IPMI_INTERFACE', False) else ''
     COMMAND = 'ipmitool %s -H {{ ipmi_address }} -U %s -P %s chassis power %s' % \
-              (specifies, config.get('SETTINGS_IPMI_USER', 'root'),
-               config.get('SETTINGS_IPMI_PASSWORD', 'password'), operation.get('OPT_SCRIPT_TEMPLATE', 'status'))
+              (specifies, operation.get('IPMI_USERNAME', 'root'),
+               operation.get('IPMI_PASSWORD', 'calvin'), operation.get('OPT_SCRIPT_TEMPLATE', 'status'))
 
     if API_URL is not None:
 

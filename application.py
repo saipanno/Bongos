@@ -30,11 +30,11 @@ from backend.tasks import backend_runner
 if __name__ == '__main__':
 
 
-    backend_runner({'OPT_SERVER_LIST': u'122.11.45.10', 'OPT_ID': 12, 'OPT_EXT_VARIABLES': u'',
-                    'OPT_RESULT': u'', 'SSH_PORT': 22, 'SSH_USERNAME': u'root', 'OPT_SCRIPT_TEMPLATE': u'',
-                    'OPT_OPERATION_TYPE': u'ssh_status_detecting', 'OPT_SSH_CONFIG': 1, 'SSH_NAME': u'ku6.com',
-                    'SSH_PRIVATE_KEY': u'ku6.key', 'SSH_PASSWORD': u'hello', 'SSH_ID': 1,
-                    'OPT_DATETIME': u'2013-08-02 17:42', 'OPT_AUTHOR': u'1', 'OPT_STATUS': u'0'},
+    backend_runner({'IPMI_ID': 1, 'OPT_SERVER_LIST': u'222.222.222.222', 'OPT_ID': 26, 'OPT_EXT_VARIABLES': u'',
+                    'OPT_RESULT': u'', 'IPMI_USERNAME': u'root', 'OPT_SCRIPT_TEMPLATE': u'reset', 'IPMI_NAME': u'root',
+                    'OPT_OPERATION_TYPE': u'remote_control', 'OPT_SSH_CONFIG': 1,
+                    'IPMI_PASSWORD': u'12345678', 'IPMI_INTERFACE': 1, 'OPT_DATETIME': u'2013-08-12 18:02',
+                    'IPMI_DESC': u'Default ipmi privileges', 'OPT_AUTHOR': u'1', 'OPT_STATUS': u'0', 'IPMI_AUTHOR': 1},
                    {'SETTINGS_APPLICATION_ROOT': None, 'SETTINGS_SSH_COMMAND_TIMEOUT': 120,
                     'SETTINGS_SESSION_COOKIE_NAME': 'session', 'SETTINGS_JSON_SORT_KEYS': True,
                     'SETTINGS_PRIVATE_KEY_PATH': '/Users/saipanno/Projects/Bongos/data/private_key',

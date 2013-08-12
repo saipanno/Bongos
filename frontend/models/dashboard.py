@@ -34,18 +34,41 @@ class SshConfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(255))
+    author = db.Column(db.Integer)
     port = db.Column(db.Integer)
     username = db.Column(db.String(50))
     password = db.Column(db.String(50))
     private_key = db.Column(db.String(50))
 
-    def __init__(self, name, desc, port, username, password, private_key=None):
+    def __init__(self, name, desc, author, port, username, password, private_key):
         self.name = name
         self.desc = desc
+        self.author = author
         self.port = port
         self.username = username
         self.password = password
         self.private_key = private_key
+
+
+class IpmiConfig(db.Model):
+
+    __tablename__ = 'ipmi_config_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    desc = db.Column(db.String(255))
+    author = db.Column(db.Integer)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+    interface = db.Column(db.Integer)
+
+    def __init__(self, name, desc, author, username, password, interface):
+        self.name = name
+        self.desc = desc
+        self.author = author
+        self.username = username
+        self.password = password
+        self.interface = interface
 
 
 class Permission(db.Model):

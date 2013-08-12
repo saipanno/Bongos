@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 
-{% block active_dashboard_ssh_config %}active{% endblock %}
+{% block active_dashboard_ipmi_config %}active{% endblock %}
 
 {% block main %}
 
@@ -11,7 +11,7 @@
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Ssh Config Manager</a></li>
+                <li><a href="#">IPMI Config Manager</a></li>
                 <li class="active">List</li>
             </ul>
 
@@ -22,23 +22,21 @@
                         <th>name</th>
                         <th>description</th>
                         <th>author</th>
-                        <th>port</th>
                         <th>username</th>
                         <th>password</th>
-                        <th>private key</th>
+                        <th>interface</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for ssh_config in ssh_configs %}
+                {% for ipmi_config in ipmi_configs %}
                     <tr>
-                        <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
-                        <td>{{ ssh_config.name }}</td>
-                        <td>{{ ssh_config.desc }}</td>
-                        <td>{{ ssh_config.author_name }}</td>
-                        <td>{{ ssh_config.port }}</td>
-                        <td>{{ ssh_config.username }}</td>
+                        <td><a href="{{ url_for('dashboard.edit_ipmi_config_ctrl', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
+                        <td>{{ ipmi_config.name }}</td>
+                        <td>{{ ipmi_config.desc }}</td>
+                        <td>{{ ipmi_config.author_name }}</td>
+                        <td>{{ ipmi_config.username }}</td>
                         <td>******</td>
-                        <td>{{ ssh_config.private_key }}</td>
+                        <td>{{ ext.get_boolean_magic(ipmi_config.interface, 'lanplus', 'lan') }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -49,7 +47,7 @@
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Ssh Config Manager</a></li>
+                <li><a href="#">IPMI Config Manager</a></li>
                 <li class="active">Create</li>
             </ul>
 
@@ -60,7 +58,7 @@
                     {{ form.hidden_tag() }}
 
                     <legend>
-                        Create Ssh Config
+                        Create IPMI Config
                     </legend>
 
                     <div class="box form-container row form-horizontal">
@@ -69,13 +67,11 @@
 
                         {{ ext.create_standard_field(form.desc) }}
 
-                        {{ ext.create_standard_field(form.port) }}
-
                         {{ ext.create_standard_field(form.username) }}
 
                         {{ ext.create_standard_field(form.password) }}
 
-                        {{ ext.create_standard_field(form.private_key) }}
+                        {{ ext.create_standard_field(form.interface) }}
 
                     </div>
 
@@ -91,7 +87,7 @@
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Ssh Config Manager</a></li>
+                <li><a href="#">IPMI Config Manager</a></li>
                 <li class="active">Edit</li>
             </ul>
 
@@ -107,7 +103,7 @@
                         {% if form.name.data %}
                             {{ form.name.data }}
                         {% else %}
-                            Edit Ssh Config
+                            Edit IPMI Config
                         {% endif %}
                     </legend>
 
@@ -117,13 +113,11 @@
 
                         {{ ext.create_standard_field(form.desc) }}
 
-                        {{ ext.create_standard_field(form.port) }}
-
                         {{ ext.create_standard_field(form.username) }}
 
                         {{ ext.create_standard_field(form.password) }}
 
-                        {{ ext.create_standard_field(form.private_key) }}
+                        {{ ext.create_standard_field(form.interface) }}
 
                     </div>
 
@@ -143,7 +137,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ssh_config_ctrl', config_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ipmi_config_ctrl', config_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

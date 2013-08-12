@@ -29,7 +29,7 @@ from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerFi
 from flask.ext.wtf import Required, Optional, Regexp, Email
 
 from frontend.models.account import Group, User
-from frontend.models.dashboard import SshConfig, FabFile
+from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.libs import Unique, UnChanged
 
@@ -53,6 +53,27 @@ class SshConfigForm(Form):
                              validators=[Required(message=u'Password is required')])
     private_key = TextField(u'Private Key:',
                             description=u'Private filename in <code>PRIVATE_KEY_PATH</code>')
+
+    submit = SubmitField(u'Submit', id='submit')
+
+
+class IpmiConfigForm(Form):
+
+    next_page = HiddenField()
+    id = IntegerField(widget=HiddenInput())
+
+    name = TextField(u'Name', description=u'Ipmi Config name. Unique',
+                     validators=[Required(message=u'Name is required'),
+                                 Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
+                                 Unique(IpmiConfig, IpmiConfig.name,
+                                        message=u'The current name is already in use')])
+    desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
+    username = TextField(u'Username', default=u'root',
+                         validators=[Required(message=u'Username is required')])
+    password = PasswordField(u'Password',
+                             validators=[Required(message=u'Password is required')])
+    interface = BooleanField(u'IPMI Interface:',
+                             description=u'Select to use <code>lanplus</code> interface, default is <code>lan</code>.')
 
     submit = SubmitField(u'Submit', id='submit')
 

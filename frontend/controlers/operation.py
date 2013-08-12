@@ -34,7 +34,7 @@ from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, 
 
 from frontend.models.account import User
 from frontend.models.operation import OperationDb
-from frontend.models.dashboard import SshConfig, FabFile
+from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
@@ -371,11 +371,18 @@ def create_power_control_ctrl():
             return redirect(url_for('operation.create_power_control_ctrl'))
 
         operation = OperationDb(author, datetime, operation_type, fruit['servers'],
-                                form.script_template.data, u'', 0, 0, u'')
+                                form.script_template.data, u'', form.ipmi_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
-        q.enqueue(backend_runner, get_obj_attributes(operation, 'OPT'), get_dict_items(current_app.config, 'SETTINGS'))
+        ipmi_config = IpmiConfig.query.filter_by(id=form.ipmi_config.data.id).first()
+        ipmi_config_dict = get_obj_attributes(ipmi_config, 'IPMI')
+        operations = get_obj_attributes(operation, 'OPT')
+        operations.update(ipmi_config_dict)
+
+        print operations
+
+        q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))

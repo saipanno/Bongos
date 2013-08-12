@@ -26,7 +26,7 @@
 
 from flask.ext.wtf import Form, TextAreaField, HiddenField, SubmitField, QuerySelectField, SelectField, Required
 
-from frontend.models.dashboard import SshConfig, FabFile
+from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 
 class CreateSshDetectForm(Form):
@@ -108,5 +108,6 @@ class CreatePowerCtrlForm(Form):
                                 validators=[Required(message=u'Server list is required')])
     script_template = SelectField(u'Operate Type', description=u'Power operate type, support by `ipmitool`',
                                   choices=[(u'reset', u'重启'), (u'off', u'关机'), (u'on', u'开机'), (u'status', u'状态')])
-
+    ipmi_config = QuerySelectField(u'Ipmi Config', query_factory=IpmiConfig.query.all, get_label='desc',
+                                   validators=[Required(message=u'IPMI config is required')])
     submit = SubmitField(u'Submit', id='submit')
