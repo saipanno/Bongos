@@ -198,6 +198,10 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
+    if config.author != current_user.id:
+        flash(u'Do not have permission to edit this config', 'error')
+        return redirect(url_for('account.list_ssh_config_ctrl'))
+
     form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, port=config.port, username=config.username,
                          private_key=config.private_key)
 
@@ -250,6 +254,10 @@ def edit_ssh_config_ctrl(config_id):
 def delete_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
+
+    if config.author != current_user.id:
+        flash(u'Do not have permission to delete this config', 'error')
+        return redirect(url_for('account.list_ssh_config_ctrl'))
 
     # TODO:增加清理数据库环境操作
 
@@ -324,6 +332,10 @@ def edit_ipmi_config_ctrl(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
+    if config.author != current_user.id:
+        flash(u'Do not have permission to edit this config', 'error')
+        return redirect(url_for('account.list_ssh_config_ctrl'))
+
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
                           interface=True if config.interface else False)
 
@@ -373,6 +385,10 @@ def edit_ipmi_config_ctrl(config_id):
 def delete_ipmi_config_ctrl(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
+
+    if config.author != current_user.id:
+        flash(u'Do not have permission to delete this config', 'error')
+        return redirect(url_for('account.list_ssh_config_ctrl'))
 
     # TODO:增加清理数据库环境操作
 
@@ -466,6 +482,11 @@ def create_fabfile_ctrl():
 def edit_fabfile_ctrl(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
+
+    if fabfile.author != current_user.id:
+        flash(u'Do not have permission to edit this fabfile', 'error')
+        return redirect(url_for('account.list_ssh_config_ctrl'))
+
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
                  encoding='utf-8') as f:
         fabfile.script = f.read()
@@ -510,6 +531,10 @@ def edit_fabfile_ctrl(fabfile_id):
 def delete_fabfile_ctrl(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
+
+    if fabfile.author != current_user.id:
+        flash(u'Do not have permission to delete this config', 'error')
+        return redirect(url_for('account.list_fabfile_ctrl'))
 
     # TODO:增加清理数据库环境操作
 
