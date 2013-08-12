@@ -173,7 +173,8 @@ def get_obj_attributes(obj, key_header):
     fruit = dict()
     fruit['%s_ID' % key_header.upper()] = obj.id
     for key in obj.__dict__.keys():
-        fruit['%s_%s' % (key_header.upper(), key.upper())] = obj.__dict__[key]
+        if key.startswith('_') is not True:
+            fruit['%s_%s' % (key_header.upper(), key.upper())] = obj.__dict__[key]
 
     return fruit
 
