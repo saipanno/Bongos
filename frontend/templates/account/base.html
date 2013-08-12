@@ -18,9 +18,9 @@
                             <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Resource <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                 <li class="dropdown-header">Permission</li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_user_ctrl') }}"><i class="icon-user"></i> Fabfile</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ssh_config_ctrl') }}"><i class="icon-key"></i> Ssh Config</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ipmi_config_ctrl') }}"><i class="icon-key"></i> Ipmi Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_fabfile_ctrl') }}"><i class="icon-user"></i> Fabfile</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_ssh_config_ctrl') }}"><i class="icon-key"></i> Ssh Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_ipmi_config_ctrl') }}"><i class="icon-key"></i> Ipmi Config</a></li>
                             </ul>
                         </div>
                     </div>
@@ -45,10 +45,10 @@
 
             <div class="col-lg-3">
                 <div class="list-group">
-                    <a class="list-group-item {% block active_account_settings %}{% endblock %}" href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> Settings</a>
-                    <a class="list-group-item {% block active_account_fabfile %}{% endblock %}" href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
-                    <a class="list-group-item {% block active_account_ssh_config %}{% endblock %}" href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
-                    <a class="list-group-item {% block active_account_ipmi_config %}{% endblock %}" href="{{ url_for("dashboard.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a>
+                    <a class="list-group-item {% block active_account_settings %}{% endblock %}" href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-user"></i> Settings</a>
+                    <a class="list-group-item {% block active_account_fabfile %}{% endblock %}" href="{{ url_for("account.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
+                    <a class="list-group-item {% block active_account_ssh_config %}{% endblock %}" href="{{ url_for("account.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
+                    <a class="list-group-item {% block active_account_ipmi_config %}{% endblock %}" href="{{ url_for("account.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a>
                 </div>
             </div>
 

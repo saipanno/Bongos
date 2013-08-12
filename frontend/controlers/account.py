@@ -34,7 +34,7 @@ from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from frontend.forms.account import UserLoginForm, EditSettingForm
 from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, FabFileForm
 
-from frontend.models.account import User
+from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
@@ -138,10 +138,24 @@ def user_edit_settings_ctrl():
 @login_required
 def list_ssh_config_ctrl():
 
-    ssh_configs = SshConfig.query.all()
+    groups = current_user.groups.split(',')
+
+    ssh_configs = list()
+    all_ssh_configs = SshConfig.query.all()
+    for ssh_config in all_ssh_configs:
+        for group_id in ssh_config.groups.split(','):
+            if group_id in groups:
+                ssh_configs.append(ssh_config)
+
     for ssh_config in ssh_configs:
         user = User.query.filter_by(id=ssh_config.author).first()
         ssh_config.author_name = user.name
+
+        groups_name = ''
+        for group_id in ssh_config.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        ssh_config.groups_name = groups_name[2:]
 
     return render_template('account/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
@@ -157,7 +171,12 @@ def create_ssh_config_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, form.port.data,
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+
+        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups), form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
         db.session.add(ssh_config)
         db.session.commit()
@@ -193,7 +212,14 @@ def edit_ssh_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        config.author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != config.groups:
+            config.groups = config_groups
 
         if form.port.data != config.port:
             config.port = form.port.data
@@ -238,10 +264,24 @@ def delete_ssh_config_ctrl(config_id):
 @login_required
 def list_ipmi_config_ctrl():
 
-    ipmi_configs = IpmiConfig.query.all()
+    groups = current_user.groups.split(',')
+
+    ipmi_configs = list()
+    all_ipmi_configs = IpmiConfig.query.all()
+    for ssh_config in all_ipmi_configs:
+        for group_id in ssh_config.groups.split(','):
+            if group_id in groups:
+                ipmi_configs.append(ssh_config)
+
     for ipmi_config in ipmi_configs:
         user = User.query.filter_by(id=ipmi_config.author).first()
         ipmi_config.author_name = user.name
+
+        groups_name = ''
+        for group_id in ssh_config.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        ssh_config.groups_name = groups_name[2:]
 
     return render_template('account/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
 
@@ -257,7 +297,12 @@ def create_ipmi_config_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id,
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+
+        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups),
                                  form.username.data, form.password.data, 1 if form.interface.data else 0)
         db.session.add(ipmi_config)
         db.session.commit()
@@ -293,7 +338,14 @@ def edit_ipmi_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        config.author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != config.groups:
+            config.groups = config_groups
 
         if form.username.data != config.username:
             config.username = form.username.data
@@ -335,11 +387,24 @@ def delete_ipmi_config_ctrl(config_id):
 @login_required
 def list_fabfile_ctrl():
 
-    fabfiles = FabFile.query.all()
+    groups = current_user.groups.split(',')
+
+    fabfiles = list()
+    all_fabfiles = FabFile.query.all()
+    for fabfile in all_fabfiles:
+        for group_id in fabfile.groups.split(','):
+            if group_id in groups:
+                fabfiles.append(fabfile)
 
     for fabfile in fabfiles:
-        user = User.query.filter_by(id=int(fabfile.author)).first()
+        user = User.query.filter_by(id=fabfile.author).first()
         fabfile.author_name = user.name
+
+        groups_name = ''
+        for group_id in fabfile.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        fabfile.groups_name = groups_name[2:]
 
     return render_template('account/fabfile_manager.html', fabfiles=fabfiles, type='list')
 
@@ -373,13 +438,16 @@ def create_fabfile_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
 
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                     encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
-        fabfile = FabFile(form.name.data, form.desc.data, author)
+        fabfile = FabFile(form.name.data, form.desc.data, current_user.id, ','.join(groups))
         db.session.add(fabfile)
         db.session.commit()
 
@@ -412,6 +480,15 @@ def edit_fabfile_ctrl(fabfile_id):
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                   encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
+
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != fabfile.groups:
+            fabfile.groups = config_groups
 
         if form.desc.data != fabfile.desc:
             fabfile.desc = form.desc.data

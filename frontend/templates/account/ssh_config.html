@@ -1,6 +1,6 @@
-{% extends "dashboard/base.html" %}
+{% extends "account/base.html" %}
 
-{% block active_dashboard_ssh_config %}active{% endblock %}
+{% block active_account_ssh_config %}active{% endblock %}
 
 {% block main %}
 
@@ -10,7 +10,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Profile</a></li>
                 <li><a href="#">Ssh Config Manager</a></li>
                 <li class="active">List</li>
             </ul>
@@ -32,7 +32,11 @@
                 <tbody>
                 {% for ssh_config in ssh_configs %}
                     <tr>
-                        <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
+                        {% if ssh_config.author == current_user.id %}
+                            <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
+                        {% else %}
+                            <td>{{ ssh_config.id }}</td>
+                        {% endif %}
                         <td>{{ ssh_config.name }}</td>
                         <td>{{ ssh_config.desc }}</td>
                         <td>{{ ssh_config.author_name }}</td>
@@ -50,7 +54,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Profile</a></li>
                 <li><a href="#">Ssh Config Manager</a></li>
                 <li class="active">Create</li>
             </ul>
@@ -94,7 +98,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Profile</a></li>
                 <li><a href="#">Ssh Config Manager</a></li>
                 <li class="active">Edit</li>
             </ul>
