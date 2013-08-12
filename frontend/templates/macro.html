@@ -53,11 +53,11 @@
 
 {% macro get_status(status)  -%}
     {% if status == 0 %}
-        <i class="icon-ban-circle text-info" title="True"></i>
+        <i class="icon-ban-circle text-info"></i>
     {% elif status == 1 %}
-        <i class="icon-ok-sign text-success" title="True"></i>
+        <i class="icon-ok-sign text-success"></i>
     {% else %}
-        <i class="icon-exclamation text-error" title="True"></i>
+        <i class="icon-exclamation text-error"></i>
     {% endif %}
 {%- endmacro %}
 
@@ -67,6 +67,15 @@
         <i class="icon-ok"></i> enable
     {% elif status == 1 %}
         <i class="icon-ban-circle"></i> disable
+    {% endif %}
+{%- endmacro %}
+
+
+{% macro get_boolean_magic(boolean, yes, no)  -%}
+    {% if boolean %}
+        {{ yes }}
+    {% else %}
+        {{ no }}
     {% endif %}
 {%- endmacro %}
 
