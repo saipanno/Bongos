@@ -28,11 +28,11 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 # web config
-PORT = 8080
+PORT = 80
 HOST = '0.0.0.0'
 SESSION_PROTECTION = 'strong'
 PRIVATE_KEY_PATH = os.path.join(_basedir, 'data/private_key')
-SECRET_KEY = 'MUST UPDATE'  # Create by os.urandom(24)
+SECRET_KEY = os.urandom(24)
 DEBUG = False 
 
 # api config
