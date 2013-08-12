@@ -53,7 +53,9 @@ class SshConfigForm(Form):
                              validators=[Required(message=u'Password is required')])
     private_key = TextField(u'Private Key:',
                             description=u'Private filename in <code>PRIVATE_KEY_PATH</code>')
-
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
     submit = SubmitField(u'Submit', id='submit')
 
 
@@ -74,7 +76,9 @@ class IpmiConfigForm(Form):
                              validators=[Required(message=u'Password is required')])
     interface = BooleanField(u'IPMI Interface:',
                              description=u'Select to use <code>lanplus</code> interface, default is <code>lan</code>.')
-
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
     submit = SubmitField(u'Submit', id='submit')
 
 
@@ -147,5 +151,8 @@ class FabFileForm(Form):
                                         message=u'The current name is already in use')])
     desc = TextField(u'Description', validators=[Required(message=u'Description is required')])
     script = TextAreaField(u'Fabfile', description=u'Fabric\'s fabfile')
+    groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
+                                      query_factory=Group.query.all, get_label='desc',
+                                      validators=[Required(message=u'Group is required')])
 
     submit = SubmitField(u'Submit', id='submit')

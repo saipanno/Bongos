@@ -22,6 +22,7 @@
                         <th>name</th>
                         <th>description</th>
                         <th>author</th>
+                        <th>groups</th>
                         <th>port</th>
                         <th>username</th>
                         <th>password</th>
@@ -35,6 +36,7 @@
                         <td>{{ ssh_config.name }}</td>
                         <td>{{ ssh_config.desc }}</td>
                         <td>{{ ssh_config.author_name }}</td>
+                        <td>{{ ssh_config.groups_name }}</td>
                         <td>{{ ssh_config.port }}</td>
                         <td>{{ ssh_config.username }}</td>
                         <td>******</td>
@@ -68,6 +70,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.groups) }}
 
                         {{ ext.create_standard_field(form.port) }}
 
@@ -116,6 +120,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.groups) }}
 
                         {{ ext.create_standard_field(form.port) }}
 

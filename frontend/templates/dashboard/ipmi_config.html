@@ -22,6 +22,7 @@
                         <th>name</th>
                         <th>description</th>
                         <th>author</th>
+                        <th>groups</th>
                         <th>username</th>
                         <th>password</th>
                         <th>interface</th>
@@ -34,8 +35,9 @@
                         <td>{{ ipmi_config.name }}</td>
                         <td>{{ ipmi_config.desc }}</td>
                         <td>{{ ipmi_config.author_name }}</td>
+                        <td>{{ ipmi_config.groups_name }}</td>
                         <td>{{ ipmi_config.username }}</td>
-                        <td>******</td>
+                        <td>{{ ipmi_config.password }}</td>
                         <td>{{ ext.get_boolean_magic(ipmi_config.interface, 'lanplus', 'lan') }}</td>
                     </tr>
                 {% endfor %}
@@ -66,6 +68,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.groups) }}
 
                         {{ ext.create_standard_field(form.username) }}
 
@@ -112,6 +116,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.desc) }}
+
+                        {{ ext.create_standard_field(form.groups) }}
 
                         {{ ext.create_standard_field(form.username) }}
 

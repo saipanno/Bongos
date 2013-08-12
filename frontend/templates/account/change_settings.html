@@ -1,55 +1,48 @@
 {% extends "account/base.html" %}
 
-{% block container %}
+{% block active_account_settings %}active{% endblock %}
 
-    <div class="container">
+{% block main %}
 
-        <div class="row">
+    <div class="col-lg-9">
 
-            <div class="col-lg-12">
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li class="#"><a href="#">Profile</a></li>
+            <li class="active">Settings</li>
+        </ul>
 
-                <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li class="#"><a href="#">Profile</a></li>
-                    <li class="active">Settings</li>
-                </ul>
+        <div class="col-lg-12 dashboard-workflow">
 
-                {{ ext.feedback_message() }}
+            <form class="form-horizontal" method="post" action="">
 
-                <div class="tabbable">
-                    <form method="post" action="">
+                {{ form.hidden_tag() }}
 
-                        {{ form.hidden_tag() }}
+                <legend>
+                    Settings
+                </legend>
 
-                        <legend>
-                            Settings
-                        </legend>
+                <div class="box form-container row form-horizontal">
 
-                        <div class="box form-container row form-horizontal">
+                    {{ ext.create_standard_field(form.email) }}
 
-                            {{ ext.create_standard_field(form.email, class="uneditable-input") }}
+                    {{ ext.create_standard_field(form.username) }}
 
-                            {{ ext.create_standard_field(form.username) }}
+                    {{ ext.create_standard_field(form.name) }}
 
-                            {{ ext.create_standard_field(form.name) }}
+                    {{ ext.create_standard_field(form.now_password) }}
 
-                            {{ ext.create_standard_field(form.now_password) }}
+                    {{ ext.create_standard_field(form.new_password) }}
 
-                            {{ ext.create_standard_field(form.new_password) }}
-
-                            {{ ext.create_standard_field(form.confirm_password) }}
-
-                        </div>
-
-                        <div class="form-actions">
-                            {{ form.submit(class="btn btn-danger") }}
-                        </div>
-
-                    </form>
+                    {{ ext.create_standard_field(form.confirm_password) }}
 
                 </div>
 
-            </div>
+                <div class="form-actions">
+                    {{ form.submit(class="btn btn-danger") }}
+                </div>
+
+            </form>
 
         </div>
 

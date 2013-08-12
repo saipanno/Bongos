@@ -73,11 +73,11 @@ def list_user_ctrl():
     users = User.query.all()
 
     for user in users:
-        group_name = ''
+        groups_name = ''
         for group_id in user.groups.split(','):
             group = Group.query.filter_by(id=int(group_id)).first()
-            group_name = '%s, %s' % (group_name, group.desc)
-        user.group_name = group_name[2:]
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        user.groups_name = groups_name[2:]
 
     return render_template('dashboard/user_manager.html', users=users, type='list')
 
@@ -200,6 +200,12 @@ def list_ssh_config_ctrl():
         user = User.query.filter_by(id=ssh_config.author).first()
         ssh_config.author_name = user.name
 
+        groups_name = ''
+        for group_id in ssh_config.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        ssh_config.groups_name = groups_name[2:]
+
     return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
 
@@ -219,7 +225,12 @@ def create_ssh_config_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, form.port.data,
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+
+        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups), form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
         db.session.add(ssh_config)
         db.session.commit()
@@ -260,7 +271,14 @@ def edit_ssh_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        config.author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != config.groups:
+            config.groups = config_groups
 
         if form.port.data != config.port:
             config.port = form.port.data
@@ -320,6 +338,12 @@ def list_ipmi_config_ctrl():
         user = User.query.filter_by(id=ipmi_config.author).first()
         ipmi_config.author_name = user.name
 
+        groups_name = ''
+        for group_id in ipmi_config.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        ipmi_config.groups_name = groups_name[2:]
+
     return render_template('dashboard/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
 
 
@@ -339,7 +363,12 @@ def create_ipmi_config_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id,
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+
+        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups),
                                  form.username.data, form.password.data, 1 if form.interface.data else 0)
         db.session.add(ipmi_config)
         db.session.commit()
@@ -380,7 +409,14 @@ def edit_ipmi_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        config.author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != config.groups:
+            config.groups = config_groups
 
         if form.username.data != config.username:
             config.username = form.username.data
@@ -421,8 +457,6 @@ def delete_ipmi_config_ctrl(config_id):
 
     flash(u'Delete IPMI configuration successfully', 'success')
     return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
-
-
 
 
 @dashboard.route('/group/list')
@@ -636,6 +670,12 @@ def list_fabfile_ctrl():
         user = User.query.filter_by(id=int(fabfile.author)).first()
         fabfile.author_name = user.name
 
+        groups_name = ''
+        for group_id in fabfile.groups.split(','):
+            group = Group.query.filter_by(id=int(group_id)).first()
+            groups_name = '%s, %s' % (groups_name, group.desc)
+        fabfile.groups_name = groups_name[2:]
+
     return render_template('dashboard/fabfile_manager.html', fabfiles=fabfiles, type='list')
 
 
@@ -678,13 +718,16 @@ def create_fabfile_ctrl():
 
     elif request.method == 'POST' and form.validate():
 
-        author = current_user.id
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
 
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                     encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
-        fabfile = FabFile(form.name.data, form.desc.data, author)
+        fabfile = FabFile(form.name.data, form.desc.data, current_user.id, ','.join(groups))
         db.session.add(fabfile)
         db.session.commit()
 
@@ -725,6 +768,15 @@ def edit_fabfile_ctrl(fabfile_id):
 
         if form.desc.data != fabfile.desc:
             fabfile.desc = form.desc.data
+
+        groups = list()
+        for group in form.groups.data:
+            groups.append(str(group.id))
+        groups.sort()
+        config_groups = ','.join(groups)
+
+        if config_groups != fabfile.groups:
+            fabfile.groups = config_groups
 
         db.session.commit()
 

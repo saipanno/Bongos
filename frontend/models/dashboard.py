@@ -35,15 +35,17 @@ class SshConfig(db.Model):
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(255))
     author = db.Column(db.Integer)
+    groups = db.Column(db.String(50))
     port = db.Column(db.Integer)
     username = db.Column(db.String(50))
     password = db.Column(db.String(50))
     private_key = db.Column(db.String(50))
 
-    def __init__(self, name, desc, author, port, username, password, private_key):
+    def __init__(self, name, desc, author, groups, port, username, password, private_key):
         self.name = name
         self.desc = desc
         self.author = author
+        self.groups = groups
         self.port = port
         self.username = username
         self.password = password
@@ -58,14 +60,16 @@ class IpmiConfig(db.Model):
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(255))
     author = db.Column(db.Integer)
+    groups = db.Column(db.String(50))
     username = db.Column(db.String(50))
     password = db.Column(db.String(50))
     interface = db.Column(db.Integer)
 
-    def __init__(self, name, desc, author, username, password, interface):
+    def __init__(self, name, desc, author, groups, username, password, interface):
         self.name = name
         self.desc = desc
         self.author = author
+        self.groups = groups
         self.username = username
         self.password = password
         self.interface = interface
@@ -95,9 +99,11 @@ class FabFile(db.Model):
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(100))
     author = db.Column(db.Integer)
+    groups = db.Column(db.String(50))
 
-    def __init__(self, name, desc, author):
+    def __init__(self, name, desc, author, groups):
 
         self.name = name
         self.desc = desc
         self.author = author
+        self.groups = groups

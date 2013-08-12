@@ -1,1 +1,62 @@
 {% extends "base.html" %}
+
+
+{% block bs_header %}
+
+    <div class="bs-header dashboard" id="content" role="banner">
+
+        <div class="container">
+
+            <div class="btn-group">
+                <h1 class="bs-header-inline">Profile</h1>
+            </div>
+
+            <div class="btn-group pull-right">
+                <div class="dropdown">
+                    <div class="btn-toolbar" style="margin: 0;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Resource <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                <li class="dropdown-header">Permission</li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_user_ctrl') }}"><i class="icon-user"></i> Fabfile</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ssh_config_ctrl') }}"><i class="icon-key"></i> Ssh Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('dashboard.create_ipmi_config_ctrl') }}"><i class="icon-key"></i> Ipmi Config</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock bs_header %}
+
+
+{% block container %}
+
+<div class="container">
+
+    <div class="row">
+
+        {% block sidebar %}
+
+            <div class="col-lg-3">
+                <div class="list-group">
+                    <a class="list-group-item {% block active_account_settings %}{% endblock %}" href="{{ url_for("dashboard.list_user_ctrl") }}"><i class="icon-user"></i> Settings</a>
+                    <a class="list-group-item {% block active_account_fabfile %}{% endblock %}" href="{{ url_for("dashboard.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
+                    <a class="list-group-item {% block active_account_ssh_config %}{% endblock %}" href="{{ url_for("dashboard.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
+                    <a class="list-group-item {% block active_account_ipmi_config %}{% endblock %}" href="{{ url_for("dashboard.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a>
+                </div>
+            </div>
+
+        {% endblock %}
+
+        {% block main %}{% endblock %}
+
+    </div>
+
+</div>
+{% endblock %}
