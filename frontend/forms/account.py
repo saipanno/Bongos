@@ -57,10 +57,7 @@ class EditSettingForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    first_name = TextField(u'First Name', validators=[Optional(),
-                                                      Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
-    last_name = TextField(u'Last Name', validators=[Optional(),
-                                                    Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
+
     submit = SubmitField(u'Submit', id='submit')
 
 

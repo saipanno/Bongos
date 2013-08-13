@@ -100,10 +100,6 @@ class CreateUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    first_name = TextField(u'First Name', validators=[Optional(),
-                                                      Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
-    last_name = TextField(u'Last Name', validators=[Optional(),
-                                                    Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
     groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
                                       query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])
@@ -128,16 +124,13 @@ class EditUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
-    first_name = TextField(u'First Name', validators=[Optional(),
-                                                      Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
-    last_name = TextField(u'Last Name', validators=[Optional(),
-                                                    Regexp(u'^[a-zA-Z]{3,20}$', message=u'Incorrect name format')])
     groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
                                       query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])
     password = TextField(u'Password', description=u'At least five characters',
                          validators=[Optional(),
                                      Regexp(u'^.{5,20}$', message=u'Password are at least five chars')])
+    status = BooleanField(u'Status', description=u'Check to enable this user')
 
     submit = SubmitField(u'Submit', id='submit')
 

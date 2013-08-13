@@ -100,7 +100,7 @@ def create_user_ctrl():
             groups.append(str(group.id))
         groups.sort()
 
-        user = User(form.email.data, form.username.data, form.name.data, form.first_name.data, form.last_name.data,
+        user = User(form.email.data, form.username.data, form.name.data,
                     ','.join(groups), form.password.data, 1 if form.status.data else 0)
         db.session.add(user)
         db.session.commit()
@@ -125,18 +125,12 @@ def edit_user_ctrl(user_id):
     user = User.query.filter_by(id=user_id).first()
 
     form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name,
-                        first_name=user.first_name, last_name=user.last_name)
+                        status=True if user.status else False)
 
     if request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
-
-        if form.first_name.data != user.first_name:
-            user.first_name = form.first_name.data
-
-        if form.last_name.data != user.last_name:
-            user.last_name = form.last_name.data
 
         if len(form.password.data) > 0:
             user.update_password(form.password.data)
@@ -149,6 +143,9 @@ def edit_user_ctrl(user_id):
 
         if user_groups != user.groups:
             user.groups = user_groups
+
+        if user.status or form.status.data:
+            user.status = 1 if form.status.data else 0
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')

@@ -106,8 +106,7 @@ def user_logout_ctrl():
 def user_edit_settings_ctrl():
 
     user = current_user
-    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name,
-                           first_name=user.first_name, last_name=user.last_name)
+    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
     if request.method == 'GET':
         return render_template('account/change_settings.html', form=form)
@@ -116,12 +115,6 @@ def user_edit_settings_ctrl():
 
         if form.name.data != user.name:
             user.name = form.name.data
-
-        if form.first_name.data != user.first_name:
-            user.first_name = form.first_name.data
-
-        if form.last_name.data != user.last_name:
-            user.last_name = form.last_name.data
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
