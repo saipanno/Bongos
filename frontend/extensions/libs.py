@@ -26,6 +26,7 @@
 
 import re
 from flask.ext.wtf import ValidationError
+from flask.ext.wtf import QuerySelectMultipleField as NativeQuerySelectMultipleField
 
 
 def validate_address(address):
@@ -112,6 +113,13 @@ def catch_errors(errors):
                 messages = '%s,%s' % (messages, error)
 
     return messages[1:] if messages else None
+
+
+class QuerySelectMultipleField(NativeQuerySelectMultipleField):
+
+    def iter_choices(self):
+        for pk, obj in self._get_object_list():
+            yield (pk, self.get_label(obj), obj.id in [int(i) for i in self.data.split(',')])
 
 
 class Unique(object):

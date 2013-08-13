@@ -24,14 +24,14 @@
 # SOFTWARE.
 
 
-from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    PasswordField, BooleanField, QuerySelectMultipleField
+from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, IntegerField, HiddenField, \
+    HiddenInput, BooleanField
 from flask.ext.wtf import Required, Optional, Regexp, Email
 
 from frontend.models.account import Group, User
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
-from frontend.extensions.libs import Unique, UnChanged
+from frontend.extensions.libs import Unique, UnChanged, QuerySelectMultipleField
 
 
 class SshConfigForm(Form):

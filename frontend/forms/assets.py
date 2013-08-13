@@ -25,13 +25,13 @@
 
 
 from flask.ext.wtf import Form, TextField, SubmitField, IntegerField, HiddenField, HiddenInput,\
-    QuerySelectField, QuerySelectMultipleField
+    QuerySelectField
 from flask.ext.wtf import Required, Optional, Regexp, IPAddress
 
 from frontend.models.account import Group
 from frontend.models.assets import Server, IDC
 
-from frontend.extensions.libs import Unique
+from frontend.extensions.libs import Unique, QuerySelectMultipleField
 
 
 class ServerForm(Form):

@@ -225,8 +225,8 @@ def edit_ssh_config_ctrl(config_id):
         flash(u'Do not have permission to edit this config', 'error')
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
-    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, port=config.port, username=config.username,
-                         private_key=config.private_key)
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+                         port=config.port, username=config.username, private_key=config.private_key)
 
     if request.method == 'GET':
         return render_template('account/ssh_config.html', form=form, type='edit')
@@ -360,7 +360,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
-                          interface=True if config.interface else False)
+                          groups=config.groups, interface=True if config.interface else False)
 
     if request.method == 'GET':
         return render_template('account/ipmi_config.html', form=form, type='edit')
@@ -514,7 +514,8 @@ def edit_fabfile_ctrl(fabfile_id):
                  encoding='utf-8') as f:
         fabfile.script = f.read()
 
-    form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
+    form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
+                       groups=fabfile.groups, script=fabfile.script)
 
     if request.method == 'GET':
         return render_template('account/fabfile_manager.html', form=form, type='edit')

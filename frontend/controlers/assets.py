@@ -78,7 +78,7 @@ def edit_server_ctrl(server_id):
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
-                      disk_info=server.disk_info, memory_info=server.memory_info)
+                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
 
     if request.method == 'POST' and form.validate():
 

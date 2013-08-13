@@ -124,7 +124,7 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name,
+    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name, groups=user.groups,
                         status=True if user.status else False)
 
     if request.method == 'POST' and form.validate():
@@ -261,8 +261,8 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
-    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, port=config.port, username=config.username,
-                         private_key=config.private_key)
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+                         port=config.port, username=config.username, private_key=config.private_key)
 
     if request.method == 'GET':
         return render_template('dashboard/ssh_config.html', form=form, type='edit')
@@ -399,8 +399,8 @@ def edit_ipmi_config_ctrl(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
-    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
-                          interface=True if config.interface else False)
+    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+                          username=config.username, interface=True if config.interface else False)
 
     if request.method == 'GET':
         return render_template('dashboard/ipmi_config.html', form=form, type='edit')
@@ -759,7 +759,8 @@ def edit_fabfile_ctrl(fabfile_id):
                  encoding='utf-8') as f:
         fabfile.script = f.read()
 
-    form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc, script=fabfile.script)
+    form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
+                       groups=fabfile.groups, script=fabfile.script)
 
     if request.method == 'GET':
         return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
@@ -892,7 +893,7 @@ def edit_server_ctrl(server_id):
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
-                      disk_info=server.disk_info, memory_info=server.memory_info)
+                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
 
     if request.method == 'GET':
 
