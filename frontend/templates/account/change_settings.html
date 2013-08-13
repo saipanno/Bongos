@@ -1,6 +1,6 @@
 {% extends "account/base.html" %}
 
-{% block active_account_settings %}active{% endblock %}
+{% block active_account_change_settings %}active{% endblock %}
 
 {% block main %}
 
@@ -30,11 +30,9 @@
 
                     {{ ext.create_standard_field(form.name) }}
 
-                    {{ ext.create_standard_field(form.now_password) }}
+                    {{ ext.create_standard_field(form.first_name) }}
 
-                    {{ ext.create_standard_field(form.new_password) }}
-
-                    {{ ext.create_standard_field(form.confirm_password) }}
+                    {{ ext.create_standard_field(form.last_name) }}
 
                 </div>
 

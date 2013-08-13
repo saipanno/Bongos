@@ -31,7 +31,7 @@ from flask import render_template, request, flash, redirect, url_for, Blueprint,
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 
-from frontend.forms.account import UserLoginForm, EditSettingForm
+from frontend.forms.account import UserLoginForm, EditSettingForm, ChangePasswordForm
 from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, FabFileForm
 
 from frontend.models.account import User, Group
@@ -101,26 +101,27 @@ def user_logout_ctrl():
     return redirect(url_for('account.index_ctrl'))
 
 
-@account.route('/settings', methods=("GET", "POST"))
+@account.route('/settings/profile', methods=("GET", "POST"))
 @login_required
 def user_edit_settings_ctrl():
 
     user = current_user
-    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
+    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name,
+                           first_name=user.first_name, last_name=user.last_name)
 
     if request.method == 'GET':
-        return render_template('account/change_settings.html', form=form, type='edit')
+        return render_template('account/change_settings.html', form=form)
 
     elif request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
 
-        if not user.check_password(form.now_password.data):
-            flash(u'Current password is incorrect', 'error')
-            return redirect(url_for('account.user_edit_settings_ctrl'))
-        else:
-            user.update_password(form.new_password.data)
+        if form.first_name.data != user.first_name:
+            user.first_name = form.first_name.data
+
+        if form.last_name.data != user.last_name:
+            user.last_name = form.last_name.data
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
@@ -133,6 +134,35 @@ def user_edit_settings_ctrl():
         flash(messages, 'error')
         return redirect(url_for('account.user_edit_settings_ctrl'))
 
+
+@account.route('/settings/change_password', methods=("GET", "POST"))
+@login_required
+def user_change_password_ctrl():
+
+    user = current_user
+    form = ChangePasswordForm()
+
+    if request.method == 'GET':
+        return render_template('account/change_password.html', form=form)
+
+    elif request.method == 'POST' and form.validate():
+
+        if not user.check_password(form.now_password.data):
+            flash(u'Current password is incorrect', 'error')
+            return redirect(url_for('account.user_change_password_ctrl'))
+        else:
+            user.update_password(form.new_password.data)
+
+        db.session.commit()
+        flash(u'Update user settings successfully', 'success')
+
+        return redirect(url_for('account.user_change_password_ctrl'))
+
+    else:
+        messages = catch_errors(form.errors)
+
+        flash(messages, 'error')
+        return redirect(url_for('account.user_change_password_ctrl'))
 
 @account.route('/ssh_config/list')
 @login_required
