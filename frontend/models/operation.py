@@ -24,6 +24,8 @@
 # SOFTWARE.
 
 
+import time
+
 from frontend.extensions.database import db
 
 
@@ -52,10 +54,10 @@ class OperationDb(db.Model):
     status = db.Column(db.Integer)
     result = db.Column(db.Text)
 
-    def __init__(self, author, datetime, operation_type, server_list, script_template, ext_variables, ssh_config, status, result):
+    def __init__(self, author, operation_type, server_list, script_template, ext_variables, ssh_config, status, result):
 
         self.author = author
-        self.datetime = datetime
+        self.datetime = time.strftime('%Y-%m-%d %H:%M')
         self.operation_type = operation_type
         self.server_list = server_list
         self.script_template = script_template

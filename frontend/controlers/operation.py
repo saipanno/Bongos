@@ -158,15 +158,13 @@ def create_ssh_detect_ctrl():
     elif form.validate_on_submit():
 
         author = current_user.id
-        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_ssh_detect_ctrl'))
 
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'],
-                                u'', u'', form.ssh_config.data.id, 0, u'')
+        operation = OperationDb(author, operation_type, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
@@ -207,14 +205,13 @@ def create_ping_detect_ctrl():
     elif form.validate_on_submit():
 
         author = current_user.id
-        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_ping_detect_ctrl'))
 
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'], u'', u'', 0, 0, u'')
+        operation = OperationDb(author, operation_type, fruit['servers'], u'', u'', 0, 0, u'')
         db.session.add(operation)
         db.session.commit()
 
@@ -250,7 +247,6 @@ def create_custom_execute_ctrl():
     elif form.validate_on_submit():
 
         author = current_user.id
-        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
@@ -263,7 +259,7 @@ def create_custom_execute_ctrl():
             return redirect(url_for('operation.create_custom_execute_ctrl'))
         ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data,
+        operation = OperationDb(author, operation_type, fruit['servers'], form.script_template.data,
                                 ext_variables, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
@@ -305,7 +301,6 @@ def create_fabfile_execute_ctrl():
     elif form.validate_on_submit():
 
         author = current_user.id
-        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
@@ -318,7 +313,7 @@ def create_fabfile_execute_ctrl():
             return redirect(url_for('operation.create_fabfile_execute_ctrl'))
         ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'], form.script_template.data.id,
+        operation = OperationDb(author, operation_type, fruit['servers'], form.script_template.data.id,
                                 ext_variables, form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
@@ -363,14 +358,13 @@ def create_power_control_ctrl():
     elif form.validate_on_submit():
 
         author = current_user.id
-        datetime = time.strftime('%Y-%m-%d %H:%M')
 
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
             return redirect(url_for('operation.create_power_control_ctrl'))
 
-        operation = OperationDb(author, datetime, operation_type, fruit['servers'],
+        operation = OperationDb(author, operation_type, fruit['servers'],
                                 form.script_template.data, u'', form.ipmi_config.data.id, 0, u'')
         db.session.add(operation)
         db.session.commit()
