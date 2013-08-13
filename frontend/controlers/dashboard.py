@@ -30,7 +30,6 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint,
 from flask.ext.login import login_required, current_user
 
 from frontend.extensions.database import db
-from frontend.extensions.libs import catch_errors
 
 from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, IpmiConfig, Permission, FabFile

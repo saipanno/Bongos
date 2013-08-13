@@ -38,7 +38,6 @@ from frontend.models.account import User, Group
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
-from frontend.extensions.libs import catch_errors
 
 
 account = Blueprint('account', __name__)

@@ -24,7 +24,6 @@
 # SOFTWARE.
 
 
-import time
 from sqlalchemy import exc, desc
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
@@ -38,8 +37,7 @@ from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
 from frontend.extensions.principal import UserAccessPermission
-from frontend.extensions.libs import catch_errors, format_address_list, format_ext_variables,\
-    get_obj_attributes, get_dict_items
+from frontend.extensions.libs import format_address_list, format_ext_variables, get_obj_attributes, get_dict_items
 
 from application import backend_runner
 from frontend.extensions.tasks import q
