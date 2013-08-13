@@ -57,10 +57,7 @@ def user_login_ctrl():
     form = UserLoginForm()
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
-    if request.method == 'GET':
-        return render_template('account/user_login.html', form=form)
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         user = User.query.filter(or_(User.email == form.key_name.data, User.username == form.key_name.data)).first()
 
@@ -85,10 +82,7 @@ def user_login_ctrl():
             return redirect(url_for('account.user_login_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.user_login_ctrl'))
+        return render_template('account/user_login.html', form=form)
 
 
 @account.route('/logout')
@@ -108,10 +102,7 @@ def user_edit_settings_ctrl():
     user = current_user
     form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
 
-    if request.method == 'GET':
-        return render_template('account/change_settings.html', form=form)
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
@@ -122,10 +113,7 @@ def user_edit_settings_ctrl():
         return redirect(url_for('account.user_edit_settings_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.user_edit_settings_ctrl'))
+        return render_template('account/change_settings.html', form=form)
 
 
 @account.route('/settings/change_password', methods=("GET", "POST"))
@@ -135,10 +123,7 @@ def user_change_password_ctrl():
     user = current_user
     form = ChangePasswordForm()
 
-    if request.method == 'GET':
-        return render_template('account/change_password.html', form=form)
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if not user.check_password(form.now_password.data):
             flash(u'Current password is incorrect', 'error')
@@ -152,10 +137,7 @@ def user_change_password_ctrl():
         return redirect(url_for('account.user_change_password_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.user_change_password_ctrl'))
+        return render_template('account/change_password.html', form=form)
 
 
 @account.route('/ssh_config/list')
