@@ -103,18 +103,6 @@ def format_ext_variables(ext_variables):
     return {'status': True, 'vars': address_vars_group}
 
 
-def catch_errors(errors):
-
-    messages = ''
-
-    if errors:
-        for (field, errors) in errors.items():
-            for error in errors:
-                messages = '%s,%s' % (messages, error)
-
-    return messages[1:] if messages else None
-
-
 class QuerySelectMultipleField(NativeQuerySelectMultipleField):
 
     def iter_choices(self):
