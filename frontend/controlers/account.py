@@ -157,6 +157,7 @@ def user_change_password_ctrl():
         flash(messages, 'error')
         return redirect(url_for('account.user_change_password_ctrl'))
 
+
 @account.route('/ssh_config/list')
 @login_required
 def list_ssh_config_ctrl():
@@ -189,17 +190,14 @@ def create_ssh_config_ctrl():
 
     form = SshConfigForm()
 
-    if request.method == 'GET':
-        return render_template('account/ssh_config.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
             groups.append(str(group.id))
         groups.sort()
 
-        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups), form.port.data,
+        ssh_config = SshConfig(form.name.data, form.desc.data, current_user.id, ','.join(groups), form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
         db.session.add(ssh_config)
         db.session.commit()
@@ -209,10 +207,7 @@ def create_ssh_config_ctrl():
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.create_ssh_config_ctrl'))
+        return render_template('account/ssh_config.html', form=form, type='create')
 
 
 @account.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -225,7 +220,7 @@ def edit_ssh_config_ctrl(config_id):
         flash(u'Do not have permission to edit this config', 'error')
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
-    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                          port=config.port, username=config.username, private_key=config.private_key)
 
     if request.method == 'GET':
@@ -360,7 +355,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
-                          groups=config.groups, interface=True if config.interface else False)
+                          groups=config.groups.split(','), interface=True if config.interface else False)
 
     if request.method == 'GET':
         return render_template('account/ipmi_config.html', form=form, type='edit')
@@ -515,7 +510,7 @@ def edit_fabfile_ctrl(fabfile_id):
         fabfile.script = f.read()
 
     form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
-                       groups=fabfile.groups, script=fabfile.script)
+                       groups=fabfile.groups.split(','), script=fabfile.script)
 
     if request.method == 'GET':
         return render_template('account/fabfile_manager.html', form=form, type='edit')

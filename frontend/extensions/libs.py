@@ -119,7 +119,7 @@ class QuerySelectMultipleField(NativeQuerySelectMultipleField):
 
     def iter_choices(self):
         for pk, obj in self._get_object_list():
-            yield (pk, self.get_label(obj), obj.id in [int(i) for i in self.data.split(',')])
+            yield (pk, self.get_label(obj), obj.id in [int(o) for o in self.data])
 
 
 class Unique(object):

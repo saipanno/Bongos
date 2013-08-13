@@ -124,8 +124,8 @@ def edit_user_ctrl(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
-    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name, groups=user.groups,
-                        status=True if user.status else False)
+    form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name,
+                        groups=user.groups.split(','), status=True if user.status else False)
 
     if request.method == 'POST' and form.validate():
 
@@ -261,7 +261,7 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
-    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                          port=config.port, username=config.username, private_key=config.private_key)
 
     if request.method == 'GET':
@@ -399,7 +399,7 @@ def edit_ipmi_config_ctrl(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
-    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
+    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                           username=config.username, interface=True if config.interface else False)
 
     if request.method == 'GET':
@@ -760,7 +760,7 @@ def edit_fabfile_ctrl(fabfile_id):
         fabfile.script = f.read()
 
     form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
-                       groups=fabfile.groups, script=fabfile.script)
+                       groups=fabfile.groups.split(','), script=fabfile.script)
 
     if request.method == 'GET':
         return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
@@ -893,7 +893,7 @@ def edit_server_ctrl(server_id):
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
-                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
+                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups.split(','))
 
     if request.method == 'GET':
 
