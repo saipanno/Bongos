@@ -44,12 +44,12 @@
         {% block sidebar %}
 
             <div class="col-lg-3">
-                <div class="list-group">
-                    <a class="list-group-item {% block active_account_settings %}{% endblock %}" href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-user"></i> Settings</a>
-                    <a class="list-group-item {% block active_account_fabfile %}{% endblock %}" href="{{ url_for("account.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a>
-                    <a class="list-group-item {% block active_account_ssh_config %}{% endblock %}" href="{{ url_for("account.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a>
-                    <a class="list-group-item {% block active_account_ipmi_config %}{% endblock %}" href="{{ url_for("account.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a>
-                </div>
+                <ul class="nav nav-tabs nav-tabs-google nav-stacked">
+                    <li class="{% block active_account_settings %}{% endblock %}"><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-user"></i> Settings</a></li>
+                    <li class="{% block active_account_fabfile %}{% endblock %}"><a href="{{ url_for("account.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a></li>
+                    <li class="{% block active_account_ssh_config %}{% endblock %}"><a href="{{ url_for("account.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
+                    <li class="{% block active_account_ipmi_config %}{% endblock %}"><a href="{{ url_for("account.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a></li>
+                </ul>
             </div>
 
         {% endblock %}
