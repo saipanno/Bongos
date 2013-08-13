@@ -45,10 +45,11 @@
 
             <div class="col-lg-3">
                 <ul class="nav nav-tabs nav-tabs-google nav-stacked">
-                    <li class="{% block active_account_settings %}{% endblock %}"><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-user"></i> Settings</a></li>
-                    <li class="{% block active_account_fabfile %}{% endblock %}"><a href="{{ url_for("account.list_fabfile_ctrl") }}"><i class="icon-code"></i> Fabfile</a></li>
-                    <li class="{% block active_account_ssh_config %}{% endblock %}"><a href="{{ url_for("account.list_ssh_config_ctrl") }}"><i class="icon-key"></i> Ssh Config</a></li>
-                    <li class="{% block active_account_ipmi_config %}{% endblock %}"><a href="{{ url_for("account.list_ipmi_config_ctrl") }}"><i class="icon-key"></i> IPMI Config</a></li>
+                    <li class="{% block active_account_change_settings %}{% endblock %}"><a href="{{ url_for("account.user_edit_settings_ctrl") }}">Account Settings</a></li>
+                    <li class="{% block active_account_change_password %}{% endblock %}"><a href="{{ url_for("account.user_change_password_ctrl") }}">Change Password</a></li>
+                    <li class="{% block active_account_fabfile %}{% endblock %}"><a href="{{ url_for("account.list_fabfile_ctrl") }}">Fabfile</a></li>
+                    <li class="{% block active_account_ssh_config %}{% endblock %}"><a href="{{ url_for("account.list_ssh_config_ctrl") }}">Ssh Config</a></li>
+                    <li class="{% block active_account_ipmi_config %}{% endblock %}"><a href="{{ url_for("account.list_ipmi_config_ctrl") }}">Ipmi Config</a></li>
                 </ul>
             </div>
 

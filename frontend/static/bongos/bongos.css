@@ -99,7 +99,10 @@
 }
 
 
-/* Overwrite nav-tabs-goole style when nav.stacked assign */
+/* Increase nav-tabs-google style with nav.stacked assign */
+.nav-tabs-google.nav-stacked {
+    padding-left: 10px;
+}
 .nav-tabs-google.nav-stacked > li {
   margin: 0 -1px 0 0;
 }
