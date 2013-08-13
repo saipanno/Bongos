@@ -119,9 +119,10 @@ class QuerySelectMultipleField(NativeQuerySelectMultipleField):
 
     def iter_choices(self):
         for pk, obj in self._get_object_list():
-            yield (pk, self.get_label(obj), obj.id in [int(o) for o in self.data])
+            yield (pk, self.get_label(obj), obj.id in [o.id for o in self.data])
 
 
+# WTForms Custom Validators
 class Unique(object):
     """ validator that checks field uniqueness """
     def __init__(self, model, attr, message=None):

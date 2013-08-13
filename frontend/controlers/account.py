@@ -223,10 +223,7 @@ def edit_ssh_config_ctrl(config_id):
     form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                          port=config.port, username=config.username, private_key=config.private_key)
 
-    if request.method == 'GET':
-        return render_template('account/ssh_config.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != config.name:
             config.name = form.name.data
@@ -261,10 +258,7 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.edit_ssh_config_ctrl', config_id=config_id))
+        return render_template('account/ssh_config.html', form=form, type='edit')
 
 
 @account.route('/ssh_config/<int:config_id>/delete')
@@ -318,10 +312,7 @@ def create_ipmi_config_ctrl():
 
     form = IpmiConfigForm()
 
-    if request.method == 'GET':
-        return render_template('account/ipmi_config.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -338,10 +329,7 @@ def create_ipmi_config_ctrl():
         return redirect(url_for('account.list_ipmi_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.create_ipmi_config_ctrl'))
+        return render_template('account/ipmi_config.html', form=form, type='create')
 
 
 @account.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -357,10 +345,7 @@ def edit_ipmi_config_ctrl(config_id):
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
                           groups=config.groups.split(','), interface=True if config.interface else False)
 
-    if request.method == 'GET':
-        return render_template('account/ipmi_config.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != config.name:
             config.name = form.name.data
@@ -392,10 +377,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('account.list_ipmi_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.edit_ipmi_config_ctrl', config_id=config_id))
+        return render_template('account/ipmi_config.html', form=form, type='edit')
 
 
 @account.route('/ipmi_config/<int:config_id>/delete')
@@ -467,10 +449,8 @@ def show_fabfile_ctrl(fabfile_id):
 def create_fabfile_ctrl():
 
     form = FabFileForm()
-    if request.method == 'GET':
-        return render_template('account/fabfile_manager.html', form=form, type='create')
 
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -489,10 +469,7 @@ def create_fabfile_ctrl():
         return redirect(url_for('account.list_fabfile_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.create_fabfile_ctrl'))
+        return render_template('account/fabfile_manager.html', form=form, type='create')
 
 
 @account.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
@@ -512,10 +489,7 @@ def edit_fabfile_ctrl(fabfile_id):
     form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
                        groups=fabfile.groups.split(','), script=fabfile.script)
 
-    if request.method == 'GET':
-        return render_template('account/fabfile_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                   encoding='utf-8') as f:
@@ -539,10 +513,7 @@ def edit_fabfile_ctrl(fabfile_id):
         return redirect(url_for('account.list_fabfile_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('account.create_fabfile_ctrl'))
+        return render_template('account/fabfile_manager.html', form=form, type='edit')
 
 
 @account.route('/fabfile/<int:fabfile_id>/delete')

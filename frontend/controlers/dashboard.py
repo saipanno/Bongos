@@ -224,10 +224,7 @@ def create_ssh_config_ctrl():
 
     form = SshConfigForm()
 
-    if request.method == 'GET':
-        return render_template('dashboard/ssh_config.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -244,10 +241,7 @@ def create_ssh_config_ctrl():
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_ssh_config_ctrl'))
+        return render_template('dashboard/ssh_config.html', form=form, type='create')
 
 
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -264,10 +258,7 @@ def edit_ssh_config_ctrl(config_id):
     form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                          port=config.port, username=config.username, private_key=config.private_key)
 
-    if request.method == 'GET':
-        return render_template('dashboard/ssh_config.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != config.name:
             config.name = form.name.data
@@ -302,10 +293,7 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_ssh_config_ctrl', config_id=config_id))
+        return render_template('dashboard/ssh_config.html', form=form, type='edit')
 
 
 @dashboard.route('/ssh_config/<int:config_id>/delete')
@@ -362,10 +350,7 @@ def create_ipmi_config_ctrl():
 
     form = IpmiConfigForm()
 
-    if request.method == 'GET':
-        return render_template('dashboard/ipmi_config.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -382,10 +367,7 @@ def create_ipmi_config_ctrl():
         return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_ipmi_config_ctrl'))
+        return render_template('dashboard/ipmi_config.html', form=form, type='create')
 
 
 @dashboard.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -402,10 +384,7 @@ def edit_ipmi_config_ctrl(config_id):
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
                           username=config.username, interface=True if config.interface else False)
 
-    if request.method == 'GET':
-        return render_template('dashboard/ipmi_config.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != config.name:
             config.name = form.name.data
@@ -437,10 +416,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_ipmi_config_ctrl', config_id=config_id))
+        return render_template('dashboard/ipmi_config.html', form=form, type='edit')
 
 
 @dashboard.route('/ipmi_config/<int:config_id>/delete')
@@ -500,11 +476,7 @@ def create_group_ctrl():
 
     form = GroupForm()
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/group_manager.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         group = Group(form.name.data, form.desc.data)
         db.session.add(group)
@@ -514,10 +486,7 @@ def create_group_ctrl():
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_group_ctrl'))
+        return render_template('dashboard/group_manager.html', form=form, type='create')
 
 
 @dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
@@ -533,11 +502,7 @@ def edit_group_ctrl(group_id):
 
     form = GroupForm(id=group.id, name=group.name, desc=group.desc)
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/group_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != group.name:
             group.name = form.name.data
@@ -551,10 +516,7 @@ def edit_group_ctrl(group_id):
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_group_ctrl', group_id=group_id))
+        return render_template('dashboard/group_manager.html', form=form, type='edit')
 
 
 @dashboard.route('/group/<int:group_id>/delete')
@@ -717,10 +679,7 @@ def create_fabfile_ctrl():
         return redirect(url_for('account.index_ctrl'))
 
     form = FabFileForm()
-    if request.method == 'GET':
-        return render_template('dashboard/fabfile_manager.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -739,10 +698,7 @@ def create_fabfile_ctrl():
         return redirect(url_for('dashboard.list_fabfile_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_fabfile_ctrl'))
+        return render_template('dashboard/fabfile_manager.html', form=form, type='create')
 
 
 @dashboard.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
@@ -762,10 +718,7 @@ def edit_fabfile_ctrl(fabfile_id):
     form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
                        groups=fabfile.groups.split(','), script=fabfile.script)
 
-    if request.method == 'GET':
-        return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                   encoding='utf-8') as f:
@@ -789,10 +742,7 @@ def edit_fabfile_ctrl(fabfile_id):
         return redirect(url_for('dashboard.list_fabfile_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_fabfile_ctrl'))
+        return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
 
 
 @dashboard.route('/fabfile/<int:fabfile_id>/delete')
@@ -850,11 +800,7 @@ def create_server_ctrl():
 
     form = ServerForm()
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/server_manager.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         groups = list()
         for group in form.groups.data:
@@ -872,10 +818,7 @@ def create_server_ctrl():
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_server_ctrl'))
+        return render_template('dashboard/server_manager.html', form=form, type='create')
 
 
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
@@ -895,11 +838,7 @@ def edit_server_ctrl(server_id):
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
                       disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups.split(','))
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/server_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.serial_number.data != server.serial_number:
             server.serial_number = form.serial_number.data
@@ -957,10 +896,7 @@ def edit_server_ctrl(server_id):
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_server_ctrl', server_id=server_id))
+        return render_template('dashboard/server_manager.html', form=form, type='edit')
 
 
 @dashboard.route('/group/<int:server_id>/delete')
@@ -1006,11 +942,7 @@ def create_idc_ctrl():
 
     form = IDCForm()
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/idc_manager.html', form=form, type='create')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         group = IDC(form.name.data, form.desc.data, form.operators.data, form.address.data)
         db.session.add(group)
@@ -1020,10 +952,7 @@ def create_idc_ctrl():
         return redirect(url_for('dashboard.list_idc_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.create_idc_ctrl'))
+        return render_template('dashboard/idc_manager.html', form=form, type='create')
 
 
 @dashboard.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
@@ -1039,11 +968,7 @@ def edit_idc_ctrl(idc_id):
 
     form = IDCForm(id=idc.id, name=idc.name, desc=idc.desc, operators=idc.operators, address=idc.address)
 
-    if request.method == 'GET':
-
-        return render_template('dashboard/idc_manager.html', form=form, type='edit')
-
-    elif request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():
 
         if form.name.data != idc.name:
             idc.name = form.name.data
@@ -1060,10 +985,7 @@ def edit_idc_ctrl(idc_id):
         return redirect(url_for('dashboard.list_idc_ctrl'))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('dashboard.edit_idc_ctrl', idc_id=idc_id))
+        return render_template('dashboard/idc_manager.html', form=form, type='edit')
 
 
 @dashboard.route('/group/<int:idc_id>/delete')

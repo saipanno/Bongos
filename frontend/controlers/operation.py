@@ -152,10 +152,7 @@ def create_ssh_detect_ctrl():
 
     form = CreateSshDetectForm()
 
-    if request.method == 'GET':
-        return render_template('operation/create_ssh_detecting.html', form=form, operation_type=operation_type)
-
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
         author = current_user.id
 
@@ -180,10 +177,7 @@ def create_ssh_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('operation.create_ssh_detect_ctrl'))
+        return render_template('operation/create_ssh_detecting.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/ping_detecting/create', methods=("GET", "POST"))
@@ -199,10 +193,7 @@ def create_ping_detect_ctrl():
 
     form = CreatePingDetectForm()
 
-    if request.method == 'GET':
-        return render_template('operation/create_ping_detecting.html', form=form, operation_type=operation_type)
-
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
         author = current_user.id
 
@@ -221,10 +212,7 @@ def create_ping_detect_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('operation.create_ping_detect_ctrl'))
+        return render_template('operation/create_ping_detecting.html', form=form, operation_type=operation_type)
 
 
 
@@ -241,10 +229,7 @@ def create_custom_execute_ctrl():
 
     form = CreateCustomExecuteForm()
 
-    if request.method == 'GET':
-        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
-
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
         author = current_user.id
 
@@ -276,10 +261,7 @@ def create_custom_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('operation.create_custom_execute_ctrl'))
+        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/fabfile_execute/create', methods=("GET", "POST"))
@@ -295,10 +277,7 @@ def create_fabfile_execute_ctrl():
 
     form = CreateFabfileExecuteForm()
 
-    if request.method == 'GET':
-        return render_template('operation/create_fabfile_execute.html', form=form, operation_type=operation_type)
-
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
         author = current_user.id
 
@@ -333,10 +312,7 @@ def create_fabfile_execute_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('operation.create_custom_execute_ctrl'))
+        return render_template('operation/create_fabfile_execute.html', form=form, operation_type=operation_type)
 
 
 @operation.route('/remote_control/create', methods=("GET", "POST"))
@@ -352,10 +328,7 @@ def create_power_control_ctrl():
 
     form = CreatePowerCtrlForm()
 
-    if request.method == 'GET':
-        return render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
-
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
 
         author = current_user.id
 
@@ -382,7 +355,4 @@ def create_power_control_ctrl():
         return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
 
     else:
-        messages = catch_errors(form.errors)
-
-        flash(messages, 'error')
-        return redirect(url_for('operation.create_power_control_ctrl'))
+        return render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
