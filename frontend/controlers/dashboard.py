@@ -71,13 +71,6 @@ def list_user_ctrl():
 
     users = User.query.all()
 
-    for user in users:
-        groups_name = ''
-        for group_id in user.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            groups_name = '%s, %s' % (groups_name, group.desc)
-        user.groups_name = groups_name[2:]
-
     return render_template('dashboard/user_manager.html', users=users, type='list')
 
 
@@ -94,13 +87,8 @@ def create_user_ctrl():
 
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
-        user = User(form.email.data, form.username.data, form.name.data,
-                    ','.join(groups), form.password.data, 1 if form.status.data else 0)
+        user = User(form.username.data, form.email.data, form.name.data, form.groups.data, form.password.data,
+                    1 if form.status.data else 0)
         db.session.add(user)
         db.session.commit()
 
@@ -124,7 +112,7 @@ def edit_user_ctrl(user_id):
     user = User.query.filter_by(id=user_id).first()
 
     form = EditUserForm(id=user.id, email=user.email, username=user.username, name=user.name,
-                        groups=user.groups.split(','), status=True if user.status else False)
+                        groups=user.groups, status=True if user.status else False)
 
     if request.method == 'POST' and form.validate():
 
@@ -134,14 +122,7 @@ def edit_user_ctrl(user_id):
         if len(form.password.data) > 0:
             user.update_password(form.password.data)
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        user_groups = ','.join(groups)
-
-        if user_groups != user.groups:
-            user.groups = user_groups
+        user.set_groups(form.groups.data)
 
         if user.status or form.status.data:
             user.status = 1 if form.status.data else 0
@@ -199,15 +180,6 @@ def list_ssh_config_ctrl():
         return redirect(url_for('account.index_ctrl'))
 
     ssh_configs = SshConfig.query.all()
-    for ssh_config in ssh_configs:
-        user = User.query.filter_by(id=ssh_config.author).first()
-        ssh_config.author_name = user.name
-
-        groups_name = ''
-        for group_id in ssh_config.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            groups_name = '%s, %s' % (groups_name, group.desc)
-        ssh_config.groups_name = groups_name[2:]
 
     return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
 
@@ -225,12 +197,7 @@ def create_ssh_config_ctrl():
 
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
-        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups), form.port.data,
+        ssh_config = SshConfig(form.username.data, form.desc.data, current_user.id, form.groups.data, form.port.data,
                                form.username.data, form.password.data, form.private_key.data)
         db.session.add(ssh_config)
         db.session.commit()
@@ -254,7 +221,7 @@ def edit_ssh_config_ctrl(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
-    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
+    form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
                          port=config.port, username=config.username, private_key=config.private_key)
 
     if request.method == 'POST' and form.validate():
@@ -265,14 +232,7 @@ def edit_ssh_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        config_groups = ','.join(groups)
-
-        if config_groups != config.groups:
-            config.groups = config_groups
+        config.set_groups(form.groups.data)
 
         if form.port.data != config.port:
             config.port = form.port.data
@@ -325,15 +285,6 @@ def list_ipmi_config_ctrl():
         return redirect(url_for('account.index_ctrl'))
 
     ipmi_configs = IpmiConfig.query.all()
-    for ipmi_config in ipmi_configs:
-        user = User.query.filter_by(id=ipmi_config.author).first()
-        ipmi_config.author_name = user.name
-
-        groups_name = ''
-        for group_id in ipmi_config.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            groups_name = '%s, %s' % (groups_name, group.desc)
-        ipmi_config.groups_name = groups_name[2:]
 
     return render_template('dashboard/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
 
@@ -351,12 +302,7 @@ def create_ipmi_config_ctrl():
 
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
-        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id, ','.join(groups),
+        ipmi_config = IpmiConfig(form.username.data, form.desc.data, current_user.id, form.groups.data,
                                  form.username.data, form.password.data, 1 if form.interface.data else 0)
         db.session.add(ipmi_config)
         db.session.commit()
@@ -380,7 +326,7 @@ def edit_ipmi_config_ctrl(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
-    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups.split(','),
+    form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
                           username=config.username, interface=True if config.interface else False)
 
     if request.method == 'POST' and form.validate():
@@ -391,14 +337,7 @@ def edit_ipmi_config_ctrl(config_id):
         if form.desc.data != config.desc:
             config.desc = form.desc.data
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        config_groups = ','.join(groups)
-
-        if config_groups != config.groups:
-            config.groups = config_groups
+        config.set_groups(form.groups.data)
 
         if form.username.data != config.username:
             config.username = form.username.data
@@ -447,19 +386,7 @@ def list_group_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    group_members = dict()
-    users = User.query.all()
     groups = Group.query.all()
-
-    for group in groups:
-        for user in users:
-            if unicode(group.id) in user.groups.split(','):
-                try:
-                    group_members[unicode(group.id)] = '%s, %s' % (group_members[unicode(group.id)], user.name)
-                except:
-                    group_members[unicode(group.id)] = user.name
-
-        group.members = group_members.get(unicode(group.id), u'')
 
     return render_template('dashboard/group_manager.html', groups=groups, type='list')
 
@@ -529,22 +456,23 @@ def delete_group_ctrl(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
+    # TODO:重新梳理数据清理工作
     # 清理用户的Group属性
-    users = User.query.all()
-    for user in users:
-        if unicode(group.id) in user.groups.split(','):
-            user_groups = user.groups.split(',')
-            user_groups.remove(unicode(group.id))
-            user_groups.sort()
-            user.groups = ','.join(user_groups)
+    #users = User.query.all()
+    #for user in users:
+    #    if unicode(group.id) in user.groups:
+    #        user_groups = user.groups
+    #        user_groups.remove(unicode(group.id))
+    #        user_groups.sort()
+    #        user.groups = ','.join(user_groups)
 
     # 清理权限的Group属性
-    permissions = Permission.query.all()
-    for permission in permissions:
-        permission_rules = permission.rules.split(',')
-        permission_rules.remove(unicode(group_id))
-        permission_rules.sort()
-        permission.rules = ','.join(permission_rules)
+    #permissions = Permission.query.all()
+    #for permission in permissions:
+    #    permission_rules = permission.rules.split(',')
+    #    permission_rules.remove(unicode(group_id))
+    #    permission_rules.sort()
+    #    permission.rules = ','.join(permission_rules)
 
     db.session.delete(group)
     db.session.commit()
@@ -562,33 +490,10 @@ def show_permission_ctrl():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    user_groups = dict()
-    group_permissions = dict()
-    permissions_handler = list()
-
     groups = Group.query.all()
-    for group in groups:
-        user_groups[unicode(group.id)] = group.desc
-
     permissions = Permission.query.all()
-    for permission in permissions:
 
-        permission_id = permission.id
-        permission_desc = permission.desc
-        permissions_handler.append(dict(id=permission_id, desc=permission_desc))
-
-        permission_rules = permission.rules.split(',')
-
-        for group_id in permission_rules:
-
-            try:
-                group_permissions[group_id][permission_id] = 1
-            except Exception:
-                group_permissions[group_id] = dict()
-                group_permissions[group_id][permission_id] = 1
-
-    return render_template('dashboard/acl_manager.html', permissions_handler=permissions_handler,
-                           user_groups=user_groups, group_permissions=group_permissions, type='show')
+    return render_template('dashboard/acl_manager.html', groups=groups, permissions=permissions, type='show')
 
 
 @dashboard.route('/permission/<group_id>/<handler_id>/status/<status>')
@@ -631,16 +536,6 @@ def list_fabfile_ctrl():
 
     fabfiles = FabFile.query.all()
 
-    for fabfile in fabfiles:
-        user = User.query.filter_by(id=int(fabfile.author)).first()
-        fabfile.author_name = user.name
-
-        groups_name = ''
-        for group_id in fabfile.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            groups_name = '%s, %s' % (groups_name, group.desc)
-        fabfile.groups_name = groups_name[2:]
-
     return render_template('dashboard/fabfile_manager.html', fabfiles=fabfiles, type='list')
 
 
@@ -680,16 +575,11 @@ def create_fabfile_ctrl():
     form = FabFileForm()
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                     encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
 
-        fabfile = FabFile(form.name.data, form.desc.data, current_user.id, ','.join(groups))
+        fabfile = FabFile(form.name.data, form.desc.data, current_user.id, form.groups.data)
         db.session.add(fabfile)
         db.session.commit()
 
@@ -715,7 +605,7 @@ def edit_fabfile_ctrl(fabfile_id):
         fabfile.script = f.read()
 
     form = FabFileForm(id=fabfile.id, name=fabfile.name, desc=fabfile.desc,
-                       groups=fabfile.groups.split(','), script=fabfile.script)
+                       groups=fabfile.groups, script=fabfile.script)
 
     if request.method == 'POST' and form.validate():
 
@@ -726,14 +616,7 @@ def edit_fabfile_ctrl(fabfile_id):
         if form.desc.data != fabfile.desc:
             fabfile.desc = form.desc.data
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        config_groups = ','.join(groups)
-
-        if config_groups != fabfile.groups:
-            fabfile.groups = config_groups
+        fabfile.set_groups(form.groups.data)
 
         db.session.commit()
 
@@ -776,13 +659,8 @@ def list_server_ctrl():
     servers = Server.query.all()
 
     for server in servers:
-        group_name = ''
-        for group_id in server.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            group_name = '%s, %s' % (group_name, group.desc)
-        server.group_name = group_name[2:]
 
-        idc = IDC.query.filter_by(id=server.id).first()
+        idc = IDC.query.get(server.id)
         server.idc_name = idc.name
 
     return render_template('dashboard/server_manager.html', servers=servers, type='list')
@@ -801,15 +679,10 @@ def create_server_ctrl():
 
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
-        server = Server(form.serial_number.data, form.assets_number.data, groups,
-                        form.desc.data, form.ext_address.data, form.int_address.data, form.ipmi_address.data,
-                        form.other_address.data, form.idc.data.id, form.rack.data, form.manufacturer.data,
-                        form.model.data, form.cpu_info.data, form.disk_info.data, form.memory_info.data)
+        server = Server(form.serial_number.data, form.assets_number.data, form.groups.data, form.desc.data,
+                        form.ext_address.data, form.int_address.data, form.ipmi_address.data, form.other_address.data,
+                        form.idc.data.id, form.rack.data, form.manufacturer.data, form.model.data, form.cpu_info.data,
+                        form.disk_info.data, form.memory_info.data)
         db.session.add(server)
         db.session.commit()
 
@@ -835,7 +708,7 @@ def edit_server_ctrl(server_id):
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
-                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups.split(','))
+                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
 
     if request.method == 'POST' and form.validate():
 
@@ -845,13 +718,7 @@ def edit_server_ctrl(server_id):
         if form.assets_number.data != server.dashboard_number:
             server.dashboard_number = form.assets_number.data
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        server_groups = ','.join(groups)
-        if server_groups != server.groups:
-            server.groups = server_groups
+        server.set_groups(form.groups.data)
 
         if form.desc.data != server.desc:
             server.desc = form.desc.data

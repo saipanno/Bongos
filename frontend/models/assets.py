@@ -24,17 +24,25 @@
 # SOFTWARE.
 
 
+from frontend.models.account import Group
+
 from frontend.extensions.database import db
+
+
+ServerGroup = db.Table('rs_server_group',
+                       db.Column('server_id', db.Integer, db.ForeignKey('servers.id', ondelete='CASCADE')),
+                       db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE')))
 
 
 class Server(db.Model):
 
-    __tablename__ = 'server_lists'
+    __tablename__ = 'servers'
 
     id = db.Column(db.Integer, primary_key=True)
     serial_number = db.Column(db.String(50))
     assets_number = db.Column(db.String(50))
-    groups = db.Column(db.String(50))
+    groups = db.relationship('Group', secondary=ServerGroup, backref=db.backref('servers', lazy='dynamic'),
+                             passive_deletes=True)
     desc = db.Column(db.Text)
     ext_address = db.Column(db.String(250), unique=True)
     int_address = db.Column(db.String(250), unique=True)
@@ -52,7 +60,7 @@ class Server(db.Model):
                  idc, rack, manufacturer, model, cpu_info, disk_info, memory_info):
         self.serial_number = serial_number
         self.assets_number = assets_number
-        self.group = group
+        self.set_groups(group)
         self.desc = desc
         self.ext_address = ext_address
         self.int_address = int_address
@@ -66,10 +74,29 @@ class Server(db.Model):
         self.disk_info = disk_info
         self.memory_info = memory_info
 
+    def set_groups(self, groups):
+        for group in self.groups:
+            self.groups.remove(group)
+        if groups:
+            for group in groups:
+                self.append_group(group)
+
+    def append_group(self, group):
+        if group and isinstance(group, Group):
+            # reload tag by id to void error that <object xxx is already attached in session>
+            renew_group = Group.query.get(group.id)
+            self.groups.append(renew_group)
+
+    def delete_group(self, group):
+        if group and isinstance(group, Group):
+            # reload tag by id to void error that <object xxx is already attached in session>
+            renew_group = Group.query.get(group.id)
+            self.groups.remove(renew_group)
+
 
 class IDC(db.Model):
 
-    __tablename__ = 'idc_lists'
+    __tablename__ = 'datacenters'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)

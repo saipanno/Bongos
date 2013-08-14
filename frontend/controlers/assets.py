@@ -51,13 +51,9 @@ def list_server_ctrl():
     servers = Server.query.all()
 
     for server in servers:
-        group_name = ''
-        for group_id in server.groups.split(','):
-            group = Group.query.filter_by(id=int(group_id)).first()
-            group_name = '%s, %s' % (group_name, group.desc)
-        server.group_name = group_name[2:]
+        server.groups_name = [group.desc for group in server.groups]
 
-        idc = IDC.query.filter_by(id=server.id).first()
+        idc = IDC.query.get(server.id)
         server.idc_name = idc.name
 
     return render_template('assets/server.html', servers=servers, type='list')
@@ -78,7 +74,7 @@ def edit_server_ctrl(server_id):
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
                       ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
-                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups.split(','))
+                      disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
 
     if request.method == 'POST' and form.validate():
 
@@ -88,13 +84,7 @@ def edit_server_ctrl(server_id):
         if form.assets_number.data != server.assets_number:
             server.assets_number = form.assets_number.data
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-        server_groups = ','.join(groups)
-        if server_groups != server.groups:
-            server.groups = server_groups
+        server.set_groups(form.groups.data)
 
         if form.desc.data != server.desc:
             server.desc = form.desc.data

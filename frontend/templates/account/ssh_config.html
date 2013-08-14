@@ -32,15 +32,19 @@
                 <tbody>
                 {% for ssh_config in ssh_configs %}
                     <tr>
-                        {% if ssh_config.author == current_user.id %}
+                        {% if ssh_config.author_id == current_user.id %}
                             <td><a href="{{ url_for('account.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
                         {% else %}
                             <td>{{ ssh_config.id }}</td>
                         {% endif %}
                         <td>{{ ssh_config.name }}</td>
                         <td>{{ ssh_config.desc }}</td>
-                        <td>{{ ssh_config.author_name }}</td>
-                        <td>{{ ssh_config.groups_name }}</td>
+                        <td>{{ ssh_config.author.name }}</td>
+                        <td>
+                            {% for group in ssh_config.groups %}
+                                <span class="label label-success">{{ group.desc }}</span>
+                            {% endfor %}
+                        </td>
                         <td>{{ ssh_config.port }}</td>
                         <td>{{ ssh_config.username }}</td>
                         <td>{{ ssh_config.password }}</td>

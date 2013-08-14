@@ -28,7 +28,7 @@ from functools import partial
 from flask.ext.principal import Need, Permission
 
 
-PermissionNeed = partial(Need, 'functions')
+PermissionNeed = partial(Need, 'handler')
 
 
 class UserAccessPermission(Permission):

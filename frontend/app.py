@@ -75,13 +75,13 @@ def configure_extensions(app):
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
 
-        permissions = Permission.query.all()
-        for permission in permissions:
+        for permission in Permission.query.all():
 
-            if hasattr(current_user, 'groups'):
-                for group_id in current_user.groups.split(','):
-                    if group_id in permission.rules.split(','):
-                        identity.provides.add(PermissionNeed(permission.function))
+            for group in permission.groups:
+                if hasattr(current_user, 'groups') and group in current_user.groups:
+                    identity.provides.add(PermissionNeed(permission.handler))
+
+        print identity.provides
 
 
 def configure_blueprints(app):

@@ -29,32 +29,60 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from frontend.extensions.database import db
 
 
+UserGroup = db.Table('rs_user_group',
+                     db.Column('user_id', db.Integer, db.ForeignKey('users.id', ondelete='CASCADE')),
+                     db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE')))
+
+
 class User(db.Model):
 
-    __tablename__ = 'user_lists'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50), unique=True)
-    groups = db.Column(db.String(50))
-    passwd_hash = db.Column(db.String(50))
+    groups = db.relationship('Group', secondary=UserGroup, backref=db.backref('users', lazy='dynamic'),
+                             passive_deletes=True)
+    password = db.Column(db.String(50))
     status = db.Column(db.Integer)
+    fabfiles = db.relationship('FabFile', backref='author', lazy='dynamic',
+                               cascade='all,delete-orphan', passive_deletes=True)
+    ssh_configs = db.relationship('SshConfig', backref='author', lazy='dynamic',
+                                  cascade='all,delete-orphan', passive_deletes=True)
+    ipmi_configs = db.relationship('IpmiConfig', backref='author', lazy='dynamic',
+                                   cascade='all,delete-orphan', passive_deletes=True)
 
-    def __init__(self, email, username, name, groups, password, status):
+    def __init__(self, username, email, name, groups, password, status):
 
-        self.email = email
         self.username = username
+        self.email = email
         self.name = name
-        self.groups = groups
-        self.passwd_hash = generate_password_hash(password, salt_length=8)
+        self.set_groups(groups)
+        self.password = generate_password_hash(password, salt_length=8)
         self.status = status
 
+    def __repr__(self):
+        return '<User %s>' % self.name
+
     def check_password(self, password):
-        return check_password_hash(self.passwd_hash, password)
+        return check_password_hash(self.password, password)
 
     def update_password(self, new_password):
-        self.passwd_hash = generate_password_hash(new_password, salt_length=8)
+        self.password = generate_password_hash(new_password, salt_length=8)
+
+    def set_groups(self, groups):
+        for group in self.groups:
+            self.groups.remove(group)
+        if groups:
+            for group in groups:
+                self.append_group(group)
+
+    def append_group(self, group):
+        if group and isinstance(group, Group):
+            # reload tag by id to void error that <object xxx is already attached in session>
+            renew_group = Group.query.get(group.id)
+            self.groups.append(renew_group)
 
     def is_authenticated(self):
         return True
@@ -71,7 +99,7 @@ class User(db.Model):
 
 class Group(db.Model):
 
-    __tablename__ = 'user_group_lists'
+    __tablename__ = 'groups'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
@@ -81,3 +109,6 @@ class Group(db.Model):
 
         self.name = name
         self.desc = desc
+
+    def __repr__(self):
+        return '<Group %s, %s, %s>' % (self.id, self.name, self.desc)

@@ -30,7 +30,11 @@
                             <td><a href="{{ url_for('dashboard.edit_group_ctrl', group_id=group.id) }}" title="Edit Group">{{ group.id }}</a></td>
                             <td>{{ group.name }}</td>
                             <td>{{ group.desc }}</td>
-                            <td>{{ group.members }}</td>
+                            <td>
+                                {% for user in group.users %}
+                                    <span class="label label-success">{{ user.name }}</span>
+                                {% endfor %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -34,7 +34,11 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
-                            <td>{{ user.groups_name }}</td>
+                            <td>
+                                {% for group in user.groups %}
+                                    <span class="label label-success">{{ group.desc }}</span>
+                                {% endfor %}
+                            </td>
                             <td>{{ ext.get_status(user.status) }}</td>
                             <td><a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
                         </tr>

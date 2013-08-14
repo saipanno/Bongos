@@ -60,15 +60,17 @@ def init_ugp():
     from frontend.models.dashboard import Permission
     from frontend.extensions.database import db
 
-    user = User(email='admin@bongos', username='admin', name='Administrator', groups='1', password='admin', status=1)
-    group = Group(name='Administrator', desc='Super Administrator Group')
-    db.session.add(user)
+    group = Group('Administrator', 'Super Administrator Group')
     db.session.add(group)
+    db.session.commit()
+
+    user = User('admin', 'admin@bongos', 'Administrator', [group], 'admin', 1)
+    db.session.add(user)
+    db.session.commit()
 
     with io.open(current_app.config.get('BASIC_PERMISSION_LIST'), 'rt') as f:
         for oneline in f.readlines():
-            function, desc = oneline.split(',')
-            permission = Permission(desc=desc, function=function, rules=u'1')
+            permission = Permission(oneline.replace('\n', ''), [group])
             db.session.add(permission)
 
     db.session.commit()

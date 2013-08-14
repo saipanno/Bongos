@@ -52,7 +52,7 @@ if __name__ == '__main__':
                     'SETTINGS_SQLALCHEMY_POOL_TIMEOUT': None, 'SETTINGS_SQLALCHEMY_POOL_RECYCLE': None,
                     'SETTINGS_SESSION_COOKIE_DOMAIN': None, 'SETTINGS_API_ACCESS_CLIENTS': ['127.0.0.1'],
                     'SETTINGS_IPMI_USER': 'root', 'SETTINGS_TRAP_HTTP_EXCEPTIONS': False, 'SETTINGS_HOST': '0.0.0.0',
-                    'SETTINGS_BASIC_PERMISSION_LIST': '/Users/saipanno/Projects/Bongos/data/access_control_lists.txt',
+                    'SETTINGS_BASIC_PERMISSION_LIST': '/Users/saipanno/Projects/Bongos/data/ACL.txt',
                     'SETTINGS_PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SETTINGS_DEBUG': True,
                     'SETTINGS_IPMI_NETWORK': '192.168', 'SETTINGS_LOGGER_NAME': 'frontend.app',
                     'SETTINGS_FABRIC_FILE_PATH': '/Users/saipanno/Projects/Bongos/backend/fabfiles',

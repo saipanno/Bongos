@@ -50,7 +50,7 @@ FABRIC_FILE_PATH = os.path.join(_basedir, 'backend/fabfiles')
 
 # database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'sqlite.db')
-BASIC_PERMISSION_LIST = os.path.join(_basedir, 'data/access_control_lists.txt')
+BASIC_PERMISSION_LIST = os.path.join(_basedir, 'data/ACL.txt')
 
 # logging config
 LOGGING_LEVEL = 'WARNING'

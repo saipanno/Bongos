@@ -36,7 +36,11 @@
                             <td>{{ server.assets_number }}</td>
                             <td>{{ server.ext_address }}</td>
                             <td>{{ server.int_address }}</td>
-                            <td>{{ server.group_name }}</td>
+                            <td>
+                                {% for group in server.groups %}
+                                    <span class="label label-success">{{ group.desc }}</span>
+                                {% endfor %}
+                            </td>
                             <td>{{ server.idc_name }}</td>
                             <td>{{ server.rack }}</td>
                             <td>{{ server.manufacturer }}</td>

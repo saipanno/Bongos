@@ -3,7 +3,6 @@
 
 from fabric.api import task, run
 
-
 @task
 def get_remote_kernel(**kwargs):
     output = run('uname -r')
