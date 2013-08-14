@@ -32,11 +32,11 @@ from frontend.models.assets import Server, IDC
 from frontend.forms.assets import ServerForm
 
 from frontend.extensions.database import db
-from frontend.extensions.principal import PermissionRequired
+from frontend.extensions.principal import AuthorizeRequired
 
 
 assets = Blueprint('assets', __name__, url_prefix='/assets')
-authorize_required = PermissionRequired('assets')
+authorize_required = AuthorizeRequired('assets')
 
 
 @assets.route('/server/list')

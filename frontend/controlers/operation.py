@@ -36,7 +36,7 @@ from frontend.models.operation import OperationDb
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
-from frontend.extensions.principal import PermissionRequired
+from frontend.extensions.principal import AuthorizeRequired
 from frontend.extensions.libs import format_address_list, format_ext_variables, get_obj_attributes, get_dict_items
 
 from application import backend_runner
@@ -44,7 +44,7 @@ from frontend.extensions.tasks import q
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
-authorize_required = PermissionRequired('operation')
+authorize_required = AuthorizeRequired('operation')
 
 
 @operation.route('/overview')

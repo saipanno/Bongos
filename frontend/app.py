@@ -33,7 +33,7 @@ from frontend.models.dashboard import Permission
 
 from frontend.extensions.database import db
 from frontend.extensions.login_manager import login
-from frontend.extensions.principal import PermissionNeed
+from frontend.extensions.principal import AuthorizeNeed
 
 
 def create_app(config=None):
@@ -79,7 +79,7 @@ def configure_extensions(app):
 
             for group in permission.groups:
                 if hasattr(current_user, 'groups') and group in current_user.groups:
-                    identity.provides.add(PermissionNeed(permission.handler))
+                    identity.provides.add(AuthorizeNeed(permission.handler))
 
 
 def configure_blueprints(app):

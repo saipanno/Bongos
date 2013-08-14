@@ -39,11 +39,11 @@ from frontend.forms.assets import ServerForm, IDCForm
 from frontend.forms.account import GroupForm
 from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, CreateUserForm, EditUserForm, FabFileForm
 
-from frontend.extensions.principal import PermissionRequired
+from frontend.extensions.principal import AuthorizeRequired
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
-authorize_required = PermissionRequired('dashboard')
+authorize_required = AuthorizeRequired('dashboard')
 
 
 @dashboard.route('/logging')

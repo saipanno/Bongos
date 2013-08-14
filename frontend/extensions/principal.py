@@ -25,22 +25,22 @@
 
 
 import functools
-from flask import abort
+from flask import flash, url_for, redirect
 
 from flask.ext.principal import Need, Permission
 
 
-PermissionNeed = functools.partial(Need, 'handler')
+AuthorizeNeed = functools.partial(Need, 'handler')
 
 
-class UserAccessPermission(Permission):
+class AuthorizePermission(Permission):
 
     def __init__(self, name):
-        need = PermissionNeed(name)
-        super(UserAccessPermission, self).__init__(need)
+        need = AuthorizeNeed(name)
+        super(AuthorizePermission, self).__init__(need)
 
 
-class PermissionRequired(object):
+class AuthorizeRequired(object):
     bp = ''
 
     def __init__(self, bp=None):
@@ -50,9 +50,10 @@ class PermissionRequired(object):
         @functools.wraps(f)
         def wrapper(*args, **kwargs):
 
-            access = UserAccessPermission('%s.%s' % (self.bp, f.__name__))
+            access = AuthorizePermission('%s.%s' % (self.bp, f.__name__))
             if not access.can():
-                abort(404)
+                flash(u'Don\'t have permission to access this link', 'error')
+                return redirect(url_for('account.index_ctrl'))
 
             return f(*args, **kwargs)
 

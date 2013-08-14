@@ -180,8 +180,8 @@ def edit_ssh_config_ctrl(config_id):
     config = SshConfig.query.filter_by(id=config_id).first()
 
     if config.author_id != current_user.id:
-        flash(u'Do not have permission to edit this config', 'error')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        flash(u'Don\'t have permission to access this link', 'error')
+        return redirect(url_for('account.index_ctrl'))
 
     form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
                          port=config.port, username=config.username, private_key=config.private_key)
@@ -273,8 +273,8 @@ def edit_ipmi_config_ctrl(config_id):
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
     if config.author_id != current_user.id:
-        flash(u'Do not have permission to edit this config', 'error')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        flash(u'Don\'t have permission to access this link', 'error')
+        return redirect(url_for('account.index_ctrl'))
 
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
                           groups=config.groups, interface=True if config.interface else False)
@@ -389,8 +389,8 @@ def edit_fabfile_ctrl(fabfile_id):
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
     if fabfile.author_id != current_user.id:
-        flash(u'Do not have permission to edit this fabfile', 'error')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        flash(u'Don\'t have permission to access this link', 'error')
+        return redirect(url_for('account.index_ctrl'))
 
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
                  encoding='utf-8') as f:
