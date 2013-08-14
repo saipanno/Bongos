@@ -15,32 +15,32 @@
 
         <div class="accordion" id="accordion2">
 
-            {% for group_id in user_groups %}
+            {% for group in groups %}
             <div class="accordion-group">
                 <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ group_id }}">
-                        Group: {{ user_groups.get(group_id, 'UnKnown Group Name') }}
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ group.id }}">
+                        Group: {{ group.name }}
                     </a>
                 </div>
 
-                <div id="{{ group_id }}" class="accordion-body collapse">
+                <div id="{{ group.id }}" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <table class="table table-striped table-condensed datatable">
                             <thead>
                             <tr>
-                                <th>ACL Desc</th>
-                                <th>Status</th>
+                                <th>acl description</th>
+                                <th>status</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for permission_handler in permissions_handler %}
-                                {% set status = group_permissions.get(group_id, dict()).get(permission_handler.get('id', dict()), 0) %}
+                            {% for permission in permissions %}
+                                {% set status = 1 if group in permission.groups else 0 %}
                                 <tr>
-                                    <td>{{ permission_handler.desc }}</td>
+                                    <td>{{ permission.handler }}</td>
                                     <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group_id, handler_id=permission_handler.get('id', 0), status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
+                                        <a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group.id, permission_id=permission.id, status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

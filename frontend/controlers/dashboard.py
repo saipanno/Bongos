@@ -496,29 +496,26 @@ def show_permission_ctrl():
     return render_template('dashboard/acl_manager.html', groups=groups, permissions=permissions, action='show')
 
 
-@dashboard.route('/permission/<group_id>/<handler_id>/status/<status>')
+@dashboard.route('/permission/<group_id>/<permission_id>/status/<status>')
 @login_required
-def update_permission_ctrl(group_id, handler_id, status):
+def update_permission_ctrl(group_id, permission_id, status):
 
     access = UserAccessPermission('dashboard.update_permission_ctrl')
     if not access.can():
         flash(u'Don\'t have permission to this page', 'warning')
         return redirect(url_for('account.index_ctrl'))
 
-    permission = Permission.query.filter_by(id=handler_id).first()
-
-    permission_rules = permission.rules.split(',')
+    group = Group.query.get(group_id)
+    permission = Permission.query.get(permission_id)
 
     if status == 'disable':
-        permission_rules.remove(unicode(group_id))
+        permission.remove_group(group)
     elif status == 'enable':
-        permission_rules.append(unicode(group_id))
+        permission.append_group(group)
     else:
         flash(u'Error permission status', 'error')
         return redirect(url_for('dashboard.show_permission_ctrl'))
 
-    permission_rules.sort()
-    permission.rules = ','.join(permission_rules)
     db.session.commit()
 
     flash(u'Update permission successfully', 'success')

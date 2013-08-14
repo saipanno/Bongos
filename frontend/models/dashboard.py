@@ -120,42 +120,6 @@ class IpmiConfig(db.Model):
             self.groups.append(renew_group)
 
 
-PermissionGroup = db.Table('rs_permission_group',
-                           db.Column('permission_id', db.Integer, db.ForeignKey('permissions.id', ondelete='CASCADE')),
-                           db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE')))
-
-
-class Permission(db.Model):
-
-    __tablename__ = 'permissions'
-
-    id = db.Column(db.Integer, primary_key=True)
-    handler = db.Column(db.String(250), unique=True)
-    groups = db.relationship('Group', secondary=PermissionGroup, backref=db.backref('permissions', lazy='dynamic'),
-                             passive_deletes=True)
-
-    def __init__(self, handler, groups):
-
-        self.handler = handler
-        self.set_groups(groups)
-
-    def __repr__(self):
-        return '<Permission %s>' % self.name
-
-    def set_groups(self, groups):
-        for group in self.groups:
-            self.groups.remove(group)
-        if groups:
-            for group in groups:
-                self.append_group(group)
-
-    def append_group(self, group):
-        if group and isinstance(group, Group):
-            # reload tag by id to void error that <object xxx is already attached in session>
-            renew_group = Group.query.get(group.id)
-            self.groups.append(renew_group)
-
-
 FabFileGroup = db.Table('rs_fabfile_group',
                         db.Column('fabfile_id', db.Integer, db.ForeignKey('fabfiles.id', ondelete='CASCADE')),
                         db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE')))
@@ -194,3 +158,45 @@ class FabFile(db.Model):
             # reload tag by id to void error that <object xxx is already attached in session>
             renew_group = Group.query.get(group.id)
             self.groups.append(renew_group)
+
+
+PermissionGroup = db.Table('rs_permission_group',
+                           db.Column('permission_id', db.Integer, db.ForeignKey('permissions.id', ondelete='CASCADE')),
+                           db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE')))
+
+
+class Permission(db.Model):
+
+    __tablename__ = 'permissions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    handler = db.Column(db.String(250), unique=True)
+    groups = db.relationship('Group', secondary=PermissionGroup, backref=db.backref('permissions', lazy='dynamic'),
+                             passive_deletes=True)
+
+    def __init__(self, handler, groups):
+
+        self.handler = handler
+        self.set_groups(groups)
+
+    def __repr__(self):
+        return '<Permission %s>' % self.name
+
+    def set_groups(self, groups):
+        for group in self.groups:
+            self.groups.remove(group)
+        if groups:
+            for group in groups:
+                self.append_group(group)
+
+    def append_group(self, group):
+        if group and isinstance(group, Group):
+            # reload tag by id to void error that <object xxx is already attached in session>
+            renew_group = Group.query.get(group.id)
+            self.groups.append(renew_group)
+
+    def remove_group(self, group):
+        if group and isinstance(group, Group):
+            # reload tag by id to void error that <object xxx is already attached in session>
+            renew_group = Group.query.get(group.id)
+            self.groups.remove(renew_group)
