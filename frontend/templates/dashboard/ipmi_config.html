@@ -31,7 +31,7 @@
                 <tbody>
                 {% for ipmi_config in ipmi_configs %}
                     <tr>
-                        <td><a href="{{ url_for('dashboard.edit_ipmi_config_ctrl', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
+                        <td><a href="{{ url_for('dashboard.edit_ipmi_config_handler', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
                         <td>{{ ipmi_config.name }}</td>
                         <td>{{ ipmi_config.desc }}</td>
                         <td>{{ ipmi_config.author.name }}</td>
@@ -147,7 +147,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ipmi_config_ctrl', config_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ipmi_config_handler', config_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

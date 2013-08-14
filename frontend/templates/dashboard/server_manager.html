@@ -32,7 +32,7 @@
                 <tbody>
                     {% for server in servers %}
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_server_ctrl', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
+                            <td><a href="{{ url_for('dashboard.edit_server_handler', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
                             <td>{{ server.assets_number }}</td>
                             <td>{{ server.ext_address }}</td>
                             <td>{{ server.int_address }}</td>
@@ -160,7 +160,7 @@
                                         <span class="label label-info">{{ form.assets_number.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_server_ctrl', server_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_server_handler', server_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

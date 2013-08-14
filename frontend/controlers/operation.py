@@ -47,17 +47,9 @@ operation = Blueprint('operation', __name__, url_prefix='/operation')
 authorize_required = AuthorizeRequired('operation')
 
 
-@operation.route('/overview')
-@login_required
-@authorize_required
-def overview_operation_ctrl():
-
-    return render_template('operation/overview.html')
-
-
 @operation.route('/list')
 @login_required
-def list_operation_ctrl():
+def list_operation_handler():
 
     executes = OperationDb.query.order_by(desc(OperationDb.id)).all()
 
@@ -71,9 +63,9 @@ def list_operation_ctrl():
 @operation.route('/<int:operation_id>/show')
 @login_required
 @authorize_required
-def show_operation_ctrl(operation_id):
+def show_operation_handler(operation_id):
 
-    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_handler'))
 
     try:
         execute = OperationDb.query.filter_by(id=operation_id).first()
@@ -97,14 +89,14 @@ def show_operation_ctrl(operation_id):
 @operation.route('/<int:operation_id>/export.csv')
 @login_required
 @authorize_required
-def export_operation_results_ctrl(operation_id):
+def export_operation_handler(operation_id):
 
     try:
         execute = OperationDb.query.filter_by(id=operation_id).first()
 
     except exc.SQLAlchemyError:
         flash(u'Internal database error', 'error')
-        return redirect(url_for('operation.list_operation_ctrl'))
+        return redirect(url_for('operation.list_operation_handler'))
 
     try:
         fruits = json.loads(execute.result)
@@ -125,7 +117,7 @@ def export_operation_results_ctrl(operation_id):
 @operation.route('/ssh_status/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_ssh_detect_ctrl():
+def create_ssh_status_detecting_handler():
 
     operation_type = u'ssh_status_detecting'
 
@@ -138,7 +130,7 @@ def create_ssh_detect_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_ssh_detect_ctrl'))
+            return redirect(url_for('operation.create_ssh_status_detecting_handler'))
 
         operation = OperationDb(author, operation_type, fruit['servers'], u'', u'', form.ssh_config.data.id, 0, u'')
         db.session.add(operation)
@@ -153,16 +145,16 @@ def create_ssh_detect_ctrl():
         q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+        return redirect(url_for('operation.list_operation_handler'))
 
     else:
-        return render_template('operation/create_ssh_detecting.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_ssh_detecting.html', form=form)
 
 
 @operation.route('/ping_detecting/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_ping_detect_ctrl():
+def create_ping_connectivity_detecting_handler():
 
     operation_type = u'ping_connectivity_detecting'
 
@@ -175,7 +167,7 @@ def create_ping_detect_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_ping_detect_ctrl'))
+            return redirect(url_for('operation.create_ping_connectivity_detecting_handler'))
 
         operation = OperationDb(author, operation_type, fruit['servers'], u'', u'', 0, 0, u'')
         db.session.add(operation)
@@ -184,17 +176,17 @@ def create_ping_detect_ctrl():
         q.enqueue(backend_runner, get_obj_attributes(operation, 'OPT'), get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+        return redirect(url_for('operation.list_operation_handler'))
 
     else:
-        return render_template('operation/create_ping_detecting.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_ping_detecting.html', form=form)
 
 
 
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_custom_execute_ctrl():
+def create_custom_execute_handler():
 
     operation_type = u'custom_script_execute'
 
@@ -207,12 +199,12 @@ def create_custom_execute_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_handler'))
 
         ext_variables_dict = format_ext_variables(form.ext_variables.data)
         if ext_variables_dict['status'] is not True:
             flash(ext_variables_dict['desc'], 'error')
-            return redirect(url_for('operation.create_custom_execute_ctrl'))
+            return redirect(url_for('operation.create_custom_execute_handler'))
         ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, operation_type, fruit['servers'], form.script_template.data,
@@ -229,16 +221,16 @@ def create_custom_execute_ctrl():
         q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+        return redirect(url_for('operation.list_operation_handler'))
 
     else:
-        return render_template('operation/create_custom_execute.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_custom_execute.html', form=form)
 
 
 @operation.route('/fabfile_execute/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_fabfile_execute_ctrl():
+def create_fabfile_execute_handler():
 
     operation_type = u'fabfile_execute'
 
@@ -251,12 +243,12 @@ def create_fabfile_execute_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_fabfile_execute_ctrl'))
+            return redirect(url_for('operation.create_fabfile_execute_handler'))
 
         ext_variables_dict = format_ext_variables(form.ext_variables.data)
         if ext_variables_dict['status'] is not True:
             flash(ext_variables_dict['desc'], 'error')
-            return redirect(url_for('operation.create_fabfile_execute_ctrl'))
+            return redirect(url_for('operation.create_fabfile_execute_handler'))
         ext_variables = json.dumps(ext_variables_dict['vars'], ensure_ascii=False)
 
         operation = OperationDb(author, operation_type, fruit['servers'], form.script_template.data.id,
@@ -276,16 +268,16 @@ def create_fabfile_execute_ctrl():
         q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+        return redirect(url_for('operation.list_operation_handler'))
 
     else:
-        return render_template('operation/create_fabfile_execute.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_fabfile_execute.html', form=form)
 
 
 @operation.route('/remote_control/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_power_control_ctrl():
+def create_remote_control_handler():
 
     operation_type = u'remote_control'
 
@@ -298,7 +290,7 @@ def create_power_control_ctrl():
         fruit = format_address_list(form.server_list.data)
         if fruit['status'] is not True:
             flash(fruit['desc'], 'error')
-            return redirect(url_for('operation.create_power_control_ctrl'))
+            return redirect(url_for('operation.create_remote_control_handler'))
 
         operation = OperationDb(author, operation_type, fruit['servers'],
                                 form.script_template.data, u'', form.ipmi_config.data.id, 0, u'')
@@ -315,7 +307,7 @@ def create_power_control_ctrl():
         q.enqueue(backend_runner, operations, get_dict_items(current_app.config, 'SETTINGS'))
 
         flash(u'Creating operation successfully', 'success')
-        return redirect(url_for('operation.list_operation_ctrl', operation_type=operation_type))
+        return redirect(url_for('operation.list_operation_handler'))
 
     else:
-        return render_template('operation/create_power_control.html', form=form, operation_type=operation_type)
+        return render_template('operation/create_power_control.html', form=form)

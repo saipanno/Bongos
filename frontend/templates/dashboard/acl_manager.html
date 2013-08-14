@@ -40,7 +40,7 @@
                                     <td>{{ permission.handler }}</td>
                                     <td>{{ ext.get_status(status) }}</td>
                                     <td>
-                                        <a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_permission_ctrl', group_id=group.id, permission_id=permission.id, status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
+                                        <a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_permission_handler', group_id=group.id, permission_id=permission.id, status='disable' if status else 'enable') }}">{{ ext.get_adverse_desc(status) }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

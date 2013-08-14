@@ -46,7 +46,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="navbar-brand" href="{{ url_for('account.index_ctrl') }}"><i class="icon-home"></i> Bongos Project</a>
+                <a class="navbar-brand" href="{{ url_for('account.index_handler') }}"><i class="icon-home"></i> Bongos Project</a>
 
                 <div class="nav-collapse collapse bs-navbar-collapse">
 
@@ -55,14 +55,14 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" >Assets <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Node</li>
-                                <li><a href="{{ url_for('assets.list_server_ctrl') }}">Server</a></li>
+                                <li><a href="{{ url_for('assets.list_server_handler') }}">Server</a></li>
                                 <li><a href="#">Network Equipment</a></li>
                                 <li class="dropdown-header">DataCenter</li>
                                 <li><a href="#">Rack</a></li>
                             </ul>
                         </li>
-                        <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.overview_operation_ctrl') }}">Operation</a></li>
-                        <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_ctrl") }}">Dashboard</a></li>
+                        <li class="{% block active_operation %}{% endblock %}"><a href="{{ url_for('operation.list_operation_handler') }}">Operation</a></li>
+                        <li class="{% block active_dashboard %}{% endblock %}"><a href="{{ url_for("dashboard.list_user_handler") }}">Dashboard</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav pull-right">
@@ -70,10 +70,10 @@
                         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome,</b> {{ current_user.name }}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header"></li>
-                                <li><a href="{{ url_for("account.user_edit_settings_ctrl") }}"><i class="icon-cogs"></i> Manage Profile</a></li>
+                                <li><a href="{{ url_for("account.edit_settings_handler") }}"><i class="icon-cogs"></i> Manage Profile</a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ url_for("account.user_logout_ctrl") }}">Log out</a></li>
+                        <li><a href="{{ url_for("account.logout_handler") }}">Log out</a></li>
                     </ul>
 
                 </div>

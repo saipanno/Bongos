@@ -53,7 +53,7 @@ class AuthorizeRequired(object):
             access = AuthorizePermission('%s.%s' % (self.bp, f.__name__))
             if not access.can():
                 flash(u'Don\'t have permission to access this link', 'error')
-                return redirect(url_for('account.index_ctrl'))
+                return redirect(url_for('account.index_handler'))
 
             return f(*args, **kwargs)
 

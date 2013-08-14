@@ -33,7 +33,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 
 
 @api.route('/operation', methods=["PUT"])
-def update_operation_status():
+def update_operation_status_handler():
 
     if request.method == 'PUT':
 

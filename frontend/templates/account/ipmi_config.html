@@ -32,7 +32,7 @@
                 {% for ipmi_config in ipmi_configs %}
                     <tr>
                         {% if ipmi_config.author_id == current_user.id %}
-                            <td><a href="{{ url_for('account.edit_ipmi_config_ctrl', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
+                            <td><a href="{{ url_for('account.edit_ipmi_config_handler', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
                         {% else %}
                             <td>{{ ipmi_config.id }}</td>
                         {% endif %}
@@ -151,7 +151,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('account.delete_ipmi_config_ctrl', config_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('account.delete_ipmi_config_handler', config_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

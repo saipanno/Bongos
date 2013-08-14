@@ -42,7 +42,7 @@ authorize_required = AuthorizeRequired('assets')
 @assets.route('/server/list')
 @login_required
 @authorize_required
-def list_server_ctrl():
+def list_server_handler():
 
     servers = Server.query.all()
 
@@ -52,7 +52,7 @@ def list_server_ctrl():
 @assets.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_server_ctrl(server_id):
+def edit_server_handler(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -111,7 +111,7 @@ def edit_server_ctrl(server_id):
         db.session.commit()
 
         flash(u'Edit server successfully', 'success')
-        return redirect(url_for('assets.list_server_ctrl'))
+        return redirect(url_for('assets.list_server_handler'))
 
     else:
         return render_template('assets/server.html', form=form, action='edit')
@@ -120,7 +120,7 @@ def edit_server_ctrl(server_id):
 @assets.route('/idc/list')
 @login_required
 @authorize_required
-def list_idc_ctrl():
+def list_idc_handler():
 
     idcs = IDC.query.all()
 

@@ -30,7 +30,7 @@
                     {% for fabfile in fabfiles %}
                         <tr>
                             {% if fabfile.author_id == current_user.id %}
-                                <td><a href="{{ url_for('account.edit_fabfile_ctrl', fabfile_id=fabfile.id) }}" title="Edit Fabfile">{{ fabfile.id }}</a></td>
+                                <td><a href="{{ url_for('account.edit_fabfile_handler', fabfile_id=fabfile.id) }}" title="Edit Fabfile">{{ fabfile.id }}</a></td>
                             {% else %}
                                 <td>{{ fabfile.id }}</td>
                             {% endif %}
@@ -42,7 +42,7 @@
                                     <span class="label label-success">{{ group.desc }}</span>
                                 {% endfor %}
                             </td>
-                            <td><a class="btn btn-mini btn-default" href="{{ url_for('account.show_fabfile_ctrl', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                            <td><a class="btn btn-mini btn-default" href="{{ url_for('account.show_fabfile_handler', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -151,7 +151,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('account.delete_fabfile_ctrl', fabfile_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('account.delete_fabfile_handler', fabfile_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

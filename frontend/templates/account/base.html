@@ -18,9 +18,9 @@
                             <button type="button" class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> Create Resource <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                 <li class="dropdown-header">Permission</li>
-                                <li><a tabindex="-1" href="{{ url_for('account.create_fabfile_ctrl') }}"><i class="icon-user"></i> Fabfile</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('account.create_ssh_config_ctrl') }}"><i class="icon-key"></i> Ssh Config</a></li>
-                                <li><a tabindex="-1" href="{{ url_for('account.create_ipmi_config_ctrl') }}"><i class="icon-key"></i> Ipmi Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_fabfile_handler') }}"><i class="icon-user"></i> Fabfile</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_ssh_config_handler') }}"><i class="icon-key"></i> Ssh Config</a></li>
+                                <li><a tabindex="-1" href="{{ url_for('account.create_ipmi_config_handler') }}"><i class="icon-key"></i> Ipmi Config</a></li>
                             </ul>
                         </div>
                     </div>
@@ -45,11 +45,11 @@
 
             <div class="col-lg-3">
                 <ul class="nav nav-tabs nav-tabs-google nav-stacked">
-                    <li class="{% block active_account_change_settings %}{% endblock %}"><a href="{{ url_for("account.user_edit_settings_ctrl") }}">Account Settings</a></li>
-                    <li class="{% block active_account_change_password %}{% endblock %}"><a href="{{ url_for("account.user_change_password_ctrl") }}">Change Password</a></li>
-                    <li class="{% block active_account_fabfile %}{% endblock %}"><a href="{{ url_for("account.list_fabfile_ctrl") }}">Fabfile</a></li>
-                    <li class="{% block active_account_ssh_config %}{% endblock %}"><a href="{{ url_for("account.list_ssh_config_ctrl") }}">Ssh Config</a></li>
-                    <li class="{% block active_account_ipmi_config %}{% endblock %}"><a href="{{ url_for("account.list_ipmi_config_ctrl") }}">Ipmi Config</a></li>
+                    <li class="{% block active_account_edit_settings %}{% endblock %}"><a href="{{ url_for("account.edit_settings_handler") }}">Account Settings</a></li>
+                    <li class="{% block active_account_edit_password %}{% endblock %}"><a href="{{ url_for("account.edit_password_handler") }}">Change Password</a></li>
+                    <li class="{% block active_account_fabfile %}{% endblock %}"><a href="{{ url_for("account.list_fabfile_handler") }}">Fabfile</a></li>
+                    <li class="{% block active_account_ssh_config %}{% endblock %}"><a href="{{ url_for("account.list_ssh_config_handler") }}">Ssh Config</a></li>
+                    <li class="{% block active_account_ipmi_config %}{% endblock %}"><a href="{{ url_for("account.list_ipmi_config_handler") }}">Ipmi Config</a></li>
                 </ul>
             </div>
 

@@ -49,7 +49,7 @@ authorize_required = AuthorizeRequired('dashboard')
 @dashboard.route('/logging')
 @login_required
 @authorize_required
-def show_logging_ctrl():
+def show_logging_handler():
 
     MAX_LEN = -20
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
@@ -60,7 +60,7 @@ def show_logging_ctrl():
 @dashboard.route('/user/list')
 @login_required
 @authorize_required
-def list_user_ctrl():
+def list_user_handler():
 
     users = User.query.all()
 
@@ -70,7 +70,7 @@ def list_user_ctrl():
 @dashboard.route('/user/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_user_ctrl():
+def create_user_handler():
 
     form = CreateUserForm()
 
@@ -83,7 +83,7 @@ def create_user_ctrl():
 
         flash(u'Creating user successfully', 'success')
 
-        return redirect(url_for('dashboard.list_user_ctrl'))
+        return redirect(url_for('dashboard.list_user_handler'))
 
     else:
         return render_template('dashboard/user_manager.html', form=form, action='create')
@@ -92,7 +92,7 @@ def create_user_ctrl():
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_user_ctrl(user_id):
+def edit_user_handler(user_id):
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -115,7 +115,7 @@ def edit_user_ctrl(user_id):
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
-        return redirect(url_for('dashboard.list_user_ctrl'))
+        return redirect(url_for('dashboard.list_user_handler'))
 
     else:
         return render_template('dashboard/user_manager.html', form=form, action='edit')
@@ -124,7 +124,7 @@ def edit_user_ctrl(user_id):
 @dashboard.route('/user/<int:user_id>/status/<status>')
 @login_required
 @authorize_required
-def update_user_status_ctrl(user_id, status):
+def update_user_status_handler(user_id, status):
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -148,13 +148,13 @@ def update_user_status_ctrl(user_id, status):
     else:
         flash(u'Incorrect user status format', 'error')
 
-    return redirect(url_for('dashboard.list_user_ctrl'))
+    return redirect(url_for('dashboard.list_user_handler'))
 
 
 @dashboard.route('/ssh_config/list')
 @login_required
 @authorize_required
-def list_ssh_config_ctrl():
+def list_ssh_config_handler():
 
     ssh_configs = SshConfig.query.all()
 
@@ -164,7 +164,7 @@ def list_ssh_config_ctrl():
 @dashboard.route('/ssh_config/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_ssh_config_ctrl():
+def create_ssh_config_handler():
 
     form = SshConfigForm()
 
@@ -177,7 +177,7 @@ def create_ssh_config_ctrl():
 
         flash(u'Creating ssh configuration successfully', 'success')
 
-        return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+        return redirect(url_for('dashboard.list_ssh_config_handler'))
 
     else:
         return render_template('dashboard/ssh_config.html', form=form, action='create')
@@ -186,7 +186,7 @@ def create_ssh_config_ctrl():
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_ssh_config_ctrl(config_id):
+def edit_ssh_config_handler(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -218,7 +218,7 @@ def edit_ssh_config_ctrl(config_id):
         db.session.commit()
 
         flash(u'Edit ssh configuration successfully', 'success')
-        return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+        return redirect(url_for('dashboard.list_ssh_config_handler'))
 
     else:
         return render_template('dashboard/ssh_config.html', form=form, action='edit')
@@ -227,7 +227,7 @@ def edit_ssh_config_ctrl(config_id):
 @dashboard.route('/ssh_config/<int:config_id>/delete')
 @login_required
 @authorize_required
-def delete_ssh_config_ctrl(config_id):
+def delete_ssh_config_handler(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -237,13 +237,13 @@ def delete_ssh_config_ctrl(config_id):
     db.session.commit()
 
     flash(u'Delete ssh configuration successfully', 'success')
-    return redirect(url_for('dashboard.list_ssh_config_ctrl'))
+    return redirect(url_for('dashboard.list_ssh_config_handler'))
 
 
 @dashboard.route('/ipmi_config/list')
 @login_required
 @authorize_required
-def list_ipmi_config_ctrl():
+def list_ipmi_config_handler():
 
     ipmi_configs = IpmiConfig.query.all()
 
@@ -253,7 +253,7 @@ def list_ipmi_config_ctrl():
 @dashboard.route('/ipmi_config/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_ipmi_config_ctrl():
+def create_ipmi_config_handler():
 
     form = IpmiConfigForm()
 
@@ -266,7 +266,7 @@ def create_ipmi_config_ctrl():
 
         flash(u'Creating IPMI configuration successfully', 'success')
 
-        return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+        return redirect(url_for('dashboard.list_ipmi_config_handler'))
 
     else:
         return render_template('dashboard/ipmi_config.html', form=form, action='create')
@@ -275,7 +275,7 @@ def create_ipmi_config_ctrl():
 @dashboard.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_ipmi_config_ctrl(config_id):
+def edit_ipmi_config_handler(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
@@ -304,7 +304,7 @@ def edit_ipmi_config_ctrl(config_id):
         db.session.commit()
 
         flash(u'Edit IPMI configuration successfully', 'success')
-        return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+        return redirect(url_for('dashboard.list_ipmi_config_handler'))
 
     else:
         return render_template('dashboard/ipmi_config.html', form=form, action='edit')
@@ -313,7 +313,7 @@ def edit_ipmi_config_ctrl(config_id):
 @dashboard.route('/ipmi_config/<int:config_id>/delete')
 @login_required
 @authorize_required
-def delete_ipmi_config_ctrl(config_id):
+def delete_ipmi_config_handler(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
@@ -323,13 +323,13 @@ def delete_ipmi_config_ctrl(config_id):
     db.session.commit()
 
     flash(u'Delete IPMI configuration successfully', 'success')
-    return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
+    return redirect(url_for('dashboard.list_ipmi_config_handler'))
 
 
 @dashboard.route('/group/list')
 @login_required
 @authorize_required
-def list_group_ctrl():
+def list_group_handler():
 
     groups = Group.query.all()
 
@@ -339,7 +339,7 @@ def list_group_ctrl():
 @dashboard.route('/group/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_group_ctrl():
+def create_group_handler():
 
     form = GroupForm()
 
@@ -350,7 +350,7 @@ def create_group_ctrl():
         db.session.commit()
 
         flash(u'Create group successfully', 'success')
-        return redirect(url_for('dashboard.list_group_ctrl'))
+        return redirect(url_for('dashboard.list_group_handler'))
 
     else:
         return render_template('dashboard/group_manager.html', form=form, action='create')
@@ -359,7 +359,7 @@ def create_group_ctrl():
 @dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_group_ctrl(group_id):
+def edit_group_handler(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
@@ -376,7 +376,7 @@ def edit_group_ctrl(group_id):
         db.session.commit()
 
         flash(u'Edit group successfully', 'success')
-        return redirect(url_for('dashboard.list_group_ctrl'))
+        return redirect(url_for('dashboard.list_group_handler'))
 
     else:
         return render_template('dashboard/group_manager.html', form=form, action='edit')
@@ -385,7 +385,7 @@ def edit_group_ctrl(group_id):
 @dashboard.route('/group/<int:group_id>/delete')
 @login_required
 @authorize_required
-def delete_group_ctrl(group_id):
+def delete_group_handler(group_id):
 
     group = Group.query.filter_by(id=group_id).first()
 
@@ -395,13 +395,13 @@ def delete_group_ctrl(group_id):
     db.session.commit()
 
     flash(u'Edit group successfully', 'success')
-    return redirect(url_for('dashboard.list_group_ctrl'))
+    return redirect(url_for('dashboard.list_group_handler'))
 
 
 @dashboard.route('/permission/show')
 @login_required
 @authorize_required
-def show_permission_ctrl():
+def show_permission_handler():
 
     groups = Group.query.all()
     permissions = Permission.query.all()
@@ -412,7 +412,7 @@ def show_permission_ctrl():
 @dashboard.route('/permission/<group_id>/<permission_id>/status/<status>')
 @login_required
 @authorize_required
-def update_permission_ctrl(group_id, permission_id, status):
+def update_permission_handler(group_id, permission_id, status):
 
     group = Group.query.get(group_id)
     permission = Permission.query.get(permission_id)
@@ -423,18 +423,18 @@ def update_permission_ctrl(group_id, permission_id, status):
         permission.append_group(group)
     else:
         flash(u'Error permission status', 'error')
-        return redirect(url_for('dashboard.show_permission_ctrl'))
+        return redirect(url_for('dashboard.show_permission_handler'))
 
     db.session.commit()
 
     flash(u'Update permission successfully', 'success')
-    return redirect(url_for('dashboard.show_permission_ctrl'))
+    return redirect(url_for('dashboard.show_permission_handler'))
 
 
 @dashboard.route('/fabfile/list')
 @login_required
 @authorize_required
-def list_fabfile_ctrl():
+def list_fabfile_handler():
 
     fabfiles = FabFile.query.all()
 
@@ -444,9 +444,9 @@ def list_fabfile_ctrl():
 @dashboard.route('/fabfile/<int:fabfile_id>/show')
 @login_required
 @authorize_required
-def show_fabfile_ctrl(fabfile_id):
+def show_fabfile_handler(fabfile_id):
 
-    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_handler'))
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
@@ -464,7 +464,7 @@ def show_fabfile_ctrl(fabfile_id):
 @dashboard.route('/fabfile/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_fabfile_ctrl():
+def create_fabfile_handler():
 
     form = FabFileForm()
     if request.method == 'POST' and form.validate():
@@ -478,7 +478,7 @@ def create_fabfile_ctrl():
         db.session.commit()
 
         flash(u'Create fabfile successfully', 'success')
-        return redirect(url_for('dashboard.list_fabfile_ctrl'))
+        return redirect(url_for('dashboard.list_fabfile_handler'))
 
     else:
         return render_template('dashboard/fabfile_manager.html', form=form, action='create')
@@ -487,7 +487,7 @@ def create_fabfile_ctrl():
 @dashboard.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_fabfile_ctrl(fabfile_id):
+def edit_fabfile_handler(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
@@ -511,7 +511,7 @@ def edit_fabfile_ctrl(fabfile_id):
         db.session.commit()
 
         flash(u'Edit fabfile successfully', 'success')
-        return redirect(url_for('dashboard.list_fabfile_ctrl'))
+        return redirect(url_for('dashboard.list_fabfile_handler'))
 
     else:
         return render_template('dashboard/fabfile_manager.html', form=form, action='edit')
@@ -520,7 +520,7 @@ def edit_fabfile_ctrl(fabfile_id):
 @dashboard.route('/fabfile/<int:fabfile_id>/delete')
 @login_required
 @authorize_required
-def delete_fabfile_ctrl(fabfile_id):
+def delete_fabfile_handler(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
@@ -530,13 +530,13 @@ def delete_fabfile_ctrl(fabfile_id):
     db.session.commit()
 
     flash(u'Edit idc successfully', 'success')
-    return redirect(url_for('dashboard.list_fabfile_ctrl'))
+    return redirect(url_for('dashboard.list_fabfile_handler'))
 
 
 @dashboard.route('/server/list')
 @login_required
 @authorize_required
-def list_server_ctrl():
+def list_server_handler():
 
     servers = Server.query.all()
 
@@ -551,7 +551,7 @@ def list_server_ctrl():
 @dashboard.route('/server/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_server_ctrl():
+def create_server_handler():
 
     form = ServerForm()
 
@@ -565,7 +565,7 @@ def create_server_ctrl():
         db.session.commit()
 
         flash(u'Create server successfully', 'success')
-        return redirect(url_for('dashboard.list_server_ctrl'))
+        return redirect(url_for('dashboard.list_server_handler'))
 
     else:
         return render_template('dashboard/server_manager.html', form=form, action='create')
@@ -574,7 +574,7 @@ def create_server_ctrl():
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_server_ctrl(server_id):
+def edit_server_handler(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -633,7 +633,7 @@ def edit_server_ctrl(server_id):
         db.session.commit()
 
         flash(u'Edit server successfully', 'success')
-        return redirect(url_for('dashboard.list_server_ctrl'))
+        return redirect(url_for('dashboard.list_server_handler'))
 
     else:
         return render_template('dashboard/server_manager.html', form=form, action='edit')
@@ -642,7 +642,7 @@ def edit_server_ctrl(server_id):
 @dashboard.route('/group/<int:server_id>/delete')
 @login_required
 @authorize_required
-def delete_server_ctrl(server_id):
+def delete_server_handler(server_id):
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -650,13 +650,13 @@ def delete_server_ctrl(server_id):
     db.session.commit()
 
     flash(u'Edit server successfully', 'success')
-    return redirect(url_for('dashboard.list_server_ctrl'))
+    return redirect(url_for('dashboard.list_server_handler'))
 
 
 @dashboard.route('/idc/list')
 @login_required
 @authorize_required
-def list_idc_ctrl():
+def list_idc_handler():
 
     idcs = IDC.query.all()
 
@@ -666,7 +666,7 @@ def list_idc_ctrl():
 @dashboard.route('/idc/create', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def create_idc_ctrl():
+def create_idc_handler():
 
     form = IDCForm()
 
@@ -677,7 +677,7 @@ def create_idc_ctrl():
         db.session.commit()
 
         flash(u'Create IDC successfully', 'success')
-        return redirect(url_for('dashboard.list_idc_ctrl'))
+        return redirect(url_for('dashboard.list_idc_handler'))
 
     else:
         return render_template('dashboard/idc_manager.html', form=form, action='create')
@@ -686,7 +686,7 @@ def create_idc_ctrl():
 @dashboard.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
 @login_required
 @authorize_required
-def edit_idc_ctrl(idc_id):
+def edit_idc_handler(idc_id):
 
     idc = IDC.query.filter_by(id=idc_id).first()
 
@@ -706,7 +706,7 @@ def edit_idc_ctrl(idc_id):
         db.session.commit()
 
         flash(u'Edit IDC successfully', 'success')
-        return redirect(url_for('dashboard.list_idc_ctrl'))
+        return redirect(url_for('dashboard.list_idc_handler'))
 
     else:
         return render_template('dashboard/idc_manager.html', form=form, action='edit')
@@ -715,7 +715,7 @@ def edit_idc_ctrl(idc_id):
 @dashboard.route('/group/<int:idc_id>/delete')
 @login_required
 @authorize_required
-def delete_idc_ctrl(idc_id):
+def delete_idc_handler(idc_id):
 
     idc = IDC.query.filter_by(id=idc_id).first()
 
@@ -723,4 +723,4 @@ def delete_idc_ctrl(idc_id):
     db.session.commit()
 
     flash(u'Edit idc successfully', 'success')
-    return redirect(url_for('dashboard.list_idc_ctrl'))
+    return redirect(url_for('dashboard.list_idc_handler'))

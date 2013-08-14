@@ -45,16 +45,16 @@ account = Blueprint('account', __name__)
 
 @account.route('/')
 @login_required
-def index_ctrl():
+def index_handler():
 
-    return redirect(url_for('operation.list_operation_ctrl', operation_type='ping_connectivity_detecting'))
+    return redirect(url_for('operation.list_operation_handler'))
 
 
 @account.route('/login', methods=['GET', 'POST'])
-def user_login_ctrl():
+def login_handler():
 
     form = UserLoginForm()
-    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_handler'))
 
     if request.method == 'POST' and form.validate():
 
@@ -62,11 +62,11 @@ def user_login_ctrl():
 
         if user is None:
             flash(u'User does not exist', 'error')
-            return redirect(url_for('account.user_login_ctrl'))
+            return redirect(url_for('account.login_handler'))
 
         elif not user.is_active():
             flash(u'User has been disabled', 'error')
-            return redirect(url_for('account.user_login_ctrl'))
+            return redirect(url_for('account.login_handler'))
 
         elif user.check_password(form.password.data):
 
@@ -78,25 +78,25 @@ def user_login_ctrl():
 
         else:
             flash(u'Current password is incorrect', 'error')
-            return redirect(url_for('account.user_login_ctrl'))
+            return redirect(url_for('account.login_handler'))
 
     else:
         return render_template('account/user_login.html', form=form)
 
 
 @account.route('/logout')
-def user_logout_ctrl():
+def logout_handler():
 
     logout_user()
 
     identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
 
-    return redirect(url_for('account.index_ctrl'))
+    return redirect(url_for('account.index_handler'))
 
 
 @account.route('/settings/profile', methods=("GET", "POST"))
 @login_required
-def user_edit_settings_ctrl():
+def edit_settings_handler():
 
     user = current_user
     form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
@@ -109,15 +109,15 @@ def user_edit_settings_ctrl():
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
-        return redirect(url_for('account.user_edit_settings_ctrl'))
+        return redirect(url_for('account.edit_settings_handler'))
 
     else:
-        return render_template('account/change_settings.html', form=form)
+        return render_template('account/edit_settings.html', form=form)
 
 
 @account.route('/settings/change_password', methods=("GET", "POST"))
 @login_required
-def user_change_password_ctrl():
+def edit_password_handler():
 
     user = current_user
     form = ChangePasswordForm()
@@ -126,22 +126,22 @@ def user_change_password_ctrl():
 
         if not user.check_password(form.now_password.data):
             flash(u'Current password is incorrect', 'error')
-            return redirect(url_for('account.user_change_password_ctrl'))
+            return redirect(url_for('account.edit_password_handler'))
         else:
             user.update_password(form.new_password.data)
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
 
-        return redirect(url_for('account.user_change_password_ctrl'))
+        return redirect(url_for('account.edit_password_handler'))
 
     else:
-        return render_template('account/change_password.html', form=form)
+        return render_template('account/edit_password.html', form=form)
 
 
 @account.route('/ssh_config/list')
 @login_required
-def list_ssh_config_ctrl():
+def list_ssh_config_handler():
 
     ssh_configs = list()
     for group in current_user.groups:
@@ -154,7 +154,7 @@ def list_ssh_config_ctrl():
 
 @account.route('/ssh_config/create', methods=("GET", "POST"))
 @login_required
-def create_ssh_config_ctrl():
+def create_ssh_config_handler():
 
     form = SshConfigForm()
 
@@ -167,7 +167,7 @@ def create_ssh_config_ctrl():
 
         flash(u'Creating ssh configuration successfully', 'success')
 
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        return redirect(url_for('account.list_ssh_config_handler'))
 
     else:
         return render_template('account/ssh_config.html', form=form, action='create')
@@ -175,13 +175,13 @@ def create_ssh_config_ctrl():
 
 @account.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
-def edit_ssh_config_ctrl(config_id):
+def edit_ssh_config_handler(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
     if config.author_id != current_user.id:
         flash(u'Don\'t have permission to access this link', 'error')
-        return redirect(url_for('account.index_ctrl'))
+        return redirect(url_for('account.index_handler'))
 
     form = SshConfigForm(id=config.id, name=config.name, desc=config.desc, groups=config.groups,
                          port=config.port, username=config.username, private_key=config.private_key)
@@ -211,7 +211,7 @@ def edit_ssh_config_ctrl(config_id):
         db.session.commit()
 
         flash(u'Edit ssh configuration successfully', 'success')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        return redirect(url_for('account.list_ssh_config_handler'))
 
     else:
         return render_template('account/ssh_config.html', form=form, action='edit')
@@ -219,13 +219,13 @@ def edit_ssh_config_ctrl(config_id):
 
 @account.route('/ssh_config/<int:config_id>/delete')
 @login_required
-def delete_ssh_config_ctrl(config_id):
+def delete_ssh_config_handler(config_id):
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
     if config.author != current_user.id:
         flash(u'Do not have permission to delete this config', 'error')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        return redirect(url_for('account.list_ssh_config_handler'))
 
     # TODO:增加清理数据库环境操作
 
@@ -233,12 +233,12 @@ def delete_ssh_config_ctrl(config_id):
     db.session.commit()
 
     flash(u'Delete ssh configuration successfully', 'success')
-    return redirect(url_for('account.list_ssh_config_ctrl'))
+    return redirect(url_for('account.list_ssh_config_handler'))
 
 
 @account.route('/ipmi_config/list')
 @login_required
-def list_ipmi_config_ctrl():
+def list_ipmi_config_handler():
 
     ipmi_configs = current_user.ipmi_configs
 
@@ -247,7 +247,7 @@ def list_ipmi_config_ctrl():
 
 @account.route('/ipmi_config/create', methods=("GET", "POST"))
 @login_required
-def create_ipmi_config_ctrl():
+def create_ipmi_config_handler():
 
     form = IpmiConfigForm()
 
@@ -260,7 +260,7 @@ def create_ipmi_config_ctrl():
 
         flash(u'Creating IPMI configuration successfully', 'success')
 
-        return redirect(url_for('account.list_ipmi_config_ctrl'))
+        return redirect(url_for('account.list_ipmi_config_handler'))
 
     else:
         return render_template('account/ipmi_config.html', form=form, action='create')
@@ -268,13 +268,13 @@ def create_ipmi_config_ctrl():
 
 @account.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
-def edit_ipmi_config_ctrl(config_id):
+def edit_ipmi_config_handler(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
     if config.author_id != current_user.id:
         flash(u'Don\'t have permission to access this link', 'error')
-        return redirect(url_for('account.index_ctrl'))
+        return redirect(url_for('account.index_handler'))
 
     form = IpmiConfigForm(id=config.id, name=config.name, desc=config.desc, username=config.username,
                           groups=config.groups, interface=True if config.interface else False)
@@ -301,7 +301,7 @@ def edit_ipmi_config_ctrl(config_id):
         db.session.commit()
 
         flash(u'Edit IPMI configuration successfully', 'success')
-        return redirect(url_for('account.list_ipmi_config_ctrl'))
+        return redirect(url_for('account.list_ipmi_config_handler'))
 
     else:
         return render_template('account/ipmi_config.html', form=form, action='edit')
@@ -309,13 +309,13 @@ def edit_ipmi_config_ctrl(config_id):
 
 @account.route('/ipmi_config/<int:config_id>/delete')
 @login_required
-def delete_ipmi_config_ctrl(config_id):
+def delete_ipmi_config_handler(config_id):
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
     if config.author != current_user.id:
         flash(u'Do not have permission to delete this config', 'error')
-        return redirect(url_for('account.list_ssh_config_ctrl'))
+        return redirect(url_for('account.list_ssh_config_handler'))
 
     # TODO:增加清理数据库环境操作
 
@@ -323,12 +323,12 @@ def delete_ipmi_config_ctrl(config_id):
     db.session.commit()
 
     flash(u'Delete IPMI configuration successfully', 'success')
-    return redirect(url_for('account.list_ipmi_config_ctrl'))
+    return redirect(url_for('account.list_ipmi_config_handler'))
 
 
 @account.route('/fabfile/list')
 @login_required
-def list_fabfile_ctrl():
+def list_fabfile_handler():
 
     fabfiles = current_user.fabfiles
 
@@ -337,9 +337,9 @@ def list_fabfile_ctrl():
 
 @account.route('/fabfile/<int:fabfile_id>/show')
 @login_required
-def show_fabfile_ctrl(fabfile_id):
+def show_fabfile_handler(fabfile_id):
 
-    default_next_page = request.values.get('next', url_for('account.index_ctrl'))
+    default_next_page = request.values.get('next', url_for('account.index_handler'))
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
@@ -356,7 +356,7 @@ def show_fabfile_ctrl(fabfile_id):
 
 @account.route('/fabfile/create', methods=("GET", "POST"))
 @login_required
-def create_fabfile_ctrl():
+def create_fabfile_handler():
 
     form = FabFileForm()
 
@@ -376,7 +376,7 @@ def create_fabfile_ctrl():
         db.session.commit()
 
         flash(u'Create fabfile successfully', 'success')
-        return redirect(url_for('account.list_fabfile_ctrl'))
+        return redirect(url_for('account.list_fabfile_handler'))
 
     else:
         return render_template('account/fabfile_manager.html', form=form, action='create')
@@ -384,13 +384,13 @@ def create_fabfile_ctrl():
 
 @account.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
 @login_required
-def edit_fabfile_ctrl(fabfile_id):
+def edit_fabfile_handler(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
     if fabfile.author_id != current_user.id:
         flash(u'Don\'t have permission to access this link', 'error')
-        return redirect(url_for('account.index_ctrl'))
+        return redirect(url_for('account.index_handler'))
 
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
                  encoding='utf-8') as f:
@@ -413,7 +413,7 @@ def edit_fabfile_ctrl(fabfile_id):
         db.session.commit()
 
         flash(u'Edit fabfile successfully', 'success')
-        return redirect(url_for('account.list_fabfile_ctrl'))
+        return redirect(url_for('account.list_fabfile_handler'))
 
     else:
         return render_template('account/fabfile_manager.html', form=form, action='edit')
@@ -421,13 +421,13 @@ def edit_fabfile_ctrl(fabfile_id):
 
 @account.route('/fabfile/<int:fabfile_id>/delete')
 @login_required
-def delete_fabfile_ctrl(fabfile_id):
+def delete_fabfile_handler(fabfile_id):
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
     if fabfile.author != current_user.id:
         flash(u'Do not have permission to delete this config', 'error')
-        return redirect(url_for('account.list_fabfile_ctrl'))
+        return redirect(url_for('account.list_fabfile_handler'))
 
     # TODO:增加清理数据库环境操作
 
@@ -435,4 +435,4 @@ def delete_fabfile_ctrl(fabfile_id):
     db.session.commit()
 
     flash(u'Edit idc successfully', 'success')
-    return redirect(url_for('account.list_fabfile_ctrl'))
+    return redirect(url_for('account.list_fabfile_handler'))

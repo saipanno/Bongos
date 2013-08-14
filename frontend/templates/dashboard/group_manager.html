@@ -27,7 +27,7 @@
                 <tbody>
                     {% for group in groups %}
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_group_ctrl', group_id=group.id) }}" title="Edit Group">{{ group.id }}</a></td>
+                            <td><a href="{{ url_for('dashboard.edit_group_handler', group_id=group.id) }}" title="Edit Group">{{ group.id }}</a></td>
                             <td>{{ group.name }}</td>
                             <td>{{ group.desc }}</td>
                             <td>
@@ -122,7 +122,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_group_ctrl', group_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_group_handler', group_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

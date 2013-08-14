@@ -20,7 +20,7 @@
                         <div class="container">
                             <a class="navbar-brand" href="#">IDC Manager</a>
                             <div class="btn-group pull-right">
-                                <a href="{{ url_for('assets.create_idc_ctrl')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add IDC</a>
+                                <a href="{{ url_for('assets.create_idc_handler')}}" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add IDC</a>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <tbody>
                             {% for idc in idcs %}
                                 <tr>
-                                    <td><a href="{{ url_for('assets.edit_idc_ctrl', idc_id=idc.id) }}" title="Edit IDC">{{ idc.id }}</a></td>
+                                    <td><a href="{{ url_for('assets.edit_idc_handler', idc_id=idc.id) }}" title="Edit IDC">{{ idc.id }}</a></td>
                                     <td>{{ idc.name }}</td>
                                     <td>{{ idc.desc }}</td>
                                     <td>{{ idc.operators }}</td>
@@ -144,7 +144,7 @@
                                         <span class="label label-info">{{ form.desc.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('assets.delete_idc_ctrl', idc_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('assets.delete_idc_handler', idc_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

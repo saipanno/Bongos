@@ -3,7 +3,7 @@
 {% block bs_header_navbar_append %}
     <div class="btn-group">
         <a class="btn btn-danger" href="#">Show Results</a>
-        <a class="btn btn-default" href="{{ url_for('operation.export_operation_results_ctrl', operation_id=id) }}"><i class="icon-save"></i> Export Results</a>
+        <a class="btn btn-default" href="{{ url_for('operation.export_operation_handler', operation_id=id) }}"><i class="icon-save"></i> Export Results</a>
     </div>
 {% endblock bs_header_navbar_append %}
 

@@ -30,7 +30,7 @@
                 <tbody>
                     {% for user in users %}
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_user_ctrl', user_id=user.id) }}" title="Edit User">{{ user.id }}</a></td>
+                            <td><a href="{{ url_for('dashboard.edit_user_handler', user_id=user.id) }}" title="Edit User">{{ user.id }}</a></td>
                             <td>{{ user.username }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
@@ -40,7 +40,7 @@
                                 {% endfor %}
                             </td>
                             <td>{{ ext.get_status(user.status) }}</td>
-                            <td><a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
+                            <td><a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_user_status_handler', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -144,7 +144,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.update_user_status_ctrl', user_id=form.id.data, status="delete") }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.update_user_status_handler', user_id=form.id.data, status="delete") }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>

@@ -29,7 +29,7 @@
                         <td>{{ execute.author_name }}</td>
                         <td>{{ execute.server_list }}</td>
                         <td>{{ ext.get_operation_status(execute.status) }}</td>
-                        <td><a class="btn btn-mini btn-primary" href="{{ url_for('operation.show_operation_ctrl', operation_id=execute.id) }}"><i class="icon-eye-open"></i> view results</a></td>
+                        <td><a class="btn btn-mini btn-primary" href="{{ url_for('operation.show_operation_handler', operation_id=execute.id) }}"><i class="icon-eye-open"></i> view results</a></td>
                     </tr>
                     {% endfor %}
                     </tbody>

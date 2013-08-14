@@ -32,7 +32,7 @@
                 <tbody>
                 {% for ssh_config in ssh_configs %}
                     <tr>
-                        <td><a href="{{ url_for('dashboard.edit_ssh_config_ctrl', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
+                        <td><a href="{{ url_for('dashboard.edit_ssh_config_handler', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
                         <td>{{ ssh_config.name }}</td>
                         <td>{{ ssh_config.desc }}</td>
                         <td>{{ ssh_config.author.name }}</td>
@@ -153,7 +153,7 @@
                                         <span class="label label-info">{{ form.name.data }}</span>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ssh_config_ctrl', config_id=form.id.data) }}">Yes, I'm sure</a>
+                                        <a class="btn btn-large btn-danger pull-left" href="{{ url_for('dashboard.delete_ssh_config_handler', config_id=form.id.data) }}">Yes, I'm sure</a>
                                         <a class="btn btn-primary pull-right" data-dismiss="modal">Cancel</a>
                                     </div>
                                 </div>
