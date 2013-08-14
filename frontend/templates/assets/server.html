@@ -8,7 +8,7 @@
 
             <div class="col-lg-12">
 
-                {% if type == 'list' %}
+                {% if action == 'list' %}
 
                     <table class="table table-hover table-condensed datatable">
                         <thead>
@@ -33,7 +33,7 @@
                                     <td>{{ server.ext_address }}</td>
                                     <td>{{ server.int_address }}</td>
                                     <td>{{ server.group_name }}</td>
-                                    <td>{{ server.idc_name }}</td>
+                                    <td>{{ server.idc.name }}</td>
                                     <td>{{ server.rack }}</td>
                                     <td>{{ server.manufacturer }}</td>
                                     <td>{{ server.model }}</td>
@@ -47,7 +47,7 @@
                         </tbody>
                     </table>
 
-                {% elif type == 'create' %}
+                {% elif action == 'create' %}
 
                     <div class="tabbable">
                         <form method="post" action="">
@@ -62,19 +62,19 @@
 
                                 {{ ext.create_standard_field(form.serial_number) }}
                                 {{ ext.create_standard_field(form.assets_number) }}
-                                {{ ext.create_standard_field(form.groups, class="select2 span4") }}
+                                {{ ext.create_standard_field(form.groups) }}
                                 {{ ext.create_standard_field(form.desc) }}
                                 {{ ext.create_standard_field(form.ext_address) }}
                                 {{ ext.create_standard_field(form.int_address) }}
                                 {{ ext.create_standard_field(form.ipmi_address) }}
-                                {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.idc, class="select2") }}
+                                {{ ext.create_standard_field(form.other_address) }}
+                                {{ ext.create_standard_field(form.idc) }}
                                 {{ ext.create_standard_field(form.rack) }}
                                 {{ ext.create_standard_field(form.manufacturer) }}
                                 {{ ext.create_standard_field(form.model) }}
-                                {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.cpu_info) }}
+                                {{ ext.create_standard_field(form.disk_info) }}
+                                {{ ext.create_standard_field(form.memory_info) }}
 
                             </div>
 
@@ -85,7 +85,7 @@
                         </form>
                     </div>
 
-                {% elif type == 'edit' %}
+                {% elif action == 'edit' %}
 
                     <div class="tabbable">
                         <form method="post" action="">
@@ -104,19 +104,19 @@
 
                                 {{ ext.create_standard_field(form.serial_number) }}
                                 {{ ext.create_standard_field(form.assets_number) }}
-                                {{ ext.create_standard_field(form.groups, class="select2 span4") }}
+                                {{ ext.create_standard_field(form.groups) }}
                                 {{ ext.create_standard_field(form.desc) }}
                                 {{ ext.create_standard_field(form.ext_address) }}
                                 {{ ext.create_standard_field(form.int_address) }}
                                 {{ ext.create_standard_field(form.ipmi_address) }}
-                                {{ ext.create_standard_field(form.other_address, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.idc, class="select2") }}
+                                {{ ext.create_standard_field(form.other_address) }}
+                                {{ ext.create_standard_field(form.idc) }}
                                 {{ ext.create_standard_field(form.rack) }}
                                 {{ ext.create_standard_field(form.manufacturer) }}
                                 {{ ext.create_standard_field(form.model) }}
-                                {{ ext.create_standard_field(form.cpu_info, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.disk_info, class="col-lg-6") }}
-                                {{ ext.create_standard_field(form.memory_info, class="col-lg-6") }}
+                                {{ ext.create_standard_field(form.cpu_info) }}
+                                {{ ext.create_standard_field(form.disk_info) }}
+                                {{ ext.create_standard_field(form.memory_info) }}
 
                             </div>
 

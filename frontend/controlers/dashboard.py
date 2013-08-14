@@ -71,7 +71,7 @@ def list_user_ctrl():
 
     users = User.query.all()
 
-    return render_template('dashboard/user_manager.html', users=users, type='list')
+    return render_template('dashboard/user_manager.html', users=users, action='list')
 
 
 @dashboard.route('/user/create', methods=("GET", "POST"))
@@ -97,7 +97,7 @@ def create_user_ctrl():
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        return render_template('dashboard/user_manager.html', form=form, type='create')
+        return render_template('dashboard/user_manager.html', form=form, action='create')
 
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
@@ -133,7 +133,7 @@ def edit_user_ctrl(user_id):
         return redirect(url_for('dashboard.list_user_ctrl'))
 
     else:
-        return render_template('dashboard/user_manager.html', form=form, type='edit')
+        return render_template('dashboard/user_manager.html', form=form, action='edit')
 
 
 @dashboard.route('/user/<int:user_id>/status/<status>')
@@ -181,7 +181,7 @@ def list_ssh_config_ctrl():
 
     ssh_configs = SshConfig.query.all()
 
-    return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, type='list')
+    return render_template('dashboard/ssh_config.html', ssh_configs=ssh_configs, action='list')
 
 
 @dashboard.route('/ssh_config/create', methods=("GET", "POST"))
@@ -207,7 +207,7 @@ def create_ssh_config_ctrl():
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
-        return render_template('dashboard/ssh_config.html', form=form, type='create')
+        return render_template('dashboard/ssh_config.html', form=form, action='create')
 
 
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -252,7 +252,7 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('dashboard.list_ssh_config_ctrl'))
 
     else:
-        return render_template('dashboard/ssh_config.html', form=form, type='edit')
+        return render_template('dashboard/ssh_config.html', form=form, action='edit')
 
 
 @dashboard.route('/ssh_config/<int:config_id>/delete')
@@ -286,7 +286,7 @@ def list_ipmi_config_ctrl():
 
     ipmi_configs = IpmiConfig.query.all()
 
-    return render_template('dashboard/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
+    return render_template('dashboard/ipmi_config.html', ipmi_configs=ipmi_configs, action='list')
 
 
 @dashboard.route('/ipmi_config/create', methods=("GET", "POST"))
@@ -312,7 +312,7 @@ def create_ipmi_config_ctrl():
         return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
 
     else:
-        return render_template('dashboard/ipmi_config.html', form=form, type='create')
+        return render_template('dashboard/ipmi_config.html', form=form, action='create')
 
 
 @dashboard.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -354,7 +354,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('dashboard.list_ipmi_config_ctrl'))
 
     else:
-        return render_template('dashboard/ipmi_config.html', form=form, type='edit')
+        return render_template('dashboard/ipmi_config.html', form=form, action='edit')
 
 
 @dashboard.route('/ipmi_config/<int:config_id>/delete')
@@ -388,7 +388,7 @@ def list_group_ctrl():
 
     groups = Group.query.all()
 
-    return render_template('dashboard/group_manager.html', groups=groups, type='list')
+    return render_template('dashboard/group_manager.html', groups=groups, action='list')
 
 
 @dashboard.route('/group/create', methods=("GET", "POST"))
@@ -412,7 +412,7 @@ def create_group_ctrl():
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
-        return render_template('dashboard/group_manager.html', form=form, type='create')
+        return render_template('dashboard/group_manager.html', form=form, action='create')
 
 
 @dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
@@ -442,7 +442,7 @@ def edit_group_ctrl(group_id):
         return redirect(url_for('dashboard.list_group_ctrl'))
 
     else:
-        return render_template('dashboard/group_manager.html', form=form, type='edit')
+        return render_template('dashboard/group_manager.html', form=form, action='edit')
 
 
 @dashboard.route('/group/<int:group_id>/delete')
@@ -493,7 +493,7 @@ def show_permission_ctrl():
     groups = Group.query.all()
     permissions = Permission.query.all()
 
-    return render_template('dashboard/acl_manager.html', groups=groups, permissions=permissions, type='show')
+    return render_template('dashboard/acl_manager.html', groups=groups, permissions=permissions, action='show')
 
 
 @dashboard.route('/permission/<group_id>/<handler_id>/status/<status>')
@@ -536,7 +536,7 @@ def list_fabfile_ctrl():
 
     fabfiles = FabFile.query.all()
 
-    return render_template('dashboard/fabfile_manager.html', fabfiles=fabfiles, type='list')
+    return render_template('dashboard/fabfile_manager.html', fabfiles=fabfiles, action='list')
 
 
 @dashboard.route('/fabfile/<int:fabfile_id>/show')
@@ -560,7 +560,7 @@ def show_fabfile_ctrl(fabfile_id):
                  encoding='utf-8') as f:
         fabfile.script = f.read()
 
-    return render_template('dashboard/fabfile_manager.html', fabfile=fabfile, type='show')
+    return render_template('dashboard/fabfile_manager.html', fabfile=fabfile, action='show')
 
 
 @dashboard.route('/fabfile/create', methods=("GET", "POST"))
@@ -587,7 +587,7 @@ def create_fabfile_ctrl():
         return redirect(url_for('dashboard.list_fabfile_ctrl'))
 
     else:
-        return render_template('dashboard/fabfile_manager.html', form=form, type='create')
+        return render_template('dashboard/fabfile_manager.html', form=form, action='create')
 
 
 @dashboard.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
@@ -624,7 +624,7 @@ def edit_fabfile_ctrl(fabfile_id):
         return redirect(url_for('dashboard.list_fabfile_ctrl'))
 
     else:
-        return render_template('dashboard/fabfile_manager.html', form=form, type='edit')
+        return render_template('dashboard/fabfile_manager.html', form=form, action='edit')
 
 
 @dashboard.route('/fabfile/<int:fabfile_id>/delete')
@@ -663,7 +663,7 @@ def list_server_ctrl():
         idc = IDC.query.get(server.id)
         server.idc_name = idc.name
 
-    return render_template('dashboard/server_manager.html', servers=servers, type='list')
+    return render_template('dashboard/server_manager.html', servers=servers, action='list')
 
 
 @dashboard.route('/server/create', methods=("GET", "POST"))
@@ -690,7 +690,7 @@ def create_server_ctrl():
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
-        return render_template('dashboard/server_manager.html', form=form, type='create')
+        return render_template('dashboard/server_manager.html', form=form, action='create')
 
 
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
@@ -762,7 +762,7 @@ def edit_server_ctrl(server_id):
         return redirect(url_for('dashboard.list_server_ctrl'))
 
     else:
-        return render_template('dashboard/server_manager.html', form=form, type='edit')
+        return render_template('dashboard/server_manager.html', form=form, action='edit')
 
 
 @dashboard.route('/group/<int:server_id>/delete')
@@ -794,7 +794,7 @@ def list_idc_ctrl():
 
     idcs = IDC.query.all()
 
-    return render_template('dashboard/idc_manager.html', idcs=idcs, type='list')
+    return render_template('dashboard/idc_manager.html', idcs=idcs, action='list')
 
 
 @dashboard.route('/idc/create', methods=("GET", "POST"))
@@ -818,7 +818,7 @@ def create_idc_ctrl():
         return redirect(url_for('dashboard.list_idc_ctrl'))
 
     else:
-        return render_template('dashboard/idc_manager.html', form=form, type='create')
+        return render_template('dashboard/idc_manager.html', form=form, action='create')
 
 
 @dashboard.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
@@ -851,7 +851,7 @@ def edit_idc_ctrl(idc_id):
         return redirect(url_for('dashboard.list_idc_ctrl'))
 
     else:
-        return render_template('dashboard/idc_manager.html', form=form, type='edit')
+        return render_template('dashboard/idc_manager.html', form=form, action='edit')
 
 
 @dashboard.route('/group/<int:idc_id>/delete')

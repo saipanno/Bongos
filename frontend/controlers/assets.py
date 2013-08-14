@@ -27,7 +27,6 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask.ext.login import login_required
 
-from frontend.models.account import Group
 from frontend.models.assets import Server, IDC
 
 from frontend.forms.assets import ServerForm
@@ -50,13 +49,7 @@ def list_server_ctrl():
 
     servers = Server.query.all()
 
-    for server in servers:
-        server.groups_name = [group.desc for group in server.groups]
-
-        idc = IDC.query.get(server.id)
-        server.idc_name = idc.name
-
-    return render_template('assets/server.html', servers=servers, type='list')
+    return render_template('assets/server.html', servers=servers, action='list')
 
 
 @assets.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
@@ -72,7 +65,7 @@ def edit_server_ctrl(server_id):
 
     form = ServerForm(id=server.id, serial_number=server.serial_number, assets_number=server.assets_number,
                       desc=server.desc, ext_address=server.ext_address, int_address=server.int_address,
-                      ipmi_address=server.ipmi_address, other_address=server.other_address, idc=server.idc,
+                      ipmi_address=server.ipmi_address, other_address=server.other_address, idc_id=server.idc,
                       rack=server.rack, manufacturer=server.manufacturer, model=server.model, cpu_info=server.cpu_info,
                       disk_info=server.disk_info, memory_info=server.memory_info, groups=server.groups)
 
@@ -128,7 +121,7 @@ def edit_server_ctrl(server_id):
         return redirect(url_for('assets.list_server_ctrl'))
 
     else:
-        return render_template('assets/server.html', form=form, type='edit')
+        return render_template('assets/server.html', form=form, action='edit')
 
 
 @assets.route('/idc/list')
@@ -142,4 +135,4 @@ def list_idc_ctrl():
 
     idcs = IDC.query.all()
 
-    return render_template('assets/idc.html', idcs=idcs, type='list')
+    return render_template('assets/idc.html', idcs=idcs, action='list')

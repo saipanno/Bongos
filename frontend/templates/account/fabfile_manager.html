@@ -6,7 +6,7 @@
 
     <div class="col-lg-9">
 
-        {% if type == 'list' %}
+        {% if action == 'list' %}
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
@@ -48,7 +48,7 @@
                 </tbody>
             </table>
 
-        {% elif type == 'show' %}
+        {% elif action == 'show' %}
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
@@ -61,7 +61,7 @@
                 <pre class="prettyprint">{{ fabfile.script|safe }}</pre>
             </div>
 
-        {% elif type == 'create' %}
+        {% elif action == 'create' %}
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>
@@ -99,7 +99,7 @@
                 </form>
             </div>
 
-            {% elif type == 'edit' %}
+            {% elif action == 'edit' %}
 
             <ul class="breadcrumb">
                 <li><a href="#">Home</a></li>

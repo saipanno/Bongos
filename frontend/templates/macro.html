@@ -24,15 +24,15 @@
 
 
 {% macro get_operation_title(type)  -%}
-    {% if type == 'ssh_status_detecting' %}
+    {% if action == 'ssh_status_detecting' %}
         Ssh Status Detecting
-    {% elif type == 'ping_connectivity_detecting' %}
+    {% elif action == 'ping_connectivity_detecting' %}
         Ping Connectivity Detecting
-    {% elif type == 'custom_script_execute' %}
+    {% elif action == 'custom_script_execute' %}
         Custom Script Execute
-    {% elif type == 'fabfile_execute' %}
+    {% elif action == 'fabfile_execute' %}
         Fabfile Execute
-    {% elif type == 'remote_control' %}
+    {% elif action == 'remote_control' %}
         Remote Control
     {% else %}
         Error Operation Type

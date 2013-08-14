@@ -48,7 +48,7 @@ class Server(db.Model):
     int_address = db.Column(db.String(250), unique=True)
     ipmi_address = db.Column(db.String(250), unique=True)
     other_address = db.Column(db.String(250))
-    idc = db.Column(db.Integer)
+    idc_id = db.Column(db.Integer, db.ForeignKey('idcs.id', ondelete='CASCADE'))
     rack = db.Column(db.String(250))
     manufacturer = db.Column(db.String(250))
     model = db.Column(db.String(250))
@@ -57,7 +57,7 @@ class Server(db.Model):
     memory_info = db.Column(db.Text)
 
     def __init__(self, serial_number, assets_number, group, desc, ext_address, int_address, ipmi_address, other_address,
-                 idc, rack, manufacturer, model, cpu_info, disk_info, memory_info):
+                 idc_id, rack, manufacturer, model, cpu_info, disk_info, memory_info):
         self.serial_number = serial_number
         self.assets_number = assets_number
         self.set_groups(group)
@@ -66,7 +66,7 @@ class Server(db.Model):
         self.int_address = int_address
         self.ipmi_address = ipmi_address
         self.other_address = other_address
-        self.idc = idc
+        self.idc_id = idc_id
         self.rack = rack
         self.manufacturer = manufacturer
         self.model = model
@@ -87,22 +87,18 @@ class Server(db.Model):
             renew_group = Group.query.get(group.id)
             self.groups.append(renew_group)
 
-    def delete_group(self, group):
-        if group and isinstance(group, Group):
-            # reload tag by id to void error that <object xxx is already attached in session>
-            renew_group = Group.query.get(group.id)
-            self.groups.remove(renew_group)
-
 
 class IDC(db.Model):
 
-    __tablename__ = 'datacenters'
+    __tablename__ = 'idcs'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
     desc = db.Column(db.String(100))
     operators = db.Column(db.String(50))
     address = db.Column(db.Text)
+    servers = db.relationship('Server', backref='idc', lazy='dynamic',
+                              cascade='all,delete-orphan', passive_deletes=True)
 
     def __init__(self, name, desc, operators, address):
 

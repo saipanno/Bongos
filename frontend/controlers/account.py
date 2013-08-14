@@ -34,7 +34,7 @@ from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from frontend.forms.account import UserLoginForm, EditSettingForm, ChangePasswordForm
 from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, FabFileForm
 
-from frontend.models.account import User, Group
+from frontend.models.account import User
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
@@ -149,7 +149,7 @@ def list_ssh_config_ctrl():
             if not ssh_config in ssh_configs:
                 ssh_configs.append(ssh_config)
 
-    return render_template('account/ssh_config.html', ssh_configs=ssh_configs, type='list')
+    return render_template('account/ssh_config.html', ssh_configs=ssh_configs, action='list')
 
 
 @account.route('/ssh_config/create', methods=("GET", "POST"))
@@ -170,7 +170,7 @@ def create_ssh_config_ctrl():
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     else:
-        return render_template('account/ssh_config.html', form=form, type='create')
+        return render_template('account/ssh_config.html', form=form, action='create')
 
 
 @account.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -214,7 +214,7 @@ def edit_ssh_config_ctrl(config_id):
         return redirect(url_for('account.list_ssh_config_ctrl'))
 
     else:
-        return render_template('account/ssh_config.html', form=form, type='edit')
+        return render_template('account/ssh_config.html', form=form, action='edit')
 
 
 @account.route('/ssh_config/<int:config_id>/delete')
@@ -242,7 +242,7 @@ def list_ipmi_config_ctrl():
 
     ipmi_configs = current_user.ipmi_configs
 
-    return render_template('account/ipmi_config.html', ipmi_configs=ipmi_configs, type='list')
+    return render_template('account/ipmi_config.html', ipmi_configs=ipmi_configs, action='list')
 
 
 @account.route('/ipmi_config/create', methods=("GET", "POST"))
@@ -263,7 +263,7 @@ def create_ipmi_config_ctrl():
         return redirect(url_for('account.list_ipmi_config_ctrl'))
 
     else:
-        return render_template('account/ipmi_config.html', form=form, type='create')
+        return render_template('account/ipmi_config.html', form=form, action='create')
 
 
 @account.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
@@ -304,7 +304,7 @@ def edit_ipmi_config_ctrl(config_id):
         return redirect(url_for('account.list_ipmi_config_ctrl'))
 
     else:
-        return render_template('account/ipmi_config.html', form=form, type='edit')
+        return render_template('account/ipmi_config.html', form=form, action='edit')
 
 
 @account.route('/ipmi_config/<int:config_id>/delete')
@@ -332,7 +332,7 @@ def list_fabfile_ctrl():
 
     fabfiles = current_user.fabfiles
 
-    return render_template('account/fabfile_manager.html', fabfiles=fabfiles, type='list')
+    return render_template('account/fabfile_manager.html', fabfiles=fabfiles, action='list')
 
 
 @account.route('/fabfile/<int:fabfile_id>/show')
@@ -351,7 +351,7 @@ def show_fabfile_ctrl(fabfile_id):
                  encoding='utf-8') as f:
         fabfile.script = f.read()
 
-    return render_template('account/fabfile_manager.html', fabfile=fabfile, type='show')
+    return render_template('account/fabfile_manager.html', fabfile=fabfile, action='show')
 
 
 @account.route('/fabfile/create', methods=("GET", "POST"))
@@ -379,7 +379,7 @@ def create_fabfile_ctrl():
         return redirect(url_for('account.list_fabfile_ctrl'))
 
     else:
-        return render_template('account/fabfile_manager.html', form=form, type='create')
+        return render_template('account/fabfile_manager.html', form=form, action='create')
 
 
 @account.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
@@ -416,7 +416,7 @@ def edit_fabfile_ctrl(fabfile_id):
         return redirect(url_for('account.list_fabfile_ctrl'))
 
     else:
-        return render_template('account/fabfile_manager.html', form=form, type='edit')
+        return render_template('account/fabfile_manager.html', form=form, action='edit')
 
 
 @account.route('/fabfile/<int:fabfile_id>/delete')
