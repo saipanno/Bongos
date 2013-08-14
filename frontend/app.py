@@ -81,8 +81,6 @@ def configure_extensions(app):
                 if hasattr(current_user, 'groups') and group in current_user.groups:
                     identity.provides.add(PermissionNeed(permission.handler))
 
-        print identity.provides
-
 
 def configure_blueprints(app):
 

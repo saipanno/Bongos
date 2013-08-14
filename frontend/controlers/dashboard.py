@@ -39,20 +39,17 @@ from frontend.forms.assets import ServerForm, IDCForm
 from frontend.forms.account import GroupForm
 from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, CreateUserForm, EditUserForm, FabFileForm
 
-from frontend.extensions.principal import UserAccessPermission
+from frontend.extensions.principal import PermissionRequired
 
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
+authorize_required = PermissionRequired('dashboard')
 
 
 @dashboard.route('/logging')
 @login_required
+@authorize_required
 def show_logging_ctrl():
-
-    access = UserAccessPermission('dashboard.show_logging_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     MAX_LEN = -20
     with open(current_app.config['LOGGING_FILENAME'], 'r') as f:
@@ -62,12 +59,8 @@ def show_logging_ctrl():
 
 @dashboard.route('/user/list')
 @login_required
+@authorize_required
 def list_user_ctrl():
-
-    access = UserAccessPermission('dashboard.list_user_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     users = User.query.all()
 
@@ -76,12 +69,8 @@ def list_user_ctrl():
 
 @dashboard.route('/user/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_user_ctrl():
-
-    access = UserAccessPermission('dashboard.create_user_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = CreateUserForm()
 
@@ -102,12 +91,8 @@ def create_user_ctrl():
 
 @dashboard.route('/user/<int:user_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_user_ctrl(user_id):
-
-    access = UserAccessPermission('dashboard.edit_user_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -138,12 +123,8 @@ def edit_user_ctrl(user_id):
 
 @dashboard.route('/user/<int:user_id>/status/<status>')
 @login_required
+@authorize_required
 def update_user_status_ctrl(user_id, status):
-
-    access = UserAccessPermission('dashboard.update_user_status_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -172,12 +153,8 @@ def update_user_status_ctrl(user_id, status):
 
 @dashboard.route('/ssh_config/list')
 @login_required
+@authorize_required
 def list_ssh_config_ctrl():
-
-    access = UserAccessPermission('dashboard.list_ssh_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     ssh_configs = SshConfig.query.all()
 
@@ -186,12 +163,8 @@ def list_ssh_config_ctrl():
 
 @dashboard.route('/ssh_config/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_ssh_config_ctrl():
-
-    access = UserAccessPermission('dashboard.create_ssh_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = SshConfigForm()
 
@@ -212,12 +185,8 @@ def create_ssh_config_ctrl():
 
 @dashboard.route('/ssh_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_ssh_config_ctrl(config_id):
-
-    access = UserAccessPermission('dashboard.edit_ssh_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -257,12 +226,8 @@ def edit_ssh_config_ctrl(config_id):
 
 @dashboard.route('/ssh_config/<int:config_id>/delete')
 @login_required
+@authorize_required
 def delete_ssh_config_ctrl(config_id):
-
-    access = UserAccessPermission('dashboard.delete_ssh_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     config = SshConfig.query.filter_by(id=config_id).first()
 
@@ -277,12 +242,8 @@ def delete_ssh_config_ctrl(config_id):
 
 @dashboard.route('/ipmi_config/list')
 @login_required
+@authorize_required
 def list_ipmi_config_ctrl():
-
-    access = UserAccessPermission('dashboard.list_ipmi_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     ipmi_configs = IpmiConfig.query.all()
 
@@ -291,12 +252,8 @@ def list_ipmi_config_ctrl():
 
 @dashboard.route('/ipmi_config/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_ipmi_config_ctrl():
-
-    access = UserAccessPermission('dashboard.create_ipmi_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = IpmiConfigForm()
 
@@ -317,12 +274,8 @@ def create_ipmi_config_ctrl():
 
 @dashboard.route('/ipmi_config/<int:config_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_ipmi_config_ctrl(config_id):
-
-    access = UserAccessPermission('dashboard.edit_ipmi_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
@@ -359,12 +312,8 @@ def edit_ipmi_config_ctrl(config_id):
 
 @dashboard.route('/ipmi_config/<int:config_id>/delete')
 @login_required
+@authorize_required
 def delete_ipmi_config_ctrl(config_id):
-
-    access = UserAccessPermission('dashboard.delete_ipmi_config_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     config = IpmiConfig.query.filter_by(id=config_id).first()
 
@@ -379,12 +328,8 @@ def delete_ipmi_config_ctrl(config_id):
 
 @dashboard.route('/group/list')
 @login_required
+@authorize_required
 def list_group_ctrl():
-
-    access = UserAccessPermission('dashboard.list_group_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     groups = Group.query.all()
 
@@ -393,12 +338,8 @@ def list_group_ctrl():
 
 @dashboard.route('/group/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_group_ctrl():
-
-    access = UserAccessPermission('dashboard.create_group_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = GroupForm()
 
@@ -417,12 +358,8 @@ def create_group_ctrl():
 
 @dashboard.route('/group/<int:group_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_group_ctrl(group_id):
-
-    access = UserAccessPermission('dashboard.edit_group_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.filter_by(id=group_id).first()
 
@@ -447,32 +384,12 @@ def edit_group_ctrl(group_id):
 
 @dashboard.route('/group/<int:group_id>/delete')
 @login_required
+@authorize_required
 def delete_group_ctrl(group_id):
-
-    access = UserAccessPermission('dashboard.delete_group_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.filter_by(id=group_id).first()
 
     # TODO:重新梳理数据清理工作
-    # 清理用户的Group属性
-    #users = User.query.all()
-    #for user in users:
-    #    if unicode(group.id) in user.groups:
-    #        user_groups = user.groups
-    #        user_groups.remove(unicode(group.id))
-    #        user_groups.sort()
-    #        user.groups = ','.join(user_groups)
-
-    # 清理权限的Group属性
-    #permissions = Permission.query.all()
-    #for permission in permissions:
-    #    permission_rules = permission.rules.split(',')
-    #    permission_rules.remove(unicode(group_id))
-    #    permission_rules.sort()
-    #    permission.rules = ','.join(permission_rules)
 
     db.session.delete(group)
     db.session.commit()
@@ -483,12 +400,8 @@ def delete_group_ctrl(group_id):
 
 @dashboard.route('/permission/show')
 @login_required
+@authorize_required
 def show_permission_ctrl():
-
-    access = UserAccessPermission('dashboard.show_permission_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     groups = Group.query.all()
     permissions = Permission.query.all()
@@ -498,12 +411,8 @@ def show_permission_ctrl():
 
 @dashboard.route('/permission/<group_id>/<permission_id>/status/<status>')
 @login_required
+@authorize_required
 def update_permission_ctrl(group_id, permission_id, status):
-
-    access = UserAccessPermission('dashboard.update_permission_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     group = Group.query.get(group_id)
     permission = Permission.query.get(permission_id)
@@ -524,12 +433,8 @@ def update_permission_ctrl(group_id, permission_id, status):
 
 @dashboard.route('/fabfile/list')
 @login_required
+@authorize_required
 def list_fabfile_ctrl():
-
-    access = UserAccessPermission('dashboard.list_fabfile_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     fabfiles = FabFile.query.all()
 
@@ -538,12 +443,8 @@ def list_fabfile_ctrl():
 
 @dashboard.route('/fabfile/<int:fabfile_id>/show')
 @login_required
+@authorize_required
 def show_fabfile_ctrl(fabfile_id):
-
-    access = UserAccessPermission('dashboard.show_fabfile_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
@@ -562,12 +463,8 @@ def show_fabfile_ctrl(fabfile_id):
 
 @dashboard.route('/fabfile/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_fabfile_ctrl():
-
-    access = UserAccessPermission('dashboard.create_fabfile_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = FabFileForm()
     if request.method == 'POST' and form.validate():
@@ -589,12 +486,8 @@ def create_fabfile_ctrl():
 
 @dashboard.route('/fabfile/<int:fabfile_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_fabfile_ctrl(fabfile_id):
-
-    access = UserAccessPermission('dashboard.edit_fabfile_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
     with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % fabfile.name), mode='rt',
@@ -626,12 +519,8 @@ def edit_fabfile_ctrl(fabfile_id):
 
 @dashboard.route('/fabfile/<int:fabfile_id>/delete')
 @login_required
+@authorize_required
 def delete_fabfile_ctrl(fabfile_id):
-
-    access = UserAccessPermission('dashboard.delete_fabfile_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     fabfile = FabFile.query.filter_by(id=fabfile_id).first()
 
@@ -646,12 +535,8 @@ def delete_fabfile_ctrl(fabfile_id):
 
 @dashboard.route('/server/list')
 @login_required
+@authorize_required
 def list_server_ctrl():
-
-    access = UserAccessPermission('dashboard.list_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     servers = Server.query.all()
 
@@ -665,12 +550,8 @@ def list_server_ctrl():
 
 @dashboard.route('/server/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_server_ctrl():
-
-    access = UserAccessPermission('dashboard.create_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = ServerForm()
 
@@ -692,12 +573,8 @@ def create_server_ctrl():
 
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_server_ctrl(server_id):
-
-    access = UserAccessPermission('dashboard.edit_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -764,12 +641,8 @@ def edit_server_ctrl(server_id):
 
 @dashboard.route('/group/<int:server_id>/delete')
 @login_required
+@authorize_required
 def delete_server_ctrl(server_id):
-
-    access = UserAccessPermission('dashboard.delete_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -782,12 +655,8 @@ def delete_server_ctrl(server_id):
 
 @dashboard.route('/idc/list')
 @login_required
+@authorize_required
 def list_idc_ctrl():
-
-    access = UserAccessPermission('dashboard.list_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     idcs = IDC.query.all()
 
@@ -796,12 +665,8 @@ def list_idc_ctrl():
 
 @dashboard.route('/idc/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_idc_ctrl():
-
-    access = UserAccessPermission('dashboard.create_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     form = IDCForm()
 
@@ -820,12 +685,8 @@ def create_idc_ctrl():
 
 @dashboard.route('/idc/<int:idc_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_idc_ctrl(idc_id):
-
-    access = UserAccessPermission('dashboard.edit_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     idc = IDC.query.filter_by(id=idc_id).first()
 
@@ -853,16 +714,10 @@ def edit_idc_ctrl(idc_id):
 
 @dashboard.route('/group/<int:idc_id>/delete')
 @login_required
+@authorize_required
 def delete_idc_ctrl(idc_id):
 
-    access = UserAccessPermission('dashboard.delete_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
     idc = IDC.query.filter_by(id=idc_id).first()
-
-    # TODO:增加清理数据库环境操作
 
     db.session.delete(idc)
     db.session.commit()

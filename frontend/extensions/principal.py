@@ -24,11 +24,13 @@
 # SOFTWARE.
 
 
-from functools import partial
+import functools
+from flask import abort
+
 from flask.ext.principal import Need, Permission
 
 
-PermissionNeed = partial(Need, 'handler')
+PermissionNeed = functools.partial(Need, 'handler')
 
 
 class UserAccessPermission(Permission):
@@ -36,3 +38,22 @@ class UserAccessPermission(Permission):
     def __init__(self, name):
         need = PermissionNeed(name)
         super(UserAccessPermission, self).__init__(need)
+
+
+class PermissionRequired(object):
+    bp = ''
+
+    def __init__(self, bp=None):
+        self.bp = bp if bp else ''
+
+    def __call__(self, f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+
+            access = UserAccessPermission('%s.%s' % (self.bp, f.__name__))
+            if not access.can():
+                abort(404)
+
+            return f(*args, **kwargs)
+
+        return wrapper

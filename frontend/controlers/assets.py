@@ -32,20 +32,17 @@ from frontend.models.assets import Server, IDC
 from frontend.forms.assets import ServerForm
 
 from frontend.extensions.database import db
-from frontend.extensions.principal import UserAccessPermission
+from frontend.extensions.principal import PermissionRequired
 
 
 assets = Blueprint('assets', __name__, url_prefix='/assets')
+authorize_required = PermissionRequired('assets')
 
 
 @assets.route('/server/list')
 @login_required
+@authorize_required
 def list_server_ctrl():
-
-    access = UserAccessPermission('assets.list_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     servers = Server.query.all()
 
@@ -54,12 +51,8 @@ def list_server_ctrl():
 
 @assets.route('/server/<int:server_id>/edit', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def edit_server_ctrl(server_id):
-
-    access = UserAccessPermission('assets.edit_server_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     server = Server.query.filter_by(id=server_id).first()
 
@@ -126,12 +119,8 @@ def edit_server_ctrl(server_id):
 
 @assets.route('/idc/list')
 @login_required
+@authorize_required
 def list_idc_ctrl():
-
-    access = UserAccessPermission('assets.list_idc_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     idcs = IDC.query.all()
 

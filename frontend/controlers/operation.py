@@ -36,7 +36,7 @@ from frontend.models.operation import OperationDb
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
 from frontend.extensions.database import db
-from frontend.extensions.principal import UserAccessPermission
+from frontend.extensions.principal import PermissionRequired
 from frontend.extensions.libs import format_address_list, format_ext_variables, get_obj_attributes, get_dict_items
 
 from application import backend_runner
@@ -44,10 +44,12 @@ from frontend.extensions.tasks import q
 
 
 operation = Blueprint('operation', __name__, url_prefix='/operation')
+authorize_required = PermissionRequired('operation')
 
 
 @operation.route('/overview')
 @login_required
+@authorize_required
 def overview_operation_ctrl():
     access = UserAccessPermission('operation.overview_operation_ctrl')
     if not access.can():
@@ -61,11 +63,6 @@ def overview_operation_ctrl():
 @login_required
 def list_operation_ctrl(operation_type):
 
-    access = UserAccessPermission('operation.list_operation_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
-
     executes = OperationDb.query.filter_by(operation_type=operation_type).order_by(desc(OperationDb.id)).all()
 
     for execute in executes:
@@ -77,12 +74,8 @@ def list_operation_ctrl(operation_type):
 
 @operation.route('/<int:operation_id>/show')
 @login_required
+@authorize_required
 def show_operation_ctrl(operation_id):
-
-    access = UserAccessPermission('operation.show_operation_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     default_next_page = request.values.get('next', url_for('account.index_ctrl'))
 
@@ -107,12 +100,8 @@ def show_operation_ctrl(operation_id):
 
 @operation.route('/<int:operation_id>/export.csv')
 @login_required
+@authorize_required
 def export_operation_results_ctrl(operation_id):
-
-    access = UserAccessPermission('operation.export_operation_results_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     try:
         execute = OperationDb.query.filter_by(id=operation_id).first()
@@ -139,12 +128,8 @@ def export_operation_results_ctrl(operation_id):
 
 @operation.route('/ssh_status/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_ssh_detect_ctrl():
-
-    access = UserAccessPermission('operation.create_ssh_detect_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     operation_type = u'ssh_status_detecting'
 
@@ -180,12 +165,8 @@ def create_ssh_detect_ctrl():
 
 @operation.route('/ping_detecting/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_ping_detect_ctrl():
-
-    access = UserAccessPermission('operation.create_ping_detect_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     operation_type = u'ping_connectivity_detecting'
 
@@ -216,12 +197,8 @@ def create_ping_detect_ctrl():
 
 @operation.route('/custom_execute/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_custom_execute_ctrl():
-
-    access = UserAccessPermission('operation.create_custom_execute_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     operation_type = u'custom_script_execute'
 
@@ -264,12 +241,8 @@ def create_custom_execute_ctrl():
 
 @operation.route('/fabfile_execute/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_fabfile_execute_ctrl():
-
-    access = UserAccessPermission('operation.create_fabfile_execute_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     operation_type = u'fabfile_execute'
 
@@ -315,12 +288,8 @@ def create_fabfile_execute_ctrl():
 
 @operation.route('/remote_control/create', methods=("GET", "POST"))
 @login_required
+@authorize_required
 def create_power_control_ctrl():
-
-    access = UserAccessPermission('operation.create_power_control_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     operation_type = u'remote_control'
 
