@@ -51,25 +51,21 @@ authorize_required = AuthorizeRequired('operation')
 @login_required
 @authorize_required
 def overview_operation_ctrl():
-    access = UserAccessPermission('operation.overview_operation_ctrl')
-    if not access.can():
-        flash(u'Don\'t have permission to this page', 'warning')
-        return redirect(url_for('account.index_ctrl'))
 
     return render_template('operation/overview.html')
 
 
-@operation.route('/<operation_type>/list')
+@operation.route('/list')
 @login_required
-def list_operation_ctrl(operation_type):
+def list_operation_ctrl():
 
-    executes = OperationDb.query.filter_by(operation_type=operation_type).order_by(desc(OperationDb.id)).all()
+    executes = OperationDb.query.order_by(desc(OperationDb.id)).all()
 
     for execute in executes:
         user = User.query.filter_by(id=int(execute.author)).first()
         execute.author_name = user.name
 
-    return render_template('operation/list_operation.html', executes=executes, action=operation_type)
+    return render_template('operation/list_operation.html', executes=executes)
 
 
 @operation.route('/<int:operation_id>/show')
