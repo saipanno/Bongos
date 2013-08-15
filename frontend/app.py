@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-from flask import Flask
+from flask import request, url_for, Flask
 from flask.ext.login import current_user
 from logging import FileHandler, Formatter
 from flask.ext.principal import identity_loaded, Principal
@@ -46,6 +46,7 @@ def create_app(config=None):
 
     configure_logger(app)
     configure_extensions(app)
+    configure_jinja(app)
     configure_blueprints(app)
 
     return app
@@ -80,6 +81,15 @@ def configure_extensions(app):
             for group in permission.groups:
                 if hasattr(current_user, 'groups') and group in current_user.groups:
                     identity.provides.add(AuthorizeNeed(permission.handler))
+
+
+def configure_jinja(app):
+
+    def url_for_other_page(page):
+        args = request.view_args.copy()
+        args['page'] = page
+        return url_for(request.endpoint, **args)
+    app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 
 def configure_blueprints(app):

@@ -25,6 +25,7 @@
 
 
 from sqlalchemy import exc, desc
+from flask.ext.sqlalchemy import Pagination
 from flask.ext.login import login_required, current_user
 from flask import render_template, request, redirect, url_for, flash, Blueprint, json, Response, current_app
 
@@ -46,13 +47,14 @@ operation = Blueprint('operation', __name__, url_prefix='/operation')
 authorize_required = AuthorizeRequired('operation')
 
 
-@operation.route('/list')
+@operation.route('/list/', defaults={'page': 1})
+@operation.route('/list/page/<int:page>')
 @login_required
-def list_operation_handler():
+def list_operation_handler(page):
 
-    operations = OperationDb.query.order_by(desc(OperationDb.id)).all()
+    pagination = OperationDb.query.order_by(desc(OperationDb.id)).paginate(page, 20)
 
-    return render_template('operation/list_operation.html', operations=operations)
+    return render_template('operation/list_operation.html', operations=pagination.items, pagination=pagination)
 
 
 @operation.route('/<int:operation_id>/show')
