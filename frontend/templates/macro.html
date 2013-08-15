@@ -24,15 +24,15 @@
 
 
 {% macro get_operation_title(type)  -%}
-    {% if action == 'ssh_status_detecting' %}
+    {% if type == 'ssh_status_detecting' %}
         Ssh Status Detecting
-    {% elif action == 'ping_connectivity_detecting' %}
+    {% elif type == 'ping_connectivity_detecting' %}
         Ping Connectivity Detecting
-    {% elif action == 'custom_script_execute' %}
+    {% elif type == 'custom_script_execute' %}
         Custom Script Execute
-    {% elif action == 'fabfile_execute' %}
+    {% elif type == 'fabfile_execute' %}
         Fabfile Execute
-    {% elif action == 'remote_control' %}
+    {% elif type == 'remote_control' %}
         Remote Control
     {% else %}
         Error Operation Type
@@ -41,11 +41,11 @@
 
 
 {% macro get_operation_status(status)  -%}
-    {% if status == '0' %}
+    {% if status == 0 %}
         <i class="icon-download text-info" title="执行中"></i>
-    {% elif status == '1' %}
+    {% elif status == 1 %}
         <i class="icon-ok-sign text-success" title="已完成"></i>
-    {% elif status == '2' %}
+    {% elif status == 2 %}
         <i class="icon-exclamation text-error" title="错误"></i>
     {% endif %}
 {%- endmacro %}

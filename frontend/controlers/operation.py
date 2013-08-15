@@ -53,10 +53,6 @@ def list_operation_handler():
 
     executes = OperationDb.query.order_by(desc(OperationDb.id)).all()
 
-    for execute in executes:
-        user = User.query.filter_by(id=int(execute.author)).first()
-        execute.author_name = user.name
-
     return render_template('operation/list_operation.html', executes=executes)
 
 

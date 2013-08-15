@@ -46,6 +46,8 @@ class User(db.Model):
                              passive_deletes=True)
     password = db.Column(db.String(50))
     status = db.Column(db.Integer)
+    operations = db.relationship('OperationDb', backref='author', lazy='dynamic',
+                                 cascade='all,delete-orphan', passive_deletes=True)
     fabfiles = db.relationship('FabFile', backref='author', lazy='dynamic',
                                cascade='all,delete-orphan', passive_deletes=True)
     ssh_configs = db.relationship('SshConfig', backref='author', lazy='dynamic',
