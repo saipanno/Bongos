@@ -45,7 +45,11 @@
                 <div class="btn-group">
                     <a class="btn {% block active_operation_list %}btn-default{% endblock %}" href="{{ url_for('operation.list_operation_handler') }}">Overview</a>
                 </div>
-                {% block bs_header_navbar_append %}{% endblock bs_header_navbar_append %}
+                {% block bs_header_navbar_append %}
+                    <div class="navbar-form col-lg-2">
+                        <input type="text" class="form-control">
+                    </div>
+                {% endblock bs_header_navbar_append %}
             </div>
         </div>
         {% endblock bs_header_navbar %}

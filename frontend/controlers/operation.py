@@ -65,22 +65,22 @@ def show_operation_handler(operation_id):
     default_next_page = request.values.get('next', url_for('account.index_handler'))
 
     try:
-        execute = OperationDb.query.filter_by(id=operation_id).first()
+        operation = OperationDb.query.filter_by(id=operation_id).first()
 
     except exc.SQLAlchemyError:
         flash(u'Internal database error', 'error')
         return redirect(default_next_page)
 
-    if execute is None:
+    if operation is None:
         flash(u'The operating does not exist.', 'error')
         return redirect(default_next_page)
 
     try:
-        fruits = json.loads(execute.result)
+        fruits = json.loads(operation.result)
     except ValueError:
         fruits = dict()
 
-    return render_template('operation/show_operation.html', fruits=fruits, id=operation_id)
+    return render_template('operation/show_operation.html', operation=operation, fruits=fruits)
 
 
 @operation.route('/<int:operation_id>/export.csv')
