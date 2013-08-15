@@ -68,10 +68,10 @@ def check_signature_handler():
     if request.method == 'GET':
 
         token = 'l6Oic8PiGl3Eo5xkuBoYZxhQo1BMrx09'
-        signature = request.json.get('signature', None)
-        timestamp = request.json.get('timestamp', None)
-        nonce = request.json.get('nonce', None)
-        echostr = request.json.get('echostr', None)
+        signature = request.args.get('signature', None)
+        timestamp = request.args.get('timestamp', None)
+        nonce = request.args.get('nonce', None)
+        echostr = request.args.get('echostr', None)
 
         fruit = [token, timestamp, nonce]
         fruit.sort()
@@ -81,4 +81,7 @@ def check_signature_handler():
         if hashstr == signature:
             return echostr
         else:
-            return None
+            return 'signature check error'
+
+    else:
+        return 'error request method'
