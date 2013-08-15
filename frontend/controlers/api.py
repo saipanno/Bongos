@@ -38,7 +38,7 @@ def check_signature_handler():
 
     if request.method == 'GET':
 
-        token = 'l6Oic8PiGl3Eo5xkuBoYZxhQo1BMrx09'
+        token = current_app.config.get('WEIXIN_TOKEN', 'BongosProject')
         signature = request.args.get('signature', None)
         timestamp = request.args.get('timestamp', None)
         nonce = request.args.get('nonce', None)

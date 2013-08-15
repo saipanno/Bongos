@@ -362,11 +362,6 @@ def create_fabfile_handler():
 
     if request.method == 'POST' and form.validate():
 
-        groups = list()
-        for group in form.groups.data:
-            groups.append(str(group.id))
-        groups.sort()
-
         with io.open(os.path.join(current_app.config['FABRIC_FILE_PATH'], '%s.py' % form.name.data), mode='wt',
                     encoding='utf-8') as f:
             f.write(form.script.data.replace('\r\n', '\n').replace('\r', '\n'))
