@@ -24,7 +24,8 @@
 # SOFTWARE.
 
 
-from flask import Blueprint, current_app, request, jsonify, json
+import hashlib
+from flask import Blueprint, current_app, request, jsonify, json, abort
 
 from frontend.extensions.database import db
 from frontend.models.operation import OperationDb
@@ -58,8 +59,26 @@ def update_operation_status_handler():
 
                 return jsonify({'status': 'success'})
 
-            return jsonify({'status': 'error', 'message': 'Unknown operation number'})
+    abort(404)
 
-        return jsonify({'status': 'error', 'message': 'Authentication permissions fails'})
 
-    return jsonify({'status': 'error', 'message': 'Request method error'})
+@api.route('/weixin', methods=["GET", "PUT"])
+def check_signature_handler():
+
+    if request.method == 'GET':
+
+        token = 'l6Oic8PiGl3Eo5xkuBoYZxhQo1BMrx09'
+        signature = request.json.get('signature', None)
+        timestamp = request.json.get('timestamp', None)
+        nonce = request.json.get('nonce', None)
+        echostr = request.json.get('echostr', None)
+
+        fruit = [token, timestamp, nonce]
+        fruit.sort()
+        fruit_str = ''.join(fruit)
+        hashstr = hashlib.sha1(fruit_str).hexdigest()
+
+        if hashstr == signature:
+            return echostr
+        else:
+            return None
