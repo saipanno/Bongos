@@ -16,42 +16,40 @@
 
                 {% if action == 'list' %}
 
-                    <table class="table table-hover table-condensed datatable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>assets number</th>
-                                <th>ext address</th>
-                                <th>int address</th>
-                                <th>group</th>
-                                <th>datacenter</th>
-                                <th>rack</th>
-                                <th>manufacturer</th>
-                                <th>model</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for server in servers %}
+                    {% if servers %}
+                        <table class="table table-hover table-condensed datatable">
+                            <thead>
                                 <tr>
-                                    <td><a href="{{ url_for('assets.edit_server_handler', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
-                                    <td>{{ server.assets_number }}</td>
-                                    <td>{{ server.ext_address }}</td>
-                                    <td>{{ server.int_address }}</td>
-                                    <td>{{ server.group_name }}</td>
-                                    <td>{{ server.idc.name }}</td>
-                                    <td>{{ server.rack }}</td>
-                                    <td>{{ server.manufacturer }}</td>
-                                    <td>{{ server.model }}</td>
-                                    <td>
-                                        <div class="dropdown related_menu">
-                                            <a title="Related Objects" class="relate_menu dropdown-toggle" data-toggle="dropdown"><i class="icon icon-list"></i></a>
-                                        </div>
-                                    </td>
+                                    <th>#</th>
+                                    <th>assets number</th>
+                                    <th>ext address</th>
+                                    <th>int address</th>
+                                    <th>groups</th>
+                                    <th>datacenter</th>
+                                    <th>rack</th>
+                                    <th>manufacturer</th>
+                                    <th>model</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for server in servers %}
+                                    <tr>
+                                        <td><a href="{{ url_for('assets.edit_server_handler', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
+                                        <td>{{ server.assets_number }}</td>
+                                        <td>{{ server.ext_address }}</td>
+                                        <td>{{ server.int_address }}</td>
+                                        <td>{{ server.group_name }}</td>
+                                        <td>{{ server.idc.name }}</td>
+                                        <td>{{ server.rack }}</td>
+                                        <td>{{ server.manufacturer }}</td>
+                                        <td>{{ server.model }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="well">No Records</p>
+                    {% endif %}
 
                 {% elif action == 'create' %}
 

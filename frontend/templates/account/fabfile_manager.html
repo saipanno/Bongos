@@ -15,38 +15,42 @@
                 <li class="active">List</li>
             </ul>
 
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>name</th>
-                        <th>description</th>
-                        <th>author</th>
-                        <th>groups</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for fabfile in fabfiles %}
+            {% if fabfiles %}
+                <table class="table table-hover table-condensed">
+                    <thead>
                         <tr>
-                            {% if fabfile.author_id == current_user.id %}
-                                <td><a href="{{ url_for('account.edit_fabfile_handler', fabfile_id=fabfile.id) }}" title="Edit Fabfile">{{ fabfile.id }}</a></td>
-                            {% else %}
-                                <td>{{ fabfile.id }}</td>
-                            {% endif %}
-                            <td>{{ fabfile.name }}</td>
-                            <td>{{ fabfile.desc }}</td>
-                            <td>{{ fabfile.author.name }}</td>
-                            <td>
-                                {% for group in fabfile.groups %}
-                                    <span class="label label-success">{{ group.desc }}</span>
-                                {% endfor %}
-                            </td>
-                            <td><a class="btn btn-mini btn-default" href="{{ url_for('account.show_fabfile_handler', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>description</th>
+                            <th>author</th>
+                            <th>groups</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for fabfile in fabfiles %}
+                            <tr>
+                                {% if fabfile.author_id == current_user.id %}
+                                    <td><a href="{{ url_for('account.edit_fabfile_handler', fabfile_id=fabfile.id) }}" title="Edit Fabfile">{{ fabfile.id }}</a></td>
+                                {% else %}
+                                    <td>{{ fabfile.id }}</td>
+                                {% endif %}
+                                <td>{{ fabfile.name }}</td>
+                                <td>{{ fabfile.desc }}</td>
+                                <td>{{ fabfile.author.name }}</td>
+                                <td>
+                                    {% for group in fabfile.groups %}
+                                        <span class="label label-success">{{ group.desc }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td><a class="btn btn-mini btn-default" href="{{ url_for('account.show_fabfile_handler', fabfile_id=fabfile.id) }}"><i class="icon-eye-open"></i> Show</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="well">No Records</p>
+            {% endif %}
 
         {% elif action == 'show' %}
 

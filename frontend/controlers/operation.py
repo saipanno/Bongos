@@ -31,7 +31,6 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint,
 from frontend.forms.operation import CreatePingDetectForm, CreateSshDetectForm, CreateFabfileExecuteForm, \
     CreateCustomExecuteForm, CreatePowerCtrlForm
 
-from frontend.models.account import User
 from frontend.models.operation import OperationDb
 from frontend.models.dashboard import SshConfig, IpmiConfig, FabFile
 
@@ -51,9 +50,9 @@ authorize_required = AuthorizeRequired('operation')
 @login_required
 def list_operation_handler():
 
-    executes = OperationDb.query.order_by(desc(OperationDb.id)).all()
+    operations = OperationDb.query.order_by(desc(OperationDb.id)).all()
 
-    return render_template('operation/list_operation.html', executes=executes)
+    return render_template('operation/list_operation.html', operations=operations)
 
 
 @operation.route('/<int:operation_id>/show')

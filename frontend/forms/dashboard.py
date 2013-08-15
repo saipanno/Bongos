@@ -157,3 +157,17 @@ class FabFileForm(Form):
                                       validators=[Required(message=u'Group is required')])
 
     submit = SubmitField(u'Submit', id='submit')
+
+
+class ImportServerForm(Form):
+
+    info = [u'serial_number', u'assets_number', u'desc', u'ext_address', u'int_address', u'ipmi_address',
+            u'other_address', u'idc', u'rack', u'manufacturer', u'model', u'cpu_info', u'disk_info', u'memory_info']
+
+    help_description = str()
+    for i in info:
+        help_description = '%s</br><span class="label label-default">%s</span>' % (help_description, i)
+
+    servers = TextAreaField(u'Server Info', description=help_description[5:])
+
+    submit = SubmitField(u'Submit', id='submit')

@@ -15,44 +15,44 @@
                 <li class="active">List</li>
             </ul>
 
-            <table class="table table-hover table-condensed datatable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Assets Number</th>
-                        <th>Ext Address</th>
-                        <th>Int Address</th>
-                        <th>Group</th>
-                        <th>IDC</th>
-                        <th>Rack</th>
-                        <th>Manufacturer</th>
-                        <th>Model</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for server in servers %}
+            {% if servers %}
+                <table class="table table-hover table-condensed datatable">
+                    <thead>
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_server_handler', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
-                            <td>{{ server.assets_number }}</td>
-                            <td>{{ server.ext_address }}</td>
-                            <td>{{ server.int_address }}</td>
-                            <td>
-                                {% for group in server.groups %}
-                                    <span class="label label-success">{{ group.desc }}</span>
-                                {% endfor %}
-                            </td>
-                            <td>{{ server.idc_name }}</td>
-                            <td>{{ server.rack }}</td>
-                            <td>{{ server.manufacturer }}</td>
-                            <td>{{ server.model }}</td>
+                            <th>#</th>
+                            <th>Assets Number</th>
+                            <th>Ext Address</th>
+                            <th>Int Address</th>
+                            <th>Group</th>
+                            <th>IDC</th>
+                            <th>Rack</th>
+                            <th>Manufacturer</th>
+                            <th>Model</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-        {% elif action == 'show' %}
-
-            <!-- TODO: 增加服务器显示页面 -->
+                    </thead>
+                    <tbody>
+                        {% for server in servers %}
+                            <tr>
+                                <td><a href="{{ url_for('dashboard.edit_server_handler', server_id=server.id) }}" title="Edit Server">{{ server.id }}</a></td>
+                                <td>{{ server.assets_number }}</td>
+                                <td>{{ server.ext_address }}</td>
+                                <td>{{ server.int_address }}</td>
+                                <td>
+                                    {% for group in server.groups %}
+                                        <span class="label label-success">{{ group.desc }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ server.idc_name }}</td>
+                                <td>{{ server.rack }}</td>
+                                <td>{{ server.manufacturer }}</td>
+                                <td>{{ server.model }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="well">No Records</p>
+            {% endif %}
 
         {% elif action == 'create' %}
 
@@ -90,6 +90,39 @@
                         {{ ext.create_standard_field(form.cpu_info) }}
                         {{ ext.create_standard_field(form.disk_info) }}
                         {{ ext.create_standard_field(form.memory_info) }}
+
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-danger") }}
+                    </div>
+
+                </form>
+
+            </div>
+
+        {% elif action == 'import' %}
+
+            <ul class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li class="#"><a href="#">Server Manager</a></li>
+                <li class="active">Import</li>
+            </ul>
+
+            <div class="col-lg-12 dashboard-workflow">
+
+                <form class="form-horizontal" method="post" action="">
+
+                    {{ form.hidden_tag() }}
+
+                    <legend>
+                        Import Servers
+                    </legend>
+
+                    <div class="box form-container row form-horizontal">
+
+                        {{ ext.create_standard_field(form.servers, field_width="col-lg-8", rows="15") }}
 
                     </div>
 

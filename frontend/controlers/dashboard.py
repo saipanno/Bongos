@@ -37,7 +37,8 @@ from frontend.models.assets import Server, IDC
 
 from frontend.forms.assets import ServerForm, IDCForm
 from frontend.forms.account import GroupForm
-from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, CreateUserForm, EditUserForm, FabFileForm
+from frontend.forms.dashboard import SshConfigForm, IpmiConfigForm, CreateUserForm, EditUserForm, \
+    FabFileForm, ImportServerForm
 
 from frontend.extensions.principal import AuthorizeRequired
 
@@ -569,6 +570,22 @@ def create_server_handler():
 
     else:
         return render_template('dashboard/server_manager.html', form=form, action='create')
+
+
+@dashboard.route('/server/import', methods=("GET", "POST"))
+@login_required
+@authorize_required
+def import_server_handler():
+
+    form = ImportServerForm()
+
+    if request.method == 'POST' and form.validate():
+
+        flash(u'Create server successfully', 'success')
+        return redirect(url_for('dashboard.list_server_handler'))
+
+    else:
+        return render_template('dashboard/server_manager.html', form=form, action='import')
 
 
 @dashboard.route('/server/<int:server_id>/edit', methods=("GET", "POST"))

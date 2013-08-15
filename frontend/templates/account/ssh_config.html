@@ -15,44 +15,48 @@
                 <li class="active">List</li>
             </ul>
 
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>name</th>
-                        <th>description</th>
-                        <th>author</th>
-                        <th>groups</th>
-                        <th>port</th>
-                        <th>username</th>
-                        <th>password</th>
-                        <th>private key</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for ssh_config in ssh_configs %}
-                    <tr>
-                        {% if ssh_config.author_id == current_user.id %}
-                            <td><a href="{{ url_for('account.edit_ssh_config_handler', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
-                        {% else %}
-                            <td>{{ ssh_config.id }}</td>
-                        {% endif %}
-                        <td>{{ ssh_config.name }}</td>
-                        <td>{{ ssh_config.desc }}</td>
-                        <td>{{ ssh_config.author.name }}</td>
-                        <td>
-                            {% for group in ssh_config.groups %}
-                                <span class="label label-success">{{ group.desc }}</span>
-                            {% endfor %}
-                        </td>
-                        <td>{{ ssh_config.port }}</td>
-                        <td>{{ ssh_config.username }}</td>
-                        <td>{{ ssh_config.password }}</td>
-                        <td>{{ ssh_config.private_key }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% if ssh_configs %}
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>description</th>
+                            <th>author</th>
+                            <th>groups</th>
+                            <th>port</th>
+                            <th>username</th>
+                            <th>password</th>
+                            <th>private key</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for ssh_config in ssh_configs %}
+                        <tr>
+                            {% if ssh_config.author_id == current_user.id %}
+                                <td><a href="{{ url_for('account.edit_ssh_config_handler', config_id=ssh_config.id) }}" title="Edit Ssh Config">{{ ssh_config.id }}</a></td>
+                            {% else %}
+                                <td>{{ ssh_config.id }}</td>
+                            {% endif %}
+                            <td>{{ ssh_config.name }}</td>
+                            <td>{{ ssh_config.desc }}</td>
+                            <td>{{ ssh_config.author.name }}</td>
+                            <td>
+                                {% for group in ssh_config.groups %}
+                                    <span class="label label-success">{{ group.desc }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>{{ ssh_config.port }}</td>
+                            <td>{{ ssh_config.username }}</td>
+                            <td>{{ ssh_config.password }}</td>
+                            <td>{{ ssh_config.private_key }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="well">No Records</p>
+            {% endif %}
 
         {% elif action == 'create' %}
 

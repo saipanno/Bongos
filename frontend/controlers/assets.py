@@ -115,13 +115,3 @@ def edit_server_handler(server_id):
 
     else:
         return render_template('assets/server.html', form=form, action='edit')
-
-
-@assets.route('/idc/list')
-@login_required
-@authorize_required
-def list_idc_handler():
-
-    idcs = IDC.query.all()
-
-    return render_template('assets/idc.html', idcs=idcs, action='list')

@@ -15,38 +15,42 @@
                 <li class="active">List</li>
             </ul>
 
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>name</th>
-                        <th>description</th>
-                        <th>author</th>
-                        <th>groups</th>
-                        <th>username</th>
-                        <th>password</th>
-                        <th>interface</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for ipmi_config in ipmi_configs %}
-                    <tr>
-                        <td><a href="{{ url_for('dashboard.edit_ipmi_config_handler', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
-                        <td>{{ ipmi_config.name }}</td>
-                        <td>{{ ipmi_config.desc }}</td>
-                        <td>{{ ipmi_config.author.name }}</td>
-                        <td>
-                            {% for group in ipmi_config.groups %}
-                                <span class="label label-success">{{ group.desc }}</span>
-                            {% endfor %}
-                        </td>
-                        <td>{{ ipmi_config.username }}</td>
-                        <td>{{ ipmi_config.password }}</td>
-                        <td>{{ ext.get_boolean_magic(ipmi_config.interface, 'lanplus', 'lan') }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% if ipmi_configs %}
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>description</th>
+                            <th>author</th>
+                            <th>groups</th>
+                            <th>username</th>
+                            <th>password</th>
+                            <th>interface</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for ipmi_config in ipmi_configs %}
+                        <tr>
+                            <td><a href="{{ url_for('dashboard.edit_ipmi_config_handler', config_id=ipmi_config.id) }}" title="Edit IPMI Config">{{ ipmi_config.id }}</a></td>
+                            <td>{{ ipmi_config.name }}</td>
+                            <td>{{ ipmi_config.desc }}</td>
+                            <td>{{ ipmi_config.author.name }}</td>
+                            <td>
+                                {% for group in ipmi_config.groups %}
+                                    <span class="label label-success">{{ group.desc }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>{{ ipmi_config.username }}</td>
+                            <td>{{ ipmi_config.password }}</td>
+                            <td>{{ ext.get_boolean_magic(ipmi_config.interface, 'lanplus', 'lan') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="well">No Records</p>
+            {% endif %}
 
         {% elif action == 'create' %}
 

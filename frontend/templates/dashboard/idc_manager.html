@@ -15,28 +15,32 @@
                 <li class="active">List</li>
             </ul>
 
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>name</th>
-                        <th>description</th>
-                        <th>operators</th>
-                        <th>address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for idc in idcs %}
+            {% if idcs %}
+                <table class="table table-hover table-condensed">
+                    <thead>
                         <tr>
-                            <td><a href="{{ url_for('dashboard.edit_idc_handler', idc_id=idc.id) }}" title="Edit IDC">{{ idc.id }}</a></td>
-                            <td>{{ idc.name }}</td>
-                            <td>{{ idc.desc }}</td>
-                            <td>{{ idc.operators }}</td>
-                            <td>{{ idc.address }}</td>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>description</th>
+                            <th>operators</th>
+                            <th>address</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for idc in idcs %}
+                            <tr>
+                                <td><a href="{{ url_for('dashboard.edit_idc_handler', idc_id=idc.id) }}" title="Edit IDC">{{ idc.id }}</a></td>
+                                <td>{{ idc.name }}</td>
+                                <td>{{ idc.desc }}</td>
+                                <td>{{ idc.operators }}</td>
+                                <td>{{ idc.address }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="well">No Records</p>
+            {% endif %}
 
         {% elif action == 'create' %}
 
