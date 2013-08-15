@@ -33,36 +33,7 @@ from frontend.models.operation import OperationDb
 api = Blueprint('api', __name__, url_prefix='/api')
 
 
-@api.route('/operation', methods=["PUT"])
-def update_operation_status_handler():
-
-    if request.method == 'PUT':
-
-        access_address = current_app.config.get('API_ACCESS_CLIENTS', '127.0.0.1')
-
-        current_app.logger.info(str(request.json))
-
-        if request.remote_addr in access_address:
-
-            id = request.json.get('id', 0)
-            status = request.json.get('status', 2)
-            result = request.json.get('result', dict())
-
-            operation = OperationDb.query.filter_by(id=id).first()
-
-            if operation is not None:
-
-                operation.status = status
-                operation.result = json.dumps(result, ensure_ascii=False)
-
-                db.session.commit()
-
-                return jsonify({'status': 'success'})
-
-    abort(404)
-
-
-@api.route('/weixin', methods=["GET", "PUT"])
+@api.route('/', methods=["GET"])
 def check_signature_handler():
 
     if request.method == 'GET':
@@ -81,7 +52,35 @@ def check_signature_handler():
         if hashstr == signature:
             return echostr
         else:
-            return 'signature check error'
+            abort(404)
 
     else:
-        return 'error request method'
+        abort(404)
+
+
+@api.route('/operation/<int:id>', methods=["PUT"])
+def update_operation_handler(id):
+
+    if request.method == 'PUT':
+
+        access_address = current_app.config.get('API_ACCESS_CLIENTS', '127.0.0.1')
+
+        current_app.logger.info(str(request.json))
+
+        if request.remote_addr in access_address:
+
+            status = request.json.get('status', 2)
+            result = request.json.get('result', dict())
+
+            operation = OperationDb.query.get(id)
+
+            if operation is not None:
+
+                operation.status = status
+                operation.result = json.dumps(result, ensure_ascii=False)
+
+                db.session.commit()
+
+                return jsonify({'status': 'success'})
+
+    abort(404)

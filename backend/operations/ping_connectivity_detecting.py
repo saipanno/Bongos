@@ -43,7 +43,7 @@ def ping_connectivity_detecting(operation, config):
     """
 
     ID = operation.get('OPT_ID', 0)
-    API_URL = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', None)
+    API_URL = '%s/operation/%s' % (config.get('SETTINGS_API_BASIC_URL', None), ID)
 
     COMMAND = 'ping -c%s -W%s {{ address }}' % \
               (config.get('SETTINGS_PING_COUNT', 4), config.get('SETTINGS_PING_TIMEOUT', 5))

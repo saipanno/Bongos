@@ -44,7 +44,7 @@ def fabfile_execute(operation, config, tasks):
     """
 
     ID = operation.get('OPT_ID', 0)
-    API_URL = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', None)
+    API_URL = '%s/operation/%s' % (config.get('SETTINGS_API_BASIC_URL', None), ID)
 
     env.user = operation.get('SSH_USERNAME', 'root')
     env.password = operation.get('SSH_PASSWORD', 'password')

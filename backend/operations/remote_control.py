@@ -44,7 +44,7 @@ def remote_control(operation, config):
     """
 
     ID = operation.get('OPT_ID', 0)
-    API_URL = '%s/operation' % config.get('SETTINGS_API_BASIC_URL', None)
+    API_URL = '%s/operation/%s' % (config.get('SETTINGS_API_BASIC_URL', None), ID)
 
     ipmi_address_list = list()
     for address in operation.get('OPT_SERVER_LIST', '').split():

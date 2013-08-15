@@ -38,6 +38,7 @@ DEBUG = False
 # api config
 API_ACCESS_CLIENTS = ['127.0.0.1']
 API_BASIC_URL = 'http://127.0.0.1/api'
+WEIXIN_TOKEN = 'BongosProject'
 
 # fabric config
 POOL_SIZE = 250             # default is 250
