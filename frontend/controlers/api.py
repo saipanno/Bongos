@@ -81,32 +81,46 @@ def check_signature_handler():
                         current_app.config.get('DOMAIN_NAME', 'localhost'),
                         url_for('account.binding_weixin_handler', weixin=sender))
 
-                elif user is not None and content == 'ssh list':
-                    ssh_configs = list()
-                    for group in user.groups:
-                        for ssh_config in group.ssh_configs:
-                            if not ssh_config in ssh_configs:
-                                ssh_configs.append(ssh_config)
-                    message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs])
+                elif content == 'status':
 
-                elif user is not None and content == 'fab list':
-                    fabfiles = list()
-                    for group in user.groups:
-                        for fabfile in group.ipmi_configs:
-                            if not fabfile in fabfiles:
-                                fabfiles.append(fabfile)
-                    message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles])
+                    if user:
+                        message = u'%s' % user.name
+                    else:
+                        message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
-                elif user is not None and content == 'ipmi list':
-                    ipmi_configs = list()
-                    for group in user.groups:
-                        for ipmi_config in group.ipmi_configs:
-                            if not ipmi_config in ipmi_configs:
-                                ipmi_configs.append(ipmi_config)
-                    message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs])
+                elif content == 'ssh list':
 
-                elif user is None:
-                    message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
+                    if user:
+                        ssh_configs = list()
+                        for group in user.groups:
+                            for ssh_config in group.ssh_configs:
+                                if not ssh_config in ssh_configs:
+                                    ssh_configs.append(ssh_config)
+                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs])
+                    else:
+                        message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
+
+                elif content == 'fab list':
+                    if user:
+                        fabfiles = list()
+                        for group in user.groups:
+                            for fabfile in group.ipmi_configs:
+                                if not fabfile in fabfiles:
+                                    fabfiles.append(fabfile)
+                        message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles])
+                    else:
+                        message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
+
+                elif content == 'ipmi list':
+                    if user:
+                        ipmi_configs = list()
+                        for group in user.groups:
+                            for ipmi_config in group.ipmi_configs:
+                                if not ipmi_config in ipmi_configs:
+                                    ipmi_configs.append(ipmi_config)
+                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs])
+                    else:
+                        message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
                 else:
                     message = u'error request content'
