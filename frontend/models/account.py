@@ -44,6 +44,7 @@ class User(db.Model):
     name = db.Column(db.String(50), unique=True)
     groups = db.relationship('Group', secondary=UserGroup, backref=db.backref('users', lazy='dynamic'),
                              passive_deletes=True)
+    weixin = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(50))
     status = db.Column(db.Integer)
     operations = db.relationship('OperationDb', backref='author', lazy='dynamic',
@@ -55,12 +56,13 @@ class User(db.Model):
     ipmi_configs = db.relationship('IpmiConfig', backref='author', lazy='dynamic',
                                    cascade='all,delete-orphan', passive_deletes=True)
 
-    def __init__(self, username, email, name, groups, password, status):
+    def __init__(self, username, email, name, groups, weixin, password, status):
 
         self.username = username
         self.email = email
         self.name = name
         self.set_groups(groups)
+        self.weixin = weixin
         self.password = generate_password_hash(password, salt_length=8)
         self.status = status
 

@@ -57,6 +57,9 @@ class EditSettingForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
+    weixin = TextField(u'Weixin OpenID', description=u'Unique, Using the command <code>openid</code> get in WeiXin',
+                       validators=[Optional(),
+                                   Unique(User, User.weixin, message=u'The current weixin OpenID is already in use')])
 
     submit = SubmitField(u'Submit', id='submit')
 

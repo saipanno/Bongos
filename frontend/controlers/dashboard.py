@@ -77,8 +77,8 @@ def create_user_handler():
 
     if request.method == 'POST' and form.validate():
 
-        user = User(form.username.data, form.email.data, form.name.data, form.groups.data, form.password.data,
-                    1 if form.status.data else 0)
+        user = User(form.username.data, form.email.data, form.name.data, form.groups.data, form.weixin.data,
+                    form.password.data, 1 if form.status.data else 0)
         db.session.add(user)
         db.session.commit()
 
@@ -109,6 +109,9 @@ def edit_user_handler(user_id):
             user.update_password(form.password.data)
 
         user.set_groups(form.groups.data)
+
+        if form.weixin.data != user.weixin:
+            user.weixin = form.weixin.data
 
         if user.status or form.status.data:
             user.status = 1 if form.status.data else 0

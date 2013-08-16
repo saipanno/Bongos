@@ -100,6 +100,9 @@ class CreateUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
+    weixin = TextField(u'Weixin OpenID', description=u'Unique, Using the command <code>openid</code> get in WeiXin',
+                       validators=[Optional(),
+                                   Unique(User, User.weixin, message=u'The current weixin OpenID is already in use')])
     groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
                                       query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])
@@ -124,6 +127,9 @@ class EditUserForm(Form):
                      validators=[Required(message=u'Name is required'),
                                  Regexp(u'^[a-zA-Z0-9\_\-\.\ ]{1,20}$', message=u'Incorrect name format'),
                                  Unique(User, User.name, message=u'The current name is already in use')])
+    weixin = TextField(u'Weixin OpenID', description=u'Unique, Using the command <code>openid</code> get in WeiXin',
+                       validators=[Optional(),
+                                   Unique(User, User.weixin, message=u'The current weixin OpenID is already in use')])
     groups = QuerySelectMultipleField(u'Group', description=u'Multiple Choice',
                                       query_factory=Group.query.all, get_label='desc',
                                       validators=[Required(message=u'Group is required')])

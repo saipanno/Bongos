@@ -23,6 +23,7 @@
                         <th>email</th>
                         <th>name</th>
                         <th>groups</th>
+                        <th>Weixin OpenID</th>
                         <th>status</th>
                         <th></th>
                     </tr>
@@ -39,6 +40,7 @@
                                     <span class="label label-success">{{ group.desc }}</span>
                                 {% endfor %}
                             </td>
+                            <td>{{ user.weixin }}</td>
                             <td>{{ ext.get_status(user.status) }}</td>
                             <td><a class="btn btn-mini btn-default" href="{{ url_for('dashboard.update_user_status_handler', user_id=user.id, status='disable' if user.status else 'enable') }}">{{ ext.get_adverse_desc(user.status) }}</a></td>
                         </tr>
@@ -74,6 +76,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.groups) }}
+
+                        {{ ext.create_standard_field(form.weixin) }}
 
                         {{ ext.create_standard_field(form.password) }}
 
@@ -121,6 +125,8 @@
                         {{ ext.create_standard_field(form.name) }}
 
                         {{ ext.create_standard_field(form.groups) }}
+
+                        {{ ext.create_standard_field(form.weixin) }}
 
                         {{ ext.create_standard_field(form.password) }}
 

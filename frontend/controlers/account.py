@@ -99,12 +99,15 @@ def logout_handler():
 def edit_settings_handler():
 
     user = current_user
-    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name)
+    form = EditSettingForm(id=user.id, email=user.email, username=user.username, name=user.name, weixin=user.weixin)
 
     if request.method == 'POST' and form.validate():
 
         if form.name.data != user.name:
             user.name = form.name.data
+
+        if form.weixin.data != user.weixin:
+            user.weixin = form.weixin.data
 
         db.session.commit()
         flash(u'Update user settings successfully', 'success')
@@ -137,6 +140,23 @@ def edit_password_handler():
 
     else:
         return render_template('account/edit_password.html', form=form)
+
+
+@account.route('/settings/binding_weixin')
+@login_required
+def binding_weixin_handler():
+
+    user = current_user
+    weixin = request.args.get('weixin', '')
+
+    if weixin and User.query.filter_by(weixin=weixin).first():
+
+        user.weixin = weixin
+        db.session.commit()
+
+        return 'binding weixin successful'
+    else:
+        return 'error weixin OpenID.'
 
 
 @account.route('/ssh_config/list')
