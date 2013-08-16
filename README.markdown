@@ -13,7 +13,8 @@ You can use the demo at [bongos.saipanno.com](http://bongos.saipanno.com) with a
 * Asset Management
 * Group-based Permission Management. Accurate to Resource Access and Feature Uses.
 * Fabric-based. Support External Variables and Output Record.
-* Full-featured Dashboard. Support Resources CRUD.
+* Full-featured Dashboard. Support all Resources CRUD.
+* **Weixin** Interface for operation create.
 
 
 
