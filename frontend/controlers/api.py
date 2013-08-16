@@ -73,18 +73,15 @@ def check_signature_handler():
 
                 user = User.query.filter_by(weixin=sender).first()
 
-                if user is None and content == 'bind':
+                if content == 'h' or content == 'help':
+                    message = weichat_help_message
+
+                elif content == 'bind':
                     message = u'访问如下链接进行帐号绑定:\n http://%s%s' % (
                         current_app.config.get('DOMAIN_NAME', 'localhost'),
                         url_for('account.binding_weixin_handler', weixin=sender))
 
-                elif user is None:
-                    message = u'当前帐号未绑定，请使用`bind`命令进行绑定操作.'
-
-                elif content == 'h' or content == 'help':
-                    message = weichat_help_message
-
-                elif content == 'ssh list':
+                elif user is not None and content == 'ssh list':
                     ssh_configs = list()
                     for group in user.groups:
                         for ssh_config in group.ssh_configs:
@@ -92,7 +89,7 @@ def check_signature_handler():
                                 ssh_configs.append(ssh_config)
                     message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs])
 
-                elif content == 'fab list':
+                elif user is not None and content == 'fab list':
                     fabfiles = list()
                     for group in user.groups:
                         for fabfile in group.ipmi_configs:
@@ -100,13 +97,16 @@ def check_signature_handler():
                                 fabfiles.append(fabfile)
                     message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles])
 
-                elif content == 'ipmi list':
+                elif user is not None and content == 'ipmi list':
                     ipmi_configs = list()
                     for group in user.groups:
                         for ipmi_config in group.ipmi_configs:
                             if not ipmi_config in ipmi_configs:
                                 ipmi_configs.append(ipmi_config)
                     message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs])
+
+                elif user is None:
+                    message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
                 else:
                     message = u'error request content'
