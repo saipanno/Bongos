@@ -25,7 +25,7 @@
 
 
 import xml.etree.cElementTree as et
-from flask import Blueprint, current_app, request, jsonify, json, abort
+from flask import Blueprint, current_app, request, jsonify, json, abort, url_for
 
 from frontend.extensions.database import db
 from frontend.extensions.weixin import return_message, signature_verification
@@ -36,18 +36,22 @@ from frontend.models.operation import OperationDb
 api = Blueprint('api', __name__, url_prefix='/api')
 
 weichat_help_message = u'''Bongos Project的微信接口支持如下功能:
-1. SSH状态测试
-    ssh list /获取SSH权限列表/
-    ssh Ssh_ID@8.8.8.8
-2. PING联通性测试
-    ping 8.8.8.8
-4. FABFILE远程操作
-    ssh list
-    fab list /获取FABFILE列表/
-    fab Ssh_ID@8.8.8.8 Fabfile_ID
-3. IPMI电源管理
-    ipmi list /获取IPMI权限列表/
-    ipmi Ipmi_ID@8.8.8.8 reset/shutdown/poweron/poweroff'''
+1. ssh  - ssh status detecting
+   ssh list
+   ssh SSH_ID@address1,address2
+
+2. ping - ping connectivity detecting
+   ping address1,address2
+
+3. ipmi - remote power control
+   ipmi list
+   ipmi IPMI_ID@address1,address2 reset/poweron/poweroff
+
+4. fab  - remote fabfile execute
+   fab list
+   ssh list
+   fab SSH_ID@address1,address2 FAB_ID'''
+
 
 @api.route('/weichat', methods=["GET", "POST"])
 def check_signature_handler():
@@ -68,23 +72,47 @@ def check_signature_handler():
                 content = data.find("Content").text.lower()
 
                 user = User.query.filter_by(weixin=sender).first()
+                if user is None:
+                    message = u'当前帐号未绑定，请使用`bind`命令进行绑定操作.'
 
-                if content == 'h' or content == 'help':
+                elif content == 'h' or content == 'help':
                     message = weichat_help_message
+
                 elif content == 'bind':
-                    message = u'请访问下面URL进行微信帐号绑定:\n' \
-                              u'http://bongos.saipanno.com/settings/binding_weixin?weixin=%s' % sender
+                    message = u'访问如下链接进行帐号绑定:\n http://%s%s' % (
+                        current_app.config.get('DOMAIN_NAME', 'localhost'),
+                        url_for('account.binding_weixin_handler', weixin=sender))
+
                 elif content == 'ssh list':
-                    pass
+                    ssh_configs = list()
+                    for group in user.groups:
+                        for ssh_config in group.ssh_configs:
+                            if not ssh_config in ssh_configs:
+                                ssh_configs.append(ssh_config)
+                    message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs])
+
                 elif content == 'fab list':
-                    pass
+                    fabfiles = list()
+                    for group in user.groups:
+                        for fabfile in group.ipmi_configs:
+                            if not fabfile in fabfiles:
+                                fabfiles.append(fabfile)
+                    message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles])
+
                 elif content == 'ipmi list':
-                    pass
+                    ipmi_configs = list()
+                    for group in user.groups:
+                        for ipmi_config in group.ipmi_configs:
+                            if not ipmi_config in ipmi_configs:
+                                ipmi_configs.append(ipmi_config)
+                    message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs])
+
                 else:
                     message = u'error request content'
 
                 # variable exchange
                 (receiver, sender) = (sender, receiver)
+
                 return return_message(sender, receiver, message)
 
     abort(404)

@@ -149,14 +149,14 @@ def binding_weixin_handler():
     user = current_user
     weixin = request.args.get('weixin', '')
 
-    if weixin and User.query.filter_by(weixin=weixin).first():
+    if weixin and not User.query.filter_by(weixin=weixin).first():
 
         user.weixin = weixin
         db.session.commit()
 
         return 'binding weixin successful'
     else:
-        return 'error weixin OpenID.'
+        return 'binding weixin error.'
 
 
 @account.route('/ssh_config/list')
