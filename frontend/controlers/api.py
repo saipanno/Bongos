@@ -33,6 +33,19 @@ from frontend.models.operation import OperationDb
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
+weichat_help_message = u'''Bongos Project的微信接口支持如下功能:
+1. SSH状态测试
+    ssh list /获取SSH权限列表/
+    ssh Ssh_ID@8.8.8.8,114.114.114.114
+2. PING联通性测试
+    ping 8.8.8.8,114.114.114.114
+4. FABFILE远程操作
+    ssh list
+    fab list /获取FABFILE列表/
+    fab Ssh_ID@8.8.8.8,114.114.114.114 Fabfile_ID
+3. IPMI电源管理
+    ipmi list /获取IPMI权限列表/
+    ipmi Ipmi_ID@8.8.8.8,114.114.114.114 reset/shutdown/poweron/poweroff'''
 
 @api.route('/weichat', methods=["GET", "POST"])
 def check_signature_handler():
@@ -46,18 +59,23 @@ def check_signature_handler():
 
         if signature_verification(request.args, current_app.config.get('WEIXIN_TOKEN', '')):
 
-            print 'signature verification successful!'
-
             data = et.fromstring(request.data)
+            if data.find("MsgType").text == 'text':
+                receiver = data.find("ToUserName").text
+                sender = data.find("FromUserName").text
+                content = data.find("Content").text.lower()
 
-            _type = data.find("MsgType").text
-            _to = data.find("ToUserName").text
-            _from = data.find("FromUserName").text
-            content = data.find("Content").text
+                if content == 'h' or content == 'help':
+                    message = weichat_help_message
 
-            # variable exchange
-            (_to, _from) = (_from, _to)
-            return return_message(_from, _to, _from)
+                elif content == 'get_openid':
+                    message = sender
+                else:
+                    message = u'error request content'
+
+                # variable exchange
+                (receiver, sender) = (sender, receiver)
+                return return_message(sender, receiver, message)
 
     abort(404)
 
