@@ -64,7 +64,7 @@ def init_ugp():
     db.session.add(group)
     db.session.commit()
 
-    user = User('admin', 'admin@bongos', 'Administrator', [group], 'admin', 1)
+    user = User('admin', 'admin@bongos', 'Administrator', [group], '', 'admin', 1)
     db.session.add(user)
     db.session.commit()
 
