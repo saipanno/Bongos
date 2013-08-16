@@ -142,7 +142,7 @@ def edit_password_handler():
         return render_template('account/edit_password.html', form=form)
 
 
-@account.route('/settings/binding_weixin')
+@account.route('/settings/binding')
 @login_required
 def binding_weixin_handler():
 
