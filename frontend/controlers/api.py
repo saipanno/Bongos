@@ -24,38 +24,42 @@
 # SOFTWARE.
 
 
-import hashlib
+import xml.etree.cElementTree as et
 from flask import Blueprint, current_app, request, jsonify, json, abort
 
 from frontend.extensions.database import db
+from frontend.extensions.weixin import return_message, signature_verification
 from frontend.models.operation import OperationDb
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
 
-@api.route('/', methods=["GET"])
+@api.route('/weichat', methods=["GET", "POST"])
 def check_signature_handler():
 
     if request.method == 'GET':
 
-        token = current_app.config.get('WEIXIN_TOKEN', 'BongosProject')
-        signature = request.args.get('signature', None)
-        timestamp = request.args.get('timestamp', None)
-        nonce = request.args.get('nonce', None)
-        echostr = request.args.get('echostr', None)
+        if signature_verification(request.args, current_app.config.get('WEIXIN_TOKEN', '')):
+            return request.args.get('echostr', None)
 
-        fruit = [token, timestamp, nonce]
-        fruit.sort()
-        fruit_str = ''.join(fruit)
-        hashstr = hashlib.sha1(fruit_str).hexdigest()
+    if request.method == 'POST':
 
-        if hashstr == signature:
-            return echostr
-        else:
-            abort(404)
+        if signature_verification(request.args, current_app.config.get('WEIXIN_TOKEN', '')):
 
-    else:
-        abort(404)
+            print 'signature verification successful!'
+
+            data = et.fromstring(request.data)
+
+            _type = data.find("MsgType").text
+            _to = data.find("ToUserName").text
+            _from = data.find("FromUserName").text
+            content = data.find("Content").text
+
+            # variable exchange
+            (_to, _from) = (_from, _to)
+            return return_message(_from, _to, _from)
+
+    abort(404)
 
 
 @api.route('/operation/<int:id>', methods=["PUT"])
