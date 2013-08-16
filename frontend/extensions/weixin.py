@@ -30,8 +30,6 @@ import hashlib
 
 def signature_verification(args, token):
 
-    print args
-
     sign_args = [args['timestamp'], args['nonce'], token]
     sign_args.sort()
     if args['signature'] == hashlib.sha1("".join(sign_args)).hexdigest():
