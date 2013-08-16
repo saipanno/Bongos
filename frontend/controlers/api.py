@@ -29,6 +29,8 @@ from flask import Blueprint, current_app, request, jsonify, json, abort
 
 from frontend.extensions.database import db
 from frontend.extensions.weixin import return_message, signature_verification
+
+from frontend.models.account import User
 from frontend.models.operation import OperationDb
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -36,16 +38,16 @@ api = Blueprint('api', __name__, url_prefix='/api')
 weichat_help_message = u'''Bongos Project的微信接口支持如下功能:
 1. SSH状态测试
     ssh list /获取SSH权限列表/
-    ssh Ssh_ID@8.8.8.8,114.114.114.114
+    ssh Ssh_ID@8.8.8.8
 2. PING联通性测试
-    ping 8.8.8.8,114.114.114.114
+    ping 8.8.8.8
 4. FABFILE远程操作
     ssh list
     fab list /获取FABFILE列表/
-    fab Ssh_ID@8.8.8.8,114.114.114.114 Fabfile_ID
+    fab Ssh_ID@8.8.8.8 Fabfile_ID
 3. IPMI电源管理
     ipmi list /获取IPMI权限列表/
-    ipmi Ipmi_ID@8.8.8.8,114.114.114.114 reset/shutdown/poweron/poweroff'''
+    ipmi Ipmi_ID@8.8.8.8 reset/shutdown/poweron/poweroff'''
 
 @api.route('/weichat', methods=["GET", "POST"])
 def check_signature_handler():
@@ -65,11 +67,19 @@ def check_signature_handler():
                 sender = data.find("FromUserName").text
                 content = data.find("Content").text.lower()
 
+                user = User.query.filter_by(weixin=sender).first()
+
                 if content == 'h' or content == 'help':
                     message = weichat_help_message
-
-                elif content == 'get_openid':
-                    message = sender
+                elif content == 'bind':
+                    message = u'请访问下面URL进行微信帐号绑定:\n' \
+                              u'http://bongos.saipanno.com/settings/binding_weixin?weixin=%s' % sender
+                elif content == 'ssh list':
+                    pass
+                elif content == 'fab list':
+                    pass
+                elif content == 'ipmi list':
+                    pass
                 else:
                     message = u'error request content'
 
