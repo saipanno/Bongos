@@ -96,7 +96,8 @@ def check_signature_handler():
                             for ssh_config in group.ssh_configs:
                                 if not ssh_config in ssh_configs:
                                     ssh_configs.append(ssh_config)
-                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs])
+                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ssh_configs]) \
+                            if ssh_configs else 'No Records'
                     else:
                         message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
@@ -107,7 +108,8 @@ def check_signature_handler():
                             for fabfile in group.ipmi_configs:
                                 if not fabfile in fabfiles:
                                     fabfiles.append(fabfile)
-                        message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles])
+                        message = '\n'.join(['%s - %s' % (fabfile.id, fabfile.name) for fabfile in fabfiles]) \
+                            if fabfiles else 'No Records'
                     else:
                         message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
@@ -118,7 +120,8 @@ def check_signature_handler():
                             for ipmi_config in group.ipmi_configs:
                                 if not ipmi_config in ipmi_configs:
                                     ipmi_configs.append(ipmi_config)
-                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs])
+                        message = '\n'.join(['%s - %s' % (config.id, config.name) for config in ipmi_configs]) \
+                            if ipmi_configs else 'No Records'
                     else:
                         message = u'当前微信帐号未绑定,请使用`bind`命令进行绑定.'
 
