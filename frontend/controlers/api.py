@@ -72,16 +72,17 @@ def check_signature_handler():
                 content = data.find("Content").text.lower()
 
                 user = User.query.filter_by(weixin=sender).first()
-                if user is None:
+
+                if user is None and content == 'bind':
+                    message = u'访问如下链接进行帐号绑定:\n http://%s%s' % (
+                        current_app.config.get('DOMAIN_NAME', 'localhost'),
+                        url_for('account.binding_weixin_handler', weixin=sender))
+
+                elif user is None:
                     message = u'当前帐号未绑定，请使用`bind`命令进行绑定操作.'
 
                 elif content == 'h' or content == 'help':
                     message = weichat_help_message
-
-                elif content == 'bind':
-                    message = u'访问如下链接进行帐号绑定:\n http://%s%s' % (
-                        current_app.config.get('DOMAIN_NAME', 'localhost'),
-                        url_for('account.binding_weixin_handler', weixin=sender))
 
                 elif content == 'ssh list':
                     ssh_configs = list()
